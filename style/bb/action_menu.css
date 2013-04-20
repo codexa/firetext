@@ -22,7 +22,6 @@ form[role=dialog] {
 form[role=dialog].current {
   visibility: visible;
   opacity: 1;
-  z-index: 100;
   
   transform: none;
   -moz-transform: none;
@@ -45,7 +44,7 @@ form[role="dialog"][data-type="object"] {
     url(action_menu/images/ui/gradient.png) no-repeat left top / 100% 100%;
   overflow: hidden;
   position: fixed;
-  z-index: 100;
+  z-index: 101;
   top: 0;
   left: 0;
   right: 0;

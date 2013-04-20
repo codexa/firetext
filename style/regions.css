@@ -2,7 +2,7 @@ section[role=region], section[role=dialog] {
   width: 100%;
   height: 100%;
   
-  z-index: 1;
+  z-index: 101;
   position: fixed;
   top: 0px;
   bottom: 0px;
@@ -94,7 +94,6 @@ section[role=dialog] {
 section[role=dialog].current {
   visibility: visible;
   opacity: 1;
-  z-index: 100;
   
   transform: none;
   -moz-transform: none;
