@@ -1,10 +1,30 @@
 'use strict'; 
 
-var editor;
+var editor, toolbar, editWindow;
 
 function init() {
   document.location.hash = 'welcome';
   editor = document.getElementById('editor');
+  toolbar = document.getElementById('edit-bar');
+  editWindow = document.getElementById('edit');
+  toolbar.addEventListener(
+    'mousedown', function mouseDown(event) {
+      event.preventDefault();
+      event.target.classList.toggle('active');
+    }
+  );
+  toolbar.addEventListener(
+    'mouseup', function mouseDown(event) {
+      if (event.target.classList.contains('sticky') != true) {
+        event.target.classList.remove('active');
+      }
+    }
+  );
+  editWindow.addEventListener(
+    'mouseenter', function mouseDown(event) {
+      editor.focus();
+    }
+  );
 }
 
 window.addEventListener('hashchange', function() {
@@ -30,5 +50,6 @@ function navBack() {
  
 function formatDoc(sCmd, sValue) {
   document.execCommand(sCmd, false, sValue);
-  editor.focus();
-}
+}   
+
+

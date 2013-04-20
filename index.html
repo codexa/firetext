@@ -89,11 +89,11 @@
     <div role="main" class="editor-container">
       <div contenteditable="true" class="editor" id="editor"></div>
     </div>
-    <div role="toolbar">
+    <div role="toolbar" id="edit-bar">
       <ul>
-        <li><button style="background-image: url(style/icons/toolbar/bold.png);" onClick="formatDoc('bold')">Bold</button></li>
-        <li><button style="background-image: url(style/icons/toolbar/underline.png);" onClick="formatDoc('underline')">Underline</button></li>
-        <li><button style="background-image: url(style/icons/toolbar/italic.png);" onClick="formatDoc('italic')">Italic</button></li>
+        <li><button class="sticky" style="background-image: url(style/icons/toolbar/bold.png);" onClick="formatDoc('bold')">Bold</button></li>
+        <li><button class="sticky" style="background-image: url(style/icons/toolbar/underline.png);" onClick="formatDoc('underline')">Underline</button></li>
+        <li><button class="sticky" style="background-image: url(style/icons/toolbar/italic.png);" onClick="formatDoc('italic')">Italic</button></li>
         <li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="nav('format')">Format</button></li>
       </ul>
       <ul>

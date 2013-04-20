@@ -37,6 +37,6 @@
   border-radius: 0;
 }
 
-[role="toolbar"] button:active {
+[role="toolbar"] button:active, [role="toolbar"] button.active {
   background-color: #008aaa;
 }
