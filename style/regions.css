@@ -1,0 +1,110 @@
+section[role=region], section[role=dialog] {
+  width: 100%;
+  height: 100%;
+  
+  z-index: 1;
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  
+  background-color: #EEE;
+}
+
+section[role=region] {
+  visibility: hidden;
+  opacity: .99;
+  
+  transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);  
+  
+  transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;  
+}
+
+section[role=region].current {
+  visibility: visible;
+  opacity: 1;
+  z-index: 100;
+  
+  transform: none;
+  -moz-transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -ms-transform: none; 
+  
+  transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;   
+}
+
+section[role=region].current ~ section[role=region] {  
+  opacity: .99;
+  
+  transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  -ms-transform: translateX(100%); 
+  
+  transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;   
+}
+
+section[role=region][is_parent=true], section[role=dialog][is_parent=true] {
+  opacity: 1;
+  visibility: visible;
+
+  transform: none;
+  -moz-transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -ms-transform: none; 
+}
+
+section[role=dialog] {
+  visibility: hidden;
+  opacity: .99;
+  
+  transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  -ms-transform: translateY(100%);  
+  
+  transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;  
+}
+
+section[role=dialog].current {
+  visibility: visible;
+  opacity: 1;
+  z-index: 100;
+  
+  transform: none;
+  -moz-transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -ms-transform: none; 
+  
+  transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;   
+}

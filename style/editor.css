@@ -1,0 +1,14 @@
+.editor-container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: scroll;
+}
+
+.editor {
+  min-height: 100%;
+  border: none;
+  padding: 10px 10px 9rem 10px;
+  font-size: 2em;
+  outline: none;
+}

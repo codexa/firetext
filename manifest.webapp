@@ -1,0 +1,61 @@
+{
+  "name": "FireText",
+  "description": "A text-editor for Firefox OS",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "Joshua Smith",
+    "url": "http://micovision.bugs3.com/"
+  },
+  "permissions": [
+  ],
+  "locales": {
+    "ar": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "de": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "el": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "en-US": {
+  	  "name": "FireText",
+  	  "description": "A text-editor for Firefox OS"
+    },
+    "es": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "fr": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "it": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "pt-BR": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "ru": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "tr": {
+  	  "name": "FireText",
+  	  "description": ""
+    },
+    "zh-TW": {
+  	  "name": "FireText",
+  	  "description": ""
+    }
+  },
+  "default_locale": "en-US",
+  "icons": {
+    "128": "/style/icons/app_icon.png"
+  }
+}

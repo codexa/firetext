@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  
+  <link href="style/images/favicon.png" rel="icon" type="image/x-icon" />
+  <link href="style/images/favicon.png" rel="shortcut icon" type="image/x-icon" />
+  
+  <title>FireText</title>
+  
+  <link rel="stylesheet" type="text/css" href="style/main.css" />
+  <link rel="stylesheet" type="text/css" href="style/editor.css" />
+  <link rel="stylesheet" type="text/css" href="style/regions.css"/>
+
+  <script type="application/javascript" src="js/firetext.js"></script>
+  
+  <!-- App Theme (Leave Blank for Default) -->
+  <!--<link rel="stylesheet" type="text/css" href="style/themes/" />-->
+
+  <!-- Building Blocks -->
+  <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/confirm.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/drawer.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/edit_mode.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/headers.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/input_areas.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/lists.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/progress_activity.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/scrolling.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/seekbars.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/status.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/switches.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/tabs.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/toolbars.css"/>
+  
+  <!-- Shared code -->
+  <script type="application/javascript" src="shared/js/l10n.js"></script>
+  <script type="application/javascript" defer src="shared/js/gesture_detector.js"></script>
+    
+</head>
+<body role="application" onLoad="init()">
+  
+  <section role="region" id="welcome">
+    <header>
+      <menu type="toolbar">
+        <button onClick="nav('add')"><span class="icon icon-add">Add</span></button>
+        <button onClick="nav('edit')"><span class="icon icon-compose">Edit</span></button>
+      </menu>
+      <h1>Firetext</h1>
+    </header>
+    <div role="main"></div>
+  </section>
+  
+  <form role="dialog" data-type="action" onsubmit="return false;" id="share">
+    <header> Share </header>
+    <menu>
+      <button> Email </button>
+      <button onClick="navBack()"> Cancel </button>
+    </menu>
+  </form>
+  
+  <section role="dialog" id="format">
+    <header>
+      <button onClick="navBack()"><span class="icon icon-back">Cancel</span></button>
+      <h1>Format</h1>
+    </header>
+  </section>
+  
+  <section role="dialog" id="add">
+    <header>
+      <button onClick="navBack()"><span class="icon icon-back">back</span></button>
+      <h1>New Document</h1>
+    </header>
+    <div role="main">
+    </div>
+  </section>
+  
+  <section role="region" id="edit">
+    <header>
+      <button onClick="navBack()"><span class="icon icon-back">back</span></button>
+      <menu type="toolbar">
+        <button><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
+      </menu>
+      <h1>Editing...</h1>
+    </header>
+    <div role="main" class="editor-container">
+      <div contenteditable="true" class="editor" id="editor"></div>
+    </div>
+    <div role="toolbar">
+      <ul>
+        <li><button style="background-image: url(style/icons/toolbar/bold.png);" onClick="formatDoc('bold')">Bold</button></li>
+        <li><button style="background-image: url(style/icons/toolbar/underline.png);" onClick="formatDoc('underline')">Underline</button></li>
+        <li><button style="background-image: url(style/icons/toolbar/italic.png);" onClick="formatDoc('italic')">Italic</button></li>
+        <li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="nav('format')">Format</button></li>
+      </ul>
+      <ul>
+        <li><button class="pack-icon-share" onClick="nav('share')">Share</button></li>
+      </ul>
+    </div>
+  </section>
+</body>
+</html>
