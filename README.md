@@ -8,3 +8,19 @@ You can run it on a Firefox OS device, or on the <a href="https://addons.mozilla
 
 ## What is ODML?
 ODML stands for Open Document Markup Language.  It has not been standardized yet, but we hope this project will bring it to the attention of the W3C.
+
+An example ODML document:
+```` HTML
+<!DOCTYPE odml>
+<odml>
+  <info>
+    <title>Sample ODML Document</title>
+    <author>Joshua Smith</author>
+    <publisher>Myself</publisher>
+    <date>4/22/13</date>
+  </info>
+  <content>
+    ...Some HTML Content...
+  </content>
+</odml>
+````
