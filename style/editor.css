@@ -6,9 +6,8 @@
 }
 
 .editor {
-  min-height: 100%;
   border: none;
-  padding: 10px 10px 9rem 10px;
+  padding: 10px 10px 80px 10px;
   font-size: 2em;
   outline: none;
 }
