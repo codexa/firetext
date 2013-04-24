@@ -1,6 +1,7 @@
 {
   "name": "FireText",
   "description": "A text-editor for Firefox OS",
+  "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
     "name": "Joshua Smith",

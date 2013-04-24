@@ -1,6 +1,7 @@
 'use strict'; 
 
 var editor, toolbar, editWindow;
+var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
   document.location.hash = 'welcome';
@@ -50,6 +51,20 @@ function navBack() {
  
 function formatDoc(sCmd, sValue) {
   document.execCommand(sCmd, false, sValue);
-}   
+}  
 
+function saveFromEditor() {
+  saveFile(document.getElementById('currentFileName').textContent, editor.innerHTML);
+} 
 
+function saveFile(filename, content) {
+  var contentBlob = new Blob([content], { "type" : "text\/html" });
+  var filePath = ("Documents/" + filename);
+  var req = storage.addNamed(contentBlob, filePath);
+  req.onsuccess = function () {
+    alert('Save successful!');
+  };
+  req.onerror = function () {
+    alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+  };
+}
