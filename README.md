@@ -24,3 +24,5 @@ An example ODML document:
   </content>
 </odml>
 ````
+
+For more information and documentation see <a href="https://github.com/Joshua-S/FireText/wiki/ODML">our wiki</a>.
