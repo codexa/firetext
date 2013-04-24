@@ -6,8 +6,9 @@
     "name": "Joshua Smith",
     "url": "http://micovision.bugs3.com/"
   },
-  "permissions": [
-  ],
+  "permissions": {
+    "device-storage:sdcard":{ "access": "readwrite" }
+  },
   "locales": {
     "ar": {
   	  "name": "FireText",
