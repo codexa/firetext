@@ -65,6 +65,17 @@ function saveFile(filename, content) {
     alert('Save successful!');
   };
   req.onerror = function () {
-    alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+    if (this.error.name == "NoModificationAllowedError") {
+      var req2 = storage.delete(filePath);
+      req2.onsuccess = function () {
+          saveFile(filename, content);
+      };
+      req2.onerror = function () {
+        alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+      }
+    }
+    else {
+      alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+    }
   };
 }
