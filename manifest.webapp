@@ -11,15 +11,15 @@
   "locales": {
     "ar": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "محرر نصوص لفايرفوكس OS"
     },
     "de": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Ein Text-Editor für Firefox OS"
     },
     "el": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Ένα κείμενο-editor για τον Firefox OS"
     },
     "en-US": {
   	  "name": "FireText",
@@ -27,31 +27,31 @@
     },
     "es": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Un editor de texto para Firefox OS"
     },
     "fr": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Un éditeur de texte pour Firefox OS"
     },
     "it": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Un editor di testo per Firefox OS"
     },
     "pt-BR": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Um editor de texto para Firefox OS"
     },
     "ru": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Текстовый редактор для Firefox OS"
     },
     "tr": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "Firefox OS için bir metin editörü"
     },
     "zh-TW": {
   	  "name": "FireText",
-  	  "description": ""
+  	  "description": "文本编辑器，火狐OS"
     }
   },
   "default_locale": "en-US",
