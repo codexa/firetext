@@ -33,7 +33,12 @@ window.addEventListener('hashchange', function() {
     window.history.back();
     window.history.back();
   } else if (document.getElementById(location.hash.replace(/#/, ''))) {
-    if (document.querySelector('.current')) {    
+    if (document.querySelector('.current')) { 
+      if (document.getElementById(location.hash.replace(/#/, '')).getAttribute('role') == 'dialog') {
+        document.querySelector('.current').classList.add('parent');
+      } else {
+        document.querySelector('.current').classList.remove('parent');      
+      }
       document.querySelector('.current').classList.remove('current');
     }
     document.getElementById(location.hash.replace(/#/, '')).classList.add('current');
