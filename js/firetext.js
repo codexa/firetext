@@ -68,12 +68,38 @@ function formatDoc(sCmd, sValue) {
 }
 
 function saveFromEditor() {
-  saveFile(document.getElementById('currentFileName').textContent, editor.innerHTML);
+  var filename = document.getElementById('currentFileName').textContent;
+  var filetype = document.getElementById('currentFileType').textContent;
+  var content = "";
+  switch (filetype) {
+    case ".odml":
+      // TODO
+    case ".html":
+      content = editor.innerHTML;
+      break;
+    case ".txt":
+    default:
+      content = editor.textContent;
+      break;
+  }
+  saveFile(filename, filetype, content);
 } 
 
-function saveFile(filename, content) {
-  var contentBlob = new Blob([content], { "type" : "text\/html" });
-  var filePath = ("Documents/" + filename);
+function saveFile(filename, filetype, content) {
+  var type = "text";
+  switch (filetype) {
+    case ".odml":
+      type = "text\/odml";
+      break;
+    case ".html":
+      type = "text\/html";
+      break;
+    case ".txt":
+    default:
+      break;
+  }
+  var contentBlob = new Blob([content], { "type" : type });
+  var filePath = ("Documents/" + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
   req.onsuccess = function () {
     alert('Save successful!');
@@ -82,7 +108,7 @@ function saveFile(filename, content) {
     if (this.error.name == "NoModificationAllowedError") {
       var req2 = storage.delete(filePath);
       req2.onsuccess = function () {
-          saveFile(filename, content);
+          saveFile(filename, filetype, content);
       };
       req2.onerror = function () {
         alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
@@ -94,16 +120,17 @@ function saveFile(filename, content) {
   };
 }
 
-function loadToEditor(filename) {
+function loadToEditor(filename, filetype) {
   editor.innerHTML = '';
   document.getElementById('currentFileName').textContent = filename;
-  loadFile(filename, function(result) {
+  document.getElementById('currentFileType').textContent = filetype;
+  loadFile(filename, filetype, function(result) {
     editor.innerHTML = result;
   });
 }
 
-function loadFile(filename, callback) {
-  var filePath = ("Documents/" + filename);
+function loadFile(filename, filetype, callback) {
+  var filePath = ("Documents/" + filename + filetype);
   var req = storage.get(filePath);
   req.onsuccess = function () {
     var reader = new FileReader();
@@ -127,18 +154,19 @@ function loadFile(filename, callback) {
 
 function buildDocList() {
   // TODO: remove predefined docs list
-  var DOCS = [["foo", ".html"], ["bar", ".html"], ["baz", ".html"]];
+  var DOCS = [["foo", ".html"], ["bar", ".odml"], ["baz", ".txt"]];
   
   // Output HTML
   var output = "";
   
   // generate each list item
   for (var i = 0; i < DOCS.length; i++) {
-    output += '<li><a href="#edit" onClick="loadToEditor(\"';
-    output += DOCS[i][0]+DOCS[i][1];
-    output += '\")"><aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside><p>';
-    output += DOCS[i][0]+'<em>'+DOCS[i][1]+'</em>';
-    output += '</p><p>The first few words of the file go here.</p></a></li>';
+    output += '<li>'
+    output += '<a href="#edit" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
+    output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
+    output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+    output += '<p>The first few words of the file go here.</p>';
+    output += '</a></li>';
   }
   
   // Display output HTML
