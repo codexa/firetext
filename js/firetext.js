@@ -4,7 +4,7 @@ var editor, toolbar, editWindow;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
-  document.location.hash = 'welcome';
+  nav('welcome');
   editor = document.getElementById('editor');
   toolbar = document.getElementById('edit-bar');
   editWindow = document.getElementById('edit');
@@ -86,6 +86,7 @@ function saveFile(filename, content) {
 }
 
 function loadToEditor(filename) {
+  editor.innerHTML = '';
   document.getElementById('currentFileName').textContent = filename;
   loadFile(filename, function(result) {
     editor.innerHTML = result;

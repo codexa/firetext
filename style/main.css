@@ -14,6 +14,13 @@ html, body {
   background: url(images/bg.png) black;
 }
 
+/* Icons */
+
+[data-type=list] aside.icon.icon-document {
+  background-image: url(icons/document.png);
+}
+
+
 /* Buttons */
 
 .button-block {
