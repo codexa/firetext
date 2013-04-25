@@ -47,24 +47,93 @@
     <header>
       <menu type="toolbar">
         <button onClick="nav('add')"><span class="icon icon-add">Add</span></button>
-        <button onClick="nav('edit')"><span class="icon icon-compose">Edit</span></button>
+        <button onClick="nav('open')"><span class="icon icon-compose">Open</span></button>
       </menu>
       <h1>Firetext</h1>
     </header>
     <div role="main">
-      <br>
-      <button onClick="nav('open')" class="button-block">Open!</button>
-      <div id="recentsList">
-
-      </div>
+      <section data-type="list">
+        <ul>
+          <li>
+            <a href="#edit">
+              <p>
+                Story<em>.odml</em>
+              </p>
+              <p>
+                A story written with Firetext!
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="#edit">
+              <p>
+                Tale<em>.txt</em>
+              </p>
+              <p>
+                Once upon a time, there was an awesome word processor called Firetext.
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="#edit">
+              <p>
+                AnotherStory<em>.html</em>
+              </p>
+              <p>
+                Look! Another story written with Firetext!
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="#edit">
+              <p>
+                Story<em>.odml</em>
+              </p>
+              <p>
+                A story written with Firetext!
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="#edit">
+              <p>
+                Tale<em>.txt</em>
+              </p>
+              <p>
+                Once upon a time, there was an awesome word processor called Firetext.
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="#edit">
+              <p>
+                AnotherStory<em>.html</em>
+              </p>
+              <p>
+                Look! Another story written with Firetext!
+              </p>
+            </a>
+          </li>
+        </ul>
+      </section>
     </div>
   </section>
-
-  <form role="dialog" data-type="action" onsubmit="return false;" id="share">
-    <header> Share </header>
+  
+  <form role="dialog" onsubmit="return false;" data-type="action" id="type">
+    <header>File type</header>
     <menu>
-      <button> Email </button>
-      <button onClick="navBack()"> Cancel </button>
+      <button>.odml</button>
+      <button>.html</button>
+      <button>.txt</button>
+      <button onClick="navBack()">Cancel</button>
+    </menu>
+  </form>
+   
+  <form role="dialog" data-type="action" onsubmit="return false;" id="share">
+    <header>Share</header>
+    <menu>
+      <button>Email</button>
+      <button onClick="navBack()">Cancel</button>
     </menu>
   </form>
 
@@ -78,12 +147,12 @@
   <section role="dialog" id="add">
     <header>
       <button onClick="navBack()"><span class="icon icon-back">back</span></button>
-      <h1>New Document</h1>
+      <h1>New document</h1>
     </header>
     <div role="main">
       <form>
   	<fieldset>
-			<legend class="action">
+			<legend style="float:right" onclick="nav('type')" class="action">
 				.odml
 			</legend>
 			<section>
@@ -102,7 +171,7 @@
   <section role="dialog" id="open">
     <header>
       <button onClick="navBack()"><span class="icon icon-back">back</span></button>
-      <h1>Open Document</h1>
+      <h1>Open document</h1>
     </header>
     <div role="main">
       <input id="fileItem" type="file">
