@@ -84,3 +84,33 @@ function saveFile(filename, content) {
     }
   };
 }
+
+function loadToEditor(filename) {
+  document.getElementById('currentFileName').textContent = filename;
+  loadFile(filename, function(result) {
+    editor.innerHTML = result;
+  });
+}
+
+function loadFile(filename, callback) {
+  var filePath = ("Documents/" + filename);
+  var req = storage.get(filePath);
+  req.onsuccess = function () {
+    var reader = new FileReader();
+    reader.readAsText(req.result);
+    reader.onerror = function () {
+      alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+    };
+    reader.onload = function () {
+      callback(this.result);
+    };
+  };
+  req.onerror = function () {
+    if (this.error.name == "NotFoundError") {
+    	// New file, leave user to edit and save it
+    }
+    else {
+      alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+    }
+  };
+}
