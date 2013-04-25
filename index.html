@@ -51,74 +51,42 @@
       </menu>
       <h1>Firetext</h1>
     </header>
-    <div role="main">
-      <section data-type="list">
-        <ul>
-          <li>
-            <a href="#edit">
-              <p>
-                Story<em>.odml</em>
-              </p>
-              <p>
-                A story written with Firetext!
-              </p>
-            </a>
-          </li>
-          <li>
-            <a href="#edit">
-              <p>
-                Tale<em>.txt</em>
-              </p>
-              <p>
-                Once upon a time, there was an awesome word processor called Firetext.
-              </p>
-            </a>
-          </li>
-          <li>
-            <a href="#edit">
-              <p>
-                AnotherStory<em>.html</em>
-              </p>
-              <p>
-                Look! Another story written with Firetext!
-              </p>
-            </a>
-          </li>
-          <li>
-            <a href="#edit">
-              <p>
-                Story<em>.odml</em>
-              </p>
-              <p>
-                A story written with Firetext!
-              </p>
-            </a>
-          </li>
-          <li>
-            <a href="#edit">
-              <p>
-                Tale<em>.txt</em>
-              </p>
-              <p>
-                Once upon a time, there was an awesome word processor called Firetext.
-              </p>
-            </a>
-          </li>
-          <li>
-            <a href="#edit">
-              <p>
-                AnotherStory<em>.html</em>
-              </p>
-              <p>
-                Look! Another story written with Firetext!
-              </p>
-            </a>
-          </li>
-        </ul>
-      </section>
-    </div>
+    <article data-type="list">
+      <ul>
+        <li>
+          <a href="#edit" onClick="loadToEditor('foo.html') ">
+            <p>
+              foo<em>.html</em>
+            </p>
+            <p>
+              The first few words of the file go here.
+            </p>
+          </a>
+        </li>
+        <li>
+          <a href="#edit" onClick="loadToEditor('bar.html') ">
+            <p>
+              bar<em>.html</em>
+            </p>
+            <p>
+              Another file!
+            </p>
+          </a>
+        </li>
+        <li>
+		  <a href="#edit" onClick="loadToEditor('baz.html') ">
+			<p>
+			  baz<em>.html</em>
+			</p>
+			<p>
+			  Yet another file!
+			</p>
+		  </a>
+        </li>
+      </ul>
+    </article>
   </section>
-  
+
   <form role="dialog" onsubmit="return false;" data-type="action" id="type">
     <header>File type</header>
     <menu>
@@ -128,7 +96,7 @@
       <button onClick="navBack()">Cancel</button>
     </menu>
   </form>
-   
+
   <form role="dialog" data-type="action" onsubmit="return false;" id="share">
     <header>Share</header>
     <menu>
@@ -184,7 +152,7 @@
       <menu type="toolbar">
         <button onClick="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>
-      <h1>Editing <span id="currentFileName">foo</span>...</h1>
+      <h1>Editing <span id="currentFileName"></span>...</h1>
     </header>
     <div role="main" class="editor-container">
       <div contenteditable="true" class="editor" id="editor"></div>
@@ -200,7 +168,7 @@
         <li><button class="pack-icon-share" onClick="nav('share')">Share</button></li>
       </ul>
     </div>
-
   </section>
+
 </body>
 </html>
