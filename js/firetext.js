@@ -1,13 +1,19 @@
 'use strict'; 
 
-var editor, toolbar, editWindow;
+var editor, toolbar, editWindow, docList;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
+  // Navigate to welcome screen
   nav('welcome');
+  
+  // Select important elements for later
   editor = document.getElementById('editor');
   toolbar = document.getElementById('edit-bar');
   editWindow = document.getElementById('edit');
+  docList = document.getElementById('docs');
+  
+  // Add event listeners
   toolbar.addEventListener(
     'mousedown', function mouseDown(event) {
       event.preventDefault();
@@ -26,6 +32,9 @@ function init() {
       editor.focus();
     }
   );
+  
+  // Generate recent docs list
+  buildDocList();
 }
 
 window.addEventListener('hashchange', function() {
@@ -56,7 +65,7 @@ function navBack() {
  
 function formatDoc(sCmd, sValue) {
   document.execCommand(sCmd, false, sValue);
-}  
+}
 
 function saveFromEditor() {
   saveFile(document.getElementById('currentFileName').textContent, editor.innerHTML);
@@ -108,10 +117,30 @@ function loadFile(filename, callback) {
   };
   req.onerror = function () {
     if (this.error.name == "NotFoundError") {
-    	// New file, leave user to edit and save it
+      // New file, leave user to edit and save it
     }
     else {
       alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
     }
   };
+}
+
+function buildDocList() {
+  // TODO: remove predefined docs list
+  var DOCS = [["foo", ".html"], ["bar", ".html"], ["baz", ".html"]];
+  
+  // Output HTML
+  var output = "";
+  
+  // generate each list item
+  for (var i = 0; i < DOCS.length; i++) {
+    output += '<li><a href="#edit" onClick="loadToEditor(\"';
+    output += DOCS[i][0]+DOCS[i][1];
+    output += '\")"><aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside><p>';
+    output += DOCS[i][0]+'<em>'+DOCS[i][1]+'</em>';
+    output += '</p><p>The first few words of the file go here.</p></a></li>';
+  }
+  
+  // Display output HTML
+  docList.innerHTML = output;
 }
