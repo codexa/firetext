@@ -18,6 +18,13 @@ html, body {
 
 [data-type=list] aside.icon.icon-document {
   background-image: url(icons/document.png);
+  background-position: center;
+  background-size: 3rem;
+}
+
+[data-type=list] aside.icon.icon-arrow {
+  background-image: url(icons/arrow.png);
+  background-position: center;
 }
 
 
