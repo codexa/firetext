@@ -121,9 +121,26 @@ function saveFile(filename, filetype, content) {
 }
 
 function loadToEditor(filename, filetype) {
+  // Clear editor
   editor.innerHTML = '';
+  
+  // Get file name and type
   document.getElementById('currentFileName').textContent = filename;
   document.getElementById('currentFileType').textContent = filetype;
+  
+  // Set tool bar
+  switch (filetype) {
+    case ".odml":
+    case ".html":
+      toolbar.style.display = "block";
+      break;
+    case ".txt":
+    default:
+      toolbar.style.display = "none";
+      break;
+  }
+  
+  // Fill editor
   loadFile(filename, filetype, function(result) {
     editor.innerHTML = result;
   });
