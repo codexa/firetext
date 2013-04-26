@@ -1,6 +1,6 @@
 'use strict'; 
 
-var editor, toolbar, editWindow, docList;
+var editor, toolbar, editWindow, docList, doc;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
@@ -79,14 +79,14 @@ function saveFromEditor() {
   var content = "";
   switch (filetype) {
     case ".odml":
-      odml.encode(editor.innerHTML, "HTML");
+      odml.encode(doc.innerHTML, "HTML");
       break;
     case ".html":
-      content = editor.innerHTML;
+      content = doc.innerHTML;
       break;
     case ".txt":
     default:
-      content = editor.textContent;
+      content = doc.textContent;
       break;
   }
   saveFile(filename, filetype, content);
@@ -129,8 +129,7 @@ function saveFile(filename, filetype, content) {
 
 function loadToEditor(filename, filetype) {
   // Clear editor
-  formatDoc("selectAll")
-  formatDoc("delete")
+  doc.innerHTML = '';
   
   // Get file name and type
   document.getElementById('currentFileName').textContent = filename;
@@ -151,16 +150,15 @@ function loadToEditor(filename, filetype) {
   // Fill editor
   loadFile(filename, filetype, function(result) {
     if (filetype == ".odml") {
-      formatDoc("insertHTML", result);
+      doc.innerHTML = odml.parse(result, "HTML");
     } else {
-      formatDoc("insertHTML", result);
+      doc.innerHTML = result;
     }
   });
 }
 
 function loadFile(filename, filetype, callback) {
   var filePath = ("Documents/" + filename + filetype);
-  console.log(filePath);
   var req = storage.get(filePath);
   req.onsuccess = function () {
     var reader = new FileReader();
@@ -169,7 +167,6 @@ function loadFile(filename, filetype, callback) {
       alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
     };
     reader.onload = function () {
-      console.log(this.result);
       callback(this.result);
     };
   };
@@ -207,4 +204,5 @@ function buildDocList() {
 function initEditor() {
   editor.contentWindow.document.designMode = "on";
   editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
+  doc = editor.contentDocument.body;
 }
