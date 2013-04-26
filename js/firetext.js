@@ -129,7 +129,8 @@ function saveFile(filename, filetype, content) {
 
 function loadToEditor(filename, filetype) {
   // Clear editor
-  editor.innerHTML = '';
+  formatDoc("selectAll")
+  formatDoc("delete")
   
   // Get file name and type
   document.getElementById('currentFileName').textContent = filename;
@@ -150,15 +151,16 @@ function loadToEditor(filename, filetype) {
   // Fill editor
   loadFile(filename, filetype, function(result) {
     if (filetype == ".odml") {
-      editor.innerHTML = odml.parse(result, "HTML");
+      formatDoc("insertHTML", result);
     } else {
-      editor.innerHTML = result;
+      formatDoc("insertHTML", result);
     }
   });
 }
 
 function loadFile(filename, filetype, callback) {
   var filePath = ("Documents/" + filename + filetype);
+  console.log(filePath);
   var req = storage.get(filePath);
   req.onsuccess = function () {
     var reader = new FileReader();
@@ -167,6 +169,7 @@ function loadFile(filename, filetype, callback) {
       alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
     };
     reader.onload = function () {
+      console.log(this.result);
       callback(this.result);
     };
   };
