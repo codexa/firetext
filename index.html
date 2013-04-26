@@ -60,7 +60,6 @@
   <form role="dialog" onsubmit="return false;" data-type="action" id="type">
     <header>File type</header>
     <menu>
-      <button>.odml</button>
       <button>.html</button>
       <button>.txt</button>
       <button onClick="navBack()">Cancel</button>
@@ -83,15 +82,15 @@
   </section>
 
   <section role="dialog" id="add">
-    <header>
-      <button onClick="navBack()"><span class="icon icon-back">back</span></button>
-      <h1>New document</h1>
-    </header>
-    <div role="main">
-      <form>
-  	<fieldset>
+	<header>
+		<button onClick="navBack()"><span class="icon icon-back">back</span></button>
+		<h1>New document</h1>
+	</header>
+	<div role="main">
+	 <form>
+	  	<fieldset>
 			<legend style="float:right" onclick="nav('type')" class="action">
-				.odml
+				.html
 			</legend>
 			<section>
 				<p>
@@ -99,11 +98,11 @@
 					<button type="reset">Clear</button>
 				</p>
 			</section>
-		</fieldset>
-		<br>
-		<button class="button-block">Create</button>
-	  </form>
-    </div>
+			</fieldset>
+			<br>
+			<button class="button-block">Create</button>
+		</form>
+	</div>
   </section>
 
   <section role="dialog" id="open">
