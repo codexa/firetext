@@ -4,6 +4,20 @@ var odml = {};
 
 odml.parse = function (data, outputType) {
   // Some code to convert ODML into something else
+  output = "";
+  if (type == "HTML") {
+    // Location of <content> tags
+    data = data.indexOf("<content")+"<content>".length;
+    end = data.indexOf("</content>");
+    // Check for errors
+    if (start > end || start - "<content>".length == -1 || end == -1) {
+      alert("Parse error! >:(");
+    } else {
+      return data.substring(start, end);
+    }
+  }
+  // Didn't parse, return false
+  return false;
 };
 
 odml.encode = function (data, type) {
