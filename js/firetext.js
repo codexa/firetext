@@ -5,6 +5,7 @@ var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
   // Navigate to welcome screen
+  nav('');
   nav('welcome');
   
   // Select important elements for later
