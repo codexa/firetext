@@ -41,6 +41,21 @@ function init() {
   initEditor();
 }
 
+// Drawer/sidebar
+/*
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById("menu").addEventListener("click", function(){
+    var region = document.getElementById("edit");
+    if (region.getAttribute("data-state") == "none" ) {
+        region.setAttribute("data-state", "drawer");
+    } else {
+        region.setAttribute("data-state", "none");
+    }
+  });
+  return false;
+});
+*/
+
 window.addEventListener('hashchange', function() {
   if (location.hash == '#back') {
     document.querySelector('.current').classList.remove('parent');
