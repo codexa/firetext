@@ -79,7 +79,8 @@ function saveFromEditor() {
   var content = "";
   switch (filetype) {
     case ".odml":
-      // TODO
+      odml.encode(editor.innerHTML, "HTML");
+      break;
     case ".html":
       content = editor.innerHTML;
       break;
@@ -148,7 +149,11 @@ function loadToEditor(filename, filetype) {
   
   // Fill editor
   loadFile(filename, filetype, function(result) {
-    editor.innerHTML = result;
+    if (filetype == ".odml") {
+      editor.innerHTML = odml.parse(result, "HTML");
+    } else {
+      editor.innerHTML = result;
+    }
   });
 }
 
