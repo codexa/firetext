@@ -36,6 +36,9 @@ function init() {
   
   // Generate recent docs list
   buildDocList();
+  
+  // Initialize the editor
+  initEditor();
 }
 
 window.addEventListener('hashchange', function() {
@@ -191,4 +194,8 @@ function buildDocList() {
   
   // Display output HTML
   docList.innerHTML = output;
+}
+
+function initEditor() {
+  editor.contentWindow.document.designMode = "on";
 }
