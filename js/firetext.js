@@ -39,6 +39,8 @@ function init() {
 
 window.addEventListener('hashchange', function() {
   if (location.hash == '#back') {
+    document.querySelector('.current').classList.remove('parent');
+    document.querySelector('.current').classList.remove('current');  
     window.history.back();
     window.history.back();
   } else if (document.getElementById(location.hash.replace(/#/, ''))) {
