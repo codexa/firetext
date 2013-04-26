@@ -70,7 +70,7 @@ function navBack() {
 }
  
 function formatDoc(sCmd, sValue) {
-  document.execCommand(sCmd, false, sValue);
+  editor.contentWindow.document.execCommand(sCmd, false, sValue);
 }
 
 function saveFromEditor() {
