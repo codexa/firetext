@@ -15,6 +15,7 @@
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
 
   <script type="application/javascript" src="js/firetext.js"></script>
+  <script type="application/javascript" src="resources/odml/parse.js"></script>
 
   <!-- App Theme (Leave Blank for Default) -->
   <!--<link rel="stylesheet" type="text/css" href="style/themes/" />-->
@@ -124,7 +125,7 @@
       <menu type="toolbar">
         <button onClick="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>
-      <h1>Editing <span id="currentFileName"></span><span id="currentFileType"></span>...</h1>
+      <h1>Editing <span id="currentFileName"></span><span id="currentFileType" style="display: none;"></span>...</h1>
     </header>
     <div role="main" class="editor-container">
       <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
