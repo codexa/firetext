@@ -202,14 +202,21 @@ function buildDocList() {
   // Output HTML
   var output = "";
   
-  // generate each list item
-  for (var i = 0; i < DOCS.length; i++) {
-    output += '<li>'
-    output += '<a href="#edit" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
-    output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-    output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
-    output += '<p>The first few words of the file go here.</p>';
-    output += '</a></li>';
+  if (DOCS.length != 0) {
+    // generate each list item
+    for (var i = 0; i < DOCS.length; i++) {
+      output += '<li>';
+      output += '<a href="#edit" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
+      output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
+      output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+      output += '<p>The first few words of the file go here.</p>';
+      output += '</a></li>';
+    }
+  } else {
+    output += "<li>"
+    output += "<p>No Recent Documents</p>";
+    output += "<p>Click the '+' icon to create one.</p>";
+    output += "</li>";
   }
   
   // Display output HTML
