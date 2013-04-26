@@ -203,4 +203,5 @@ function buildDocList() {
 
 function initEditor() {
   editor.contentWindow.document.designMode = "on";
+  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
 }
