@@ -77,19 +77,22 @@
 	<div role="main">
 	 <form>
 	  	<fieldset>
-			<legend style="float:right" onclick="nav('type')" class="action">
-				.html
-			</legend>
-			<section>
-			  <p>
-			    <input placeholder="untitled" required="" type="text">
-				<button type="reset">Clear</button>
-			  </p>
-			</section>
-			</fieldset>
-			<br>
-			<button class="button-block">Create</button>
-		</form>
+          <legend style="float:right">
+            <select>
+              <option>.html</option>
+              <option>.css</option>
+            </select>
+		  </legend>
+		  <section>
+		    <p>
+		      <input placeholder="untitled" required="" type="text">
+              <button type="reset">Clear</button>
+			</p>
+		  </section>
+	    </fieldset>
+		<br>
+		<button class="button-block">Create</button>
+	</form>
 	</div>
   </section>
 
@@ -146,11 +149,6 @@
       </div>
     </nav>
   <!-- end sidebar -->
-
-  <select role="dialog" id="type">
-  	<option>.html</option>
-  	<option>.css</option>
-  </select>
 
   <form role="dialog" data-type="action" onsubmit="return false;" id="share">
     <header>Share</header>
