@@ -39,6 +39,9 @@ function init() {
   
   // Initialize the editor
   initEditor();
+  
+  // For testing, remove before publishing
+  docsInFolder()
 }
 
 // Drawer/sidebar
@@ -197,7 +200,7 @@ function loadFile(filename, filetype, callback) {
 
 function buildDocList() {
   // TODO: remove predefined docs list
-  var DOCS = [["foo", ".html"], ["bar", ".odml"], ["baz", ".txt"]];
+  var DOCS = [["foo", ".html"], ["baz", ".txt"]];
   
   // Output HTML
   var output = "";
@@ -205,7 +208,7 @@ function buildDocList() {
   if (DOCS.length != 0) {
     // generate each list item
     for (var i = 0; i < DOCS.length; i++) {
-      output += '<li>';
+      output += '<li>'
       output += '<a href="#edit" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
       output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
       output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
@@ -221,6 +224,30 @@ function buildDocList() {
   
   // Display output HTML
   docList.innerHTML = output;
+}
+
+function docsInFolder() {
+  // Get all the docs in /Documents directory
+  var cursor = storage.enumerate("Documents");
+  
+  cursor.onerror = function() {
+    alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+  };
+  cursor.onsuccess = function() {
+    if ( !cursor.result ) return;
+    
+    var file = cursor.result;
+    
+    // Only get documents
+    if (file.type.substring(0, 5) !== "text/") {
+      cursor.continue();
+      return;
+    }
+    
+    // At this point, the file should be vaild
+    alert(file.name);
+    cursor.continue();
+  }
 }
 
 function initEditor() {
