@@ -95,8 +95,31 @@
 	</form>
 	</div>
   </section>
+    <!-- sidebar -->
+  <section data-type="sidebar">
+    <header>
+      <menu type="toolbar">
+       <a href="#back"><span class="icon icon-back">back</span></a>
+    </menu>
+      <h1>Menu</h1>
+    </header>
+    <nav>
+      <ul>
+        <li><a href="#">Open a file...</a></li>
+        <li><a href="#">Create a new file</a></li>
+        <li><a href="#">Delete this file</a></li>
+      </ul>
+      <h2>Backup</h2>
+      <ul>
+        <li><a href="#">DropBox</a></li>
+        <li><a href="#">Google Drive</a></li>
+        <li><a href="#">Skydrive</a><li>
+      </ul>
+    </nav>
+  </section>
+  <!-- end sidebar -->
 
-  <section role="region" id="edit">
+ <section role="region" id="edit">
     <header>
       <a href="#" onclick="return false;" id="menu"><span class="icon icon-menu">menu</span></a>
       <menu type="toolbar">
@@ -119,36 +142,6 @@
       </ul>
     </div>
   </section>
-
-  <!-- sidebar -->
-    <nav>
-      <header>
-        <menu type="toolbar">
-         <a href="#back"><span class="icon icon-back">back</span></a>
-      </menu>
-        <h1>Menu</h1>
-      </header>
-      <div class="inner">
-        <ul>
-          <li><a href="#">Open a file...</a></li>
-          <li><a href="#">Create a new file</a></li>
-          <li><a href="#">Delete this file</a></li>
-        </ul>
-        <h2>Backup</h2>
-        <ul>
-          <li><a href="#">DropBox</a></li>
-          <li><a href="#">Google Drive</a></li>
-          <li><a href="#">Skydrive</a><li>
-        </ul>
-      </div>
-      <div role="toolbar">
-        <ul class="end">
-          <li><button class="search">Search</button></li>
-          <li><button class="pack-icon-share" onClick="nav('share')">Share</button></li>
-        </ul>
-      </div>
-    </nav>
-  <!-- end sidebar -->
 
   <form role="dialog" data-type="action" onsubmit="return false;" id="share">
     <header>Share</header>
