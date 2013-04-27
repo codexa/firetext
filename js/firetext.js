@@ -197,7 +197,6 @@ function buildDocList(DOCS, listElm) {
 }
 
 function buildDirList(DOCS) {
-  buildDocList(DOCS, dirList);
   buildDocList(DOCS, docBrowserDirList);
 }
 
@@ -257,4 +256,9 @@ function initEditor() {
   editor.contentWindow.document.designMode = "on";
   editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   doc = editor.contentDocument.body;
+}
+
+function showAllDocs() {
+  document.getElementById("device").style.display = "block";
+  document.getElementById("showAll").style.display = "none";
 }
