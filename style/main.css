@@ -19,11 +19,6 @@ html, body {
   overflow: scroll;
 }
 
-[data-type=list] {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 [data-type=list] li {
   padding-left: 10px;
   padding-right: 10px;
