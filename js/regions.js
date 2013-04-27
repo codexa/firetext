@@ -35,17 +35,17 @@ function navBack() {
 
 function sidebar(name) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
-    if (document.querySelector('.current').getAttribute('data-state') == 'none') {
-      document.getElementById('sidebar_' + name).classList.add('active');
-      document.querySelector('.current').setAttribute('data-state', 'drawer'); 
-      if (document.getElementById('button_' + name)) {
-        document.getElementById('button_' + name).classList.add('sidebar-faded-button');
-      }
-    } else {      
+    if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
       document.getElementById('sidebar_' + name).classList.remove('active');
       document.querySelector('.current').setAttribute('data-state', 'none');
       if (document.getElementById('button_' + name)) {
         document.getElementById('button_' + name).classList.remove('sidebar-faded-button');
+      }
+    } else {
+      document.getElementById('sidebar_' + name).classList.add('active');
+      document.querySelector('.current').setAttribute('data-state', 'drawer'); 
+      if (document.getElementById('button_' + name)) {
+        document.getElementById('button_' + name).classList.add('sidebar-faded-button');
       }
     }
   }

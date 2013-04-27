@@ -19,6 +19,23 @@ html, body {
   overflow: scroll;
 }
 
+[data-type=list] {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+[data-type=list] li {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+[data-type=list] h2 {
+  background: #222;
+  padding: 10px;
+  color: white;
+  margin: 10px 0;
+}
+
 /* Icons */
 
 [data-type=list] aside.icon.icon-document {
