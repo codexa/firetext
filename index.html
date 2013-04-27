@@ -96,7 +96,18 @@
 	</div>
   </section>
 
-  <!-- sidebar -->
+  <section role="dialog" id="open">
+    <header>
+      <button onClick="navBack()"><span class="icon icon-back">back</span></button>
+      <h1>Open document</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" class="docsList">
+        <ul id="openDialogDirList"></ul>
+      </article>
+    </div>
+  </section>
+
   <section data-type="sidebar" id="sidebar_main">
     <header>
       <menu type="toolbar">
@@ -106,22 +117,13 @@
     </header>
     <nav>
       <ul>
-        <li><a href="#" onClick="nav('welcome')">Go Home!</a></li>
-        <li><a href="#" onClick="nav('open')">Open a file...</a></li>
-        <li><a href="#" onClick="nav('add')">Create a new file</a></li>
-        <!--<li><a href="#">Delete this file</a></li>-->
+        <li><a href="#" onClick="nav('add')">New Document</a></li>
+        <li><a href="#" onClick="nav('open')">Open Document</a></li>
+        <li><a href="#" onClick="saveFromEditor()">Save Document</a></li>
+        <li><a href="#" onClick="nav('welcome')">Close Document</a></li>
       </ul>
-      <!--
-      <h2>Backup</h2>
-      <ul>
-        <li><a href="#">DropBox</a></li>
-        <li><a href="#">Google Drive</a></li>
-        <li><a href="#">Skydrive</a><li>
-      </ul>
-      -->
     </nav>
   </section>
-  <!-- end sidebar -->
 
   <section role="region" id="edit">
     <header>
