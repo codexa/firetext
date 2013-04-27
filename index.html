@@ -103,7 +103,7 @@
       <menu type="toolbar">
        <button onClick="sidebar('main')"><span class="icon icon-back">back</span></button>
     </menu>
-      <h1>Format</h1>
+      <h1>Menu</h1>
     </header>
     <nav>
       <ul>
@@ -126,7 +126,7 @@
 
   <section role="region" id="edit">
     <header>
-      <button onClick="navBack()" id="button_main"><span class="icon icon-back">back</span></button>
+      <button onClick="sidebar('main')" id="button_main"><span class="icon icon-menu">menu</span></button>
       <menu type="toolbar">
         <button onClick="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>
@@ -140,7 +140,7 @@
         <li><button class="sticky" style="background-image: url(style/icons/toolbar/bold.png);" onClick="formatDoc('bold')">Bold</button></li>
         <li><button class="sticky" style="background-image: url(style/icons/toolbar/underline.png);" onClick="formatDoc('underline')">Underline</button></li>
         <li><button class="sticky" style="background-image: url(style/icons/toolbar/italic.png);" onClick="formatDoc('italic')">Italic</button></li>
-        <li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="sidebar('main');editor.blur();">Format</button></li>
+        <!--<li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="nav('format')">Format</button></li>-->
       </ul>
       <ul>
         <!--<li><button class="pack-icon-share" onClick="nav('share')">Share</button></li>-->
@@ -154,7 +154,14 @@
       <button>Email</button>
       <button onClick="navBack()">Cancel</button>
     </menu>
-  </form>-->
+  </form>
+
+  <section role="dialog" id="format">
+    <header>
+      <button onClick="navBack()"><span class="icon icon-back">Cancel</span></button>
+      <h1>Format</h1>
+    </header>
+  </section>-->
 
 </body>
 </html>
