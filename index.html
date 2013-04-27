@@ -100,14 +100,23 @@
       <menu type="toolbar">
        <button onClick="sidebar('main')"><span class="icon icon-back">back</span></button>
     </menu>
-      <h1>Format</h1>
+      <h1>Menu</h1>
     </header>
     <nav>
       <ul>
-        <li><a href="#"><span style="float: left">Bold</span><label style="float: right"><input type="checkbox"><span></span></label></a></li>
-        <li><a href="#"><span style="float: left">Italic</span><label style="float: right"><input type="checkbox"><span></span></label></a></li>
-        <li><a href="#"><span style="float: left">Underline</span><label style="float: right"><input type="checkbox"><span></span></label></a></li>
+        <li><a href="#" onClick="nav('welcome')">Go Home!</a></li>
+        <li><a href="#" onClick="nav('open')">Open a file...</a></li>
+        <li><a href="#" onClick="nav('add')">Create a new file</a></li>
+        <!--<li><a href="#">Delete this file</a></li>-->
       </ul>
+      <!--
+      <h2>Backup</h2>
+      <ul>
+        <li><a href="#">DropBox</a></li>
+        <li><a href="#">Google Drive</a></li>
+        <li><a href="#">Skydrive</a><li>
+      </ul>
+      -->
     </nav>
   </section>
   <!-- end sidebar -->
@@ -116,6 +125,7 @@
     <header>
       <button onClick="navBack()" id="button_main"><span class="icon icon-back">back</span></button>
       <menu type="toolbar">
+        <button onClick="sidebar('main');editor.blur();"><span class="icon icon-menu">Menu</span></button>
         <button onClick="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>
       <h1>Editing <span id="currentFileName"></span><span id="currentFileType" style="display: none;"></span>...</h1>
@@ -128,7 +138,7 @@
         <li><button class="sticky" style="background-image: url(style/icons/toolbar/bold.png);" onClick="formatDoc('bold')">Bold</button></li>
         <li><button class="sticky" style="background-image: url(style/icons/toolbar/underline.png);" onClick="formatDoc('underline')">Underline</button></li>
         <li><button class="sticky" style="background-image: url(style/icons/toolbar/italic.png);" onClick="formatDoc('italic')">Italic</button></li>
-        <li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="sidebar('main');editor.blur();">Format</button></li>
+        <!--<li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="sidebar('main');editor.blur();">Format</button></li>-->
       </ul>
       <ul>
         <!--<li><button class="pack-icon-share" onClick="nav('share')">Share</button></li>-->
