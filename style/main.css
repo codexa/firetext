@@ -14,6 +14,11 @@ html, body {
   background: url(images/bg.png) black;
 }
 
+[role=main].header-only {
+  height: calc(100% - 5rem);
+  overflow: scroll;
+}
+
 /* Icons */
 
 [data-type=list] aside.icon.icon-document {

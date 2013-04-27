@@ -51,13 +51,18 @@
     <header>
       <menu type="toolbar">
         <button onClick="nav('add')"><span class="icon icon-add">Add</span></button>
-        <button onClick="nav('open')"><span class="icon icon-compose">Open</span></button>
+        <button onClick=""><span class="icon icon-edit">Edit</span></button>
       </menu>
       <h1>Firetext</h1>
     </header>
-    <article data-type="list" class="docsList">
-      <ul id="docs"></ul>
-    </article>
+    <div role="main" class="header-only">
+      <article data-type="list" class="docsList">
+        <h2>Recents:</h2>
+        <ul id="docs"></ul>
+        <hr /><h2>All:</h2>
+        <ul id="docBrowserDirList"></ul>
+      </article>
+    </div>
   </section>
 
   <section role="dialog" id="open">
@@ -65,9 +70,11 @@
       <button onClick="navBack()"><span class="icon icon-back">back</span></button>
       <h1>Open document</h1>
     </header>
-    <article data-type="list" class="docsList">
-	  <ul id="dir"></ul>
-    </article>
+    <div role="main" class="header-only">
+      <article data-type="list" class="docsList">
+	    <ul id="openDialogDirList"></ul>
+      </article>
+    </div>
   </section>
 
   <section role="dialog" id="add">
@@ -75,13 +82,13 @@
 		<button onClick="navBack()"><span class="icon icon-back">back</span></button>
 		<h1>New document</h1>
 	</header>
-	<div role="main">
+	<div role="main" class="header-only">
 	 <form onSubmit="javascript:createFromDialog();">
 	  	<fieldset>
           <legend style="float:right">
             <select id="createDialogFileType">
               <option>.html</option>
-              <option>.css</option>
+              <option>.txt</option>
             </select>
 		  </legend>
 		  <section>
