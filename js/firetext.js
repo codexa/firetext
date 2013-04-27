@@ -5,7 +5,6 @@ var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
   // Navigate to welcome screen
-  nav('');
   nav('welcome');
   
   // Select important elements for later
@@ -136,6 +135,9 @@ function loadToEditor(filename, filetype) {
       doc.innerHTML = result;
     }
   });
+  
+  // Show editor
+  nav('edit');
 }
 
 function loadFile(filename, filetype, callback) {
@@ -169,7 +171,7 @@ function buildDocList(DOCS, listElm) {
     // generate each list item
     for (var i = 0; i < DOCS.length; i++) {
       output += '<li>'
-      output += '<a href="#edit" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
+      output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
       output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
       output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
       output += '<p>The first few words of the file go here.</p>';

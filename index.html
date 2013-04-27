@@ -96,11 +96,12 @@
 	</form>
 	</div>
   </section>
-    <!-- sidebar -->
-  <section data-type="sidebar">
+  
+  <!-- sidebar -->
+  <section data-type="sidebar" id="sidebar_main">
     <header>
       <menu type="toolbar">
-       <a href="#back"><span class="icon icon-back">back</span></a>
+       <button onClick="sidebar('main')"><span class="icon icon-back">back</span></button>
     </menu>
       <h1>Menu</h1>
     </header>
@@ -120,9 +121,9 @@
   </section>
   <!-- end sidebar -->
 
- <section role="region" id="edit">
+  <section role="region" id="edit">
     <header>
-      <a href="#" onclick="return false;" id="menu"><span class="icon icon-menu">menu</span></a>
+      <button onClick="sidebar('main')" id="button_main"><span class="icon icon-menu">menu</span></button>
       <menu type="toolbar">
         <button onClick="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>

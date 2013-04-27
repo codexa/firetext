@@ -1,42 +1,44 @@
-window.addEventListener('hashchange', function() {
-  if (location.hash == '#back') {
-    document.querySelector('.current').classList.remove('parent');
-    document.querySelector('.current').classList.remove('current');  
-    window.history.back();
-    window.history.back();
-  } else if (document.getElementById(location.hash.replace(/#/, ''))) {
-    if (document.querySelector('.current')) { 
-      if (document.getElementById(location.hash.replace(/#/, '')).getAttribute('role') == 'dialog') {
+var regionHistory = new Array();
+
+function nav(location) {
+  if (document.getElementById(location)) {
+    if (document.querySelector('.current')) {
+      if (document.getElementById(location).getAttribute('role') == 'dialog') {
         document.querySelector('.current').classList.add('parent');
-      } else {
-        document.querySelector('.current').classList.remove('parent');      
+      } else {        
+        document.querySelector('.current').classList.remove('parent');
       }
       document.querySelector('.current').classList.remove('current');
     }
-    document.getElementById(location.hash.replace(/#/, '')).classList.add('current');
-  } else {
+    regionHistory.push(location);
+    document.getElementById(location).classList.add('current');
   }
-});
-
-function nav(location) {
-  document.location.hash = location;
 }
 
 function navBack() {
-  document.location.hash = 'back';
+  document.querySelector('.current').classList.remove('current');
+  regionHistory.pop();
+  
+  // This is a weird way to do this, but I couldn't figure out a better one.
+  document.getElementById(regionHistory.pop()).classList.add('current');  
+  regionHistory.push(document.querySelector('.current'));
 }
 
-// Drawer/sidebar
-/*
-document.addEventListener("DOMContentLoaded", function(){
-  document.getElementById("menu").addEventListener("click", function(){
-    var region = document.getElementById("edit");
-    if (region.getAttribute("data-state") == "none" ) {
-        region.setAttribute("data-state", "drawer");
+function sidebar(name) {
+  if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
+    if (document.querySelector('.current').getAttribute('data-state') == 'none') {
+      document.querySelector('.current').setAttribute('data-state', 'drawer'); 
+      if (document.getElementById('button_' + name)) {
+        document.getElementById('button_' + name).style.transition = 'opacity .5s';
+        document.getElementById('button_' + name).style.opacity = '0';
+      }
     } else {
-        region.setAttribute("data-state", "none");
+      document.querySelector('.current').setAttribute('data-state', 'none');
+      if (document.getElementById('button_' + name)) {
+        document.getElementById('button_' + name).style.transition = 'opacity .5s';
+        document.getElementById('button_' + name).style.opacity = '1';
+      }
     }
-  });
-  return false;
-});
-*/
+  }
+}
+
