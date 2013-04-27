@@ -250,7 +250,6 @@ function docsInFolder(callback) {
     // Base case
     if (!cursor.result) {
       // Finished
-      alert(docs);
       callback(docs);
       return;
     }
