@@ -197,6 +197,7 @@ function buildDocList(DOCS, listElm) {
 }
 
 function buildDirList(DOCS) {
+  buildDocList(DOCS, dirList);
   buildDocList(DOCS, docBrowserDirList);
 }
 
