@@ -170,15 +170,18 @@ function loadFile(filename, filetype, callback) {
 function buildDocList(DOCS, listElm) {
   // Output HTML
   var output = "";
+  var description = "";
   
-  if (DOCS.length != 0) {
-    // generate each list item
+  if (DOCS.length != 0) { 
+  
+    // generate each list item 
     for (var i = 0; i < DOCS.length; i++) {
+      // TODO: Get first few words of file.
       output += '<li>'
       output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
       output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
       output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
-      output += '<p>The first few words of the file go here.</p>';
+      output += '<p>'+description+'</p>';
       output += '</a></li>';
     }
   } else {

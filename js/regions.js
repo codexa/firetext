@@ -25,12 +25,12 @@ function nav(location) {
 }
 
 function navBack() {
+  document.querySelector('.current').classList.remove('parent');
   document.querySelector('.current').classList.remove('current');
   regionHistory.pop();
   
   // This is a weird way to do this, but I couldn't figure out a better one.
-  document.getElementById(regionHistory.pop()).classList.add('current');  
-  regionHistory.push(document.querySelector('.current'));
+  nav(regionHistory.pop()); 
 }
 
 function sidebar(name) {
