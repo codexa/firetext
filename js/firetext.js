@@ -1,6 +1,6 @@
 'use strict'; 
 
-var editor, toolbar, editWindow, docList, doc;
+var editor, toolbar, editWindow, docList, dirList, doc, docsTMP;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
@@ -13,6 +13,7 @@ function init() {
   toolbar = document.getElementById('edit-bar');
   editWindow = document.getElementById('edit');
   docList = document.getElementById('docs');
+  dirList = document.getElementById('dir');
   
   // Add event listeners
   toolbar.addEventListener(
@@ -34,14 +35,17 @@ function init() {
     }
   );
   
+  // TODO: remove predefined docs list
+  var docsTMP = [["foo", ".html"], ["baz", ".txt"]];
+  
   // Generate recent docs list
-  buildDocList();
+  buildDocList(docsTMP, docList);
   
   // Initialize the editor
   initEditor();
   
   // For testing, remove before publishing
-  docsInFolder()
+  docsInFolder(buildDirList);
 }
 
 // Drawer/sidebar
@@ -200,10 +204,7 @@ function loadFile(filename, filetype, callback) {
   };
 }
 
-function buildDocList() {
-  // TODO: remove predefined docs list
-  var DOCS = [["foo", ".html"], ["baz", ".txt"]];
-  
+function buildDocList(DOCS, listElm) {
   // Output HTML
   var output = "";
   
@@ -225,10 +226,17 @@ function buildDocList() {
   }
   
   // Display output HTML
-  docList.innerHTML = output;
+  listElm.innerHTML = output;
 }
 
-function docsInFolder() {
+function buildDirList(DOCS) {
+  buildDocList(DOCS, dirList);
+}
+
+function docsInFolder(callback) {
+  // List of documents
+  var docs = [];
+  
   // Get all the docs in /Documents directory
   var cursor = storage.enumerate("Documents");
   
@@ -236,18 +244,44 @@ function docsInFolder() {
     alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
   };
   cursor.onsuccess = function() {
-    if ( !cursor.result ) return;
-    
+    // Get file
     var file = cursor.result;
     
+    // Base case
+    if (!cursor.result) {
+      // Finished
+      alert(docs);
+      callback(docs);
+      return;
+    }
+    
     // Only get documents
-    if (file.type.substring(0, 5) !== "text/") {
+    if (file.type !== "text/plain" && file.type !== "text/html") {
       cursor.continue();
       return;
     }
     
-    // At this point, the file should be vaild
-    alert(file.name);
+    
+    // At this point, the file should be vaild!
+    
+    // Get file properties
+    var filename = "";
+    var filetype = "";
+    switch(file.type) {
+      case "text\/plain":
+        filename = file.name.substring(0, file.name.length-4);
+        filetype = ".txt";
+        break;
+      case "text\/html":
+        filename = file.name.substring(0, file.name.length-5);
+        filetype = ".html";
+        break;
+    }
+    
+    // Add to list of docs
+    docs.push([filename, filetype]);
+    
+    // Check next file
     cursor.continue();
   }
 }
