@@ -1,8 +1,14 @@
 var regionHistory = new Array();
 
 function nav(location) {
-  if (document.getElementById(location)) {
+  if (document.getElementById(location)) { 
     if (document.querySelector('.current')) {
+      if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
+        document.querySelector('.current').setAttribute('data-state', 'none');
+        if (document.querySelector('.sidebar-faded-button')) {
+          document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
+        }
+      }
       if (document.getElementById(location).getAttribute('role') == 'dialog') {
         document.querySelector('.current').classList.add('parent');
       } else {        
@@ -27,16 +33,16 @@ function navBack() {
 function sidebar(name) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
     if (document.querySelector('.current').getAttribute('data-state') == 'none') {
+      document.getElementById('sidebar_' + name).classList.add('active');
       document.querySelector('.current').setAttribute('data-state', 'drawer'); 
       if (document.getElementById('button_' + name)) {
-        document.getElementById('button_' + name).style.transition = 'opacity .5s';
-        document.getElementById('button_' + name).style.opacity = '0';
+        document.getElementById('button_' + name).classList.add('sidebar-faded-button');
       }
-    } else {
+    } else {      
+      document.getElementById('sidebar_' + name).classList.remove('active');
       document.querySelector('.current').setAttribute('data-state', 'none');
       if (document.getElementById('button_' + name)) {
-        document.getElementById('button_' + name).style.transition = 'opacity .5s';
-        document.getElementById('button_' + name).style.opacity = '1';
+        document.getElementById('button_' + name).classList.remove('sidebar-faded-button');
       }
     }
   }

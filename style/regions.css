@@ -85,10 +85,25 @@ section[role=dialog].current {
 }
 
 /* Handle sidebars */
+[data-type=sidebar] {
+  opacity: 0;
+  transition: 0s opacity .5s;
+}
+
+[data-type=sidebar].active {
+  opacity: 1;
+  transition: 0s opacity;
+}
+
 section[role=region][data-state=drawer].current, section[role=dialog][data-state=drawer].current, form[role=dialog][data-state=drawer].current {
   transform: translateX(80%);
   -moz-transform: translateX(80%);
   -webkit-transform: translateX(80%);
   -o-transform: translateX(80%);
   -ms-transform: translateX(80%);  
+}
+
+.sidebar-faded-button {
+  opacity: 0 !important;
+  transition: opacity .5s;
 }
