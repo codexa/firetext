@@ -88,9 +88,6 @@ function saveFile(filename, filetype, content) {
   var contentBlob = new Blob([content], { "type" : type });
   var filePath = ("Documents/" + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
-  req.onsuccess = function () {
-    alert('Save successful!');
-  };
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError") {
       var req2 = storage.delete(filePath);
