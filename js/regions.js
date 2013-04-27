@@ -16,6 +16,9 @@ function nav(location) {
       }
       document.querySelector('.current').classList.remove('current');
     }
+    if (document.querySelector('.parent') && document.getElementById(location).getAttribute('role') != 'dialog') {
+      document.querySelector('.parent').classList.remove('parent');
+    }
     regionHistory.push(location);
     document.getElementById(location).classList.add('current');
   }

@@ -51,6 +51,13 @@ function formatDoc(sCmd, sValue) {
   editor.contentWindow.document.execCommand(sCmd, false, sValue);
 }
 
+function createFromDialog() {
+  var filename = document.getElementById('createDialogFileName').value;
+  var filetype = document.getElementById('createDialogFileType').value;
+  saveFile(filename, filetype, '');
+  loadToEditor(filename, filetype);
+}
+
 function saveFromEditor() {
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;

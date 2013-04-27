@@ -76,23 +76,23 @@
 		<h1>New document</h1>
 	</header>
 	<div role="main">
-	 <form>
+	 <form onSubmit="javascript:createFromDialog();">
 	  	<fieldset>
           <legend style="float:right">
-            <select>
+            <select id="createDialogFileType">
               <option>.html</option>
               <option>.css</option>
             </select>
 		  </legend>
 		  <section>
 		    <p>
-		      <input placeholder="untitled" required="" type="text">
+		      <input placeholder="untitled" required="" type="text" id="createDialogFileName">
               <button type="reset">Clear</button>
 			</p>
 		  </section>
 	    </fieldset>
 		<br>
-		<button class="button-block">Create</button>
+		<button type="submit" class="button-block">Create</button>
 	</form>
 	</div>
   </section>
