@@ -1,6 +1,6 @@
 'use strict'; 
 
-var editor, toolbar, editWindow, docList, dirList, doc, docsTMP;
+var editor, toolbar, editWindow, docList, dirList, doc, docsTMP, docBrowserDirList;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
@@ -12,7 +12,8 @@ function init() {
   toolbar = document.getElementById('edit-bar');
   editWindow = document.getElementById('edit');
   docList = document.getElementById('docs');
-  dirList = document.getElementById('dir');
+  dirList = document.getElementById('openDialogDirList');
+  docBrowserDirList = document.getElementById('docBrowserDirList');
   
   // Add event listeners
   toolbar.addEventListener(
@@ -197,6 +198,7 @@ function buildDocList(DOCS, listElm) {
 
 function buildDirList(DOCS) {
   buildDocList(DOCS, dirList);
+  buildDocList(DOCS, docBrowserDirList);
 }
 
 function docsInFolder(callback) {
