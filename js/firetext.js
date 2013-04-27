@@ -120,6 +120,8 @@ function saveFile(filename, filetype, content) {
       type = "text\/html";
       break;
     case ".txt":
+      type = "text\/plain";
+      break;
     default:
       break;
   }
