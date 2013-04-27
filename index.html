@@ -60,9 +60,11 @@
       <article data-type="list" class="docsList">
         <h2>Recents:</h2>
         <ul id="docs"></ul>
-        <button>Show All Documents</button>
-        <!--<hr /><h2>Device:</h2>
-        <ul id="docBrowserDirList"></ul>-->
+        <button id="showAll" onClick="showAllDocs()">Show All Documents</button>
+        <div id="device" style="display: none;">
+          <h2>Device:</h2>
+          <ul id="docBrowserDirList"></ul>
+        </div>
       </article>
     </div>
   </section>
