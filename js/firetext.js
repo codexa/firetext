@@ -52,9 +52,10 @@ function formatDoc(sCmd, sValue) {
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
-  saveFile(filename, filetype, '', false);
-  RecentDocs.add([filename,filetype]);
-  loadToEditor(filename, filetype);
+  saveFile(filename, filetype, '', false, function() {
+    RecentDocs.add([filename,filetype]);
+    loadToEditor(filename, filetype);
+  });
 }
 
 function saveFromEditor() {
@@ -73,10 +74,10 @@ function saveFromEditor() {
       content = doc.textContent;
       break;
   }
-  saveFile(filename, filetype, content, true);
+  saveFile(filename, filetype, content, true, false);
 } 
 
-function saveFile(filename, filetype, content, showBanner) {
+function saveFile(filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
     case ".odml":
@@ -98,12 +99,15 @@ function saveFile(filename, filetype, content, showBanner) {
     if (showBanner) {
       showSaveBanner();
     }
+    if (callback) {
+      callback();
+    }
   };
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError") {
       var req2 = storage.delete(filePath);
       req2.onsuccess = function () {
-          saveFile(filename, filetype, content);
+        saveFile(filename, filetype, content, showBanner, callback);
       };
       req2.onerror = function () {
         alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
