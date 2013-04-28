@@ -22,6 +22,9 @@ function nav(location) {
     regionHistory.push(location);
     document.getElementById(location).classList.add('current');
   }
+  
+  // Generate docs list
+  updateDocLists();
 }
 
 function navBack() {
@@ -30,7 +33,10 @@ function navBack() {
   regionHistory.pop();
   
   // This is a weird way to do this, but I couldn't figure out a better one.
-  nav(regionHistory.pop()); 
+  nav(regionHistory.pop());
+  
+  // Generate docs list
+  updateDocLists();
 }
 
 function sidebar(name) {
