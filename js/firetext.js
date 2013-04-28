@@ -94,6 +94,9 @@ function saveFile(filename, filetype, content) {
   var contentBlob = new Blob([content], { "type" : type });
   var filePath = ("Documents/" + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
+  req.onsuccess = function () {
+    showSaveBanner()
+  };
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError") {
       var req2 = storage.delete(filePath);
@@ -114,9 +117,13 @@ function loadToEditor(filename, filetype) {
   // Clear editor
   doc.innerHTML = '';
   
-  // Get file name and type
+  // Set file name and type
   document.getElementById('currentFileName').textContent = filename;
   document.getElementById('currentFileType').textContent = filetype;
+  
+  // Set alert banner name and type
+  document.getElementById('save-banner-name').textContent = filename;
+  document.getElementById('save-banner-type').textContent = filetype;
   
   // Set tool bar
   switch (filetype) {
@@ -320,4 +327,17 @@ RecentDocs.add = function(file) {
     this.init();
     this.add(file);
   }
+}
+
+// Make save banner hidden after 4 seconds
+function hideSaveBanner() {
+  window.setTimeout(function() {
+    document.getElementById("save-banner").hidden = true;
+  }, 4000);
+}
+ 
+// Show the banner
+function showSaveBanner() {
+  document.getElementById("save-banner").hidden = false;
+  hideSaveBanner();
 }
