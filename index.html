@@ -70,30 +70,31 @@
   </section>
 
   <section role="dialog" id="add">
-	<header>
-		<button onClick="navBack()"><span class="icon icon-back">back</span></button>
-		<h1>New document</h1>
-	</header>
-	<div role="main" class="header-only">
-	 <form onSubmit="javascript:createFromDialog();">
-	  	<fieldset>
+	  <header>
+	    <button onClick="navBack()"><span class="icon icon-back">back</span></button>
+	    <h1>New document</h1>
+	   </header>
+	   <div role="main" class="header-only">
+	    <form onSubmit="javascript:createFromDialog();">
+	      <br>
+	      <fieldset class="button-block">
           <legend style="float:right">
             <select id="createDialogFileType">
               <option>.html</option>
               <option>.txt</option>
             </select>
-		  </legend>
-		  <section>
-		    <p>
-		      <input placeholder="untitled" required="" type="text" id="createDialogFileName">
+          </legend>
+  		    <section>
+  		      <p>
+  		        <input placeholder="untitled" required="" type="text" id="createDialogFileName">
               <button type="reset">Clear</button>
-			</p>
-		  </section>
-	    </fieldset>
-		<br>
-		<button type="submit" class="button-block">Create</button>
-	  </form>
-	</div>
+  			    </p>
+  		    </section> 
+  		  </fieldset>
+  		  <br>
+  		  <button type="submit" class="button-block">Create</button>
+	    </form>
+	  </div>
   </section>
 
   <section role="dialog" id="open">
