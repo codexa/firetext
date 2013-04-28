@@ -52,7 +52,7 @@ function formatDoc(sCmd, sValue) {
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
-  saveFile(filename, filetype, '');
+  saveFile(filename, filetype, '', false);
   RecentDocs.add([filename,filetype]);
   loadToEditor(filename, filetype);
 }
@@ -73,10 +73,10 @@ function saveFromEditor() {
       content = doc.textContent;
       break;
   }
-  saveFile(filename, filetype, content);
+  saveFile(filename, filetype, content, true);
 } 
 
-function saveFile(filename, filetype, content) {
+function saveFile(filename, filetype, content, showBanner) {
   var type = "text";
   switch (filetype) {
     case ".odml":
@@ -95,7 +95,9 @@ function saveFile(filename, filetype, content) {
   var filePath = ("Documents/" + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
   req.onsuccess = function () {
-    showSaveBanner()
+    if (showBanner) {
+      showSaveBanner();
+    }
   };
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError") {
