@@ -1,6 +1,6 @@
 'use strict'; 
 
-var editor, toolbar, editWindow, docList, dirList, doc, docsTMP, docBrowserDirList;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
@@ -35,17 +35,14 @@ function init() {
     }
   );
   
-  // TODO: remove predefined docs list
-  var docsTMP = [["foo", ".html"], ["baz", ".txt"]];
+  // Initalize recent docs
+  RecentDocs.init();
   
-  // Generate recent docs list
-  buildDocList(docsTMP, docList);
+  // Generate docs list
+  updateDocLists();
   
   // Initialize the editor
   initEditor();
-  
-  // For testing, remove before publishing
-  docsInFolder(buildDirList);
 }
  
 function formatDoc(sCmd, sValue) {
@@ -56,6 +53,7 @@ function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
   saveFile(filename, filetype, '');
+  RecentDocs.add([filename,filetype]);
   loadToEditor(filename, filetype);
 }
 
@@ -141,6 +139,9 @@ function loadToEditor(filename, filetype) {
     }
   });
   
+  // Add file to recent docs
+  RecentDocs.add([filename, filetype]);
+  
   // Show editor
   nav('edit');
 }
@@ -169,31 +170,32 @@ function loadFile(filename, filetype, callback) {
 }
 
 function buildDocList(DOCS, listElm) {
-  // Output HTML
-  var output = "";
-  var description = "";
-  
-  if (DOCS.length != 0) { 
-  
-    // generate each list item 
-    for (var i = 0; i < DOCS.length; i++) {
-      // TODO: Get first few words of file.
-      output += '<li>'
-      output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
-      output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-      output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
-      output += '<p>'+description+'</p>';
-      output += '</a></li>';
+  if (listElm != undefined) {
+    // Output HTML
+    var output = "";
+    var description = "";
+    
+    if (DOCS.length != 0) {     
+      // generate each list item 
+      for (var i = 0; i < DOCS.length; i++) {
+        // TODO: Get first few words of file.
+        output += '<li>'
+        output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
+        output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
+        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+        output += '<p>'+description+'</p>';
+        output += '</a></li>';
+      }
+    } else {
+      output += "<li>"
+      output += "<p>No Recent Documents</p>";
+      output += "<p>Click the '+' icon to create one.</p>";
+      output += "</li>";
     }
-  } else {
-    output += "<li>"
-    output += "<p>No Recent Documents</p>";
-    output += "<p>Click the '+' icon to create one.</p>";
-    output += "</li>";
+    
+    // Display output HTML
+    listElm.innerHTML = output;
   }
-  
-  // Display output HTML
-  listElm.innerHTML = output;
 }
 
 function buildDirList(DOCS) {
@@ -262,4 +264,60 @@ function initEditor() {
 function showAllDocs() {
   document.getElementById("device").style.display = "block";
   document.getElementById("showAll").style.display = "none";
+}
+
+function updateDocLists() {
+  buildDocList(RecentDocs.get(), docList);
+  docsInFolder(buildDirList);
+}
+
+// RecentDocs Object
+var RecentDocs = {};
+
+// Initalize recent docs
+RecentDocs.init = function() {
+  if (localStorage["firetext.docs.recent"] == undefined) {
+    localStorage["firetext.docs.recent"] = JSON.stringify([]);
+  }
+}
+
+// Get recent docs
+RecentDocs.get = function() {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    return JSON.parse(localStorage["firetext.docs.recent"]);
+  }
+  else {
+    this.init();
+    return this.get();
+  }
+}
+
+// Add to recent docs
+RecentDocs.add = function(file) {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    var docsTMP = this.get();
+    
+    // Remove duplicate
+    for (var i = 0; i < docsTMP.length; i++) {
+      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+        docsTMP.splice(i, 1);
+        break;
+      }
+    }
+    
+    // Add item
+    docsTMP.splice(0, 0, file);
+    
+    // Remove extra items
+    if (docsTMP.length > 4) {
+      docsTMP.splice(4, docsTMP.length);
+    }
+    
+    // Save array
+    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
+  }
+  else {
+    this.init();
+    this.add(file);
+  }
 }
