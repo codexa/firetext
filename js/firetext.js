@@ -160,7 +160,13 @@ function docsInFolder(callback) {
   var cursor = storage.enumerate("Documents");
   
   cursor.onerror = function() {
-    alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+    if (cursor.error.name == 'TypeMismatchError') {
+      saveFile('Welcome','.html','<h1><b>Welcome</b> to <i>Firetext</i>!</h1>', false, function() {
+      loadToEditor('Welcome', '.html');
+    });
+    } else {
+      alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+    }
   };
   cursor.onsuccess = function() {
     // Get file
