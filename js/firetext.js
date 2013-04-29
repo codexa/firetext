@@ -1,6 +1,6 @@
 'use strict'; 
 
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline;
 var storage = navigator.getDeviceStorage("sdcard");
 
 function init() {
@@ -14,6 +14,9 @@ function init() {
   docList = document.getElementById('docs');
   dirList = document.getElementById('openDialogDirList');
   docBrowserDirList = document.getElementById('docBrowserDirList');
+  bold = document.getElementById('bold');
+  italic = document.getElementById('italic');
+  underline = document.getElementById('underline');
   
   // Add event listeners
   toolbar.addEventListener(
@@ -131,7 +134,7 @@ function loadToEditor(filename, filetype) {
   document.getElementById('save-banner-name').textContent = filename;
   document.getElementById('save-banner-type').textContent = filetype;
   
-  // Set tool bar
+  // Show/hide toolbar
   switch (filetype) {
     case ".odml":
     case ".html":
@@ -347,3 +350,25 @@ function showSaveBanner() {
   document.getElementById("save-banner").hidden = false;
   hideSaveBanner();
 }
+
+function updateToolbar() {
+  if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
+    if (editor.contentDocument.queryCommandState("bold")) {
+      bold.classList.add('active');
+    } else {
+      bold.classList.remove('active');
+    }
+    if (editor.contentDocument.queryCommandState("italic")) {
+      italic.classList.add('active');
+    } else {
+      italic.classList.remove('active');
+    }
+    if (editor.contentDocument.queryCommandState("underline")) {
+      underline.classList.add('active');
+    } else {
+      underline.classList.remove('active');
+    }
+  }
+}
+
+window.setInterval(updateToolbar, 100);
