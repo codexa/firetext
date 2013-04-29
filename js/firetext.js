@@ -203,10 +203,10 @@ function buildDocList(DOCS, listElm) {
         output += '</a></li>';
       }
     } else {
-      output += "<li>"
-      output += "<p>No Recent Documents</p>";
+      output += '<li style="margin-top: -5px">';
+      output += '<p>No Recent Documents</p>';
       output += "<p>Click the '+' icon to create one.</p>";
-      output += "</li>";
+      output += '</li>';
     }
     
     // Display output HTML
@@ -344,7 +344,7 @@ function hideSaveBanner() {
     document.getElementById("save-banner").hidden = true;
   }, 4000);
 }
- 
+
 // Show the banner
 function showSaveBanner() {
   document.getElementById("save-banner").hidden = false;
