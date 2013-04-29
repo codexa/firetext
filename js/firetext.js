@@ -230,7 +230,7 @@ function showAllDocs() {
   document.getElementById("showAll").style.display = "none";
 }
 
-/* Create, Load, & Save
+/* File IO
 ------------------------*/
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
@@ -363,6 +363,26 @@ function loadFile(filename, filetype, callback) {
       alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
     }
   };
+}
+
+function deleteFile(name) {  
+  var path = ('Documents/'+name);
+  var req = storage.delete(path);
+  req.onsuccess = function () {
+    // Code to show a deleted banner
+  }
+  req.onerror = function () {
+    // Code to show an error banner (the alert is temporary)
+    alert('Delete unsuccessful :(\n\nInfo for gurus:\n"' + this.error.name + '"');
+  }
+}
+
+function renameFile(name, type, newname) {
+  loadFile(name, type, function(result) {
+    var fullName = (name + type);
+    saveFile(name, type, result, false);
+    deleteFile(fullName);
+  });
 }
 
 /* Format
