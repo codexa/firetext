@@ -1,8 +1,12 @@
 'use strict'; 
 
+/* Globals
+------------------------*/
 var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline;
 var storage = navigator.getDeviceStorage("sdcard");
 
+/* Initalize
+------------------------*/
 function init() {
   // Navigate to welcome screen
   nav('welcome');
@@ -47,11 +51,181 @@ function init() {
   // Initialize the editor
   initEditor();
 }
- 
-function formatDoc(sCmd, sValue) {
-  editor.contentWindow.document.execCommand(sCmd, false, sValue);
+
+function initEditor() {
+  editor.contentWindow.document.designMode = "on";
+  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
+  doc = editor.contentDocument.body;
 }
 
+/* Recent Docs
+------------------------*/
+// RecentDocs Object
+var RecentDocs = {};
+
+// Initalize recent docs
+RecentDocs.init = function() {
+  if (localStorage["firetext.docs.recent"] == undefined) {
+    localStorage["firetext.docs.recent"] = JSON.stringify([]);
+  }
+}
+
+// Get recent docs
+RecentDocs.get = function() {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    return JSON.parse(localStorage["firetext.docs.recent"]);
+  }
+  else {
+    this.init();
+    return this.get();
+  }
+}
+
+// Add to recent docs
+RecentDocs.add = function(file) {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    var docsTMP = this.get();
+    
+    // Remove duplicate
+    for (var i = 0; i < docsTMP.length; i++) {
+      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+        docsTMP.splice(i, 1);
+        break;
+      }
+    }
+    
+    // Add item
+    docsTMP.splice(0, 0, file);
+    
+    // Remove extra items
+    if (docsTMP.length > 4) {
+      docsTMP.splice(4, docsTMP.length);
+    }
+    
+    // Save array
+    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
+  }
+  else {
+    this.init();
+    this.add(file);
+  }
+}
+
+/* Doc lists
+------------------------*/
+function updateDocLists() {
+  buildDocList(RecentDocs.get(), docList, "Recent Documents");
+  docsInFolder(buildDirList);
+}
+
+function buildDirList(DOCS) {
+  buildDocList(DOCS, dirList, "Documents Found");
+  buildDocList(DOCS, docBrowserDirList, "Documents Found");
+}
+
+function buildDocList(DOCS, listElm, display) {
+  if (listElm != undefined) {
+    // Output HTML
+    var output = "";
+    var description = "";
+    
+    if (DOCS.length != 0) {     
+      // generate each list item 
+      for (var i = 0; i < DOCS.length; i++) {
+        // TODO: Get first few words of file.
+        output += '<li>'
+        output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
+        output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
+        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+        output += '<p>'+description+'</p>';
+        output += '</a></li>';
+      }
+    } else {
+      output += '<li style="margin-top: -5px">';
+      output += '<p>No ' + display + '</p>';
+      output += "<p>Click the '+' icon to create one.</p>";
+      output += '</li>';
+    }
+    
+    // Display output HTML
+    listElm.innerHTML = output;
+  }
+}
+
+function docsInFolder(callback) {
+  // List of documents
+  var docs = [];
+  
+  // Get all the docs in /Documents directory
+  var cursor = storage.enumerate("Documents");
+  
+  cursor.onerror = function() {
+    alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+  };
+  cursor.onsuccess = function() {
+    // Get file
+    var file = cursor.result;
+    
+    // Base case
+    if (!cursor.result) {
+      // Finished
+      callback(docs);
+      return;
+    }
+    
+    // Only get documents
+    if (file.type !== "text/plain" && file.type !== "text/html") {
+      cursor.continue();
+      return;
+    }
+    
+    
+    // At this point, the file should be vaild!
+    
+    // Get file properties
+    var filename = "";
+    var filetype = "";
+    switch(file.type) {
+      case "text\/plain":
+        filename = file.name.substring(0, file.name.length-4);
+        filetype = ".txt";
+        break;
+      case "text\/html":
+        filename = file.name.substring(0, file.name.length-5);
+        filetype = ".html";
+        break;
+    }
+    
+    // Add to list of docs
+    docs.push([filename, filetype]);
+    
+    // Check next file
+    cursor.continue();
+  }
+}
+
+/* Display
+------------------------*/
+// Make save banner hidden after 4 seconds
+function hideSaveBanner() {
+  window.setTimeout(function() {
+    document.getElementById("save-banner").hidden = true;
+  }, 4000);
+}
+
+// Show the banner
+function showSaveBanner() {
+  document.getElementById("save-banner").hidden = false;
+  hideSaveBanner();
+}
+
+function showAllDocs() {
+  document.getElementById("device").style.display = "block";
+  document.getElementById("showAll").style.display = "none";
+}
+
+/* Create, Load, & Save
+------------------------*/
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
@@ -185,170 +359,10 @@ function loadFile(filename, filetype, callback) {
   };
 }
 
-function buildDocList(DOCS, listElm) {
-  if (listElm != undefined) {
-    // Output HTML
-    var output = "";
-    var description = "";
-    
-    if (DOCS.length != 0) {     
-      // generate each list item 
-      for (var i = 0; i < DOCS.length; i++) {
-        // TODO: Get first few words of file.
-        output += '<li>'
-        output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
-        output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
-        output += '<p>'+description+'</p>';
-        output += '</a></li>';
-      }
-    } else {
-      output += '<li style="margin-top: -5px">';
-      output += '<p>No Recent Documents</p>';
-      output += "<p>Click the '+' icon to create one.</p>";
-      output += '</li>';
-    }
-    
-    // Display output HTML
-    listElm.innerHTML = output;
-  }
-}
-
-function buildDirList(DOCS) {
-  buildDocList(DOCS, dirList);
-  buildDocList(DOCS, docBrowserDirList);
-}
-
-function docsInFolder(callback) {
-  // List of documents
-  var docs = [];
-  
-  // Get all the docs in /Documents directory
-  var cursor = storage.enumerate("Documents");
-  
-  cursor.onerror = function() {
-    alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
-  };
-  cursor.onsuccess = function() {
-    // Get file
-    var file = cursor.result;
-    
-    // Base case
-    if (!cursor.result) {
-      // Finished
-      callback(docs);
-      return;
-    }
-    
-    // Only get documents
-    if (file.type !== "text/plain" && file.type !== "text/html") {
-      cursor.continue();
-      return;
-    }
-    
-    
-    // At this point, the file should be vaild!
-    
-    // Get file properties
-    var filename = "";
-    var filetype = "";
-    switch(file.type) {
-      case "text\/plain":
-        filename = file.name.substring(0, file.name.length-4);
-        filetype = ".txt";
-        break;
-      case "text\/html":
-        filename = file.name.substring(0, file.name.length-5);
-        filetype = ".html";
-        break;
-    }
-    
-    // Add to list of docs
-    docs.push([filename, filetype]);
-    
-    // Check next file
-    cursor.continue();
-  }
-}
-
-function initEditor() {
-  editor.contentWindow.document.designMode = "on";
-  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
-  doc = editor.contentDocument.body;
-}
-
-function showAllDocs() {
-  document.getElementById("device").style.display = "block";
-  document.getElementById("showAll").style.display = "none";
-}
-
-function updateDocLists() {
-  buildDocList(RecentDocs.get(), docList);
-  docsInFolder(buildDirList);
-}
-
-// RecentDocs Object
-var RecentDocs = {};
-
-// Initalize recent docs
-RecentDocs.init = function() {
-  if (localStorage["firetext.docs.recent"] == undefined) {
-    localStorage["firetext.docs.recent"] = JSON.stringify([]);
-  }
-}
-
-// Get recent docs
-RecentDocs.get = function() {
-  if (localStorage["firetext.docs.recent"] != undefined) {
-    return JSON.parse(localStorage["firetext.docs.recent"]);
-  }
-  else {
-    this.init();
-    return this.get();
-  }
-}
-
-// Add to recent docs
-RecentDocs.add = function(file) {
-  if (localStorage["firetext.docs.recent"] != undefined) {
-    var docsTMP = this.get();
-    
-    // Remove duplicate
-    for (var i = 0; i < docsTMP.length; i++) {
-      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
-        docsTMP.splice(i, 1);
-        break;
-      }
-    }
-    
-    // Add item
-    docsTMP.splice(0, 0, file);
-    
-    // Remove extra items
-    if (docsTMP.length > 4) {
-      docsTMP.splice(4, docsTMP.length);
-    }
-    
-    // Save array
-    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
-  }
-  else {
-    this.init();
-    this.add(file);
-  }
-}
-
-// Make save banner hidden after 4 seconds
-function hideSaveBanner() {
-  window.setTimeout(function() {
-    document.getElementById("save-banner").hidden = true;
-  }, 4000);
-}
-
-// Show the banner
-function showSaveBanner() {
-  document.getElementById("save-banner").hidden = false;
-  hideSaveBanner();
+/* Format
+------------------------*/ 
+function formatDoc(sCmd, sValue) {
+  editor.contentWindow.document.execCommand(sCmd, false, sValue);
 }
 
 function updateToolbar() {
