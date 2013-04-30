@@ -114,7 +114,7 @@ RecentDocs.add = function(file) {
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  buildDocList(RecentDocs.get(), docList, "Recent Documents");
+  buildEditDocList(RecentDocs.get(), docList, "Recent Documents");
   docsInFolder(buildDirList);
 }
 
@@ -146,6 +146,39 @@ function buildDocList(DOCS, listElm, display) {
       output += "<p>Click the '+' icon to create one.</p>";
       output += '</li>';
     }
+    
+    // Display output HTML
+    listElm.innerHTML = output;
+  }
+}
+
+function buildEditDocList(DOCS, listElm, display) {
+  if (listElm != undefined) {
+    // Output HTML
+    var output = "";
+    var description = "";
+    
+    if (DOCS.length != 0) {     
+      // generate each list item 
+      for (var i = 0; i < DOCS.length; i++) {
+        // TODO: Get first few words of file.
+        output += '<li>'
+        output += '<label class="danger"><input type="checkbox"><span></span></label>';
+        output += '<a href="#">';
+        output += '<aside class="icon icon-document"></aside>'; 
+        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+        output += '<p>'+description+'</p>';
+        output += '</a></li>';
+      }
+    } else {
+      output += '<li style="margin-top: -5px">';
+      output += '<p>No ' + display + '</p>';
+      output += "<p>Click the '+' icon to create one.</p>";
+      output += '</li>';
+    }
+    
+    // Make list an edit list
+    listElm.setAttribute("data-type","edit");
     
     // Display output HTML
     listElm.innerHTML = output;
