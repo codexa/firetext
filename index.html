@@ -52,16 +52,17 @@
     <header>
       <menu type="toolbar">
         <button onClick="nav('add')"><span class="icon icon-compose">New</span></button>
-        <button onClick="nav('welcome-edit-mode')"><span class="icon icon-edit">Edit</span></button>
+        <button onClick="editDocs()"><span class="icon icon-edit">Edit</span></button>
       </menu>
       <h1>Firetext</h1>
     </header>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
-        <h2>Recents:</h2>
-        <ul id="docs"></ul>
-        <button id="showAll" onClick="showAllDocs()" style="margin: 10px 0;">Show All Documents</button>
-        <div id="device" style="display: none;">
+        <div id="recent-docs-list">
+          <h2>Recents:</h2>
+          <ul id="docs"></ul>
+        </div>
+        <div id="device-docs-list">
           <h2>Device:</h2>
           <ul id="docBrowserDirList"></ul>
         </div>
@@ -71,7 +72,7 @@
       <section>
         <header>
           <menu type="toolbar">
-            <button onClick="navBack()">done</button>
+            <button onClick="editDocs()">done</button>
           </menu>
           <h1>Edit</h1>
         </header>

@@ -2,7 +2,7 @@
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState;
 var storage = navigator.getDeviceStorage("sdcard");
 
 /* Initalize
@@ -114,7 +114,7 @@ RecentDocs.add = function(file) {
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  buildEditDocList(RecentDocs.get(), docList, "Recent Documents");
+  buildDocList(RecentDocs.get(), docList, "Recent Documents");
   docsInFolder(buildDirList);
 }
 
@@ -269,6 +269,7 @@ function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
   saveFile(filename, filetype, '', false, function() {
+    navBack();
     RecentDocs.add([filename,filetype]);
     loadToEditor(filename, filetype);
   });
@@ -445,3 +446,21 @@ function updateToolbar() {
 }
 
 window.setInterval(updateToolbar, 100);
+
+/* Edit Mode
+------------------------*/ 
+function editDocs() {
+  if (editState == true) {
+    updateDocLists();  
+    document.getElementById('recent-docs-list').style.display = 'block';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+    navBack();
+    editState = false;
+  } else {
+    nav('welcome-edit-mode');
+    document.getElementById('recent-docs-list').style.display = 'none';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
+    editState = true;
+    // Code to build list
+  }
+}
