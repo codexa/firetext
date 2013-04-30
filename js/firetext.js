@@ -162,7 +162,7 @@ function buildEditDocList(DOCS, listElm, display) {
       // generate each list item 
       for (var i = 0; i < DOCS.length; i++) {
         // TODO: Get first few words of file.
-        output += '<li>'
+        output += '<li>';
         output += '<label class="danger"><input type="checkbox" /><span></span></label>';
         output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
         output += '</li>';
@@ -461,6 +461,8 @@ function editDocs() {
     editState = true;
     
     // Code to build list
-    buildEditDocList(docsInFolder(), docBrowserDirList, 'Documents found');
+    docsInFolder(function(result) {
+      buildEditDocList(result, docBrowserDirList, 'Documents found');
+    });
   }
 }
