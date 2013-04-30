@@ -143,7 +143,7 @@ function buildDocList(DOCS, listElm, display) {
     } else {
       output += '<li style="margin-top: -5px">';
       output += '<p>No ' + display + '</p>';
-      output += "<p>Click the '+' icon to create one.</p>";
+      output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
     }
     
@@ -163,17 +163,14 @@ function buildEditDocList(DOCS, listElm, display) {
       for (var i = 0; i < DOCS.length; i++) {
         // TODO: Get first few words of file.
         output += '<li>'
-        output += '<label class="danger"><input type="checkbox"><span></span></label>';
-        output += '<a href="#">';
-        output += '<aside class="icon icon-document"></aside>'; 
+        output += '<label class="danger"><input type="checkbox" /><span></span></label>';
         output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
-        output += '<p>'+description+'</p>';
-        output += '</a></li>';
+        output += '</li>';
       }
     } else {
       output += '<li style="margin-top: -5px">';
       output += '<p>No ' + display + '</p>';
-      output += "<p>Click the '+' icon to create one.</p>";
+      output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
     }
     
@@ -241,6 +238,7 @@ function docsInFolder(callback) {
     // Check next file
     cursor.continue();
   }
+  return docs;
 }
 
 /* Display
@@ -461,6 +459,8 @@ function editDocs() {
     document.getElementById('recent-docs-list').style.display = 'none';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
     editState = true;
+    
     // Code to build list
+    buildEditDocList(docsInFolder(), docBrowserDirList, 'Documents found');
   }
 }
