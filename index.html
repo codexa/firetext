@@ -51,8 +51,8 @@
   <section role="region" id="welcome">
     <header>
       <menu type="toolbar">
-        <button onClick=""><span class="icon icon-edit">Edit</span></button>
-        <button onClick="nav('add')"><span class="icon icon-add">Add</span></button>
+        <button onClick="nav('add')"><span class="icon icon-compose">New</span></button>
+        <button onClick="nav('welcome-edit-mode')"><span class="icon icon-edit">Edit</span></button>
       </menu>
       <h1>Firetext</h1>
     </header>
@@ -67,6 +67,20 @@
         </div>
       </article>
     </div>
+    <form role="edit" data-type="edit" id="welcome-edit-mode">
+      <section>
+        <header>
+          <menu type="toolbar">
+            <button onClick="navBack()">done</button>
+          </menu>
+          <h1>Edit</h1>
+        </header>
+      </section>
+      <menu>
+        <button>Delete all</button>
+        <button>Delete selected</button>
+      </menu>
+    </form>
   </section>
 
   <section role="dialog" id="add">
