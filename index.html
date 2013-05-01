@@ -56,6 +56,20 @@
       </menu>
       <h1>Firetext</h1>
     </header>
+    <form role="edit" data-type="edit" id="welcome-edit-mode">
+      <section>
+        <header>
+          <menu type="toolbar">
+            <button onClick="editDocs()">Close</button>
+          </menu>
+          <h1>Edit docs</h1>
+        </header>
+      </section>
+      <menu>
+        <button>Rename</button>
+        <button>Delete selected</button>
+      </menu>
+    </form>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
         <div id="recent-docs-list">
@@ -68,20 +82,6 @@
         </div>
       </article>
     </div>
-    <form role="edit" data-type="edit" id="welcome-edit-mode">
-      <section>
-        <header>
-          <menu type="toolbar">
-            <button onClick="editDocs()">done</button>
-          </menu>
-          <h1>Edit</h1>
-        </header>
-      </section>
-      <menu>
-        <button>Delete all</button>
-        <button>Delete selected</button>
-      </menu>
-    </form>
   </section>
 
   <section role="dialog" id="add">
