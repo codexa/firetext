@@ -469,3 +469,15 @@ function editDocs() {
     });
   }
 }
+
+/* Actions (had to do this because of CSP policies)
+------------------------*/ 
+document.addEventListener('click', function(event) {
+  var calledFunction = event.target.getAttribute('data-click');
+  eval(calledFunction);
+});
+
+document.addEventListener('submit', function(event) {
+  var calledFunction = event.target.getAttribute('data-submit');
+  eval(calledFunction);
+});
