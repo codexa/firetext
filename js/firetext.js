@@ -481,3 +481,5 @@ document.addEventListener('submit', function(event) {
   var calledFunction = event.target.getAttribute('data-submit');
   eval(calledFunction);
 });
+
+window.addEventListener('DOMContentLoaded', function(event) { init(); });
