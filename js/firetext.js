@@ -134,7 +134,7 @@ function buildDocList(DOCS, listElm, display) {
       for (var i = 0; i < DOCS.length; i++) {
         // TODO: Get first few words of file.
         output += '<li>'
-        output += '<a href="#" onClick="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
+        output += '<a href="#" data-click="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
         output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
         output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
         output += '<p>'+description+'</p>';
