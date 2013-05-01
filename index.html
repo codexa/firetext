@@ -51,8 +51,8 @@
   <section role="region" id="welcome">
     <header>
       <menu type="toolbar">
-        <button onClick="nav('add')"><span class="icon icon-compose">New</span></button>
-        <button onClick="editDocs()"><span class="icon icon-edit">Edit</span></button>
+        <button data-click="nav('add')"><span class="icon icon-compose">New</span></button>
+        <button data-click="editDocs()"><span class="icon icon-edit">Edit</span></button>
       </menu>
       <h1>Firetext</h1>
     </header>
@@ -60,7 +60,7 @@
       <section>
         <header>
           <menu type="toolbar">
-            <button onClick="editDocs()">Close</button>
+            <button data-click="editDocs()">Close</button>
           </menu>
           <h1>Edit docs</h1>
         </header>
@@ -86,11 +86,11 @@
 
   <section role="dialog" id="add">
     <header>
-      <button onClick="navBack()"><span class="icon icon-back">back</span></button>
+      <button data-click="navBack()"><span class="icon icon-back">back</span></button>
       <h1>New document</h1>
     </header>
     <div role="main" class="header-only">
-      <form onSubmit="javascript:createFromDialog();">
+      <form data-submit="javascript:createFromDialog();">
         <br>
         <fieldset class="button-block">
           <legend style="float:right">
@@ -114,7 +114,7 @@
 
   <section role="dialog" id="open">
     <header>
-      <button onClick="navBack()"><span class="icon icon-back">back</span></button>
+      <button data-click="navBack()"><span class="icon icon-back">back</span></button>
       <h1>Open document</h1>
     </header>
     <div role="main" class="header-only">
@@ -127,26 +127,26 @@
   <section data-type="sidebar" id="sidebar_main">
     <header>
       <menu type="toolbar">
-       <button onClick="sidebar('main')"><span class="icon icon-back">back</span></button>
+       <button data-click="sidebar('main')"><span class="icon icon-back">back</span></button>
     </menu>
       <h1>Menu</h1>
     </header>
     <nav>
       <ul>
-        <li><a href="#" onClick="nav('add')">New Document</a></li>
-        <li><a href="#" onClick="nav('open')">Open Document</a></li>
-        <li><a href="#" onClick="saveFromEditor()">Save Document</a></li>
-        <li><a href="#" onClick="nav('welcome')">Close Document</a></li>
+        <li><a href="#" data-click="nav('add')">New Document</a></li>
+        <li><a href="#" data-click="nav('open')">Open Document</a></li>
+        <li><a href="#" data-click="saveFromEditor()">Save Document</a></li>
+        <li><a href="#" data-click="nav('welcome')">Close Document</a></li>
       </ul>
     </nav>
   </section>
 
   <section role="region" id="edit">
     <header>
-      <button onClick="nav('welcome')" id="button_main"><span class="icon icon-back">back</span></button>
+      <button data-click="nav('welcome')" id="button_main"><span class="icon icon-back">back</span></button>
       <menu type="toolbar">
-        <button onClick="sidebar('main');editor.blur();"><span class="icon icon-menu">Menu</span></button>
-        <button onClick="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
+        <button data-click="sidebar('main');editor.blur();"><span class="icon icon-menu">Menu</span></button>
+        <button data-click="saveFromEditor()"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>
       <h1>Editing <span id="currentFileName"></span><span id="currentFileType" style="display: none;"></span>...</h1>
     </header>
@@ -155,10 +155,10 @@
     </div>
     <div role="toolbar" id="edit-bar">
       <ul>
-        <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" onClick="formatDoc('bold')">Bold</button></li>
-        <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" onClick="formatDoc('italic')">Italic</button></li>
-        <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" onClick="formatDoc('underline')">Underline</button></li>
-        <!--<li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" onClick="sidebar('main');editor.blur();">Format</button></li>-->
+        <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc('bold')">Bold</button></li>
+        <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc('italic')">Italic</button></li>
+        <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc('underline')">Underline</button></li>
+        <!--<li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;" data-click="sidebar('main');editor.blur();">Format</button></li>-->
       </ul>
       <ul>
         <!--<li><button class="pack-icon-share" onClick="nav('share')">Share</button></li>-->
@@ -173,7 +173,7 @@
     <header>Share</header>
     <menu>
       <button>Email</button>
-      <button onClick="navBack()">Cancel</button>
+      <button data-click="navBack()">Cancel</button>
     </menu>
   </form>-->
 
