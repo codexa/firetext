@@ -147,6 +147,9 @@ function buildDocList(DOCS, listElm, display) {
       output += '</li>';
     }
     
+    // Make sure list is not an edit list
+    listElm.setAttribute("data-type", "list");
+    
     // Display output HTML
     listElm.innerHTML = output;
   }
