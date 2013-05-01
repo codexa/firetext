@@ -123,35 +123,51 @@ function buildDirList(DOCS) {
   buildDocList(DOCS, docBrowserDirList, "Documents Found");
 }
 
+function buildDocListItems(DOCS, listElm, description, output) {
+  
+  // Generate item
+  output += '<li>';
+  output += '<a href="#" onClick="loadToEditor(\'' + DOCS[0][0] + '\', \'' + DOCS[0][1] + '\')">';
+  output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
+  output += '<p>'+DOCS[0][0]+'<em>'+DOCS[0][1]+'</em></p>';
+  output += '<p>'+description+'</p>';
+  output += '</a></li>';
+  
+  // Display output HTML
+  listElm.innerHTML = output;
+  
+  // Base case
+  if (DOCS.length <= 1) {    
+    return;
+  }
+  
+  // build next item
+  loadFile(DOCS[1][0], DOCS[1][1], function(result) {
+    alert(result);
+    buildDocListItems(DOCS.slice(1, DOCS.length), listElm, result, output);
+  });
+}
+
 function buildDocList(DOCS, listElm, display) {
   if (listElm != undefined) {
-    // Output HTML
-    var output = "";
-    var description = "";
+    // Make sure list is not an edit list
+    listElm.setAttribute("data-type", "list");
     
-    if (DOCS.length != 0) {     
-      // generate each list item 
-      for (var i = 0; i < DOCS.length; i++) {
-        // TODO: Get first few words of file.
-        output += '<li>'
-        output += '<a href="#" data-click="loadToEditor(\'' + DOCS[i][0] + '\', \'' + DOCS[i][1] + '\')">';
-        output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
-        output += '<p>'+description+'</p>';
-        output += '</a></li>';
-      }
+    if (DOCS.length > 0) {
+      loadFile(DOCS[0][0], DOCS[0][1], function(result) {
+        buildDocListItems(DOCS, listElm, result, "")
+      });
     } else {
+      // No docs message
+      var output;
       output += '<li style="margin-top: -5px">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
+      
+      // Display output HTML
+      listElm.innerHTML = output;
     }
-    
-    // Make sure list is not an edit list
-    listElm.setAttribute("data-type", "list");
-    
-    // Display output HTML
-    listElm.innerHTML = output;
   }
 }
 
