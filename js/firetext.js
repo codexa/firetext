@@ -143,7 +143,6 @@ function buildDocListItems(DOCS, listElm, description, output) {
   
   // build next item
   loadFile(DOCS[1][0], DOCS[1][1], function(result) {
-    alert(result);
     buildDocListItems(DOCS.slice(1, DOCS.length), listElm, result, output);
   });
 }
