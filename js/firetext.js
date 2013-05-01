@@ -167,7 +167,7 @@ function buildEditDocList(DOCS, listElm, display) {
         // TODO: Get first few words of file.
         output += '<li>';
         output += '<label class="danger"><input type="checkbox" /><span></span></label>';
-        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+        output += '<p><input type="text" placeholder="File Name" value="'+DOCS[i][0]+'" /><em>'+DOCS[i][1]+'</em></p>';
         output += '</li>';
       }
     } else {
@@ -452,11 +452,11 @@ window.setInterval(updateToolbar, 100);
 ------------------------*/ 
 function editDocs() {
   if (editState == true) {
-    updateDocLists();  
-    document.getElementById('recent-docs-list').style.display = 'block';
-    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
     navBack();
     editState = false;
+    updateDocLists();
+    document.getElementById('recent-docs-list').style.display = 'block';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
   } else {
     nav('welcome-edit-mode');
     document.getElementById('recent-docs-list').style.display = 'none';
