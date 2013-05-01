@@ -124,10 +124,9 @@ function buildDirList(DOCS) {
 }
 
 function buildDocListItems(DOCS, listElm, description, output) {
-  
   // Generate item
   output += '<li>';
-  output += '<a href="#" onClick="loadToEditor(\'' + DOCS[0][0] + '\', \'' + DOCS[0][1] + '\')">';
+  output += '<a href="#" data-click="loadToEditor(\'' + DOCS[0][0] + '\', \'' + DOCS[0][1] + '\')">';
   output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
   output += '<p>'+DOCS[0][0]+'<em>'+DOCS[0][1]+'</em></p>';
   output += '<p>'+description+'</p>';
@@ -170,33 +169,49 @@ function buildDocList(DOCS, listElm, display) {
   }
 }
 
+function buildEditDocListItems(DOCS, listElm, description, output) {
+  // Generate item
+  output += '<li>';
+  output += '<label class="danger"><input type="checkbox" /><span></span></label>';
+  output += '<p><input type="text" placeholder="File Name" value="'+DOCS[0][0]+'" /><em>'+DOCS[0][1]+'</em></p>';
+  output += '<p>'+description+'</p>';
+  output += '</li>';
+  
+  // Display output HTML
+  listElm.innerHTML = output;
+  
+  // Base case
+  if (DOCS.length <= 1) {    
+    return;
+  }
+  
+  // build next item
+  loadFile(DOCS[1][0], DOCS[1][1], function(result) {
+    buildDocListItems(DOCS.slice(1, DOCS.length), listElm, result, output);
+  });
+}
+
+
 function buildEditDocList(DOCS, listElm, display) {
   if (listElm != undefined) {
-    // Output HTML
-    var output = "";
-    var description = "";
+    // Make list an edit list
+    listElm.setAttribute("data-type","edit");
     
-    if (DOCS.length != 0) {     
-      // generate each list item 
-      for (var i = 0; i < DOCS.length; i++) {
-        // TODO: Get first few words of file.
-        output += '<li>';
-        output += '<label class="danger"><input type="checkbox" /><span></span></label>';
-        output += '<p><input type="text" placeholder="File Name" value="'+DOCS[i][0]+'" /><em>'+DOCS[i][1]+'</em></p>';
-        output += '</li>';
-      }
+    if (DOCS.length > 0) {
+      loadFile(DOCS[0][0], DOCS[0][1], function(result) {
+        buildEditDocListItems(DOCS, listElm, result, "")
+      });
     } else {
+      // No docs message
+      var output;
       output += '<li style="margin-top: -5px">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
+      
+      // Display output HTML
+      listElm.innerHTML = output;
     }
-    
-    // Make list an edit list
-    listElm.setAttribute("data-type","edit");
-    
-    // Display output HTML
-    listElm.innerHTML = output;
   }
 }
 
