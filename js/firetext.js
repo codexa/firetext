@@ -70,6 +70,13 @@ RecentDocs.init = function() {
   }
 }
 
+// Initalize recent docs
+RecentDocs.reset = function() {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    localStorage["firetext.docs.recent"] = JSON.stringify([]);
+  }
+}
+
 // Get recent docs
 RecentDocs.get = function() {
   if (localStorage["firetext.docs.recent"] != undefined) {
