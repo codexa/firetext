@@ -321,6 +321,8 @@ function saveFromEditor() {
       content = doc.innerHTML;
       break;
     case ".txt":
+      content = txt.encode(doc.innerHTML, "HTML");
+      break;
     default:
       content = doc.textContent;
       break;
@@ -396,10 +398,17 @@ function loadToEditor(filename, filetype) {
   
   // Fill editor
   loadFile(filename, filetype, function(result) {
-    if (filetype == ".odml") {
-      doc.innerHTML = odml.parse(result, "HTML");
-    } else {
-      doc.innerHTML = result;
+    switch (filetype) {
+      case ".odml":
+        doc.innerHTML = odml.parse(result, "HTML");
+        break;
+      case ".txt":
+        doc.innerHTML = txt.parse(result, "HTML");
+        break;
+      case ".html":
+      default:
+        doc.innerHTML = result;
+        break;
     }
   });
   
