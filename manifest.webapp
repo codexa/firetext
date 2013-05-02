@@ -1,6 +1,6 @@
 {
   "name": "FireText",
-  "description": "A text-editor for Firefox OS",
+  "description": "A word processor for Firefox OS",
   "version": "0.1",
   "type": "privileged",
   "launch_path": "/index.html",
@@ -29,7 +29,7 @@
     },
     "en-US": {
   	  "name": "FireText",
-  	  "description": "A text-editor for Firefox OS"
+  	  "description": "A word processor for Firefox OS"
     },
     "es": {
   	  "name": "FireText",
