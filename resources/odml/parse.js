@@ -2,7 +2,7 @@
 
 var odml = {};
 
-odml.parse = function (data, outputType) {
+odml.parse = function (data, type) {
   // Some code to convert ODML into something else
   output = "";
   if (type == "HTML") {
