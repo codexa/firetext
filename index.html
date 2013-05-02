@@ -95,17 +95,17 @@
     <div role="main" class="header-only">
       <form data-submit="createFromDialog">
         <br>
-        <img src="style/icons/FiretextExtic.png" id="extIconFile" style="display:block; margin: 10px auto;"/>
+        <img src="style/icons/FiretextExtic.png" id="extIconFile" height="50px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
           <legend style="float:right">
             <select id="createDialogFileType">
-              <option onClick="extIcon()">.html</option>
-              <option onClick="extIcon()">.txt</option>
+              <option data-click="extIcon">.html</option>
+              <option data-click="extIcon">.txt</option>
             </select>
           </legend>
           <section>
             <p>
-              <input placeholder="untitled" required="" type="text" id="createDialogFileName" onClick="extIcon()">
+              <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-click="extIcon">
               <button type="reset">Clear</button>
             </p>
           </section>
