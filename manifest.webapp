@@ -62,6 +62,7 @@
   },
   "default_locale": "en-US",
   "icons": {
-    "128": "/style/icons/app_icon.png"
+    "60": "/style/icons/app_icon.png",
+    "120": "/style/icons/app_logo.png"
   }
 }
