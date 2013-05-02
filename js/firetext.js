@@ -124,6 +124,11 @@ function buildDirList(DOCS) {
 }
 
 function buildDocListItems(DOCS, listElm, description, output) {
+  // Remove HTML
+  var tmp = document.createElement("DIV");
+  tmp.innerHTML = description;
+  description = tmp.textContent;
+    
   // Generate item
   output += '<li class="fileListItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
   output += '<a href="#">';
