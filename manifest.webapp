@@ -9,7 +9,10 @@
     "url": "https://github.com/Joshua-S/FireText/contributors"
   },
   "permissions": {
-    "device-storage:sdcard":{ "access": "readwrite" }
+    "device-storage:sdcard":{ 
+      "description": "Required for document storage.",
+      "access": "readwrite"
+    }
   },
   "locales": {
     "ar": {
