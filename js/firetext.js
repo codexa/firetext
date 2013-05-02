@@ -384,11 +384,11 @@ function loadToEditor(filename, filetype) {
     }
   });
   
-  // Add file to recent docs
-  RecentDocs.add([filename, filetype]);
-  
   // Show editor
   nav('edit');
+  
+  // Add file to recent docs
+  RecentDocs.add([filename, filetype]);
 }
 
 function loadFile(filename, filetype, callback) {
@@ -495,6 +495,15 @@ document.addEventListener('submit', function(event) {
 });
 
 function processActions(eventAttribute, target) {
+  if (target.parentNode.classList.contains('fileListItem')) {
+    target = target.parentNode;
+  } else if (target.parentNode.parentNode.classList.contains('fileListItem')) {
+    target = target.parentNode.parentNode;
+  } else if (target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+    target = target.parentNode.parentNode.parentNode;
+  } else if (target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+    target = target.parentNode.parentNode.parentNode.parentNode;
+  }
   var calledFunction = target.getAttribute(eventAttribute);
   if (calledFunction == 'loadToEditor') {
     loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
