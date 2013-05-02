@@ -208,9 +208,11 @@ function docsInFolder(callback) {
   
   cursor.onerror = function() {
     if (cursor.error.name == 'TypeMismatchError') {
-      saveFile('Welcome','.html','<h1><b>Welcome</b> to <i>Firetext</i>!</h1>', false, function() {
-      loadToEditor('Welcome', '.html');
-    });
+      saveFile('Welcome','.html','<b>Welcome</b> to <i>Firetext</i>!', false, function() {
+        loadToEditor('Welcome', '.html');
+      });
+    } else if (cursor.error.name == 'SecurityError') {
+      alert('Please allow Firetext to access your SD card.');
     } else {
       alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
     }
@@ -276,6 +278,23 @@ function showSaveBanner() {
 function showAllDocs() {
   document.getElementById("device").style.display = "block";
   document.getElementById("showAll").style.display = "none";
+}
+  
+// File Extension Icon on Create new file
+function extIcon(){
+  var extf = document.getElementById('extIconFile');
+  var option = document.getElementById('createDialogFileType').value;
+  if (option == ".html") {
+    extf.src = "style/icons/extic/FTichtml.png";
+  } else if (option == ".txt") {
+    extf.src = "style/icons/extic/FTictxt.png";
+  } else if (option == ".odml") {
+    extf.src = "style/icons/extic/FTicodml.png";
+  } else if (option == ".rtf") {
+    extf.src = "style/icons/extic/FTicrtf.png";
+  } else {
+    extf.src = "style/icons/FiretextExtic.png";
+  };
 }
 
 /* File IO
@@ -387,23 +406,6 @@ function loadToEditor(filename, filetype) {
   // Show editor
   nav('edit');
   
-  // File Extension Icon on Create new file
-function extIcon(){
-  var extf = document.getElementById('extIconFile');
-  var option = document.getElementById('createDialogFileType').value;
-  if (option === ".html") {
-    extf.src = "style/icons/extic/FTichtml.png";
-  } else if (option === ".txt") {
-    extf.src = "style/icons/extic/FTictxt.png";
-  } else if (option === ".odml") {
-    extf.src = "style/icons/extic/FTicodml.png";
-  } else if (option === ".rtf") {
-    extf.src = "style/icons/extic/FTicrtf.png";
-  } else {
-    extf.src = "style/icons/FiretextExtic.png";
-  };
-}
-  
   // Add file to recent docs
   RecentDocs.add([filename, filetype]);
 }
@@ -512,13 +514,13 @@ document.addEventListener('submit', function(event) {
 });
 
 function processActions(eventAttribute, target) {
-  if (target.parentNode.classList.contains('fileListItem')) {
+  if (target.parentNode && target.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode;
-  } else if (target.parentNode.parentNode.classList.contains('fileListItem')) {
+  } else if (target.parentNode.parentNode && target.parentNode.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+  } else if (target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+  } else if (target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode.parentNode.parentNode.parentNode;
   }
   var calledFunction = target.getAttribute(eventAttribute);
