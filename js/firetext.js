@@ -538,6 +538,8 @@ function processActions(eventAttribute, target) {
     createFromDialog();
   } else if (calledFunction == 'editDocs') {
     editDocs();
+  } else if (calledFunction == 'extIcon') {
+    extIcon();
   } else {
   }
 }
