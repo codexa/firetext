@@ -16,7 +16,7 @@ txt.parse = function (data, type) {
   return false;
 };
 
-odml.encode = function (data, type) {
+txt.encode = function (data, type) {
   // Some code to convert data to TXT
   output = "";
   if (type == "HTML") {
