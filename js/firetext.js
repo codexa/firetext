@@ -387,6 +387,23 @@ function loadToEditor(filename, filetype) {
   // Show editor
   nav('edit');
   
+  // File Extension Icon on Create new file
+function extIcon(){
+  var extf = document.getElementById('extIconFile');
+  var option = document.getElementById('createDialogFileType').value;
+  if (option === ".html") {
+    extf.src = "style/icons/extic/FTichtml.png";
+  } else if (option === ".txt") {
+    extf.src = "style/icons/extic/FTictxt.png";
+  } else if (option === ".odml") {
+    extf.src = "style/icons/extic/FTicodml.png";
+  } else if (option === ".rtf") {
+    extf.src = "style/icons/extic/FTicrtf.png";
+  } else {
+    extf.src = "style/icons/FiretextExtic.png";
+  };
+}
+  
   // Add file to recent docs
   RecentDocs.add([filename, filetype]);
 }
