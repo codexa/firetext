@@ -8,7 +8,9 @@ txt.parse = function (data, type) {
   if (type == "HTML") {
     output = data.replace(/<br\/>/gi, '\n');
     output = output.replace(/<br>/gi, '\n');
-    return output;
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = output;
+    return tmp.textContent;
   }
   // Didn't parse, return false
   return false;
