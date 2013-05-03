@@ -132,13 +132,11 @@ RecentDocs.add = function(file) {
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  buildDocList(RecentDocs.get(), docList, "Recent Documents");
-  docsInFolder(buildDirList);
-}
-
-function buildDirList(DOCS) {
-  buildDocList(DOCS, dirList, "Documents Found");
-  buildDocList(DOCS, docBrowserDirList, "Documents Found");
+  docsInFolder(function(DOCS) {
+    buildDocList(DOCS, dirList, "Documents Found");
+    buildDocList(DOCS, docBrowserDirList, "Documents Found");
+    buildDocList(RecentDocs.get(), docList, "Recent Documents");
+  });
 }
 
 function buildDocListItems(DOCS, listElm, description, output) {
