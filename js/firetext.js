@@ -412,10 +412,12 @@ function loadToEditor(filename, filetype) {
     case ".odml":
     case ".html":
       toolbar.style.display = "block";
+      editor.classList.remove('toolbarHidden');
       break;
     case ".txt":
     default:
       toolbar.style.display = "none";
+      editor.classList.add('toolbarHidden');
       break;
   }
   

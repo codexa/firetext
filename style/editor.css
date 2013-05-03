@@ -23,3 +23,7 @@
   width: 100%;
   height: calc(100% - 5rem - 40px);
 }
+
+.editor.toolbarHidden {
+  height: calc(100% - 5rem);
+}
