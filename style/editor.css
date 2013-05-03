@@ -5,9 +5,19 @@
   overflow: scroll;
 }
 
+/* Disabled temporarily
 .editor {
   border: none;
   padding: 10px;
+  font-size: 2em;
+  outline: none;
+  width: 100%;
+  height: calc(100% - 5rem - 40px);
+}
+ */
+
+.editor {
+  border: none;
   font-size: 2em;
   outline: none;
   width: 100%;

@@ -53,9 +53,18 @@ function init() {
 }
 
 function initEditor() {
+  /* Disabled until bug 811177 is fixed
   editor.contentWindow.document.designMode = "on";
   editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   doc = editor.contentDocument.body;
+  */
+
+  doc = document.createElement('DIV');
+  doc.setAttribute('contentEditable', 'true');
+  doc.id = 'tempEditDiv';
+  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none;');
+  editor.contentWindow.document.body.appendChild(doc);
+  doc = editor.contentWindow.document.getElementById('tempEditDiv');
 }
 
 /* Recent Docs
@@ -480,7 +489,7 @@ function formatDoc(sCmd, sValue) {
   editor.contentWindow.document.execCommand(sCmd, false, sValue);
 }
 
-function updateToolbar() {
+/*function updateToolbar() {
   if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
     if (editor.contentDocument.queryCommandState("bold")) {
       bold.classList.add('active');
@@ -500,7 +509,29 @@ function updateToolbar() {
   }
 }
 
-window.setInterval(updateToolbar, 100);
+window.setInterval(updateToolbar, 100);*/
+
+/*function updateToolbar() {
+  if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
+    if (editor.contentDocument.document.queryCommandState("bold")) {
+      bold.classList.add('active');
+    } else {
+      bold.classList.remove('active');
+    }
+    if (editor.contentDocument.document.queryCommandState("italic")) {
+      italic.classList.add('active');
+    } else {
+      italic.classList.remove('active');
+    }
+    if (editor.contentDocument.document.queryCommandState("underline")) {
+      underline.classList.add('active');
+    } else {
+      underline.classList.remove('active');
+    }
+  }
+}
+
+window.setInterval(updateToolbar, 100);*/
 
 /* Edit Mode
 ------------------------*/ 
