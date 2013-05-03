@@ -489,28 +489,6 @@ function formatDoc(sCmd, sValue) {
   editor.contentWindow.document.execCommand(sCmd, false, sValue);
 }
 
-/*function updateToolbar() {
-  if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
-    if (editor.contentDocument.queryCommandState("bold")) {
-      bold.classList.add('active');
-    } else {
-      bold.classList.remove('active');
-    }
-    if (editor.contentDocument.queryCommandState("italic")) {
-      italic.classList.add('active');
-    } else {
-      italic.classList.remove('active');
-    }
-    if (editor.contentDocument.queryCommandState("underline")) {
-      underline.classList.add('active');
-    } else {
-      underline.classList.remove('active');
-    }
-  }
-}
-
-window.setInterval(updateToolbar, 100);*/
-
 function updateToolbar() {
   if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
     if (editor.contentDocument.queryCommandState("bold")) {
