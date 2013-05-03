@@ -5,8 +5,8 @@
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
-    "name": "FireText Contributors",
-    "url": "https://github.com/Joshua-S/FireText/contributors"
+    "name": "Codexa",
+    "url": "https://github.com/codexa"
   },
   "permissions": {
     "device-storage:sdcard":{ 
