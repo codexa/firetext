@@ -133,13 +133,12 @@ RecentDocs.add = function(file) {
 ------------------------*/
 function updateDocLists() {
   docsInFolder(function(DOCS) {
-    buildDocList(DOCS, dirList, "Documents Found");
-    buildDocList(DOCS, docBrowserDirList, "Documents Found");
-    buildDocList(RecentDocs.get(), docList, "Recent Documents");
+    buildDocList(DOCS, [dirList, docBrowserDirList], "Documents Found");
+    buildDocList(RecentDocs.get(), [docList], "Recent Documents");
   });
 }
 
-function buildDocListItems(DOCS, listElm, description, output) {
+function buildDocListItems(DOCS, listElms, description, output) {
   // Remove HTML
   var tmp = document.createElement("DIV");
   tmp.innerHTML = description;
@@ -154,7 +153,9 @@ function buildDocListItems(DOCS, listElm, description, output) {
   output += '</a></li>';
   
   // Display output HTML
-  listElm.innerHTML = output;
+  for (var i = 0; i < listElms.length; i++) {
+    listElms[i].innerHTML = output;
+  }
   
   // Base case
   if (DOCS.length <= 1) {    
@@ -163,29 +164,32 @@ function buildDocListItems(DOCS, listElm, description, output) {
   
   // build next item
   loadFile(DOCS[1][0], DOCS[1][1], function(result) {
-    buildDocListItems(DOCS.slice(1, DOCS.length), listElm, result, output);
+    buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output);
   });
 }
 
-function buildDocList(DOCS, listElm, display) {
-  if (listElm != undefined) {
+function buildDocList(DOCS, listElms, display) {
+  if (listElms != undefined) {
     // Make sure list is not an edit list
-    listElm.setAttribute("data-type", "list");
+    for (var i = 0; i < listElms.length; i++) {
+      listElms[i].setAttribute("data-type", "list");
+    }
     
     if (DOCS.length > 0) {
       loadFile(DOCS[0][0], DOCS[0][1], function(result) {
-        buildDocListItems(DOCS, listElm, result, "")
+        buildDocListItems(DOCS, listElms, result, "")
       });
     } else {
       // No docs message
-      var output;
-      output += '<li style="margin-top: -5px">';
+      var output = '<li style="margin-top: -5px">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
       
       // Display output HTML
-      listElm.innerHTML = output;
+      for (var i = 0; i < listElms.length; i++) {
+        listElms[i].innerHTML = output;
+      }
     }
   }
 }
