@@ -59,10 +59,12 @@ function initEditor() {
   doc = editor.contentDocument.body;
   */
 
+  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
   doc = document.createElement('DIV');
   doc.setAttribute('contentEditable', 'true');
   doc.id = 'tempEditDiv';
-  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none;');
+  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
 }
