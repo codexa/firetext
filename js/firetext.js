@@ -204,7 +204,6 @@ function buildEditDocList(DOCS, listElm, display) {
   if (listElm != undefined) {
     // Output HTML
     var output = "";
-    var description = "";
     
     if (DOCS.length != 0) {
       // generate each list item
