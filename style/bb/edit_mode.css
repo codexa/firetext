@@ -14,7 +14,7 @@ form[role="edit"][data-type="edit"] {
   font-family: "MozTT", Sans-serif;
   color: #fff;
   pointer-events: none;
-  opacity: 0;
+  opacity: .99;
   visibility: hidden;
   transform: scale(1, 2);
   transition: transform 1s, opacity .5s, .5s visibility 1s;
