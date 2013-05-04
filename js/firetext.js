@@ -330,7 +330,7 @@ function extIcon(){
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
-  saveFile(filename, filetype, '', false, function() {
+  saveFile(filename, filetype, ' ', false, function() {
     navBack();
     RecentDocs.add([filename,filetype]);
     loadToEditor(filename, filetype);
@@ -355,7 +355,7 @@ function saveFromEditor() {
       content = doc.textContent;
       break;
   }
-  saveFile(filename, filetype, content, true, false);
+  saveFile(filename, filetype, content, true, function(){});
 } 
 
 function saveFile(filename, filetype, content, showBanner, callback) {
@@ -380,9 +380,7 @@ function saveFile(filename, filetype, content, showBanner, callback) {
     if (showBanner) {
       showSaveBanner();
     }
-    if (callback) {
-      callback();
-    }
+    callback();
   };
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError") {
@@ -487,7 +485,7 @@ function deleteFile(name) {
 function renameFile(name, type, newname) {
   loadFile(name, type, function(result) {
     var fullName = (name + type);
-    saveFile(name, type, result, false);
+    saveFile(name, type, result, function(){});
     deleteFile(fullName);
   });
 }
