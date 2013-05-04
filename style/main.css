@@ -72,18 +72,19 @@ html, body {
 /* Value selectors */
 #fileTypeLegend {
   float:right;
-  width: calc(1.8rem / 1em);
+  width: 9rem;
 }
 
 #createDialogFileType {
   position: absolute;
-  margin: 0;
   padding-top: 11px;
+  
   width: 100%;
   height: 100%;
+  
   background: none;
+  
   border: none;
-  -moz-appearance: none;
   border-radius: 0;
 }
 
