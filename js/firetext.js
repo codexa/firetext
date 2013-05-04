@@ -147,6 +147,8 @@ function buildDocListItems(DOCS, listElms, description, output) {
   var tmp = document.createElement("DIV");
   tmp.innerHTML = description;
   description = tmp.textContent;
+  tmp.innerHTML = description;
+  description = tmp.textContent;
     
   // Generate item
   output += '<li class="fileListItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
