@@ -550,13 +550,13 @@ document.addEventListener('submit', function(event) {
 });
 
 function processActions(eventAttribute, target) {
-  if (target.parentNode && target.parentNode.classList.contains('fileListItem')) {
+  if (target.parentNode.classList && target.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode;
-  } else if (target.parentNode.parentNode && target.parentNode.parentNode.classList.contains('fileListItem')) {
+  } else if (target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+  } else if (target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+  } else if (target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
     target = target.parentNode.parentNode.parentNode.parentNode;
   }
   var calledFunction = target.getAttribute(eventAttribute);
