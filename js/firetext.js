@@ -304,11 +304,6 @@ function showSaveBanner() {
   document.getElementById("save-banner").hidden = false;
   hideSaveBanner();
 }
-
-function showAllDocs() {
-  document.getElementById("device").style.display = "block";
-  document.getElementById("showAll").style.display = "none";
-}
   
 // File Extension Icon on Create new file
 function extIcon(){
@@ -441,11 +436,11 @@ function loadToEditor(filename, filetype) {
     }
   });
   
-  // Show editor
-  nav('edit');
-  
   // Add file to recent docs
   RecentDocs.add([filename, filetype]);
+  
+  // Show editor
+  nav('edit');
 }
 
 function loadFile(filename, filetype, callback) {
