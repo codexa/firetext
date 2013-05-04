@@ -22,7 +22,11 @@ function init() {
   italic = document.getElementById('italic');
   underline = document.getElementById('underline');
   
+  // Init extIcon
+  extIcon();
+  
   // Add event listeners
+  document.getElementById('createDialogFileType').addEventListener('change', function() {extIcon();});
   toolbar.addEventListener(
     'mousedown', function mouseDown(event) {
       event.preventDefault();
@@ -203,7 +207,6 @@ function buildEditDocList(DOCS, listElm, display) {
     if (DOCS.length != 0) {
       // generate each list item
       for (var i = 0; i < DOCS.length; i++) {
-        // TODO: Get first few words of file.
         output += '<li>';
         output += '<label class="danger"><input type="checkbox" /><span></span></label>';
         output += '<p><input type="text" placeholder="File Name" value="'+DOCS[i][0]+'" /><em>'+DOCS[i][1]+'</em></p>';
@@ -582,4 +585,4 @@ function processActions(eventAttribute, target) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function(event) { init(); });
+window.addEventListener('DOMContentLoaded', function() { init(); });
