@@ -5,6 +5,7 @@ function nav(location) {
     if (document.querySelector('.current')) {
       if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
         document.querySelector('.current').setAttribute('data-state', 'none');
+        document.querySelector('[data-type=sidebar].active').classList.remove('active');
         if (document.querySelector('.sidebar-faded-button')) {
           document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
         }
@@ -18,13 +19,10 @@ function nav(location) {
     }
     if (document.querySelector('.parent') && document.getElementById(location).getAttribute('role') == 'region') {
       document.querySelector('.parent').classList.remove('parent');
-    }
+    }    
     regionHistory.push(location);
     document.getElementById(location).classList.add('current');
   }
-  
-  // Generate docs list
-  updateDocLists();
 }
 
 function navBack() {

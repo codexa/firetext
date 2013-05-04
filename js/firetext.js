@@ -526,7 +526,6 @@ function editDocs() {
   if (editState == true) {
     navBack();
     editState = false;
-    updateDocLists();
     document.getElementById('recent-docs-list').style.display = 'block';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
   } else {
@@ -566,6 +565,9 @@ function processActions(eventAttribute, target) {
   if (calledFunction == 'loadToEditor') {
     loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
   } else if (calledFunction == 'nav') {
+    if (target.getAttribute(eventAttribute + '-location') == 'welcome') {
+      updateDocLists();      
+    }
     nav(target.getAttribute(eventAttribute + '-location'));
   } else if (calledFunction == 'navBack') {
     navBack();
