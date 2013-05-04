@@ -331,7 +331,6 @@ function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
   saveFile(filename, filetype, ' ', false, function() {
-    navBack();
     RecentDocs.add([filename,filetype]);
     loadToEditor(filename, filetype);
   });
