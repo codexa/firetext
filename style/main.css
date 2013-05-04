@@ -21,21 +21,26 @@ html, body {
 
 /* Lists */
 
-[data-type=list] {
+[data-type=list], [data-type=edit] {
   margin: 0;
   padding: 0;
 }
 
-[data-type=list] li {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-[data-type=list] h2 {
+[data-type=list] h2, [data-type=edit] h2 {
   background: #222;
   padding: 10px 20px;
   color: white;
   margin: 10px 0;
+}
+
+[data-type=list] li, [data-type=edit] li {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+[data-type=edit] li {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* Icons */
@@ -77,6 +82,7 @@ html, body {
 }
 
 /* Value selectors */
+
 #fileTypeLegend {
   float:right;
   width: 9rem;
@@ -97,4 +103,10 @@ html, body {
 
 #createDialogFileType:active {
   background-color: #008caa;
+}
+
+/*  Edit Mode */
+
+.pointer-events {
+  pointer-events: auto;
 }

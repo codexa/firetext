@@ -209,7 +209,7 @@ function buildEditDocList(DOCS, listElm, display) {
       for (var i = 0; i < DOCS.length; i++) {
         output += '<li>';
         output += '<label class="danger"><input type="checkbox" /><span></span></label>';
-        output += '<p><input type="text" placeholder="File Name" value="'+DOCS[i][0]+'" /><em>'+DOCS[i][1]+'</em></p>';
+        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
         output += '</li>';
       }
     } else {
