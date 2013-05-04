@@ -19,14 +19,21 @@ html, body {
   overflow: scroll;
 }
 
+/* Lists */
+
+[data-type=list] {
+  margin: 0;
+  padding: 0;
+}
+
 [data-type=list] li {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 [data-type=list] h2 {
   background: #222;
-  padding: 10px;
+  padding: 10px 20px;
   color: white;
   margin: 10px 0;
 }
