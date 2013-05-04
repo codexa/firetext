@@ -44,7 +44,7 @@
 
   <!-- ODML -->
   <script type="application/javascript" src="resources/odml/parse.js"></script>
-  
+
   <!-- TXT -->
   <script type="application/javascript" src="resources/txt/parse.js"></script>
 
@@ -97,13 +97,14 @@
         <br>
         <img src="style/icons/FiretextExtic.png" id="extIconFile" height="200px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
-          <legend style="float:right">
-            <select id="createDialogFileType">
+          <legend id="fileTypeLegend" class="action">
+            <select name="File type" id="createDialogFileType">
               <option>.html</option>
               <option>.txt</option>
             </select>
+            <select id="dummy" style="visibility:hidden; width: 80%;"></select>
           </legend>
-          <section>
+          <section id="fileNameInput">
             <p>
               <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-click="extIcon">
               <button type="reset">Clear</button>
