@@ -312,10 +312,6 @@ function extIcon(){
     extf.src = "style/icons/extic/FTichtml.png";
   } else if (option == ".txt") {
     extf.src = "style/icons/extic/FTictxt.png";
-  } else if (option == ".odml") {
-    extf.src = "style/icons/extic/FTicodml.png";
-  } else if (option == ".rtf") {
-    extf.src = "style/icons/extic/FTicrtf.png";
   } else {
     extf.src = "style/icons/FiretextExtic.png";
   };
@@ -337,9 +333,6 @@ function saveFromEditor() {
   var filetype = document.getElementById('currentFileType').textContent;
   var content = "";
   switch (filetype) {
-    case ".odml":
-      odml.encode(doc.innerHTML, "HTML");
-      break;
     case ".html":
       content = doc.innerHTML;
       break;
@@ -356,9 +349,6 @@ function saveFromEditor() {
 function saveFile(filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
-    case ".odml":
-      type = "text\/odml";
-      break;
     case ".html":
       type = "text\/html";
       break;
@@ -407,7 +397,6 @@ function loadToEditor(filename, filetype) {
   
   // Show/hide toolbar
   switch (filetype) {
-    case ".odml":
     case ".html":
       toolbar.style.display = "block";
       editor.classList.remove('toolbarHidden');
@@ -422,9 +411,6 @@ function loadToEditor(filename, filetype) {
   // Fill editor
   loadFile(filename, filetype, function(result) {
     switch (filetype) {
-      case ".odml":
-        doc.innerHTML = odml.parse(result, "HTML");
-        break;
       case ".txt":
         doc.innerHTML = txt.parse(result, "HTML");
         break;
