@@ -524,6 +524,16 @@ function editDocs() {
   }
 }
 
+function selectAll() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      checkboxes[i].checked = true;
+    }
+  }
+}
+
 function deleteSelected() {
   // Only use this function in edit mode
   if (editState == true) {
@@ -622,6 +632,8 @@ function processActions(eventAttribute, target) {
       extIcon();
     } else if (calledFunction == "delete") {
       deleteSelected();
+    } else if (calledFunction == "selectAll") {
+      selectAll();
     }
   }
 }
