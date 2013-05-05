@@ -536,7 +536,7 @@ function deleteSelected() {
     // Delete selected files
     for (var i = 0; i < selected.length; i++ ) {
       // Get filename
-      var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[i].textContent;
+      var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
       
       // Remove from RecentDocs
       RecentDocs.remove(filename, true);
