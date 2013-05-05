@@ -134,15 +134,23 @@ RecentDocs.add = function(file) {
 }
 
 // Remove from recent docs
-RecentDocs.remove = function(file) {
+RecentDocs.remove = function(file, merged) {
   if (localStorage["firetext.docs.recent"] != undefined) {
     var docsTMP = this.get();
     
     // Remove item
     for (var i = 0; i < docsTMP.length; i++) {
-      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
-        docsTMP.splice(i, 1);
-        break;
+      if (!merged) {
+        if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+          docsTMP.splice(i, 1);
+          break;
+        }
+      }
+      else {
+        if (file == docsTMP[i][0] + docsTMP[i][1]) {
+          docsTMP.splice(i, 1);
+          break;
+        }
       }
     }
     
@@ -527,6 +535,9 @@ function deleteSelected() {
     
     // Delete selected files
     for (var i = 0; i < selected.length; i++ ) {
+      // Remove from RecentDocs
+      RecentDocs.remove(filename, true);
+      
       // Delete file
       var filename = selected[0].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
       deleteFile(filename);
