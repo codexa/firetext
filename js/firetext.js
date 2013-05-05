@@ -322,6 +322,10 @@ function extIcon(){
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
+  if (filename == null | filename == undefined | filename == '')  {
+    alert('Please enter a name for the new file.');
+    return;
+  }
   saveFile(filename, filetype, ' ', false, function() {
     RecentDocs.add([filename,filetype]);
     loadToEditor(filename, filetype);
@@ -531,38 +535,40 @@ document.addEventListener('submit', function(event) {
 });
 
 function processActions(eventAttribute, target) {
-  if (target.parentNode.classList && target.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode;
-  } else if (target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode.parentNode.parentNode.parentNode;
-  }
-  var calledFunction = target.getAttribute(eventAttribute);
-  if (calledFunction == 'loadToEditor') {
-    loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
-  } else if (calledFunction == 'nav') {
-    if (target.getAttribute(eventAttribute + '-location') == 'welcome') {
-      updateDocLists();      
+  if (target && target.getAttribute) {
+    if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('fileListItem')) {
+      target = target.parentNode;
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('fileListItem')) {
+      target = target.parentNode.parentNode;
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+      target = target.parentNode.parentNode.parentNode;
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+      target = target.parentNode.parentNode.parentNode.parentNode;
     }
-    nav(target.getAttribute(eventAttribute + '-location'));
-  } else if (calledFunction == 'navBack') {
-    navBack();
-  } else if (calledFunction == 'sidebar') {
-    sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-hidden'));
-  } else if (calledFunction == 'saveFromEditor') {
-    saveFromEditor();
-  } else if (calledFunction == 'formatDoc') {
-    formatDoc(target.getAttribute(eventAttribute + '-action'));
-  } else if (calledFunction == 'createFromDialog') {
-    createFromDialog();
-  } else if (calledFunction == 'editDocs') {
-    editDocs();
-  } else if (calledFunction == 'extIcon') {
-    extIcon();
-  } else {
+    var calledFunction = target.getAttribute(eventAttribute);
+    if (calledFunction == 'loadToEditor') {
+      loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
+    } else if (calledFunction == 'nav') {
+      if (target.getAttribute(eventAttribute + '-location') == 'welcome') {
+        updateDocLists();      
+      }
+      nav(target.getAttribute(eventAttribute + '-location'));
+    } else if (calledFunction == 'navBack') {
+      navBack();
+    } else if (calledFunction == 'sidebar') {
+      sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-hidden'));
+    } else if (calledFunction == 'saveFromEditor') {
+      saveFromEditor();
+    } else if (calledFunction == 'formatDoc') {
+      formatDoc(target.getAttribute(eventAttribute + '-action'));
+    } else if (calledFunction == 'createFromDialog') {
+      createFromDialog();
+    } else if (calledFunction == 'editDocs') {
+      editDocs();
+    } else if (calledFunction == 'extIcon') {
+      extIcon();
+    } else {
+    }
   }
 }
 
