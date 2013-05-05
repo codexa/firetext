@@ -37,19 +37,19 @@ function navBack() {
   updateDocLists();
 }
 
-function sidebar(name) {
+function sidebar(name, hidden) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
     if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
       document.getElementById('sidebar_' + name).classList.remove('active');
       document.querySelector('.current').setAttribute('data-state', 'none');
-      if (document.getElementById('button_' + name)) {
-        document.getElementById('button_' + name).classList.remove('sidebar-faded-button');
+      if (document.querySelector('.sidebar-faded-button')) {
+        document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
       }
     } else {
       document.getElementById('sidebar_' + name).classList.add('active');
       document.querySelector('.current').setAttribute('data-state', 'drawer'); 
-      if (document.getElementById('button_' + name)) {
-        document.getElementById('button_' + name).classList.add('sidebar-faded-button');
+      if (document.getElementById(hidden)) {
+        document.getElementById(hidden).classList.add('sidebar-faded-button');
       }
     }
   }

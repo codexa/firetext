@@ -565,7 +565,7 @@ function processActions(eventAttribute, target) {
   } else if (calledFunction == 'navBack') {
     navBack();
   } else if (calledFunction == 'sidebar') {
-    sidebar(target.getAttribute(eventAttribute + '-id'));
+    sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-hidden'));
   } else if (calledFunction == 'saveFromEditor') {
     saveFromEditor();
   } else if (calledFunction == 'formatDoc') {

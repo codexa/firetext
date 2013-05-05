@@ -53,6 +53,7 @@
 
   <section role="region" id="welcome">
     <header>
+      <button data-click="sidebar" data-click-id="main" data-click-hidden="welcome-sidebar-button" id="welcome-sidebar-button"><span class="icon icon-menu">Menu</span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-compose">New</span></button>
         <button data-click="editDocs"><span class="icon icon-edit">Edit</span></button>
@@ -148,9 +149,9 @@
 
   <section role="region" id="edit">
     <header>
-      <button data-click="nav" data-click-location="welcome" id="button_main"><span class="icon icon-back">back</span></button>
+      <button data-click="nav" data-click-location="welcome" id="edit-sidebar-button"><span class="icon icon-back">back</span></button>
       <menu type="toolbar">
-        <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu">Menu</span></button>
+        <button data-click="sidebar" data-click-id="main" data-click-hidden='edit-sidebar-button'><span class="icon icon-menu">Menu</span></button>
         <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
       </menu>
       <h1>Editing <span id="currentFileName"></span><span id="currentFileType" style="display: none;"></span>...</h1>
