@@ -209,7 +209,7 @@ function buildEditDocList(DOCS, listElm, display) {
       // generate each list item
       for (var i = 0; i < DOCS.length; i++) {
         output += '<li>';
-        output += '<label class="danger"><input type="checkbox" /><span></span></label>';
+        output += '<label class="danger"><input type="checkbox" class="edit-selected"/><span></span></label>';
         output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
         output += '</li>';
       }
@@ -475,6 +475,51 @@ function renameFile(name, type, newname) {
   });
 }
 
+/* Edit Mode
+------------------------*/ 
+function editDocs() {
+  if (editState == true) {
+    updateDocLists();
+    editState = false;
+    document.getElementById('recent-docs-list').style.display = 'block';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+    navBack();
+  } else {    
+    document.getElementById('recent-docs-list').style.display = 'none';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
+    editState = true;
+    
+    // Code to build list
+    docsInFolder(function(result) {
+      buildEditDocList(result, docBrowserDirList, 'Documents found');
+    });
+    
+    nav('welcome-edit-mode');
+  }
+}
+
+function deleteSelected() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    // Get selected files
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    var selected = Array.filter( checkboxes, function(elm) {
+      return elm.checked;
+    });
+    
+    // Delete selected files
+    for (var i = 0; i < selected.length; i++ ) {
+      // Delete file
+      var filename = selected[0].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
+      deleteFile(filename);
+      
+      // Remove from list
+      var elm = selected[i].parentNode.parentNode;
+      elm.parentNode.removeChild(elm);
+    }
+  }
+}
+
 /* Format
 ------------------------*/ 
 function formatDoc(sCmd, sValue) {
@@ -498,29 +543,6 @@ function updateToolbar() {
     } else {
       underline.classList.remove('active');
     }
-  }
-}
-
-window.setInterval(updateToolbar, 100);
-
-/* Edit Mode
-------------------------*/ 
-function editDocs() {
-  if (editState == true) {
-    navBack();
-    editState = false;
-    document.getElementById('recent-docs-list').style.display = 'block';
-    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
-  } else {
-    nav('welcome-edit-mode');
-    document.getElementById('recent-docs-list').style.display = 'none';
-    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
-    editState = true;
-    
-    // Code to build list
-    docsInFolder(function(result) {
-      buildEditDocList(result, docBrowserDirList, 'Documents found');
-    });
   }
 }
 
@@ -567,9 +589,14 @@ function processActions(eventAttribute, target) {
       editDocs();
     } else if (calledFunction == 'extIcon') {
       extIcon();
-    } else {
+    } else if (calledFunction == "delete") {
+      deleteSelected();
     }
   }
 }
 
+
+/* Start
+------------------------*/ 
 window.addEventListener('DOMContentLoaded', function() { init(); });
+window.setInterval(updateToolbar, 100);
