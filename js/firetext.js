@@ -108,7 +108,7 @@ RecentDocs.add = function(file) {
   if (localStorage["firetext.docs.recent"] != undefined) {
     var docsTMP = this.get();
     
-    // Remove duplicate
+    // Remove duplicates
     for (var i = 0; i < docsTMP.length; i++) {
       if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
         docsTMP.splice(i, 1);
@@ -130,6 +130,24 @@ RecentDocs.add = function(file) {
   else {
     this.init();
     this.add(file);
+  }
+}
+
+// Remove from recent docs
+RecentDocs.remove = function(file) {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    var docsTMP = this.get();
+    
+    // Remove item
+    for (var i = 0; i < docsTMP.length; i++) {
+      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+        docsTMP.splice(i, 1);
+        break;
+      }
+    }
+    
+    // Save array
+    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
   }
 }
 
