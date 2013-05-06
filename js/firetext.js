@@ -284,11 +284,10 @@ function docsInFolder(callback) {
     }
     
     // Only get documents
-    if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "text/odml") {
+    if (file.type !== "text/odml" && file.type !== "text/plain" && file.type !== "text/html") {
       cursor.continue();
       return;
     }
-    
     
     // At this point, the file should be vaild!
     
@@ -368,21 +367,7 @@ function createFromDialog() {
 function saveFromEditor() {
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
-  var content = "";
-  switch (filetype) {
-    case ".html":
-      content = doc.innerHTML;
-      break;
-    case ".txt":
-      content = txt.encode(doc.innerHTML, "HTML");
-      break;
-    case ".odml":
-      content = odml.encode(doc.innerHTML, "HTML");
-      break;
-    default:
-      content = doc.textContent;
-      break;
-  }
+  var content = doc.innerHTML;
   saveFile(filename, filetype, content, true, function(){});
 } 
 
@@ -390,12 +375,14 @@ function saveFile(filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
     case ".odml":
+      content = odml.encode(content, "HTML");
       type = "text\/odml";
       break;
     case ".html":
       type = "text\/html";
       break;
     case ".txt":
+      content = txt.encode(content, "HTML");
       type = "text\/plain";
       break;
     default:
