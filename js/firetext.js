@@ -353,9 +353,10 @@ function createFromDialog() {
     return;
   }
   saveFile(filename, filetype, ' ', false, function() {
-    RecentDocs.add([filename,filetype]);
     loadToEditor(filename, filetype);
   });
+  document.getElementById('createDialogFileName').value = '';
+  document.getElementById('createDialogFileType').value = '';
 }
 
 function saveFromEditor() {
