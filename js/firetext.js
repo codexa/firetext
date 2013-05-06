@@ -331,7 +331,7 @@ function showSaveBanner() {
 }
   
 // File Extension Icon on Create new file
-function extIcon(){
+function extIcon() {
   var extf = document.getElementById('extIconFile');
   var option = document.getElementById('createDialogFileType').value;
   if (option == ".html") {
@@ -340,7 +340,7 @@ function extIcon(){
     extf.src = "style/icons/extic/FTictxt.png";
   } else {
     extf.src = "style/icons/FiretextExtic.png";
-  };
+  }
 }
 
 /* File IO
