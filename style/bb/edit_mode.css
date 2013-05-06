@@ -2,7 +2,7 @@
  * Edit mode
  * ---------------------------------- */
 
-form[role="edit"][data-type="edit"] {
+[role="edit"][data-type="edit"] {
   overflow: hidden;
   position: absolute;
   z-index: 100;
@@ -20,7 +20,7 @@ form[role="edit"][data-type="edit"] {
   transition: transform 1s, opacity .5s, .5s visibility 1s;
 }
 
-form[role="edit"][data-type="edit"].current {
+[role="edit"][data-type="edit"].current {
   opacity: 1;
   visibility: visible;
   transform: none;
@@ -28,7 +28,7 @@ form[role="edit"][data-type="edit"].current {
 }
 
 /* Header */
-form[role="edit"][data-type="edit"] header {
+[role="edit"][data-type="edit"] header {
   pointer-events: auto;
   position: relative;
   z-index: 10;
@@ -39,7 +39,7 @@ form[role="edit"][data-type="edit"] header {
   border: none;
 }
 
-form[role="edit"][data-type="edit"] header:after {
+[role="edit"][data-type="edit"] header:after {
   content: "";
   display: block;
   height: 0.3rem;
@@ -51,7 +51,7 @@ form[role="edit"][data-type="edit"] header:after {
   background-size: auto 100%;
 }
 
-form[role="edit"][data-type="edit"] header h1 {
+[role="edit"][data-type="edit"] header h1 {
   font: 2.5rem/5rem "MozTT", Sans-serif;
   text-align: left;
   color: #fff;
@@ -63,7 +63,7 @@ form[role="edit"][data-type="edit"] header h1 {
   height: 100%
 }
 
-form[role="edit"][data-type="edit"] header button {
+[role="edit"][data-type="edit"] header button {
   border: none;
   background: none;
   padding: 0;
@@ -73,14 +73,14 @@ form[role="edit"][data-type="edit"] header button {
   border-radius: 0;
 }
 
-form[role="edit"][data-type="edit"] header menu[type="toolbar"] {
+[role="edit"][data-type="edit"] header menu[type="toolbar"] {
   height: 100%;
   float: right;
   margin: 0;
   padding: 0;
 }
 
-form[role="edit"][data-type="edit"] header menu[type="toolbar"] button {
+[role="edit"][data-type="edit"] header menu[type="toolbar"] button {
   height: 5rem;
   min-width: 5rem;
   width: auto;
@@ -98,30 +98,30 @@ form[role="edit"][data-type="edit"] header menu[type="toolbar"] button {
   z-index: 5;
 }
 
-form[role="edit"][data-type="edit"] header menu button {
+[role="edit"][data-type="edit"] header menu button {
   color: #fff;
   border: none;
 }
 
-form[role="edit"][data-type="edit"] header menu[type="toolbar"] button:last-child {
+[role="edit"][data-type="edit"] header menu[type="toolbar"] button:last-child {
   background: url(edit_mode/images/ui/separator.png) no-repeat left center;
   margin-left: -0.2rem;
   z-index: 1;
 }
 
 /* Press state */
-form[role="edit"][data-type="edit"] header button:active .icon:after,
-form[role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
+[role="edit"][data-type="edit"] header button:active .icon:after,
+[role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
   background: #008aaa !important;
   transition: background 0.2s ease;
   color: #fff;
 }
 
-form[role="edit"][data-type="edit"] header button:first-letter {
-  text-transform: uppercase;
+[role="edit"][data-type="edit"] header button:first-letter {
+  text-trans: uppercase;
 }
 
-form[role="edit"][data-type="edit"] header > button {
+[role="edit"][data-type="edit"] header > button {
   position: absolute;
   left: 0;
   width: 4rem;
@@ -131,7 +131,7 @@ form[role="edit"][data-type="edit"] header > button {
   text-align: center;
 }
 
-form[role="edit"][data-type="edit"] header > button span {
+[role="edit"][data-type="edit"] header > button span {
   background: url(edit_mode/images/icons/close.png) no-repeat center center;
   overflow: visible;
   font: 0/0 a;
@@ -141,7 +141,7 @@ form[role="edit"][data-type="edit"] header > button span {
   display: block;
 }
 
-form[role="edit"][data-type="edit"] header > button span:after {
+[role="edit"][data-type="edit"] header > button span:after {
   content: "";
   position: absolute;
   left: 0;
@@ -152,7 +152,7 @@ form[role="edit"][data-type="edit"] header > button span:after {
 }
 
 /* Menu */
-form[role="edit"][data-type="edit"] > menu {
+[role="edit"][data-type="edit"] > menu {
   pointer-events: auto;
   white-space: nowrap;
   margin: 0;
@@ -167,7 +167,7 @@ form[role="edit"][data-type="edit"] > menu {
   bottom: 0;
 }
 
-form[role="edit"][data-type="edit"] menu button {
+[role="edit"][data-type="edit"] menu button {
   width: 100%;
   height: 3.8rem;
   margin: 0 0 1rem;
@@ -193,22 +193,22 @@ form[role="edit"][data-type="edit"] menu button {
 }
 
 /* Press (default & recommend) */
-form[role="edit"][data-type="edit"] menu button:active,
-form[role="edit"][data-type="edit"] menu button.recommend:active {
+[role="edit"][data-type="edit"] menu button:active,
+[role="edit"][data-type="edit"] menu button.recommend:active {
   border-color: #008aaa;
   background: #008aaa;
   color: #333;
 }
 
 /* Recommend */
-form[role="edit"][data-type="edit"] menu button.recommend{
+[role="edit"][data-type="edit"] menu button.recommend{
   background-image: url(edit_mode/images/ui/recommend.png);
   background-color: #00caf2;
   border-color: #008eab;
 }
 
 /* Danger */
-form[role="edit"][data-type="edit"] menu button.danger{
+[role="edit"][data-type="edit"] menu button.danger{
   background-image: url(edit_mode/images/ui/danger.png);
   background-color: #b70404;
   color: #fff;
@@ -217,13 +217,13 @@ form[role="edit"][data-type="edit"] menu button.danger{
 }
 
 /* Danger Press */
-form[role="edit"][data-type="edit"] menu button.danger:active{
+[role="edit"][data-type="edit"] menu button.danger:active{
   background-image: url(edit_mode/images/ui/danger-press.png);
   background-color: #890707;
 }
 
 /* Disabled */
-form[role="edit"][data-type="edit"] > menu > button[disabled] {
+[role="edit"][data-type="edit"] > menu > button[disabled] {
   background: #5f5f5f;
   color: #4d4d4d;
   text-shadow: none;
@@ -231,19 +231,19 @@ form[role="edit"][data-type="edit"] > menu > button[disabled] {
   pointer-events: none;
 }
 
-form[role="edit"][data-type="edit"] menu button:last-child {
+[role="edit"][data-type="edit"] menu button:last-child {
   margin-left: 1rem;
 }
 
-form[role="edit"][data-type="edit"] menu button,
-form[role="edit"][data-type="edit"] menu button:first-child {
+[role="edit"][data-type="edit"] menu button,
+[role="edit"][data-type="edit"] menu button:first-child {
   margin: 0;
 }
 
-form[role="edit"][data-type="edit"] menu button {
+[role="edit"][data-type="edit"] menu button {
   width: calc((100% - 1rem) / 2);
 }
 
-form[role="edit"][data-type="edit"] menu button.full {
+[role="edit"][data-type="edit"] menu button.full {
   width: 100%;
 }
