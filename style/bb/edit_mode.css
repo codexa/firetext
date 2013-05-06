@@ -118,7 +118,7 @@
 }
 
 [role="edit"][data-type="edit"] header button:first-letter {
-  text-trans: uppercase;
+  text-transform: uppercase;
 }
 
 [role="edit"][data-type="edit"] header > button {
