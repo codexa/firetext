@@ -48,6 +48,9 @@ function sidebar(name, hidden) {
     } else {
       document.getElementById('sidebar_' + name).classList.add('active');
       document.querySelector('.current').setAttribute('data-state', 'drawer'); 
+      if (document.getElementById('sidebar_' + name).getAttribute('data-position') == 'right') {
+        document.querySelector('.current').setAttribute('data-position', 'right'); 
+      }
       if (document.getElementById(hidden)) {
         document.getElementById(hidden).classList.add('sidebar-faded-button');
       }

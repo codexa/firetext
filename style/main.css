@@ -108,9 +108,3 @@ html, body {
 #createDialogFileType:active {
   background-color: #008caa;
 }
-
-/*  Edit Mode */
-
-.pointer-events {
-  pointer-events: auto;
-}
