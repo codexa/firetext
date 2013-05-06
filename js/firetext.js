@@ -284,10 +284,11 @@ function docsInFolder(callback) {
     }
     
     // Only get documents
-    if (file.type !== "text/odml" && file.type !== "text/plain" && file.type !== "text/html") {
+    if (file.type !== "text/plain" && file.type !== "text/html") {
       cursor.continue();
       return;
     }
+    
     
     // At this point, the file should be vaild!
     
@@ -298,10 +299,6 @@ function docsInFolder(callback) {
       case "text\/plain":
         filename = file.name.substring(0, file.name.length-4);
         filetype = ".txt";
-        break;
-      case "text\/odml":
-        filename = file.name.substring(0, file.name.length-5);
-  filetype = ".odml";
         break;
       case "text\/html":
         filename = file.name.substring(0, file.name.length-5);
@@ -341,8 +338,6 @@ function extIcon() {
     extf.src = "style/icons/extic/FTichtml.png";
   } else if (option == ".txt") {
     extf.src = "style/icons/extic/FTictxt.png";
-  } else if (option == ".odml") {
-    extf.src = "style/icons/extic/FTicodml.png";
   } else {
     extf.src = "style/icons/FiretextExtic.png";
   }
@@ -367,22 +362,28 @@ function createFromDialog() {
 function saveFromEditor() {
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
-  var content = doc.innerHTML;
+  var content = "";
+  switch (filetype) {
+    case ".html":
+      content = doc.innerHTML;
+      break;
+    case ".txt":
+      content = txt.encode(doc.innerHTML, "HTML");
+      break;
+    default:
+      content = doc.textContent;
+      break;
+  }
   saveFile(filename, filetype, content, true, function(){});
 } 
 
 function saveFile(filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
-    case ".odml":
-      content = odml.encode(content, "HTML");
-      type = "text\/odml";
-      break;
     case ".html":
       type = "text\/html";
       break;
     case ".txt":
-      content = txt.encode(content, "HTML");
       type = "text\/plain";
       break;
     default:
@@ -427,7 +428,6 @@ function loadToEditor(filename, filetype) {
   
   // Show/hide toolbar
   switch (filetype) {
-    case ".odml":
     case ".html":
       toolbar.style.display = "block";
       editor.classList.remove('toolbarHidden');
@@ -442,9 +442,6 @@ function loadToEditor(filename, filetype) {
   // Fill editor
   loadFile(filename, filetype, function(result) {
     switch (filetype) {
-      case ".odml":
-        doc.innerHTML = odml.parse(result, "HTML");
-        break;
       case ".txt":
         doc.innerHTML = txt.parse(result, "HTML");
         break;
