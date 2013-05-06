@@ -518,9 +518,45 @@ function editDocs() {
     // Code to build list
     docsInFolder(function(result) {
       buildEditDocList(result, docBrowserDirList, 'Documents found');
+      watchCheckboxes();
     });
     
     nav('welcome-edit-mode');
+  }
+}
+
+function watchCheckboxes() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      checkboxes[i].onchange = updateSelectButton;
+    }
+  }
+}
+
+function updateSelectButton() {
+  if (numSelected() == 0) {
+    // Add select all button
+    document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">Select all</button><button data-click="delete" class="danger">Delete selected</button>';
+  }
+  else {
+    // Add deselect all button
+    document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">Deselect all</button><button data-click="delete" class="danger">Delete selected</button>';
+  }
+}
+
+function numSelected() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var n = 0;
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      if (checkboxes[i].checked) {
+        n++;
+      }
+    }
+    return n;
   }
 }
 
@@ -531,6 +567,7 @@ function selectAll() {
     for (var i = 0; i < checkboxes.length; i++ ) {
       checkboxes[i].checked = true;
     }
+    updateSelectButton();
   }
 }
 
@@ -541,6 +578,7 @@ function deselectAll() {
     for (var i = 0; i < checkboxes.length; i++ ) {
       checkboxes[i].checked = false;
     }
+    updateSelectButton();
   }
 }
 
