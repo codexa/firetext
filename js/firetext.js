@@ -338,6 +338,8 @@ function extIcon() {
     extf.src = "style/icons/extic/FTichtml.png";
   } else if (option == ".txt") {
     extf.src = "style/icons/extic/FTictxt.png";
+  } else if (option == ".odml") {
+    extf.src = "style/icons/extic/FTicodml.png";
   } else {
     extf.src = "style/icons/FiretextExtic.png";
   }
@@ -370,6 +372,9 @@ function saveFromEditor() {
     case ".txt":
       content = txt.encode(doc.innerHTML, "HTML");
       break;
+    case ".txt":
+      content = odml.encode(doc.innerHTML, "HTML");
+      break;
     default:
       content = doc.textContent;
       break;
@@ -380,6 +385,9 @@ function saveFromEditor() {
 function saveFile(filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
+    case ".odml":
+      type = "text\/odml";
+      break;
     case ".html":
       type = "text\/html";
       break;
@@ -442,6 +450,9 @@ function loadToEditor(filename, filetype) {
   // Fill editor
   loadFile(filename, filetype, function(result) {
     switch (filetype) {
+      case ".txt":
+        doc.innerHTML = odml.parse(result, "HTML");
+        break;
       case ".txt":
         doc.innerHTML = txt.parse(result, "HTML");
         break;
