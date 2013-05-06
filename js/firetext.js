@@ -284,7 +284,7 @@ function docsInFolder(callback) {
     }
     
     // Only get documents
-    if (file.type !== "text/plain" && file.type !== "text/html") {
+    if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "text/odml") {
       cursor.continue();
       return;
     }
@@ -299,6 +299,10 @@ function docsInFolder(callback) {
       case "text\/plain":
         filename = file.name.substring(0, file.name.length-4);
         filetype = ".txt";
+        break;
+      case "text\/odml":
+        filename = file.name.substring(0, file.name.length-5);
+  filetype = ".odml";
         break;
       case "text\/html":
         filename = file.name.substring(0, file.name.length-5);
@@ -372,7 +376,7 @@ function saveFromEditor() {
     case ".txt":
       content = txt.encode(doc.innerHTML, "HTML");
       break;
-    case ".txt":
+    case ".odml":
       content = odml.encode(doc.innerHTML, "HTML");
       break;
     default:
@@ -436,6 +440,7 @@ function loadToEditor(filename, filetype) {
   
   // Show/hide toolbar
   switch (filetype) {
+    case ".odml":
     case ".html":
       toolbar.style.display = "block";
       editor.classList.remove('toolbarHidden');
@@ -450,7 +455,7 @@ function loadToEditor(filename, filetype) {
   // Fill editor
   loadFile(filename, filetype, function(result) {
     switch (filetype) {
-      case ".txt":
+      case ".odml":
         doc.innerHTML = odml.parse(result, "HTML");
         break;
       case ".txt":
