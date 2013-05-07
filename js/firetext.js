@@ -352,6 +352,7 @@ function createFromDialog() {
     alert('Please enter a name for the new file.');
     return;
   }
+  RecentDocs.add([filename, filetype]);
   saveFile(filename, filetype, ' ', false, function() {
     loadToEditor(filename, filetype);
   });
