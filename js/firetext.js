@@ -351,17 +351,39 @@ function createFromDialog() {
   if (filename == null | filename == undefined | filename == '')  {
     alert('Please enter a name for the new file.');
     return;
+  }  
+  
+  // Save the file
+  var type = "text";
+  switch (filetype) {
+    case ".html":
+      type = "text\/html";
+      break;
+    case ".txt":
+      type = "text\/plain";
+      break;
+    default:
+      break;
   }
-  if (storage.get(('Documents/'+filename+filetype))) {
-    alert('This file already exists, please choose another name.');
-    return;
-  }
-  RecentDocs.add([filename, filetype]);
-  saveFile(filename, filetype, ' ', false, function() {
+  var contentBlob = new Blob([' '], { "type" : type });
+  var filePath = ("Documents/" + filename + filetype);
+  var req = storage.addNamed(contentBlob, filePath);
+  req.onerror = function () {
+    if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
+      alert('This file already exists, please choose another name.'); 
+    }
+    else {
+      alert('File creation unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+    }
+  };  
+  req.onsuccess = function () {  
+    // Load to editor
     loadToEditor(filename, filetype);
-  });
+  };
+  
+  // Clear file fields
   document.getElementById('createDialogFileName').value = '';
-  document.getElementById('createDialogFileType').value = '';
+  document.getElementById('createDialogFileType').value = '.html';
 }
 
 function saveFromEditor() {
