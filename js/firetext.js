@@ -264,9 +264,9 @@ function docsInFolder(callback) {
   cursor.onerror = function() {
     if (cursor.error.name == 'TypeMismatchError') {
       saveFile('firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+        deleteFile('firetext.temp');
       });
       updateDocLists();
-      deleteFile('firetext.temp');
       return;
     } else if (cursor.error.name == 'SecurityError') {
       alert('Please allow Firetext to access your SD card.');
