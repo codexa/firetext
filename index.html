@@ -190,9 +190,10 @@
         <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
         <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
         <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+        <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
       </ul>
       <ul>
-        <!--<li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>-->
+        <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
       </ul>
     </div>
     <section role="status" id="save-banner" hidden>
@@ -200,7 +201,6 @@
     </section>
   </section>
 
-  <!-- Version 0.2
   <form role="dialog" data-type="action" id="share">
     <header>Share</header>
     <menu>
@@ -208,7 +208,13 @@
       <button data-click="navBack">Cancel</button>
     </menu>
   </form>
-  -->
+
+  <form role="dialog" data-type="action" id="format">
+    <header>Format</header>
+    <menu>
+      <button data-click="navBack">Close</button>
+    </menu>
+  </form>
 
   <section role="region" id="settings">
     <header>
