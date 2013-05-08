@@ -612,7 +612,7 @@ function deselectAll() {
   }
 }
 
-function deleteSelected() {
+function deleteSelected(confirmed) {
   // Only use this function in edit mode
   if (editState == true) {
     // Get selected files
@@ -620,6 +620,13 @@ function deleteSelected() {
     var selected = Array.filter( checkboxes, function(elm) {
       return elm.checked;
     });
+    
+    if (confirmed != true && confirmed != 'true') {
+      var confirmDeletion = confirm('Do you want to delete these files?');
+      if (confirmDeletion != true) {
+        return;
+      }
+    }
     
     // Delete selected files
     for (var i = 0; i < selected.length; i++ ) {
@@ -709,7 +716,7 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'extIcon') {
       extIcon();
     } else if (calledFunction == "delete") {
-      deleteSelected();
+      deleteSelected(target.getAttribute(eventAttribute + '-confirmed'));
     } else if (calledFunction == "selectAll") {
       selectAll();
     } else if (calledFunction == "deselectAll") {
