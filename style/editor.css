@@ -24,10 +24,6 @@
   height: calc(100% - 5rem - 40px);
 }
 
-.editor.toolbarHidden {
-  height: calc(100% - 5rem);
-}
-
 #rawEditor {
   border: none;
   padding: 10px;
@@ -37,8 +33,6 @@
   height: calc(100% - 5rem);
 }
 
-[role="toolbar"].hidden {
-  transform: translateY(100%);
+[role="toolbar"] .hidden {
   visibility: hidden;
-  transition: transform .5s, .5s visibility 0s;
 }
