@@ -39,7 +39,7 @@
 }
 
 [role="tablist"] > [role="tab"] > a {
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   text-decoration: none;
   line-height: 4rem;
   text-align: center;
@@ -50,6 +50,7 @@
   position: relative;
   color: #737373;
   transition: all .5s;
+  font-weight: bold;
 }
 
 [role="tablist"] > [role="tab"] > a:active {

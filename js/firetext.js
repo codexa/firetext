@@ -455,6 +455,11 @@ function loadToEditor(filename, filetype) {
   doc.innerHTML = '';
   rawEditor.textContent = '';
   
+  // If no tab is selected, nav to the design tab
+  if (document.querySelector('.selected') === undefined | document.querySelector('.selected') === null) {
+    tab(document.querySelector('#editTabs'), 'design');
+  }
+  
   // Set file name and type
   document.getElementById('currentFileName').textContent = filename;
   document.getElementById('currentFileType').textContent = filetype;
@@ -516,11 +521,7 @@ function loadToEditor(filename, filetype) {
   RecentDocs.add([filename, filetype]);
   
   // Show editor
-  nav('edit');
-  if (document.querySelector('.selected') === undefined | document.querySelector('.selected') === null) {
-    tab(document.querySelector('#editTabs'), 'design');
-  }
-  
+  nav('edit');  
 }
 
 function loadFile(filename, filetype, callback) {
