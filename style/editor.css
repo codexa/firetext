@@ -27,3 +27,14 @@
 .editor.toolbarHidden {
   height: calc(100% - 5rem);
 }
+
+#rawEditor {
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 2em;
+  outline: none;
+  width: 100%;
+  height: calc(100% - 5rem);
+}

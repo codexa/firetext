@@ -175,7 +175,7 @@
 
   <section role="region" id="edit">
     <header>
-      <button data-click="nav" data-click-location="welcome" id="edit-sidebar-button"><span class="icon icon-back">back</span></button>
+      <button data-click="nav" data-click-location="welcome" id="edit-sidebar-button"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
         <button data-click="sidebar" data-click-id="main" data-click-hidden='edit-sidebar-button'><span class="icon icon-menu">Menu</span></button>
@@ -183,7 +183,20 @@
       <h1>Editing <span id="currentFileName"></span><span id="currentFileType" style="display: none;"></span>...</h1>
     </header>
     <div role="main" class="editor-container">
-      <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
+      <ul role="tablist" data-items="2">
+        <li id="tab-design" role="tab">
+          <a href="#tab-design">Design</a>
+          <div role="tabpanel">
+            <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
+          </div>
+        </li>
+        <li id="tab-edit" role="tab">
+          <a href="#tab-edit">HTML</a>
+          <div role="tabpanel">
+            <div id="rawEditor">Foo!</div>
+          </div>
+        </li>
+      </ul>
     </div>
     <div role="toolbar" id="edit-bar">
       <ul>
