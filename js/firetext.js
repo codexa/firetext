@@ -2,7 +2,7 @@
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, tabRaw, tabDesign;
 var storage = navigator.getDeviceStorage("sdcard");
 
 /* Initalize
@@ -12,7 +12,10 @@ function init() {
   nav('welcome');
   
   // Select important elements for later
+  tabDesign = document.getElementById('tab-design');
+  tabRaw = document.getElementById('tab-raw');
   editor = document.getElementById('editor');
+  rawEditor = document.getElementById('rawEditor');
   toolbar = document.getElementById('edit-bar');
   editWindow = document.getElementById('edit');
   docList = document.getElementById('docs');
@@ -63,6 +66,7 @@ function initEditor() {
   doc = editor.contentDocument.body;
   */
 
+  // Initialize Designer
   editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
   editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
   doc = document.createElement('DIV');
@@ -71,6 +75,9 @@ function initEditor() {
   doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
+  
+  // Initialize Raw Editor
+  rawEditor.setAttribute('contentEditable', 'true');
 }
 
 /* Recent Docs
@@ -446,6 +453,7 @@ function saveFile(filename, filetype, content, showBanner, callback) {
 function loadToEditor(filename, filetype) {
   // Clear editor
   doc.innerHTML = '';
+  rawEditor.textContent = '';
   
   // Set file name and type
   document.getElementById('currentFileName').textContent = filename;
@@ -470,13 +478,20 @@ function loadToEditor(filename, filetype) {
   
   // Fill editor
   loadFile(filename, filetype, function(result) {
+    var content;
+    
     switch (filetype) {
       case ".txt":
-        doc.innerHTML = txt.parse(result, "HTML");
+        content = txt.parse(result, "HTML");
+        doc.innerHTML = content;
+        tabRaw.style.visibility = 'hidden';
         break;
       case ".html":
       default:
-        doc.innerHTML = result;
+        content = result;
+        doc.innerHTML = content;
+        rawEditor.textContent = content;
+        tabRaw.style.visibility = 'visible';
         break;
     }
   });

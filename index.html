@@ -188,25 +188,25 @@
           <a href="#tab-design">Design</a>
           <div role="tabpanel">
             <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
+            <div role="toolbar" id="edit-bar">
+              <ul>
+                <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
+                <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
+                <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
+              </ul>
+              <ul>
+                <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
+              </ul>
+            </div>
           </div>
         </li>
-        <li id="tab-edit" role="tab">
-          <a href="#tab-edit">HTML</a>
+        <li id="tab-raw" role="tab">
+          <a href="#tab-raw">Raw</a>
           <div role="tabpanel">
-            <div id="rawEditor">Foo!</div>
+            <div id="rawEditor"></div>
           </div>
         </li>
-      </ul>
-    </div>
-    <div role="toolbar" id="edit-bar">
-      <ul>
-        <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-        <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-        <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-        <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
-      </ul>
-      <ul>
-        <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
       </ul>
     </div>
     <section role="status" id="save-banner" hidden>
