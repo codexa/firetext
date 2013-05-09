@@ -57,3 +57,12 @@ function sidebar(name, hidden) {
     }
   }
 }
+
+function tab(list, name) {
+  if (document.getElementById('tab-'+name)) {
+    if (document.querySelector('.selected')) {
+      document.querySelector('.selected').classList.remove('selected');
+    }
+    document.getElementById('tab-'+name).classList.add('selected');
+  }
+}

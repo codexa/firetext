@@ -736,6 +736,8 @@ function processActions(eventAttribute, target) {
       selectAll();
     } else if (calledFunction == "deselectAll") {
       deselectAll();
+    } else if (calledFunction == 'tab') {
+      tab(target.parentNode, target.getAttribute(eventAttribute + '-name'));
     }
   }
 }
