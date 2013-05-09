@@ -9,7 +9,7 @@
   width: 100%;
   height: 100%;
   font-family: "Open Sans", Sans-serif;
-  background: black;
+  background: #C7C7C7;
 }
 
 [role="tablist"] > [role="tab"] {
@@ -17,6 +17,8 @@
   margin: 0;
   padding: 0;
   float: left;
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Items calcs */
@@ -73,9 +75,14 @@
   z-index: 1;
 }
 
+/* Hidden */
+[role="tablist"] > [role="tab"].hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s, .5s visibility 0s;
+}
 
 /* Selected state */
-
 [role="tablist"] > [role="tab"].selected > a {
   color: #000;
   background: #fff;
@@ -104,7 +111,7 @@
   display: block;
   overflow: auto;
   opacity: .99;
-  transform: translateX(-100%);
+  transform: translateX(-102%);
   background: #EEE;
   transition: transform .5s ease, opacity .5s, .5s visibility 0s;
 }
@@ -116,7 +123,7 @@
 }
 
 [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
-  transform: translateX(100%);
+  transform: translateX(102%);
 }
 
 /* Position bottom */

@@ -484,7 +484,7 @@ function loadToEditor(filename, filetype) {
       case ".txt":
         content = txt.parse(result, "HTML");
         doc.innerHTML = content;
-        tabRaw.style.visibility = 'hidden';
+        tabRaw.classList.add('hidden');
         tab(document.querySelector('#editTabs'), 'design');
         break;
       case ".html":
@@ -492,7 +492,7 @@ function loadToEditor(filename, filetype) {
         content = result;
         doc.innerHTML = content;
         rawEditor.textContent = content;
-        tabRaw.style.visibility = 'visible';
+        tabRaw.classList.remove('hidden');
         break;
     }
   });
