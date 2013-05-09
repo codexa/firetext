@@ -498,7 +498,7 @@ function loadToEditor(filename, filetype) {
         tabRaw.classList.remove('hidden');   
              
         // Add listener to update raw
-        doc.addEventListener('keyup', function(event) {
+        doc.addEventListener('compositionupdate', function(event) {
           rawEditor.textContent = event.target.innerHTML;
         });
         doc.addEventListener('blur', function(event) {
@@ -506,7 +506,7 @@ function loadToEditor(filename, filetype) {
         });
         
         // Add listener to update design
-        rawEditor.addEventListener('keyup', function(event) {
+        rawEditor.addEventListener('compositionupdate', function(event) {
           doc.innerHTML = event.target.textContent;
         });
         rawEditor.addEventListener('blur', function(event) {
