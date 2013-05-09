@@ -16,7 +16,7 @@ function init() {
   tabRaw = document.getElementById('tab-raw');
   editor = document.getElementById('editor');
   rawEditor = document.getElementById('rawEditor');
-  toolbar = document.getElementById('edit-bar');
+  toolbar = document.getElementById('edit-zone');
   editWindow = document.getElementById('edit');
   docList = document.getElementById('docs');
   dirList = document.getElementById('openDialogDirList');
@@ -467,12 +467,10 @@ function loadToEditor(filename, filetype) {
   switch (filetype) {
     case ".html":
       toolbar.classList.remove('hidden');
-      editor.classList.remove('toolbarHidden');
       break;
     case ".txt":
     default:
       toolbar.classList.add('hidden');
-      editor.classList.add('toolbarHidden');
       break;
   }
   
