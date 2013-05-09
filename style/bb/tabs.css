@@ -43,9 +43,10 @@
   color: #FFF;
   float: left;
   width: 100%;
-  background: #000 no-repeat center top;
+  background: #C7C7C7 no-repeat center top;
   position: relative;
-  color: #fff;
+  color: #737373;
+  transition: all .5s;
 }
 
 [role="tablist"] > [role="tab"] > a:active {
@@ -73,8 +74,10 @@
 
 
 /* Selected state */
+
 [role="tablist"] > [role="tab"]:target > a {
-  color: #62c6f5
+  color: #000;
+  background: #fff;
 }
 
 [role="tablist"] > [role="tab"]:target > a.icon:after {
