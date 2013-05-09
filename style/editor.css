@@ -38,3 +38,9 @@
   width: 100%;
   height: calc(100% - 5rem);
 }
+
+[role="toolbar"].hidden {
+  transform: translateY(100%);
+  visibility: hidden;
+  transition: transform .5s, .5s visibility 0s;
+}

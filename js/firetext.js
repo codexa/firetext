@@ -466,12 +466,12 @@ function loadToEditor(filename, filetype) {
   // Show/hide toolbar
   switch (filetype) {
     case ".html":
-      toolbar.style.display = "block";
+      toolbar.classList.remove('hidden');
       editor.classList.remove('toolbarHidden');
       break;
     case ".txt":
     default:
-      toolbar.style.display = "none";
+      toolbar.classList.add('hidden');
       editor.classList.add('toolbarHidden');
       break;
   }
@@ -699,6 +699,10 @@ document.addEventListener('click', function(event) {
 
 document.addEventListener('submit', function(event) {
   processActions('data-submit', event.target);
+});
+
+document.addEventListener('focus', function(event) {
+  processActions('data-focus', event.target);
 });
 
 function processActions(eventAttribute, target) {
