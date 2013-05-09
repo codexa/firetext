@@ -57,6 +57,13 @@ function init() {
   
   // Initialize the editor
   initEditor();
+  
+  // Check for recent file, and if found, load it.
+  var latestDocs = RecentDocs.get();
+  if (latestDocs.length >= 1) {
+    var latestDocs = RecentDocs.get();
+    loadToEditor(latestDocs[0][0], latestDocs[0][1]);
+  }
 }
 
 function initEditor() {
