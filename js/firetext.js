@@ -492,7 +492,24 @@ function loadToEditor(filename, filetype) {
         content = result;
         doc.innerHTML = content;
         rawEditor.textContent = content;
-        tabRaw.classList.remove('hidden');
+        tabRaw.classList.remove('hidden');   
+             
+        // Add listener to update raw
+        doc.addEventListener('keyup', function(event) {
+          rawEditor.textContent = event.target.innerHTML;
+        });
+        doc.addEventListener('blur', function(event) {
+          rawEditor.textContent = event.target.innerHTML;
+        });
+        
+        // Add listener to update design
+        rawEditor.addEventListener('keyup', function(event) {
+          doc.innerHTML = event.target.textContent;
+        });
+        rawEditor.addEventListener('blur', function(event) {
+          doc.innerHTML = event.target.textContent;
+        });
+        
         break;
     }
   });
@@ -505,6 +522,7 @@ function loadToEditor(filename, filetype) {
   if (document.querySelector('.selected') === undefined | document.querySelector('.selected') === null) {
     tab(document.querySelector('#editTabs'), 'design');
   }
+  
 }
 
 function loadFile(filename, filetype, callback) {
@@ -699,10 +717,6 @@ document.addEventListener('click', function(event) {
 
 document.addEventListener('submit', function(event) {
   processActions('data-submit', event.target);
-});
-
-document.addEventListener('focus', function(event) {
-  processActions('data-focus', event.target);
 });
 
 function processActions(eventAttribute, target) {
