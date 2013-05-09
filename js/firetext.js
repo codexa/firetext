@@ -485,6 +485,7 @@ function loadToEditor(filename, filetype) {
         content = txt.parse(result, "HTML");
         doc.innerHTML = content;
         tabRaw.style.visibility = 'hidden';
+        tab(document.querySelector('#editTabs'), 'design');
         break;
       case ".html":
       default:
@@ -501,6 +502,9 @@ function loadToEditor(filename, filetype) {
   
   // Show editor
   nav('edit');
+  if (document.querySelector('.selected') === undefined | document.querySelector('.selected') === null) {
+    tab(document.querySelector('#editTabs'), 'design');
+  }
 }
 
 function loadFile(filename, filetype, callback) {
@@ -737,7 +741,7 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == "deselectAll") {
       deselectAll();
     } else if (calledFunction == 'tab') {
-      tab(target.parentNode, target.getAttribute(eventAttribute + '-name'));
+      tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
     }
   }
 }
