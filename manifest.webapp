@@ -1,7 +1,7 @@
 {
   "name": "FireText",
   "description": "A word processor for Firefox OS",
-  "version": "0.1",
+  "version": "0.2",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
