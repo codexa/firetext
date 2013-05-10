@@ -8,9 +8,6 @@ var storage = navigator.getDeviceStorage("sdcard");
 /* Initalize
 ------------------------*/
 function init() {
-  // Navigate to welcome screen
-  nav('welcome');
-  
   // Select important elements for later
   tabDesign = document.getElementById('tab-design');
   tabRaw = document.getElementById('tab-raw');
@@ -52,11 +49,11 @@ function init() {
   // Initalize recent docs
   RecentDocs.init();
   
-  // Generate docs list
-  updateDocLists();
-  
   // Initialize the editor
   initEditor();
+  
+  // Navigate to welcome screen
+  nav('welcome');  
   
   // Check for recent file, and if found, load it.
   var latestDocs = RecentDocs.get();
@@ -740,7 +737,7 @@ function processActions(eventAttribute, target) {
     if (calledFunction == 'loadToEditor') {
       loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
     } else if (calledFunction == 'nav') {
-      if (target.getAttribute(eventAttribute + '-location') == 'welcome') {
+      if (target.getAttribute(eventAttribute + '-location') == 'welcome' | target.getAttribute(eventAttribute + '-location') == 'open') {
         updateDocLists();      
       }
       nav(target.getAttribute(eventAttribute + '-location'));
