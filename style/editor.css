@@ -30,6 +30,7 @@
   padding-bottom: 6rem;
   font-size: 2em;
   outline: none;
+  font-family: monospace;
 }
 
 [role="toolbar"] .hidden {
