@@ -86,7 +86,7 @@
 /* Selected state */
 [role="tablist"] > [role="tab"].selected > a {
   color: #000;
-  background: #fff;
+  background: #eee;
 }
 
 [role="tablist"] > [role="tab"].selected > a.icon:after {

@@ -408,7 +408,7 @@ function saveFromEditor() {
   var content = "";
   switch (filetype) {
     case ".html":
-      content = doc.innerHTML;
+      content = rawEditor.textContent;
       break;
     case ".txt":
       content = txt.encode(doc.innerHTML, "HTML");

@@ -9,7 +9,7 @@ section[role=region], section[role=dialog] {
   left: 0px;
   right: 0px;
   
-  background-color: #EEE;
+  background-color: #eee;
   
   transition: all .5s ease;
   -moz-transition: all .5s ease;
