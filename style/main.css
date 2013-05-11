@@ -40,7 +40,7 @@ html, body {
   margin: 10px 0;
 }
 
-[data-type=list] li, [data-type=edit] li {
+[data-type=list] li a, [data-type=edit] li a {
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -60,6 +60,11 @@ html, body {
 
 [data-type=list] aside.icon.icon-arrow {
   background-image: url(icons/arrow.png);
+  background-position: center;
+}
+
+[data-type=list] aside.icon.icon-dropbox {
+  background-image: url(icons/dropbox.png);
   background-position: center;
 }
 
