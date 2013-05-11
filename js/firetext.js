@@ -763,6 +763,8 @@ function processActions(eventAttribute, target) {
       deselectAll();
     } else if (calledFunction == 'tab') {
       tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
+    } else if (calledFunction == 'settings') {
+      nav('settings-'+target.getAttribute(eventAttribute + '-name'));
     }
   }
 }
