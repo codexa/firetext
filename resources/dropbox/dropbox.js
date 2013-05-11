@@ -1,6 +1,6 @@
 var dropAPI = {};
 
-var dropAPI.client = new Dropbox.Client({
+dropAPI.client = new Dropbox.Client({
     key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
 });
 
