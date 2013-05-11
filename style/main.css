@@ -63,6 +63,11 @@ html, body {
   background-position: center;
 }
 
+[data-type=list] aside.icon.icon-dropbox {
+  background-image: url(icons/dropbox.png);
+  background-position: center;
+}
+
 
 /* Buttons */
 
