@@ -188,7 +188,7 @@ function buildDocListItems(DOCS, listElms, description, output) {
   description = tmp.textContent;
     
   // Generate item
-  output += '<li class="fileListItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
+  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
   output += '<a href="#">';
   output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
   output += '<p>'+DOCS[0][0]+'<em>'+DOCS[0][1]+'</em></p>';
@@ -724,13 +724,13 @@ document.addEventListener('submit', function(event) {
 
 function processActions(eventAttribute, target) {
   if (target && target.getAttribute) {
-    if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('fileListItem')) {
+    if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('listItem')) {
       target = target.parentNode;
-    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('fileListItem')) {
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('listItem')) {
       target = target.parentNode.parentNode;
-    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('listItem')) {
       target = target.parentNode.parentNode.parentNode;
-    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('listItem')) {
       target = target.parentNode.parentNode.parentNode.parentNode;
     }
     var calledFunction = target.getAttribute(eventAttribute);
@@ -764,7 +764,8 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'tab') {
       tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
     } else if (calledFunction == 'settings') {
-      nav('settings-'+target.getAttribute(eventAttribute + '-name'));
+      var settingsLoc = ('settings-'+target.getAttribute(eventAttribute + '-name'));
+      nav(settingsLoc);
     }
   }
 }
