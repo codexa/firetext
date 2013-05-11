@@ -1,13 +1,14 @@
 {
   "name": "FireText",
   "description": "A word processor for Firefox OS",
-  "version": "0.1",
+  "version": "0.2",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
     "name": "Codexa",
     "url": "https://github.com/codexa"
   },
+  "orientation": ["portrait"],
   "permissions": {
     "device-storage:sdcard":{ 
       "description": "Required for document storage.",

@@ -7,7 +7,7 @@ odml.parse = function (data, type) {
   output = "";
   if (type == "HTML") {
     // Location of <content> tags
-    data = data.indexOf("<content")+"<content>".length;
+    start = data.indexOf("<content")+"<content>".length;
     end = data.indexOf("</content>");
     // Check for errors
     if (start > end || start - "<content>".length == -1 || end == -1) {
