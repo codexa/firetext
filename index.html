@@ -44,10 +44,10 @@
 
   <!-- .txt -->
   <script type="application/javascript" src="resources/txt/parse.js"></script>
-  
+
   <!-- Resources -->
   <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
-  <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>   
+  <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
 
 </head>
 <body role="application">
@@ -113,7 +113,7 @@
 
   <section role="dialog" id="add">
     <header>
-      <button data-click="navBack"><span class="icon icon-close">close</span></button>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
       <h1>New document</h1>
     </header>
     <div role="main" class="header-only">
@@ -228,12 +228,45 @@
     </menu>
   </form>
 
-  <form role="dialog" data-type="action" id="format">
-    <header>Format</header>
-    <menu>
-      <button data-click="navBack">Close</button>
-    </menu>
-  </form>
+  <section role="dialog" id="format" class="skin-organic">
+    <header>
+      <button data-click="navBack"><span class="icon icon-close">close</span></button>
+      <h1>Format</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" style="padding: 20px;">
+        <ul>
+          <li class="listItem">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" checked>
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Bold</p>
+          </li>
+          <li class="listItem">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" checked>
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Italic</p>
+          </li>
+          <li class="listItem">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" checked>
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Underline</p>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </section>
 
   <section role="region" id="settings" class="skin-dark">
     <header>
@@ -277,7 +310,7 @@
           <br>
           <div id="dropbox-settings-list">
             <li class="listItem">
-              <input type="text" placeholder="Username" />        
+              <input type="text" placeholder="Username" />
             </li>
             <li class="listItem">
               <input type="password" placeholder="Password" />
