@@ -712,6 +712,48 @@ function updateToolbar() {
   }
 }
 
+/* Settings
+------------------------*/ 
+function getSettings(name) {
+  if (name) {
+    name = ("firetext.settings."+name);
+    if (localStorage[name] == undefined) {
+      localStorage[name] = JSON.stringify([]);
+    }
+    return JSON.parse(localStorage[name]);
+  }
+}
+
+function saveSettings(name, value) {
+  if (name && value) {
+    name = ("firetext.settings."+name);
+    localStorage[name] = JSON.stringify(value);
+  }
+}
+
+function dropboxSettings(settings, update) {
+  if (update == true) {
+    var newSettings = new Array();
+    if (document.getElementById('dropbox-enabled-button').hasAttribute('checked')) {
+      newSettings[1] = true;
+    } else {
+      newSettings[1] = false;      
+    }      
+    saveSettings('dropbox', newSettings);
+    dropboxSettings(getSettings('dropbox'), false);
+  } else {
+    if (settings[1] == true) {
+      document.getElementById('dropbox-settings-list').style.transition = 'opacity .5s';
+      document.getElementById('dropbox-settings-list').style.opacity = '1';
+      document.getElementById('dropbox-enabled-button').setAttribute('checked', '');        
+    } else {
+      document.getElementById('dropbox-settings-list').style.transition = 'opacity .5s';
+      document.getElementById('dropbox-settings-list').style.opacity = '0';
+      document.getElementById('dropbox-enabled-button').removeAttribute('checked');
+    }
+  }
+}
+
 /* Actions (had to do this because of CSP policies)
 ------------------------*/ 
 document.addEventListener('click', function(event) {
@@ -765,7 +807,16 @@ function processActions(eventAttribute, target) {
       tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
     } else if (calledFunction == 'settings') {
       var settingsLoc = ('settings-'+target.getAttribute(eventAttribute + '-name'));
-      nav(settingsLoc);
+      if (target.getAttribute(eventAttribute + '-update') == 'true') {
+        if (target.getAttribute(eventAttribute + '-name') == 'dropbox') {
+          dropboxSettings(getSettings('dropbox'), true);
+        }
+      } else {
+        if (target.getAttribute(eventAttribute + '-name') == 'dropbox') {
+          dropboxSettings(getSettings('dropbox'), false);
+        }
+        nav(settingsLoc);
+      }
     }
   }
 }
