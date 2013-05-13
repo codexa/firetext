@@ -735,14 +735,14 @@ function dropboxSettings(settings, update) {
   if (update == true) {
     var newSettings = new Array();
     if (document.getElementById('dropbox-enabled-button').hasAttribute('checked')) {
-      newSettings[1] = true;
+      newSettings[0] = true;
     } else {
-      newSettings[1] = false;      
+      newSettings[0] = false;      
     }      
     saveSettings('dropbox', newSettings);
     dropboxSettings(getSettings('dropbox'), false);
   } else {
-    if (settings[1] == true) {
+    if (settings[0] == true) {
       document.getElementById('dropbox-settings-list').style.transition = 'opacity .5s';
       document.getElementById('dropbox-settings-list').style.opacity = '1';
       document.getElementById('dropbox-enabled-button').setAttribute('checked', '');        
@@ -751,6 +751,8 @@ function dropboxSettings(settings, update) {
       document.getElementById('dropbox-settings-list').style.opacity = '0';
       document.getElementById('dropbox-enabled-button').removeAttribute('checked');
     }
+    document.getElementById('dropbox-username-field').value = settings[1];
+    document.getElementById('dropbox-password-field').value = settings[2];
   }
 }
 
