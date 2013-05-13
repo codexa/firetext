@@ -41,6 +41,10 @@ label:not([for]) input:checked + span {
   background-position: center bottom;
 }
 
+.pack-end label {
+  margin: 5px;
+}
+
 /* 'Dangerous' switches */
 
 label:not([for]).danger input[type="checkbox"] + span {
