@@ -46,6 +46,9 @@ function init() {
     }
   );
   
+  // Initialize sharing
+  initSharing();
+  
   // Initalize recent docs
   RecentDocs.init();
   
@@ -82,6 +85,16 @@ function initEditor() {
   
   // Initialize Raw Editor
   rawEditor.setAttribute('contentEditable', 'true');
+}
+
+function initSharing() {
+  var dropboxSettings = getSettings('dropbox');
+  if (dropboxSettings[0] != true && dropboxSettings[0] != false) {
+    saveSettings('dropbox', [true, '', '']);
+    initSharing();
+  } else if (dropboxSettings[0] == true) {
+    // Some code to init Dropbox
+  }
 }
 
 /* Recent Docs
@@ -738,7 +751,10 @@ function dropboxSettings(settings, update) {
       newSettings[0] = true;
     } else {
       newSettings[0] = false;      
-    }      
+    }
+    newSettings[1] = document.getElementById('dropbox-username-field').value;
+    newSettings[2] = document.getElementById('dropbox-password-field').value;
+    document.getElementById('dropbox-password-field').value = settings[2];
     saveSettings('dropbox', newSettings);
     dropboxSettings(getSettings('dropbox'), false);
   } else {
