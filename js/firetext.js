@@ -55,14 +55,14 @@ function init() {
   // Initialize the editor
   initEditor();
   
-  // Navigate to welcome screen
-  nav('welcome');  
-  
   // Check for recent file, and if found, load it.
   var latestDocs = RecentDocs.get();
-  if (latestDocs.length >= 1) {
+  if (latestDocs.length >= 1 && getSettings('autoload') == true) {
     var latestDocs = RecentDocs.get();
     loadToEditor(latestDocs[0][0], latestDocs[0][1]);
+  } else {
+    nav('welcome');
+    updateDocLists();
   }
 }
 
@@ -237,7 +237,7 @@ function buildDocList(DOCS, listElms, display) {
       });
     } else {
       // No docs message
-      var output = '<li style="margin-top: -5px">';
+      var output = '<li style="margin-top: -5px" class="noLink">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
@@ -264,7 +264,7 @@ function buildEditDocList(DOCS, listElm, display) {
         output += '</li>';
       }
     } else {
-      output += '<li style="margin-top: -5px">';
+      output += '<li style="margin-top: -5px" class="noLink">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
