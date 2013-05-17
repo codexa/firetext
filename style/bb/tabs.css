@@ -18,7 +18,6 @@
   padding: 0;
   float: left;
   opacity: 1;
-  visibility: visible;
 }
 
 /* Items calcs */
@@ -111,14 +110,19 @@
   height: calc(100% - 4rem);
   display: block;
   overflow: auto;
-  opacity: .99;
+  opacity: .4;
   transform: translateX(-102%);
   background: #EEE;
   transition: transform .5s ease, opacity .5s, .5s visibility 0s;
 }
 
-[role="tablist"] .selected [role="tabpanel"] {
+.current [role="tablist"] .selected [role="tabpanel"], .parent [role="tablist"] .selected [role="tabpanel"], .active [role="tablist"] .selected [role="tabpanel"] {
   visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+[role="tablist"] .selected [role="tabpanel"] {
   opacity: 1;
   transform: none;
 }

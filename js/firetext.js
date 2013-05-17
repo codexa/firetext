@@ -47,7 +47,7 @@ function init() {
   );
   
   // Initialize sharing
-  initSharing();
+  // initSharing();
   
   // Initalize recent docs
   RecentDocs.init();
@@ -56,14 +56,19 @@ function init() {
   initEditor();
   
   // Check for recent file, and if found, load it.
-  var latestDocs = RecentDocs.get();
-  if (latestDocs.length >= 1 && getSettings('autoload') == true) {
+  if (getSettings('autoload') == true) {
     var latestDocs = RecentDocs.get();
-    loadToEditor(latestDocs[0][0], latestDocs[0][1]);
+    if (latestDocs.length >= 1) {
+      loadToEditor(latestDocs[0][0], latestDocs[0][1]);
+    } else {
+      nav('welcome');    
+    }
   } else {
     nav('welcome');
-    updateDocLists();
   }
+  
+  // Update Doc Lists
+  updateDocLists();
 }
 
 function initEditor() {
@@ -85,16 +90,9 @@ function initEditor() {
   
   // Initialize Raw Editor
   rawEditor.setAttribute('contentEditable', 'true');
-}
-
-function initSharing() {
-  var dropboxSettings = getSettings('dropbox');
-  if (dropboxSettings[0] != true && dropboxSettings[0] != false) {
-    saveSettings('dropbox', [true, '', '']);
-    initSharing();
-  } else if (dropboxSettings[0] == true) {
-    // Some code to init Dropbox
-  }
+  
+  // Nav to the design tab
+  tab(document.querySelector('#editTabs'), 'design');
 }
 
 /* Recent Docs
@@ -472,11 +470,6 @@ function loadToEditor(filename, filetype) {
   doc.innerHTML = '';
   rawEditor.textContent = '';
   
-  // If no tab is selected, nav to the design tab
-  if (document.querySelector('.selected') === undefined | document.querySelector('.selected') === null) {
-    tab(document.querySelector('#editTabs'), 'design');
-  }
-  
   // Set file name and type
   document.getElementById('currentFileName').textContent = filename;
   document.getElementById('currentFileType').textContent = filetype;
@@ -728,47 +721,39 @@ function updateToolbar() {
 /* Settings
 ------------------------*/ 
 function getSettings(name) {
-  if (name) {
-    name = ("firetext.settings."+name);
-    if (localStorage[name] == undefined) {
-      localStorage[name] = JSON.stringify([]);
-    }
-    return JSON.parse(localStorage[name]);
-  }
+  name = ("firetext.settings."+name);
+  return localStorage.getItem(name);
 }
 
 function saveSettings(name, value) {
-  if (name && value) {
-    name = ("firetext.settings."+name);
-    localStorage[name] = JSON.stringify(value);
-  }
+  name = ("firetext.settings."+name);
+  localStorage.setItem(name, value);
 }
 
-function dropboxSettings(settings, update) {
-  if (update == true) {
-    var newSettings = new Array();
-    if (document.getElementById('dropbox-enabled-button').hasAttribute('checked')) {
-      newSettings[0] = true;
-    } else {
-      newSettings[0] = false;      
-    }
-    newSettings[1] = document.getElementById('dropbox-username-field').value;
-    newSettings[2] = document.getElementById('dropbox-password-field').value;
-    document.getElementById('dropbox-password-field').value = settings[2];
-    saveSettings('dropbox', newSettings);
-    dropboxSettings(getSettings('dropbox'), false);
+function settings() {
+  var autosaveEnabled = document.querySelector('#autosave-enabled input');
+  var autoloadEnabled = document.querySelector('#autoload-enabled input');
+  
+  if (getSettings('autosave') == false) {
+    autosaveEnabled.checked = true;
   } else {
-    if (settings[0] == true) {
-      document.getElementById('dropbox-settings-list').style.transition = 'opacity .5s';
-      document.getElementById('dropbox-settings-list').style.opacity = '1';
-      document.getElementById('dropbox-enabled-button').setAttribute('checked', '');        
-    } else {
-      document.getElementById('dropbox-settings-list').style.transition = 'opacity .5s';
-      document.getElementById('dropbox-settings-list').style.opacity = '0';
-      document.getElementById('dropbox-enabled-button').removeAttribute('checked');
-    }
-    document.getElementById('dropbox-username-field').value = settings[1];
-    document.getElementById('dropbox-password-field').value = settings[2];
+    autosaveEnabled.checked = false;  
+  }
+  
+  if (getSettings('autoload') == false) {
+    autoloadEnabled.checked = true;
+  } else {
+    autoloadEnabled.checked = false;  
+  }
+  
+  // Autosave
+  autosaveEnabled.onchange = function toggleAutosave() {
+    saveSettings('autosave', this.checked);
+  }
+  
+  // Autoload
+  autoloadEnabled.onchange = function toggleAutoload() {
+    saveSettings('autoload', this.checked);
   }
 }
 
@@ -799,6 +784,8 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'nav') {
       if (target.getAttribute(eventAttribute + '-location') == 'welcome' | target.getAttribute(eventAttribute + '-location') == 'open') {
         updateDocLists();      
+      } else if (target.getAttribute(eventAttribute + '-location') == 'settings') {
+        settings();
       }
       nav(target.getAttribute(eventAttribute + '-location'));
     } else if (calledFunction == 'navBack') {
@@ -823,18 +810,6 @@ function processActions(eventAttribute, target) {
       deselectAll();
     } else if (calledFunction == 'tab') {
       tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
-    } else if (calledFunction == 'settings') {
-      var settingsLoc = ('settings-'+target.getAttribute(eventAttribute + '-name'));
-      if (target.getAttribute(eventAttribute + '-update') == 'true') {
-        if (target.getAttribute(eventAttribute + '-name') == 'dropbox') {
-          dropboxSettings(getSettings('dropbox'), true);
-        }
-      } else {
-        if (target.getAttribute(eventAttribute + '-name') == 'dropbox') {
-          dropboxSettings(getSettings('dropbox'), false);
-        }
-        nav(settingsLoc);
-      }
     }
   }
 }
