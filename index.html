@@ -100,12 +100,16 @@
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
         <div id="recent-docs-list">
-          <h2>Recents:</h2>
+          <h2>Recents</h2>
           <ul id="docs"></ul>
         </div>
         <div id="device-docs-list">
-          <h2>Device:</h2>
+          <h2>Device</h2>
           <ul id="docBrowserDirList"></ul>
+        </div>
+        <div id="dropbox-docs-list">
+          <h2>Dropbox</h2>
+          <ul id="dropboxDocsList"></ul>
         </div>
       </article>
     </div>
@@ -301,7 +305,7 @@
         <div>
           <h2>Sharing</h2>
           <ul>
-            <li data-click="settings" data-click-name="dropbox" class="listItem">
+            <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
               <a href="#">
                 <aside class="icon icon-dropbox"></aside>
                 <p>Dropbox</p>
@@ -321,10 +325,10 @@
     <div role="main" class="header-only">
       <article data-type="list" style="padding: 20px;">
         <ul>
-          <li class="listItem">
+          <li class="listItem" id="dropbox-enabled">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" id="dropbox-enabled-button" data-click="settings" data-click-name="dropbox" data-click-update="true">
+                <input type="checkbox" data-type="switch" />
                 <span></span>
               </label>
             </aside>
@@ -332,11 +336,11 @@
           </li>
           <br>
           <div id="dropbox-settings-list">
-            <li class="listItem">
-              <input type="text" placeholder="Username" id="dropbox-username-field" />
+            <li class="listItem" id="dropbox-username">
+              <input type="text" placeholder="Username" />
             </li>
-            <li class="listItem">
-              <input type="password" placeholder="Password" id="dropbox-password-field" />
+            <li class="listItem" id="dropbox-password">
+              <input type="password" placeholder="Password" />
             </li>
           </div>
         </ul>

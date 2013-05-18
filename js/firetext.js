@@ -2,7 +2,7 @@
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, tabRaw, tabDesign;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, dropboxDocsList, dropboxDirList, tabRaw, tabDesign;
 var storage = navigator.getDeviceStorage("sdcard");
 
 /* Initalize
@@ -17,6 +17,8 @@ function init() {
   editWindow = document.getElementById('edit');
   docList = document.getElementById('docs');
   dirList = document.getElementById('openDialogDirList');
+  dropboxDocsList = document.getElementById('dropbox-docs-list');
+  dropboxDirList = document.getElementById('dropboxDirList');
   docBrowserDirList = document.getElementById('docBrowserDirList');
   bold = document.getElementById('bold');
   italic = document.getElementById('italic');
@@ -47,7 +49,7 @@ function init() {
   );
   
   // Initialize sharing
-  // initSharing();
+  initSharing();
   
   // Initalize recent docs
   RecentDocs.init();
@@ -93,6 +95,14 @@ function initEditor() {
   
   // Nav to the design tab
   tab(document.querySelector('#editTabs'), 'design');
+}
+
+function initSharing() {
+  if (getSettings('dropbox.enabled') == true) {
+    // Code to get dropbox files
+  } else {
+    dropboxDocsList.style.display = 'none';
+  }
 }
 
 /* Recent Docs
@@ -321,11 +331,11 @@ function docsInFolder(callback) {
     var filetype = "";
     switch(file.type) {
       case "text\/plain":
-        filename = file.name.substring(0, file.name.length-4);
+        filename = file.name.substring(0, file.name.length-4).replace(/Documents\//gi, '');
         filetype = ".txt";
         break;
       case "text\/html":
-        filename = file.name.substring(0, file.name.length-5);
+        filename = file.name.substring(0, file.name.length-5).replace(/Documents\//gi, '');
         filetype = ".html";
         break;
     }
@@ -731,29 +741,29 @@ function saveSettings(name, value) {
 }
 
 function settings() {
+  // Select elements
   var autosaveEnabled = document.querySelector('#autosave-enabled input');
   var autoloadEnabled = document.querySelector('#autoload-enabled input');
-  
-  if (getSettings('autosave') == false) {
-    autosaveEnabled.checked = true;
-  } else {
-    autosaveEnabled.checked = false;  
-  }
-  
-  if (getSettings('autoload') == false) {
-    autoloadEnabled.checked = true;
-  } else {
-    autoloadEnabled.checked = false;  
-  }
+  var dropboxEnabled = document.querySelector('#dropbox-enabled input');
+  var dropboxSettings = document.querySelector('#dropbox-settings-list');
+  var dropboxUser = document.querySelector('#dropbox-settings-list');
   
   // Autosave
+  autosaveEnabled.setAttribute('checked', getSettings('autosave'));
   autosaveEnabled.onchange = function toggleAutosave() {
     saveSettings('autosave', this.checked);
   }
   
   // Autoload
+  autoloadEnabled.setAttribute('checked', getSettings('autoload'));
   autoloadEnabled.onchange = function toggleAutoload() {
     saveSettings('autoload', this.checked);
+  }
+  
+  // Dropbox
+  dropboxEnabled.setAttribute('checked', getSettings('dropbox.enabled'))
+  dropboxEnabled.onchange = function toggleDropbox() {
+    saveSettings('dropbox.enabled', this.checked);
   }
 }
 
