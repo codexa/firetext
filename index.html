@@ -121,7 +121,7 @@
       <h1>New document</h1>
     </header>
     <div role="main" class="header-only">
-      <form data-submit="createFromDialog">
+      <div class="form">
         <br>
         <img src="style/icons/FiretextExtic.png" id="extIconFile" height="200px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
@@ -134,14 +134,14 @@
           </legend>
           <section id="fileNameInput">
             <p>
-              <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-click="extIcon">
-              <button type="reset">Clear</button>
+              <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-enter="createFromDialog" />
+              <button type="reset" data-mouse-down="clearCreateForm">Clear</button>
             </p>
           </section>
         </fieldset>
         <br>
-        <button type="submit" class="button-block">Create</button>
-      </form>
+        <button class="button-block" data-click="createFromDialog">Create</button>
+      </div>
     </div>
   </section>
 

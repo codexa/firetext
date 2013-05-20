@@ -5,6 +5,11 @@
 var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, dropboxDocsList, dropboxDirList, tabRaw, tabDesign;
 var storage = navigator.getDeviceStorage("sdcard");
 
+/* Start
+------------------------*/ 
+window.addEventListener('DOMContentLoaded', function() { init(); });
+window.setInterval(updateToolbar, 100);
+
 /* Initalize
 ------------------------*/
 function init() {
@@ -800,6 +805,16 @@ document.addEventListener('submit', function(event) {
   processActions('data-submit', event.target);
 });
 
+document.addEventListener('keypress', function(event) {
+  if (event.key == 13 | event.keyCode == 13) {
+    processActions('data-enter', event.target);
+  }
+});
+
+document.addEventListener('mousedown', function(event) {
+  processActions('data-mouse-down', event.target);
+});
+
 function processActions(eventAttribute, target) {
   if (target && target.getAttribute) {
     if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('listItem')) {
@@ -843,12 +858,16 @@ function processActions(eventAttribute, target) {
       deselectAll();
     } else if (calledFunction == 'tab') {
       tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
+    } else if (calledFunction == 'clearCreateForm') {
+      clearCreateForm();
     }
   }
 }
 
-
-/* Start
+/* Miscellaneous
 ------------------------*/ 
-window.addEventListener('DOMContentLoaded', function() { init(); });
-window.setInterval(updateToolbar, 100);
+function clearCreateForm() {
+  document.getElementById('createDialogFileName').value = '';
+  document.getElementById('createDialogFileType').value = '.html';
+  extIcon();
+}
