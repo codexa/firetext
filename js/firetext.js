@@ -117,9 +117,11 @@ RecentDocs.init = function() {
   }
 }
 
-// Reset recent docs
+// Initalize recent docs
 RecentDocs.reset = function() {
-  localStorage["firetext.docs.recent"] = JSON.stringify([]);
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    localStorage["firetext.docs.recent"] = JSON.stringify([]);
+  }
 }
 
 // Get recent docs
@@ -186,62 +188,6 @@ RecentDocs.remove = function(file, merged) {
     
     // Save array
     localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
-  }
-}
-
-/* Settings
-------------------------*/
-// Settings Object
-var RecentDocs = {};
-
-// Initalize settings
-RecentDocs.init = function() {
-  if (localStorage["firetext.settings"] == undefined) {
-    localStorage["firetext.settings"] = JSON.stringify({});
-  }
-}
-
-// Reset settings
-RecentDocs.reset = function() {
-  localStorage["firetext.settings"] = JSON.stringify({});
-}
-
-// Get a settings
-RecentDocs.get = function(setting) {
-  if (localStorage["firetext.settings"] != undefined) {
-    return JSON.parse(localStorage["firetext.settings"])[setting];
-  }
-  else {
-    this.init();
-    return this.get(setting);
-  }
-}
-
-// Get all settings
-RecentDocs.getAll = function() {
-  if (localStorage["firetext.settings"] != undefined) {
-    return JSON.parse(localStorage["firetext.settings"]);
-  }
-  else {
-    this.init();
-    return this.get(setting);
-  }
-}
-
-// Add to recent docs
-RecentDocs.set = function(setting, value) {
-  if (localStorage["firetext.settings"] != undefined) {
-    var settingsTMP = this.get();
-    
-    // Set item
-    settingsTMP[setting] = value;
-    
-    // Save settings
-    localStorage["firetext.settings"] = JSON.stringify(settingsTMP);
-  }
-  else {
-    this.init();
-    this.set(setting, value);
   }
 }
 
