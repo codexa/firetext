@@ -73,30 +73,6 @@ function init() {
   updateDocLists();
 }
 
-function initEditor() {
-  /* Disabled until bug 811177 is fixed
-  editor.contentWindow.document.designMode = "on";
-  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
-  doc = editor.contentDocument.body;
-  */
-
-  // Initialize Designer
-  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  doc = document.createElement('DIV');
-  doc.setAttribute('contentEditable', 'true');
-  doc.id = 'tempEditDiv';
-  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
-  editor.contentWindow.document.body.appendChild(doc);
-  doc = editor.contentWindow.document.getElementById('tempEditDiv');
-  
-  // Initialize Raw Editor
-  rawEditor.setAttribute('contentEditable', 'true');
-  
-  // Nav to the design tab
-  tab(document.querySelector('#editTabs'), 'design');
-}
-
 function initSharing() {
   if (getSettings('dropbox.enabled') == true) {
     // Code to get dropbox files
@@ -516,25 +492,13 @@ function loadToEditor(filename, filetype) {
         doc.innerHTML = content;
         rawEditor.textContent = content;
         tabRaw.classList.remove('hidden');   
-             
-        // Add listener to update raw
-        doc.addEventListener('compositionupdate', function(event) {
-          rawEditor.textContent = event.target.innerHTML;
-        });
-        doc.addEventListener('blur', function(event) {
-          rawEditor.textContent = event.target.innerHTML;
-        });
-        
-        // Add listener to update design
-        rawEditor.addEventListener('compositionupdate', function(event) {
-          doc.innerHTML = event.target.textContent;
-        });
-        rawEditor.addEventListener('blur', function(event) {
-          doc.innerHTML = event.target.textContent;
-        });
         
         break;
-    }
+    }             
+        
+    // Add listener to update views
+    watchDocument(filetype);
+    
   });
   
   // Add file to recent docs
@@ -585,6 +549,65 @@ function renameFile(name, type, newname) {
     saveFile(name, type, result, function(){});
     deleteFile(fullName);
   });
+}
+
+/* Editor
+------------------------*/ 
+function initEditor() {
+  /* Disabled until bug 811177 is fixed
+  editor.contentWindow.document.designMode = "on";
+  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
+  doc = editor.contentDocument.body;
+  */
+
+  // Initialize Designer
+  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+  doc = document.createElement('DIV');
+  doc.setAttribute('contentEditable', 'true');
+  doc.id = 'tempEditDiv';
+  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
+  editor.contentWindow.document.body.appendChild(doc);
+  doc = editor.contentWindow.document.getElementById('tempEditDiv');
+  
+  // Initialize Raw Editor
+  rawEditor.setAttribute('contentEditable', 'true');
+  
+  // Nav to the design tab
+  tab(document.querySelector('#editTabs'), 'design');
+}
+
+function watchDocument(filetype) {
+  // Add listener to update raw
+  if (filetype == '.html') {
+    doc.addEventListener('compositionupdate', function() {
+      updateViews(rawEditor, doc.innerHTML, 'text');
+    });
+    doc.addEventListener('blur', function() {
+      updateViews(rawEditor, doc.innerHTML, 'text');
+    });
+        
+    // Add listener to update design
+    rawEditor.addEventListener('compositionupdate', function() {
+      updateViews(doc, rawEditor.textContent, 'html');
+    });
+    rawEditor.addEventListener('blur', function() {
+      updateViews(doc, rawEditor.textContent, 'html');
+    });
+  }
+}
+
+function updateViews(destView, source, contentType) {
+  if (destView) {
+    if (contentType == 'html') {
+      destView.innerHTML = source;      
+    } else {
+      destView.textContent = source;
+    }
+    if (getSettings('autosave') == true) {
+      saveFromEditor;
+    }
+  }
 }
 
 /* Edit Mode
