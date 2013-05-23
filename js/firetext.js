@@ -1,3 +1,10 @@
+/*
+ * Copyright (C) Codexa Organisation 2013.
+ * Licenced released under the GPLv3. 
+ * See LICENSE in "resources/licenses/gpl.txt"
+ * or at http://www.gnu.org/licenses/gpl-3.0.txt
+ */
+ 
 'use strict'; 
 
 /* Globals
