@@ -1,28 +1,38 @@
 var regionHistory = new Array();
+var tempLoc = '';
 
 function nav(location) {
-  if (document.getElementById(location)) { 
-    if (document.querySelector('.current')) {
-      if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
-        document.querySelector('.current').setAttribute('data-state', 'none');
-        document.querySelector('[data-type=sidebar].active').classList.remove('active');
-        if (document.querySelector('.sidebar-faded-button')) {
-          document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
-        }
+  tempLoc = '';
+  if (document.getElementById(location)) {
+    tempLoc = location;
+    if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
+      sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
+      if (document.querySelector('.sidebar-faded-button')) {
+        document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
       }
-      if (document.getElementById(location).getAttribute('role') != 'region') {
+      setTimeout(function() {nav2();}, 500);
+    } else {
+      nav2();
+    }
+  }
+}
+
+function nav2() {   
+  if (document.getElementById(tempLoc)) { 
+    if (document.querySelector('.current')) {
+      if (document.getElementById(tempLoc).getAttribute('role') != 'region') {
         document.querySelector('.current').classList.add('parent');
       } else {        
         document.querySelector('.current').classList.remove('parent');
       }
       document.querySelector('.current').classList.remove('current');
     }
-    if (document.querySelector('.parent') && document.getElementById(location).getAttribute('role') == 'region') {
+    if (document.querySelector('.parent') && document.getElementById(tempLoc).getAttribute('role') == 'region') {
       document.querySelector('.parent').classList.remove('parent');
-    }    
-    regionHistory.push(location);
-    document.getElementById(location).classList.add('current');
-  }
+    }
+    regionHistory.push(tempLoc);
+    document.getElementById(tempLoc).classList.add('current');
+  }
 }
 
 function navBack() {
