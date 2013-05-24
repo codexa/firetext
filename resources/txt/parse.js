@@ -1,4 +1,4 @@
-// This JS-based parser was made by the FireText contributors.
+// Copyright (C) Codexa Organisation 2013.
 
 var txt = {};
 
