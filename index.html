@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
 
-  <link href="style/images/favicon.png" rel="icon" type="image/x-icon" />
-  <link href="style/images/favicon.png" rel="shortcut icon" type="image/x-icon" />
+  <link href="style/icons/app_icon.png" rel="icon" type="image/x-icon" />
+  <link href="style/icons/app_icon.png" rel="shortcut icon" type="image/x-icon" />
 
   <title>FireText</title>
 
@@ -39,49 +39,81 @@
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
 
   <!-- Shared code -->
-  <script type="application/javascript" src="shared/js/l10n.js"></script>
-  <script type="application/javascript" defer src="shared/js/gesture_detector.js"></script>
+  <script type="application/javascript" defer src="js/gesture_detector.js"></script>
 
-  <!-- ODML -->
-  <script type="application/javascript" src="resources/odml/parse.js"></script>
-  
-  <!-- TXT -->
+  <!-- Format parsers -->
   <script type="application/javascript" src="resources/txt/parse.js"></script>
+  <script type="application/javascript" src="resources/docx/docx.js"></script>
+
+  <!-- Resources -->
+  <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
+  <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
 
 </head>
 <body role="application">
 
+  <section data-type="sidebar" id="sidebar_welcome" class="skin-organic">
+    <header>
+      <menu type="toolbar">
+       <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-back">back</span></button>
+    </menu>
+      <h1>Menu</h1>
+    </header>
+    <nav>
+      <ul>
+        <li><a href="#" data-click="nav" data-click-location="add">New Document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="open">Open Document</a></li>
+      </ul>
+      <div role="toolbar">
+        <ul>
+          <li><button class="pack-icon-setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
+        </ul>
+        <ul>
+        </ul>
+      </div>
+    </nav>
+  </section>
+
   <section role="region" id="welcome">
     <header>
+      <button data-click="sidebar" data-click-id="welcome" data-click-hidden="welcome-sidebar-button" id="welcome-sidebar-button"><span class="icon icon-menu">Menu</span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-compose">New</span></button>
         <button data-click="editDocs"><span class="icon icon-edit">Edit</span></button>
       </menu>
-      <h1>Firetext</h1>
+      <h1 style="font-family: 'Philosopher';">Firetext</h1>
     </header>
-    <form role="edit" data-type="edit" id="welcome-edit-mode">
+    <div role="edit" data-type="edit" id="welcome-edit-mode">
       <section>
         <header>
           <menu type="toolbar">
-            <button data-click="editDocs">Close</button>
+            <button data-click="editDocs">Done</button>
           </menu>
           <h1>Edit docs</h1>
         </header>
       </section>
-      <menu>
-        <button>Rename</button>
-        <button>Delete selected</button>
+      <menu id="selectButtons">
+        <button data-click="selectAll">Select all</button>
+        <button data-click="delete" class="danger">Delete selected</button>
       </menu>
-    </form>
+    </div>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
         <div id="recent-docs-list">
-          <h2>Recents:</h2>
+          <h2>Recents</h2>
           <ul id="docs"></ul>
         </div>
         <div id="device-docs-list">
-          <h2>Device:</h2>
+          <h2>Device</h2>
           <ul id="docBrowserDirList"></ul>
+        </div>
+        <div id="dropbox-docs-list">
+          <h2>Dropbox</h2>
+          <ul id="dropboxDocsList"></ul>
+        </div>
+        <div id="gDrive-docs-list">
+          <h2>Google Drive</h2>
+          <ul id="gDriveDocsList"></ul>
         </div>
       </article>
     </div>
@@ -93,32 +125,33 @@
       <h1>New document</h1>
     </header>
     <div role="main" class="header-only">
-      <form data-submit="createFromDialog">
+      <div class="form">
         <br>
-        <img src="style/icons/FiretextExtic.png" id="extIconFile" style="display:block; margin: 10px auto;"/>
+        <img src="style/icons/FiretextExtic.png" id="extIconFile" height="200px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
-          <legend style="float:right">
-            <select id="createDialogFileType">
-              <option data-click="extIcon">.html</option>
-              <option data-click="extIcon">.txt</option>
+          <legend id="fileTypeLegend" class="action">
+            <select name="File type" id="createDialogFileType">
+              <option>.html</option>
+              <option>.txt</option>
             </select>
+            <select id="dummy" style="visibility:hidden; width: 80%;"></select>
           </legend>
-          <section>
+          <section id="fileNameInput">
             <p>
-              <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-click="extIcon">
-              <button type="reset">Clear</button>
+              <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-enter="createFromDialog" />
+              <button type="reset" data-mouse-down="clearCreateForm">Clear</button>
             </p>
           </section>
         </fieldset>
         <br>
-        <button type="submit" class="button-block">Create</button>
-      </form>
+        <button class="button-block" data-click="createFromDialog">Create</button>
+      </div>
     </div>
   </section>
 
   <section role="dialog" id="open">
     <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <button data-click="navBack"><span class="icon icon-close">Close</span></button>
       <h1>Open document</h1>
     </header>
     <div role="main" class="header-only">
@@ -128,7 +161,7 @@
     </div>
   </section>
 
-  <section data-type="sidebar" id="sidebar_main">
+  <section data-type="sidebar" id="sidebar_main" class="skin-organic" data-position="right">
     <header>
       <menu type="toolbar">
        <button data-click="sidebar" data-click-id="main"><span class="icon icon-back">back</span></button>
@@ -142,30 +175,50 @@
         <li><a href="#" data-click="saveFromEditor">Save Document</a></li>
         <li><a href="#" data-click="nav" data-click-location="welcome">Close Document</a></li>
       </ul>
+      <div role="toolbar">
+        <ul>
+          <li><button class="pack-icon-setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
+        </ul>
+        <ul>
+        </ul>
+      </div>
     </nav>
   </section>
 
   <section role="region" id="edit">
     <header>
-      <button data-click="nav" data-click-location="welcome" id="button_main"><span class="icon icon-back">back</span></button>
+      <button data-click="nav" data-click-location="welcome" id="edit-sidebar-button"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
-        <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu">Menu</span></button>
         <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
+        <button data-click="sidebar" data-click-id="main" data-click-hidden='edit-sidebar-button'><span class="icon icon-menu">Menu</span></button>
       </menu>
-      <h1>Editing <span id="currentFileName"></span><span id="currentFileType" style="display: none;"></span>...</h1>
+      <h1><span id="currentFileName"></span><span id="currentFileType"></span></h1>
     </header>
     <div role="main" class="editor-container">
-      <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
-    </div>
-    <div role="toolbar" id="edit-bar">
-      <ul>
-        <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-        <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-        <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-        <!--<li><button style="background-image: url(style/icons/toolbar/more.png); border-right: 1px solid white;">Format</button></li>-->
-      </ul>
-      <ul>
-        <!--<li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>-->
+      <ul role="tablist" data-items="2" id="editTabs">
+        <li id="tab-design" role="tab">
+          <a href="#" data-click="tab" data-click-name="design">Design</a>
+          <div role="tabpanel">
+            <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
+            <div role="toolbar" id="edit-bar">
+              <ul id="edit-zone">
+                <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
+                <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
+                <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
+              </ul>
+              <ul>
+                <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li id="tab-raw" role="tab">
+          <a href="#" data-click="tab" data-click-name="raw">Raw</a>
+          <div role="tabpanel">
+            <div id="rawEditor"></div>
+          </div>
+        </li>
       </ul>
     </div>
     <section role="status" id="save-banner" hidden>
@@ -173,13 +226,167 @@
     </section>
   </section>
 
-  <!--<form role="dialog" data-type="action" id="share">
+  <form role="dialog" data-type="action" id="share">
     <header>Share</header>
     <menu>
+      <button>Google Drive</button>
+      <button>Dropbox</button>
       <button>Email</button>
       <button data-click="navBack">Cancel</button>
     </menu>
-  </form>-->
+  </form>
+
+  <section role="dialog" id="format" class="skin-organic">
+    <header>
+      <button data-click="navBack"><span class="icon icon-close">close</span></button>
+      <h1>Format</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" style="padding: 20px;">
+        <ul>
+          <li class="listItem">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" checked>
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Bold</p>
+          </li>
+          <li class="listItem">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" checked>
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Italic</p>
+          </li>
+          <li class="listItem">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" checked>
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Underline</p>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section role="region" id="settings" class="skin-dark">
+    <header>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <h1>Settings</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list">
+        <div>
+          <h2>General</h2>
+          <ul>
+            <li class="listItem noLink" id="autosave-enabled">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label">Enable autosave</p>
+            </li>
+            <li class="listItem noLink" id="autoload-enabled">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label">Load last file on startup</p>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>Cloud Backup</h2>
+          <ul>
+            <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
+              <a href="#">
+                <aside class="icon icon-dropbox"></aside>
+                <p>Dropbox</p>
+              </a>
+            </li>
+            <li data-click="nav" data-click-location="settings-gDrive" class="listItem">
+              <a href="#">
+                  <aside class="icon icon-gDrive"></aside>
+                  <p>Google Drive</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section role="region" id="settings-dropbox" class="skin-dark">
+    <header>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <h1>Dropbox Settings</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" style="padding: 20px;">
+        <ul>
+          <li class="listItem" id="dropbox-enabled">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" />
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Use Dropbox</p>
+          </li>
+          <br>
+          <div id="dropbox-settings-list">
+            <li class="listItem" id="dropbox-username">
+              <input type="text" placeholder="Username" />
+            </li>
+            <li class="listItem" id="dropbox-password">
+              <input type="password" placeholder="Password" />
+            </li>
+          </div>
+        </ul>
+      </article>
+    </div>
+  </section>
+  <section role="region" id="settings-gDrive" class="skin-dark">
+    <header>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <h1>Google Drive Settings</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" style="padding: 20px;">
+        <ul>
+          <li class="listItem" id="gDrive-enabled">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" />
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Use Google drive</p>
+          </li>
+          <br>
+          <div id="gDrive-settings-list">
+            <li class="listItem" id="gDrive-username">
+              <input type="text" placeholder="Username" />
+            </li>
+            <li class="listItem" id="gDrive-password">
+              <input type="password" placeholder="Password" />
+            </li>
+          </div>
+        </ul>
+      </article>
+    </div>
+  </section>
 
 </body>
 </html>

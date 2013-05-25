@@ -1,106 +1,63 @@
-section[role=region], section[role=dialog] {
+section[role="region"], section[role="dialog"] {
   width: 100%;
-  height: 100%;
-  
+  height: 100%;  
   z-index: 101;
   position: fixed;
   top: 0px;
   bottom: 0px;
   left: 0px;
-  right: 0px;
-  
-  background-color: #EEE;
-  
+  right: 0px;  
+  background-color: #eee;  
   transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -webkit-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  -ms-transition: all .5s ease;  
 }
 
-section[role=region] {
+section[role="region"] {
   visibility: hidden;
-  opacity: .99;
-  
-  transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
-  -ms-transform: translateX(-100%);  
+  opacity: .99;  
+  transform: translateX(-100%); 
 }
 
-section[role=region].current, [role=region].parent, [role=dialog].parent {
+section[role="region"].current, [role="region"].parent, [role="dialog"].parent {
   visibility: visible;
   opacity: 1;
-  z-index: 100;
-  
+  z-index: 100;  
   transform: none;
-  -moz-transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -ms-transform: none; 
 }
 
-section[role=region].current ~ section[role=region] {  
-  opacity: .99;
-  
+section[role="region"].current ~ section[role="region"] {  
+  opacity: .99;  
   transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -webkit-transform: translateX(100%);
-  -o-transform: translateX(100%);
-  -ms-transform: translateX(100%); 
 }
 
-section[role=region][is_parent=true], section[role=dialog][is_parent=true] {
-  opacity: 1;
-  visibility: visible;
-
-  transform: none;
-  -moz-transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -ms-transform: none; 
-}
-
-section[role=dialog] {
+section[role="dialog"] {
   visibility: hidden;
-  opacity: .99;
-  
+  opacity: .99;  
   transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -webkit-transform: translateY(100%);
-  -o-transform: translateY(100%);
-  -ms-transform: translateY(100%);  
 }
 
-section[role=dialog].current {
+section[role="dialog"].current {
   visibility: visible;
-  opacity: 1;
-  
-  transform: none;
-  -moz-transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -ms-transform: none;  
+  opacity: 1;  
+  transform: none; 
 }
 
 /* Handle sidebars */
-[data-type=sidebar] {
+[data-type="sidebar"] {
   opacity: 0;
   transition: 0s opacity .5s;
 }
 
-[data-type=sidebar].active {
+[data-type="sidebar"].active {
   opacity: 1;
   transition: 0s opacity;
 }
 
-section[role=region][data-state=drawer].current, section[role=dialog][data-state=drawer].current, form[role=dialog][data-state=drawer].current {
-  transform: translateX(80%);
-  -moz-transform: translateX(80%);
-  -webkit-transform: translateX(80%);
-  -o-transform: translateX(80%);
-  -ms-transform: translateX(80%);  
+[data-state="drawer"].current {
+  transform: translateX(80%) !important;  
+}
+
+[data-state="drawer"][data-position="right"].current {
+  transform: translateX(-80%) !important;
 }
 
 .sidebar-faded-button {

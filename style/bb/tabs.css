@@ -9,6 +9,7 @@
   width: 100%;
   height: 100%;
   font-family: "Open Sans", Sans-serif;
+  background: #C7C7C7;
 }
 
 [role="tablist"] > [role="tab"] {
@@ -16,6 +17,7 @@
   margin: 0;
   padding: 0;
   float: left;
+  opacity: 1;
 }
 
 /* Items calcs */
@@ -36,16 +38,18 @@
 }
 
 [role="tablist"] > [role="tab"] > a {
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   text-decoration: none;
   line-height: 4rem;
   text-align: center;
   color: #FFF;
   float: left;
   width: 100%;
-  background: #000 no-repeat center top;
+  background: #C7C7C7 no-repeat center top;
   position: relative;
-  color: #fff;
+  color: #737373;
+  transition: all .5s;
+  font-weight: bold;
 }
 
 [role="tablist"] > [role="tab"] > a:active {
@@ -71,13 +75,20 @@
   z-index: 1;
 }
 
-
-/* Selected state */
-[role="tablist"] > [role="tab"]:target > a {
-  color: #62c6f5
+/* Hidden */
+[role="tablist"] > [role="tab"].hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s, .5s visibility 0s;
 }
 
-[role="tablist"] > [role="tab"]:target > a.icon:after {
+/* Selected state */
+[role="tablist"] > [role="tab"].selected > a {
+  color: #000;
+  background: #eee;
+}
+
+[role="tablist"] > [role="tab"].selected > a.icon:after {
   background-position: center -4rem;
 }
 
@@ -97,14 +108,27 @@
   visibility: hidden;
   width: 100%;
   height: calc(100% - 4rem);
-  z-index: 10;
   display: block;
   overflow: auto;
+  opacity: .4;
+  transform: translateX(-102%);
+  background: #EEE;
+  transition: transform .5s ease, opacity .5s, .5s visibility 0s;
 }
 
-[role="tablist"] :target [role="tabpanel"] {
-  z-index: 1;
+.current [role="tablist"] .selected [role="tabpanel"], .parent [role="tablist"] .selected [role="tabpanel"], .active [role="tablist"] .selected [role="tabpanel"] {
   visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+[role="tablist"] .selected [role="tabpanel"] {
+  opacity: 1;
+  transform: none;
+}
+
+[role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
+  transform: translateX(102%);
 }
 
 /* Position bottom */
@@ -169,14 +193,14 @@
 }
 
 /* Selected state */
-[role="tablist"][data-type="filter"] > [role="tab"]:target {
+[role="tablist"][data-type="filter"] > [role="tab"].selected {
   background: #fff;
   border: solid 1px #999;
   border-top: none;
   color: #000;
 }
 
-[role="tablist"][data-type="filter"] > [role="tab"]:target > a {
+[role="tablist"][data-type="filter"] > [role="tab"].selected > a {
   color: #000;
 }
 

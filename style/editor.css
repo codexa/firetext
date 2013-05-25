@@ -24,6 +24,15 @@
   height: calc(100% - 5rem - 40px);
 }
 
-.editor.toolbarHidden {
-  height: calc(100% - 5rem);
+#rawEditor {
+  border: none;
+  padding: 10px;
+  padding-bottom: 6rem;
+  font-size: 2em;
+  outline: none;
+  font-family: monospace;
+}
+
+[role="toolbar"] .hidden {
+  visibility: hidden;
 }
