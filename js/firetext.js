@@ -1,28 +1,46 @@
+/*
+ * Copyright (C) Codexa Organisation 2013.
+ * Licenced released under the GPLv3. 
+ * See LICENSE in "resources/liscence/gpl.txt"
+ * or at http://www.gnu.org/licenses/gpl-3.0.txt
+ */
+
 'use strict'; 
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, dropboxDocsList, dropboxDirList, tabRaw, tabDesign;
 var storage = navigator.getDeviceStorage("sdcard");
+
+/* Start
+------------------------*/ 
+window.addEventListener('DOMContentLoaded', function() { init(); });
+window.setInterval(updateToolbar, 100);
 
 /* Initalize
 ------------------------*/
 function init() {
-  // Navigate to welcome screen
-  nav('welcome');
-  
   // Select important elements for later
+  tabDesign = document.getElementById('tab-design');
+  tabRaw = document.getElementById('tab-raw');
   editor = document.getElementById('editor');
-  toolbar = document.getElementById('edit-bar');
+  rawEditor = document.getElementById('rawEditor');
+  toolbar = document.getElementById('edit-zone');
   editWindow = document.getElementById('edit');
   docList = document.getElementById('docs');
   dirList = document.getElementById('openDialogDirList');
+  dropboxDocsList = document.getElementById('dropbox-docs-list');
+  dropboxDirList = document.getElementById('dropboxDirList');
   docBrowserDirList = document.getElementById('docBrowserDirList');
   bold = document.getElementById('bold');
   italic = document.getElementById('italic');
   underline = document.getElementById('underline');
   
+  // Init extIcon
+  extIcon();
+  
   // Add event listeners
+  document.getElementById('createDialogFileType').addEventListener('change', function() {extIcon();});
   toolbar.addEventListener(
     'mousedown', function mouseDown(event) {
       event.preventDefault();
@@ -42,31 +60,37 @@ function init() {
     }
   );
   
+  // Initialize sharing
+  initSharing();
+  
   // Initalize recent docs
   RecentDocs.init();
   
-  // Generate docs list
-  updateDocLists();
-  
   // Initialize the editor
   initEditor();
+  
+  // Check for recent file, and if found, load it.
+  if (getSettings('autoload') == true) {
+    var latestDocs = RecentDocs.get();
+    if (latestDocs.length >= 1) {
+      loadToEditor(latestDocs[0][0], latestDocs[0][1]);
+    } else {
+      nav('welcome');    
+    }
+  } else {
+    nav('welcome');
+  }
+  
+  // Update Doc Lists
+  updateDocLists();
 }
 
-function initEditor() {
-  /* Disabled until bug 811177 is fixed
-  editor.contentWindow.document.designMode = "on";
-  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
-  doc = editor.contentDocument.body;
-  */
-
-  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  doc = document.createElement('DIV');
-  doc.setAttribute('contentEditable', 'true');
-  doc.id = 'tempEditDiv';
-  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
-  editor.contentWindow.document.body.appendChild(doc);
-  doc = editor.contentWindow.document.getElementById('tempEditDiv');
+function initSharing() {
+  if (getSettings('dropbox.enabled') == true) {
+    // Code to get dropbox files
+  } else {
+    dropboxDocsList.style.display = 'none';
+  }
 }
 
 /* Recent Docs
@@ -104,7 +128,7 @@ RecentDocs.add = function(file) {
   if (localStorage["firetext.docs.recent"] != undefined) {
     var docsTMP = this.get();
     
-    // Remove duplicate
+    // Remove duplicates
     for (var i = 0; i < docsTMP.length; i++) {
       if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
         docsTMP.splice(i, 1);
@@ -129,26 +153,51 @@ RecentDocs.add = function(file) {
   }
 }
 
+// Remove from recent docs
+RecentDocs.remove = function(file, merged) {
+  if (localStorage["firetext.docs.recent"] != undefined) {
+    var docsTMP = this.get();
+    
+    // Remove item
+    for (var i = 0; i < docsTMP.length; i++) {
+      if (!merged) {
+        if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+          docsTMP.splice(i, 1);
+          break;
+        }
+      }
+      else {
+        if (file == docsTMP[i][0] + docsTMP[i][1]) {
+          docsTMP.splice(i, 1);
+          break;
+        }
+      }
+    }
+    
+    // Save array
+    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
+  }
+}
+
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  buildDocList(RecentDocs.get(), docList, "Recent Documents");
-  docsInFolder(buildDirList);
+  docsInFolder(function(DOCS) {
+    buildDocList(DOCS, [dirList, docBrowserDirList], "Documents Found");
+    buildDocList(RecentDocs.get(), [docList], "Recent Documents");
+  });
 }
 
-function buildDirList(DOCS) {
-  buildDocList(DOCS, dirList, "Documents Found");
-  buildDocList(DOCS, docBrowserDirList, "Documents Found");
-}
-
-function buildDocListItems(DOCS, listElm, description, output) {
+function buildDocListItems(DOCS, listElms, description, output) {
   // Remove HTML
   var tmp = document.createElement("DIV");
   tmp.innerHTML = description;
   description = tmp.textContent;
+  tmp.innerHTML = description;
+  description = tmp.textContent;
     
   // Generate item
-  output += '<li class="fileListItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
+  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
   output += '<a href="#">';
   output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
   output += '<p>'+DOCS[0][0]+'<em>'+DOCS[0][1]+'</em></p>';
@@ -156,7 +205,9 @@ function buildDocListItems(DOCS, listElm, description, output) {
   output += '</a></li>';
   
   // Display output HTML
-  listElm.innerHTML = output;
+  for (var i = 0; i < listElms.length; i++) {
+    listElms[i].innerHTML = output;
+  }
   
   // Base case
   if (DOCS.length <= 1) {    
@@ -165,29 +216,32 @@ function buildDocListItems(DOCS, listElm, description, output) {
   
   // build next item
   loadFile(DOCS[1][0], DOCS[1][1], function(result) {
-    buildDocListItems(DOCS.slice(1, DOCS.length), listElm, result, output);
+    buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output);
   });
 }
 
-function buildDocList(DOCS, listElm, display) {
-  if (listElm != undefined) {
+function buildDocList(DOCS, listElms, display) {
+  if (listElms != undefined) {
     // Make sure list is not an edit list
-    listElm.setAttribute("data-type", "list");
+    for (var i = 0; i < listElms.length; i++) {
+      listElms[i].setAttribute("data-type", "list");
+    }
     
     if (DOCS.length > 0) {
       loadFile(DOCS[0][0], DOCS[0][1], function(result) {
-        buildDocListItems(DOCS, listElm, result, "")
+        buildDocListItems(DOCS, listElms, result, "")
       });
     } else {
       // No docs message
-      var output;
-      output += '<li style="margin-top: -5px">';
+      var output = '<li style="margin-top: -5px" class="noLink">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
       
       // Display output HTML
-      listElm.innerHTML = output;
+      for (var i = 0; i < listElms.length; i++) {
+        listElms[i].innerHTML = output;
+      }
     }
   }
 }
@@ -196,19 +250,17 @@ function buildEditDocList(DOCS, listElm, display) {
   if (listElm != undefined) {
     // Output HTML
     var output = "";
-    var description = "";
     
     if (DOCS.length != 0) {
       // generate each list item
       for (var i = 0; i < DOCS.length; i++) {
-        // TODO: Get first few words of file.
         output += '<li>';
-        output += '<label class="danger"><input type="checkbox" /><span></span></label>';
-        output += '<p><input type="text" placeholder="File Name" value="'+DOCS[i][0]+'" /><em>'+DOCS[i][1]+'</em></p>';
+        output += '<label class="danger"><input type="checkbox" class="edit-selected"/><span></span></label>';
+        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
         output += '</li>';
       }
     } else {
-      output += '<li style="margin-top: -5px">';
+      output += '<li style="margin-top: -5px" class="noLink">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
@@ -231,9 +283,11 @@ function docsInFolder(callback) {
   
   cursor.onerror = function() {
     if (cursor.error.name == 'TypeMismatchError') {
-      saveFile('Welcome','.html','<b>Welcome</b> to <i>Firetext</i>!', false, function() {
-        loadToEditor('Welcome', '.html');
+      saveFile('firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+        deleteFile('firetext.temp');
       });
+      updateDocLists();
+      return;
     } else if (cursor.error.name == 'SecurityError') {
       alert('Please allow Firetext to access your SD card.');
     } else {
@@ -265,11 +319,11 @@ function docsInFolder(callback) {
     var filetype = "";
     switch(file.type) {
       case "text\/plain":
-        filename = file.name.substring(0, file.name.length-4);
+        filename = file.name.substring(0, file.name.length-4).replace(/Documents\//gi, '');
         filetype = ".txt";
         break;
       case "text\/html":
-        filename = file.name.substring(0, file.name.length-5);
+        filename = file.name.substring(0, file.name.length-5).replace(/Documents\//gi, '');
         filetype = ".html";
         break;
     }
@@ -297,27 +351,18 @@ function showSaveBanner() {
   document.getElementById("save-banner").hidden = false;
   hideSaveBanner();
 }
-
-function showAllDocs() {
-  document.getElementById("device").style.display = "block";
-  document.getElementById("showAll").style.display = "none";
-}
   
 // File Extension Icon on Create new file
-function extIcon(){
+function extIcon() {
   var extf = document.getElementById('extIconFile');
   var option = document.getElementById('createDialogFileType').value;
   if (option == ".html") {
     extf.src = "style/icons/extic/FTichtml.png";
   } else if (option == ".txt") {
     extf.src = "style/icons/extic/FTictxt.png";
-  } else if (option == ".odml") {
-    extf.src = "style/icons/extic/FTicodml.png";
-  } else if (option == ".rtf") {
-    extf.src = "style/icons/extic/FTicrtf.png";
   } else {
     extf.src = "style/icons/FiretextExtic.png";
-  };
+  }
 }
 
 /* File IO
@@ -325,23 +370,51 @@ function extIcon(){
 function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
-  saveFile(filename, filetype, '', false, function() {
-    navBack();
-    RecentDocs.add([filename,filetype]);
+  if (filename == null | filename == undefined | filename == '')  {
+    alert('Please enter a name for the new file.');
+    return;
+  }  
+  
+  // Save the file
+  var type = "text";
+  switch (filetype) {
+    case ".html":
+      type = "text\/html";
+      break;
+    case ".txt":
+      type = "text\/plain";
+      break;
+    default:
+      break;
+  }
+  var contentBlob = new Blob([' '], { "type" : type });
+  var filePath = ("Documents/" + filename + filetype);
+  var req = storage.addNamed(contentBlob, filePath);
+  req.onerror = function () {
+    if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
+      alert('This file already exists, please choose another name.'); 
+    }
+    else {
+      alert('File creation unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+    }
+  };  
+  req.onsuccess = function () {  
+    // Load to editor
     loadToEditor(filename, filetype);
-  });
+  };
+  
+  // Clear file fields
+  document.getElementById('createDialogFileName').value = '';
+  document.getElementById('createDialogFileType').value = '.html';
 }
 
-function saveFromEditor() {
+function saveFromEditor(banner) {
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
   var content = "";
   switch (filetype) {
-    case ".odml":
-      odml.encode(doc.innerHTML, "HTML");
-      break;
     case ".html":
-      content = doc.innerHTML;
+      content = rawEditor.textContent;
       break;
     case ".txt":
       content = txt.encode(doc.innerHTML, "HTML");
@@ -350,15 +423,15 @@ function saveFromEditor() {
       content = doc.textContent;
       break;
   }
-  saveFile(filename, filetype, content, true, false);
+  if (banner != false) {
+    banner = true;
+  }
+  saveFile(filename, filetype, content, banner, function(){});
 } 
 
 function saveFile(filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
-    case ".odml":
-      type = "text\/odml";
-      break;
     case ".html":
       type = "text\/html";
       break;
@@ -375,9 +448,7 @@ function saveFile(filename, filetype, content, showBanner, callback) {
     if (showBanner) {
       showSaveBanner();
     }
-    if (callback) {
-      callback();
-    }
+    callback();
   };
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError") {
@@ -398,6 +469,7 @@ function saveFile(filename, filetype, content, showBanner, callback) {
 function loadToEditor(filename, filetype) {
   // Clear editor
   doc.innerHTML = '';
+  rawEditor.textContent = '';
   
   // Set file name and type
   document.getElementById('currentFileName').textContent = filename;
@@ -409,39 +481,46 @@ function loadToEditor(filename, filetype) {
   
   // Show/hide toolbar
   switch (filetype) {
-    case ".odml":
     case ".html":
-      toolbar.style.display = "block";
-      editor.classList.remove('toolbarHidden');
+      toolbar.classList.remove('hidden');
       break;
     case ".txt":
     default:
-      toolbar.style.display = "none";
-      editor.classList.add('toolbarHidden');
+      toolbar.classList.add('hidden');
       break;
   }
   
   // Fill editor
   loadFile(filename, filetype, function(result) {
+    var content;
+    
     switch (filetype) {
-      case ".odml":
-        doc.innerHTML = odml.parse(result, "HTML");
-        break;
       case ".txt":
-        doc.innerHTML = txt.parse(result, "HTML");
+        content = txt.parse(result, "HTML");
+        doc.innerHTML = content;
+        tabRaw.classList.add('hidden');
+        tab(document.querySelector('#editTabs'), 'design');
         break;
       case ".html":
       default:
-        doc.innerHTML = result;
+        content = result;
+        doc.innerHTML = content;
+        rawEditor.textContent = content;
+        tabRaw.classList.remove('hidden');   
+        
         break;
-    }
+    }             
+        
+    // Add listener to update views
+    watchDocument(filetype);
+    
   });
-  
-  // Show editor
-  nav('edit');
   
   // Add file to recent docs
   RecentDocs.add([filename, filetype]);
+  
+  // Show editor
+  nav('edit');  
 }
 
 function loadFile(filename, filetype, callback) {
@@ -482,9 +561,177 @@ function deleteFile(name) {
 function renameFile(name, type, newname) {
   loadFile(name, type, function(result) {
     var fullName = (name + type);
-    saveFile(name, type, result, false);
+    saveFile(name, type, result, function(){});
     deleteFile(fullName);
   });
+}
+
+/* Editor
+------------------------*/ 
+function initEditor() {
+  /* Disabled until bug 811177 is fixed
+  editor.contentWindow.document.designMode = "on";
+  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
+  doc = editor.contentDocument.body;
+  */
+
+  // Initialize Designer
+  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+  doc = document.createElement('DIV');
+  doc.setAttribute('contentEditable', 'true');
+  doc.id = 'tempEditDiv';
+  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
+  editor.contentWindow.document.body.appendChild(doc);
+  doc = editor.contentWindow.document.getElementById('tempEditDiv');
+  
+  // Initialize Raw Editor
+  rawEditor.setAttribute('contentEditable', 'true');
+  
+  // Nav to the design tab
+  tab(document.querySelector('#editTabs'), 'design');
+}
+
+function watchDocument(filetype) {
+  // Add listener to update raw
+  if (filetype == '.html') {
+    doc.addEventListener('input', function() {
+      updateViews(rawEditor, doc.innerHTML, 'text');
+    });
+        
+    // Add listener to update design
+    rawEditor.addEventListener('input', function() {
+      updateViews(doc, rawEditor.textContent, 'html');
+    });
+  }
+}
+
+function updateViews(destView, source, contentType) {
+  if (destView) {
+    if (contentType == 'html') {
+      destView.innerHTML = source;      
+    } else {
+      destView.textContent = source;
+    }
+    if (getSettings('autosave') == true) {
+      saveFromEditor(false);
+    }
+  }
+}
+
+/* Edit Mode
+------------------------*/ 
+function editDocs() {
+  if (editState == true) {
+    updateDocLists();
+    editState = false;
+    document.getElementById('recent-docs-list').style.display = 'block';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+    navBack();
+  } else {    
+    document.getElementById('recent-docs-list').style.display = 'none';
+    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
+    editState = true;
+    
+    // Code to build list
+    docsInFolder(function(result) {
+      buildEditDocList(result, docBrowserDirList, 'Documents found');
+      watchCheckboxes();
+    });
+    
+    nav('welcome-edit-mode');
+  }
+}
+
+function watchCheckboxes() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      checkboxes[i].onchange = updateSelectButton;
+    }
+  }
+}
+
+function updateSelectButton() {
+  if (numSelected() == 0) {
+    // Add select all button
+    document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">Select all</button><button data-click="delete" class="danger">Delete selected</button>';
+  }
+  else {
+    // Add deselect all button
+    document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">Deselect all</button><button data-click="delete" class="danger">Delete selected</button>';
+  }
+}
+
+function numSelected() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var n = 0;
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      if (checkboxes[i].checked) {
+        n++;
+      }
+    }
+    return n;
+  }
+}
+
+function selectAll() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      checkboxes[i].checked = true;
+    }
+    updateSelectButton();
+  }
+}
+
+function deselectAll() {
+  // Only use this function in edit mode
+  if (editState == true) {
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    for (var i = 0; i < checkboxes.length; i++ ) {
+      checkboxes[i].checked = false;
+    }
+    updateSelectButton();
+  }
+}
+
+function deleteSelected(confirmed) {
+  // Only use this function in edit mode
+  if (editState == true) {
+    // Get selected files
+    var checkboxes = docBrowserDirList.getElementsByClassName('edit-selected');
+    var selected = Array.filter( checkboxes, function(elm) {
+      return elm.checked;
+    });
+    
+    if (confirmed != true && confirmed != 'true') {
+      var confirmDeletion = confirm('Do you want to delete these files?');
+      if (confirmDeletion != true) {
+        return;
+      }
+    }
+    
+    // Delete selected files
+    for (var i = 0; i < selected.length; i++ ) {
+      // Get filename
+      var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
+      
+      // Remove from RecentDocs
+      RecentDocs.remove(filename, true);
+      
+      // Delete file
+      deleteFile(filename);
+      
+      // Remove from list
+      var elm = selected[i].parentNode.parentNode;
+      elm.parentNode.removeChild(elm);
+    }
+  }
 }
 
 /* Format
@@ -513,27 +760,42 @@ function updateToolbar() {
   }
 }
 
-window.setInterval(updateToolbar, 100);
-
-/* Edit Mode
+/* Settings
 ------------------------*/ 
-function editDocs() {
-  if (editState == true) {
-    navBack();
-    editState = false;
-    updateDocLists();
-    document.getElementById('recent-docs-list').style.display = 'block';
-    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
-  } else {
-    nav('welcome-edit-mode');
-    document.getElementById('recent-docs-list').style.display = 'none';
-    document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
-    editState = true;
-    
-    // Code to build list
-    docsInFolder(function(result) {
-      buildEditDocList(result, docBrowserDirList, 'Documents found');
-    });
+function getSettings(name) {
+  name = ("firetext.settings."+name);
+  return localStorage.getItem(name);
+}
+
+function saveSettings(name, value) {
+  name = ("firetext.settings."+name);
+  localStorage.setItem(name, value);
+}
+
+function settings() {
+  // Select elements
+  var autosaveEnabled = document.querySelector('#autosave-enabled input');
+  var autoloadEnabled = document.querySelector('#autoload-enabled input');
+  var dropboxEnabled = document.querySelector('#dropbox-enabled input');
+  var dropboxSettings = document.querySelector('#dropbox-settings-list');
+  var dropboxUser = document.querySelector('#dropbox-settings-list');
+  
+  // Autosave
+  autosaveEnabled.setAttribute('checked', getSettings('autosave'));
+  autosaveEnabled.onchange = function toggleAutosave() {
+    saveSettings('autosave', this.checked);
+  }
+  
+  // Autoload
+  autoloadEnabled.setAttribute('checked', getSettings('autoload'));
+  autoloadEnabled.onchange = function toggleAutoload() {
+    saveSettings('autoload', this.checked);
+  }
+  
+  // Dropbox
+  dropboxEnabled.setAttribute('checked', getSettings('dropbox.enabled'))
+  dropboxEnabled.onchange = function toggleDropbox() {
+    saveSettings('dropbox.enabled', this.checked);
   }
 }
 
@@ -547,37 +809,70 @@ document.addEventListener('submit', function(event) {
   processActions('data-submit', event.target);
 });
 
-function processActions(eventAttribute, target) {
-  if (target.parentNode && target.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode;
-  } else if (target.parentNode.parentNode && target.parentNode.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode.parentNode.parentNode;
-  } else if (target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList.contains('fileListItem')) {
-    target = target.parentNode.parentNode.parentNode.parentNode;
+document.addEventListener('keypress', function(event) {
+  if (event.key == 13 | event.keyCode == 13) {
+    processActions('data-enter', event.target);
   }
-  var calledFunction = target.getAttribute(eventAttribute);
-  if (calledFunction == 'loadToEditor') {
-    loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
-  } else if (calledFunction == 'nav') {
-    nav(target.getAttribute(eventAttribute + '-location'));
-  } else if (calledFunction == 'navBack') {
-    navBack();
-  } else if (calledFunction == 'sidebar') {
-    sidebar(target.getAttribute(eventAttribute + '-id'));
-  } else if (calledFunction == 'saveFromEditor') {
-    saveFromEditor();
-  } else if (calledFunction == 'formatDoc') {
-    formatDoc(target.getAttribute(eventAttribute + '-action'));
-  } else if (calledFunction == 'createFromDialog') {
-    createFromDialog();
-  } else if (calledFunction == 'editDocs') {
-    editDocs();
-  } else if (calledFunction == 'extIcon') {
-    extIcon();
-  } else {
+});
+
+document.addEventListener('mousedown', function(event) {
+  processActions('data-mouse-down', event.target);
+});
+
+function processActions(eventAttribute, target) {
+  if (target && target.getAttribute) {
+    if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('listItem')) {
+      target = target.parentNode;
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('listItem')) {
+      target = target.parentNode.parentNode;
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('listItem')) {
+      target = target.parentNode.parentNode.parentNode;
+    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('listItem')) {
+      target = target.parentNode.parentNode.parentNode.parentNode;
+    }
+    var calledFunction = target.getAttribute(eventAttribute);
+    if (calledFunction == 'loadToEditor') {
+      loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
+    } else if (calledFunction == 'nav') {
+      var navLocation = target.getAttribute(eventAttribute + '-location');
+      if (navLocation == 'welcome' | navLocation == 'open') {
+        updateDocLists();      
+      } else if (navLocation == 'settings') {
+        settings();
+      }
+      nav(navLocation);
+    } else if (calledFunction == 'navBack') {
+      navBack();
+    } else if (calledFunction == 'sidebar') {
+      sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-hidden'));
+    } else if (calledFunction == 'saveFromEditor') {
+      saveFromEditor();
+    } else if (calledFunction == 'formatDoc') {
+      formatDoc(target.getAttribute(eventAttribute + '-action'));
+    } else if (calledFunction == 'createFromDialog') {
+      createFromDialog();
+    } else if (calledFunction == 'editDocs') {
+      editDocs();
+    } else if (calledFunction == 'extIcon') {
+      extIcon();
+    } else if (calledFunction == "delete") {
+      deleteSelected(target.getAttribute(eventAttribute + '-confirmed'));
+    } else if (calledFunction == "selectAll") {
+      selectAll();
+    } else if (calledFunction == "deselectAll") {
+      deselectAll();
+    } else if (calledFunction == 'tab') {
+      tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
+    } else if (calledFunction == 'clearCreateForm') {
+      clearCreateForm();
+    }
   }
 }
 
-window.addEventListener('DOMContentLoaded', function(event) { init(); });
+/* Miscellaneous
+------------------------*/ 
+function clearCreateForm() {
+  document.getElementById('createDialogFileName').value = '';
+  document.getElementById('createDialogFileType').value = '.html';
+  extIcon();
+}

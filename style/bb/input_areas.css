@@ -46,17 +46,21 @@ textarea::-moz-placeholder {
   color: #666;
 }
 
-form p {
+form p,
+.form p {
   position: relative;
   margin: 0;
 }
 
-form p + p {
+form p + p,
+.form p + p {
   margin-top: 1rem;
 }
 
 form p input + button[type="reset"],
-form p textarea + button[type="reset"] {
+form p textarea + button[type="reset"],
+.form p input + button[type="reset"],
+.form p textarea + button[type="reset"] {
   position: absolute;
   top: 50%;
   right: 0;
@@ -69,10 +73,13 @@ form p textarea + button[type="reset"] {
   opacity: 0;
   pointer-events: none;
   background: url(input_areas/images/icons/clear.png) no-repeat 50% 50%;
+  transition: opacity .3s;
 }
 
 form p input + button[type="reset"],
-form p textarea + button[type="reset"] {
+form p textarea + button[type="reset"],
+.form p input + button[type="reset"],
+.form p textarea + button[type="reset"] {
   top: 0;
   margin: 0;
 }
@@ -81,16 +88,20 @@ textarea {
   padding: 0.8rem;
 }
 
-form p input:focus {
+form p input:focus,
+.form p input:focus {
   padding-right: 3.5rem;
 }
 
-form p textarea:focus {
+form p textarea:focus,
+.form p textarea:focus {
   padding-right: 3rem;
 }
 
 form p input:focus + button[type="reset"],
-form p textarea:focus + button[type="reset"] {
+form p textarea:focus + button[type="reset"],
+.form p input:focus + button[type="reset"],
+.form p textarea:focus + button[type="reset"] {
   opacity: 1;
   pointer-events: all;
 }
@@ -170,19 +181,22 @@ fieldset section p:last-child {
 }
 
 /* Tidy (search/submit) */
-form[role="search"] {
+form[role="search"],
+.form[role="search"] {
   position: relative;
   height: 3.7rem;
   background: #e8e8e8 url(input_areas/images/ui/background.png) repeat-x;
 }
 
-section[role="region"] > header:first-child + form[role="search"] {
+section[role="region"] > header:first-child + form[role="search"],
+section[role="region"] > header:first-child + .form[role="search"] {
   /* increase height when underneath a header because of header's shadow */
   padding-top: 0.3rem;
   border-bottom: 0.1rem solid #c8c8c8;
 }
 
-form[role="search"]:after {
+form[role="search"]:after,
+.form[role="search"]:after {
   content: "";
   position: absolute;
   top: 100%;
@@ -192,7 +206,8 @@ form[role="search"]:after {
   background: url(input_areas/images/ui/shadow-search.png) repeat-x left top;
 }
 
-form[role="search"].bottom:after {
+form[role="search"].bottom:after,
+.form[role="search"].bottom:after {
   content: "";
   position: absolute;
   top: -0.3rem;
@@ -202,35 +217,42 @@ form[role="search"].bottom:after {
   background: url(input_areas/images/ui/shadow-invert.png) repeat-x 0 100%;
 }
 
-section[role="region"] > header:first-child + form[role="search"]:after{
+section[role="region"] > header:first-child + form[role="search"]:after,
+section[role="region"] > header:first-child + .form[role="search"]:after {
   background: none;
 }
 
-form[role="search"] p {
+form[role="search"] p,
+.form[role="search"] p {
   -moz-box-sizing: border-box;
   padding: 0.3rem 1.2rem;
   overflow: hidden;
 }
 
-form[role="search"].full p {
+form[role="search"].full p,
+.form[role="search"].full p {
   padding: 0.3rem 2.5rem;
 }
 
-form[role="search"] p input {
+form[role="search"] p input,
+.form[role="search"] p input {
   height: 3rem;
   border: 0.1rem solid #ababab;
   background: #fff url(input_areas/images/ui/shadow-search.png) repeat-x left top;
 }
 
-form[role="search"] p button[type="reset"] {
+form[role="search"] p button[type="reset"],
+.form[role="search"] p button[type="reset"] {
   right: 1rem;
 }
 
-form[role="search"].full p button[type="reset"] {
+form[role="search"].full p button[type="reset"],
+.form[role="search"].full p button[type="reset"] {
   right: 2.3rem;
 }
 
-form[role="search"] button[type="submit"] {
+form[role="search"] button[type="submit"],
+.form[role="search"] button[type="submit"] {
   float: right;
   min-width: 6rem;
   height: 3.7rem;
@@ -242,32 +264,39 @@ form[role="search"] button[type="submit"] {
               url(input_areas/images/ui/active.png) repeat-x 0 100%;
 }
 
-form[role="search"] button[type="submit"] + p > textarea {
+form[role="search"] button[type="submit"] + p > textarea,
+.form[role="search"] button[type="submit"] + p > textarea {
   height: 3rem;
   padding: 0.5rem 3rem 0.5rem 0.8rem;
   line-height: 2rem;
 }
 
-form[role="search"] button[type="submit"] + p button {
+form[role="search"] button[type="submit"] + p button,
+.form[role="search"] button[type="submit"] + p button {
   height: 3.7rem;
 }
 
-form[role="search"].full button[type="submit"] {
+form[role="search"].full button[type="submit"],
+.form[role="search"].full button[type="submit"] {
   display: none;
 }
 
-form[role="search"] button[type="submit"]:active {
+form[role="search"] button[type="submit"]:active,
+.form[role="search"] button[type="submit"]:active {
   background: #008caa;
   text-shadow: 0.1rem 0.1rem 0 rgba(255,255,255,.3);
 }
 
-form[role="search"] button[type="submit"][disabled] {
+form[role="search"] button[type="submit"][disabled],
+.form[role="search"] button[type="submit"][disabled] {
   color: #adadad;
   background: url(input_areas/images/ui/separator.png) no-repeat 0 50%;
 }
 
 form p button[type="reset"]:focus,
-form p button[type="reset"]::-moz-focus-inner {
+form p button[type="reset"]::-moz-focus-inner,
+.form p button[type="reset"]:focus,
+.form p button[type="reset"]::-moz-focus-inner {
   border: none;
   outline: none;
 }
@@ -277,17 +306,23 @@ form p button[type="reset"]::-moz-focus-inner {
  */
 
 html[dir="rtl"] form p input:valid,
-html[dir="rtl"] form p input:valid:focus {
+html[dir="rtl"] form p input:valid:focus,
+html[dir="rtl"] .form p input:valid,
+html[dir="rtl"] .form p input:valid:focus {
   padding: 0 0.8rem 0 3.5rem;
 }
 
 html[dir="rtl"] form p textarea:valid,
-html[dir="rtl"] form p textarea:valid:focus {
+html[dir="rtl"] form p textarea:valid:focus,
+html[dir="rtl"] .form p textarea:valid,
+html[dir="rtl"] .form p textarea:valid:focus {
   padding: 0.8rem 0.8rem 0.8rem 3.5rem;
 }
 
 html[dir="rtl"] form p input + button[type="reset"],
-html[dir="rtl"] form p textarea + button[type="reset"] {
+html[dir="rtl"] form p textarea + button[type="reset"],
+html[dir="rtl"] .form p input + button[type="reset"],
+html[dir="rtl"] .form p textarea + button[type="reset"] {
   right: auto;
   left: 0;
 }
@@ -300,10 +335,12 @@ html[dir="rtl"] fieldset legend {
   padding: 0 1.8rem 0 0.5rem;
 }
 
-html[dir="rtl"] form[role="search"] button[type="submit"] + p > textarea {
+html[dir="rtl"] form[role="search"] button[type="submit"] + p > textarea,
+html[dir="rtl"] .form[role="search"] button[type="submit"] + p > textarea {
   padding: 0.5rem 0.8rem 0.5rem 3rem;
 }
 
-html[dir="rtl"] form[role="search"] button[type="submit"] + p > button {
+html[dir="rtl"] form[role="search"] button[type="submit"] + p > button,
+html[dir="rtl"] .form[role="search"] button[type="submit"] + p > button {
   left: 1rem;
 }

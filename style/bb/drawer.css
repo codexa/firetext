@@ -62,6 +62,11 @@ section[data-type="sidebar"] {
   font-family: "MozTT", Sans-serif;
 }
 
+section[data-type="sidebar"][data-position="right"] {
+  left: auto;
+  right: 0;
+}
+
 /* Sidebar header */
 section[data-type="sidebar"] > header {
   position: relative;
@@ -162,6 +167,12 @@ section[data-type="sidebar"]:after {
   top: 0;
   right: 0;
   z-index: 5;
+}
+
+section[data-type="sidebar"][data-position="right"]:after {
+  right: auto;
+  left: 0;
+  transform: rotate(180deg);
 }
 
 section[data-type="sidebar"] > nav {
