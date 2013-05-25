@@ -110,6 +110,10 @@
           <h2>Dropbox</h2>
           <ul id="dropboxDocsList"></ul>
         </div>
+        <div id="gDrive-docs-list">
+          <h2>Google Drive</h2>
+          <ul id="gDriveDocsList"></ul>
+        </div>
       </article>
     </div>
   </section>
@@ -302,12 +306,18 @@
           </ul>
         </div>
         <div>
-          <h2>Sharing</h2>
+          <h2>Cloud Backup</h2>
           <ul>
             <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
               <a href="#">
                 <aside class="icon icon-dropbox"></aside>
                 <p>Dropbox</p>
+              </a>
+            </li>
+            <li data-click="nav" data-click-location="settings-gDrive" class="listItem">
+              <a href="#">
+                  <aside class="icon icon-gDrive"></aside>
+                  <p>Google Drive</p>
               </a>
             </li>
           </ul>
@@ -339,6 +349,36 @@
               <input type="text" placeholder="Username" />
             </li>
             <li class="listItem" id="dropbox-password">
+              <input type="password" placeholder="Password" />
+            </li>
+          </div>
+        </ul>
+      </article>
+    </div>
+  </section>
+  <section role="region" id="settings-gDrive" class="skin-dark">
+    <header>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <h1>Google Drive Settings</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" style="padding: 20px;">
+        <ul>
+          <li class="listItem" id="dropbox-enabled">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" />
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Use Google drive</p>
+          </li>
+          <br>
+          <div id="gDrive-settings-list">
+            <li class="listItem" id="gDrive-username">
+              <input type="text" placeholder="Username" />
+            </li>
+            <li class="listItem" id="gDrive-password">
               <input type="password" placeholder="Password" />
             </li>
           </div>
