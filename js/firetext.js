@@ -834,12 +834,13 @@ function processActions(eventAttribute, target) {
     if (calledFunction == 'loadToEditor') {
       loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
     } else if (calledFunction == 'nav') {
-      if (target.getAttribute(eventAttribute + '-location') == 'welcome' | target.getAttribute(eventAttribute + '-location') == 'open') {
+      var navLocation = target.getAttribute(eventAttribute + '-location');
+      if (navLocation == 'welcome' | navLocation == 'open') {
         updateDocLists();      
-      } else if (target.getAttribute(eventAttribute + '-location') == 'settings') {
+      } else if (navLocation == 'settings') {
         settings();
       }
-      nav(target.getAttribute(eventAttribute + '-location'));
+      nav(navLocation);
     } else if (calledFunction == 'navBack') {
       navBack();
     } else if (calledFunction == 'sidebar') {
