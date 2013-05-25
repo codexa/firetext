@@ -8,7 +8,7 @@ section[role="region"], section[role="dialog"] {
   left: 0px;
   right: 0px;  
   background-color: #eee;  
-  transition: all .5s ease;
+  transition: all .4s ease;
 }
 
 section[role="region"] {
@@ -53,7 +53,7 @@ section[role="dialog"].current {
 }
 
 [data-state="drawer"].current {
-  transform: translateX(80%) !important;  
+  transform: translateX(80%) !important;
 }
 
 [data-state="drawer"][data-position="right"].current {

@@ -89,6 +89,9 @@ function init() {
 
 function initSharing() {
   if (getSettings('dropbox.enabled') == true) {
+    // Auth
+    dropAPI.client.authenticate(function(error, client) {});
+    
     // Code to get dropbox files
   } else {
     dropboxDocsList.style.display = 'none';
