@@ -370,6 +370,8 @@ function extIcon() {
     extf.src = "style/icons/extic/FTichtml.png";
   } else if (option == ".txt") {
     extf.src = "style/icons/extic/FTictxt.png";
+  } else if (option == '.docx') {
+    extf.src = "style/icons/extic/FTicdocx.png";  
   } else {
     extf.src = "style/icons/FiretextExtic.png";
   }
