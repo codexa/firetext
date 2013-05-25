@@ -862,7 +862,11 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'navBack') {
       navBack();
     } else if (calledFunction == 'sidebar') {
-      sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-hidden'));
+      var hiddenElement = target.getAttribute(eventAttribute + '-hidden')
+      if (hiddenElement == 'this') {
+        hiddenElement = target.id;
+      }
+      sidebar(target.getAttribute(eventAttribute + '-id'), hiddenElement);
     } else if (calledFunction == 'saveFromEditor') {
       saveFromEditor();
     } else if (calledFunction == 'formatDoc') {

@@ -15,7 +15,7 @@ html, body {
   font-family: 'Philosopher';
   font-style: normal;
   font-weight: 400;
-  src: local('Philosopher'), url(http://themes.googleusercontent.com/static/fonts/philosopher/v4/OttjxgcoEsufOGSINYBGLYbN6UDyHWBl620a-IRfuBk.woff) format('woff');
+  src: local('Philosopher'), url(fonts/philosopher.woff) format('woff');
 }
 
 [role="main"].header-only {

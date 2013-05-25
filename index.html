@@ -76,7 +76,7 @@
 
   <section role="region" id="welcome">
     <header>
-      <button data-click="sidebar" data-click-id="welcome" data-click-hidden="welcome-sidebar-button" id="welcome-sidebar-button"><span class="icon icon-menu">Menu</span></button>
+      <button data-click="sidebar" data-click-id="welcome" data-click-hidden="this" id="welcome-sidebar-button"><span class="icon icon-menu">Menu</span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-compose">New</span></button>
         <button data-click="editDocs"><span class="icon icon-edit">Edit</span></button>
@@ -187,10 +187,10 @@
 
   <section role="region" id="edit">
     <header>
-      <button data-click="nav" data-click-location="welcome" id="edit-sidebar-button"><span class="icon icon-close">close</span></button>
+      <button data-click="nav" data-click-location="welcome"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
-        <button data-click="sidebar" data-click-id="main" data-click-hidden='edit-sidebar-button'><span class="icon icon-menu">Menu</span></button>
+        <button data-click="sidebar" data-click-id="main" data-click-hidden='this' id="edit-sidebar-button"><span class="icon icon-menu">Menu</span></button>
       </menu>
       <h1><span id="currentFileName"></span><span id="currentFileType"></span></h1>
     </header>
@@ -307,7 +307,7 @@
           </ul>
         </div>
         <div>
-          <h2>Cloud Backup</h2>
+          <h2>Cloud Storage</h2>
           <ul>
             <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
               <a href="#">

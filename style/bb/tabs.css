@@ -113,7 +113,7 @@
   opacity: .4;
   transform: translateX(-102%);
   background: #EEE;
-  transition: transform .5s ease, opacity .5s, .5s visibility 0s;
+  transition: transform .4s ease, opacity .4s, .4s visibility 0s;
 }
 
 .current [role="tablist"] .selected [role="tabpanel"], .parent [role="tablist"] .selected [role="tabpanel"], .active [role="tablist"] .selected [role="tabpanel"] {
