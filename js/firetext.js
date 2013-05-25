@@ -408,7 +408,7 @@ function createFromDialog() {
   document.getElementById('createDialogFileType').value = '.html';
 }
 
-function saveFromEditor() {
+function saveFromEditor(banner) {
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
   var content = "";
@@ -423,7 +423,10 @@ function saveFromEditor() {
       content = doc.textContent;
       break;
   }
-  saveFile(filename, filetype, content, true, function(){});
+  if (banner != false) {
+    banner = true;
+  }
+  saveFile(filename, filetype, content, banner, function(){});
 } 
 
 function saveFile(filename, filetype, content, showBanner, callback) {
@@ -592,18 +595,12 @@ function initEditor() {
 function watchDocument(filetype) {
   // Add listener to update raw
   if (filetype == '.html') {
-    doc.addEventListener('compositionupdate', function() {
-      updateViews(rawEditor, doc.innerHTML, 'text');
-    });
-    doc.addEventListener('blur', function() {
+    doc.addEventListener('input', function() {
       updateViews(rawEditor, doc.innerHTML, 'text');
     });
         
     // Add listener to update design
-    rawEditor.addEventListener('compositionupdate', function() {
-      updateViews(doc, rawEditor.textContent, 'html');
-    });
-    rawEditor.addEventListener('blur', function() {
+    rawEditor.addEventListener('input', function() {
       updateViews(doc, rawEditor.textContent, 'html');
     });
   }
@@ -617,7 +614,7 @@ function updateViews(destView, source, contentType) {
       destView.textContent = source;
     }
     if (getSettings('autosave') == true) {
-      saveFromEditor;
+      saveFromEditor(false);
     }
   }
 }
