@@ -9,7 +9,7 @@
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, dropboxDocsList, dropboxDirList, tabRaw, tabDesign;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, tabRaw, tabDesign;
 var storage = navigator.getDeviceStorage("sdcard");
 
 /* Start
@@ -31,6 +31,8 @@ function init() {
   dirList = document.getElementById('openDialogDirList');
   dropboxDocsList = document.getElementById('dropbox-docs-list');
   dropboxDirList = document.getElementById('dropboxDirList');
+  gDriveDocsList  = document.getElementById('gDrive-docs-list');
+  gDriveDirList = document.getElementById('gDriveDirList');
   docBrowserDirList = document.getElementById('docBrowserDirList');
   bold = document.getElementById('bold');
   italic = document.getElementById('italic');
@@ -90,6 +92,11 @@ function initSharing() {
     // Code to get dropbox files
   } else {
     dropboxDocsList.style.display = 'none';
+  }
+  if (getSettings('gDrive.enabled') == true) {
+    // Code to get Google Drive files
+  } else {
+    gDriveDocsList.style.display = 'none';
   }
 }
 
@@ -779,6 +786,9 @@ function settings() {
   var dropboxEnabled = document.querySelector('#dropbox-enabled input');
   var dropboxSettings = document.querySelector('#dropbox-settings-list');
   var dropboxUser = document.querySelector('#dropbox-settings-list');
+  var gDriveEnabled = document.querySelector('#gDrive-enabled input');
+  var gDriveSettings = document.querySelector('#gDrive-settings-list');
+  var gDriveUser = document.querySelector('#gDrive-settings-list'); 
   
   // Autosave
   autosaveEnabled.setAttribute('checked', getSettings('autosave'));
@@ -796,6 +806,11 @@ function settings() {
   dropboxEnabled.setAttribute('checked', getSettings('dropbox.enabled'))
   dropboxEnabled.onchange = function toggleDropbox() {
     saveSettings('dropbox.enabled', this.checked);
+  }
+  // Google Drive
+  gDriveEnabled.setAttribute('checked', getSettings('gDrive.enabled'))
+  gDriveEnabled.onchange = function togglegDrive() {
+    saveSettings('gDrive.enabled', this.checked);
   }
 }
 
