@@ -316,7 +316,7 @@ function docsInFolder(callback) {
     }
     
     // Only get documents
-    if (file.type !== "text/plain" && file.type !== "text/html") {
+    if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
       cursor.continue();
       return;
     }
@@ -335,6 +335,10 @@ function docsInFolder(callback) {
       case "text\/html":
         filename = file.name.substring(0, file.name.length-5).replace(/Documents\//gi, '');
         filetype = ".html";
+        break;
+      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        filename = file.name.substring(0, file.name.length-5).replace(/Documents\//gi, '');
+        filetype = ".docx";
         break;
     }
     
@@ -395,6 +399,9 @@ function createFromDialog() {
       break;
     case ".txt":
       type = "text\/plain";
+      break;
+    case ".docx":
+      type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
       break;
     default:
       break;
