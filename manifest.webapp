@@ -8,7 +8,6 @@
     "name": "Codexa",
     "url": "https://github.com/codexa"
   },
-  "orientation": ["portrait"],
   "permissions": {
     "device-storage:sdcard":{ 
       "description": "Required for document storage.",
