@@ -856,9 +856,11 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
       if (navLocation == 'welcome' | navLocation == 'open') {
-        updateDocLists();      
+        updateDocLists();
+        editFullScreen(false);     
       } else if (navLocation == 'settings') {
         settings();
+        editFullScreen(false);
       }
       nav(navLocation);
     } else if (calledFunction == 'navBack') {
@@ -889,6 +891,12 @@ function processActions(eventAttribute, target) {
       tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
     } else if (calledFunction == 'clearCreateForm') {
       clearCreateForm();
+    } else if (calledFunction == 'fullscreen') {
+      if (target.getAttribute(eventAttribute + '-state') == 'off') {
+        editFullScreen(false);      
+      } else {
+        editFullScreen();
+      }
     }
   }
 }
@@ -899,4 +907,37 @@ function clearCreateForm() {
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
   extIcon();
+}
+
+function editFullScreen(enter) {
+  if (!document.fullscreenElement &&    // alternative standard method
+      !document.mozFullScreenElement && !document.webkitFullscreenElement && enter != false) {  // current working methods
+    // Make app fullscreen
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+    
+    // Special editor UI
+    document.querySelector('#edit header:first-child').style.display = 'none';
+    document.getElementById('editTabs').setAttribute('data-items', '4');
+    document.querySelector('#editTabs .tabToolbar').classList.add('visible');
+  } else {
+    // Exit fullscreen
+    if (document.cancelFullScreen) {
+      document.cancelFullScreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    }
+    
+    // Regular editor UI
+    document.querySelector('#edit header:first-child').style.display = 'block';
+    document.getElementById('editTabs').setAttribute('data-items', '2');
+    document.querySelector('#editTabs .tabToolbar').classList.remove('visible');
+  }
 }

@@ -70,7 +70,6 @@ html, body {
   background-position: center;
 }
 
-
 /* Buttons */
 
 .button-block {
@@ -118,4 +117,27 @@ html, body {
 
 #createDialogFileType:active {
   background-color: #008caa;
+}
+
+/* Tab Toolbar */
+
+.tabToolbar {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s;
+}
+
+.tabToolbar.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tabButton {
+  float: right;
+  padding: 5px;
+}
+
+.tabButton:active {
+  background: #008aaa;
+  transition: background 0.2s ease;
 }

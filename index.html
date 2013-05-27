@@ -170,8 +170,9 @@
       <h1>Menu</h1>
     </header>
     <nav>
+      <h2>Document actions</h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="add">New Document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="add">Create Document</a></li>
         <li><a href="#" data-click="nav" data-click-location="open">Open Document</a></li>
         <li><a href="#" data-click="saveFromEditor">Save Document</a></li>
         <li><a href="#" data-click="nav" data-click-location="welcome">Close Document</a></li>
@@ -191,6 +192,7 @@
       <button data-click="nav" data-click-location="welcome"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
+        <button data-click="fullscreen"><span class="icon" style="background-image: url(style/icons/toolbar/fs.png);">Fullscreen</span></button>
         <button data-click="sidebar" data-click-id="main" data-click-hidden='this' id="edit-sidebar-button"><span class="icon icon-menu">Menu</span></button>
       </menu>
       <h1><span id="currentFileName"></span><span id="currentFileType"></span></h1>
@@ -220,7 +222,12 @@
             <div id="rawEditor"></div>
           </div>
         </li>
-      </ul>
+        <div class="tabToolbar">
+          <img src="style/icons/black/efs.png" alt="" class="tabButton" data-click="fullscreen" />
+          <img src="style/icons/black/save.png" alt="" class="tabButton" data-click="saveFromEditor" />
+          <img src="style/icons/black/close.png" alt="" class="tabButton" data-click="nav" data-click-location="welcome" />
+        </div>
+      </ul>      
     </div>
     <section role="status" id="save-banner" hidden>
 	  <p>Successfully saved <strong><span id="save-banner-name"></span><span id="save-banner-type"></span></strong>!</p>
