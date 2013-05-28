@@ -913,8 +913,8 @@ function processActions(eventAttribute, target) {
       }
       document.getElementById('browserFrame').src = browseLocation;
       nav('browser');
-      document.getElementById('browserFrame').addEventListener('mozbrowsertitlechange', function () {
-        document.getElementById('browserTitle').textContent = this.contentDocument.title;      
+      document.getElementById('browserFrame').addEventListener('mozbrowsertitlechange', function (e) {
+        document.getElementById('browserTitle').textContent = e.detail;      
       });
       document.getElementById('browserFrame').addEventListener('mozbrowserclose', function () {
         navBack();      
