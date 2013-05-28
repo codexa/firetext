@@ -248,42 +248,62 @@
   <section role="dialog" id="format" class="skin-organic">
     <header>
       <button data-click="navBack"><span class="icon icon-close">close</span></button>
-      <h1>Format</h1>
+      <h1>Tools</h1>
     </header>
     <div role="main" class="header-only">
-      <article data-type="list" style="padding: 20px;">
+      <article data-type="list">
+        <h2>Elements</h2>
         <ul>
-          <li class="listItem">
+          <li class="listItem noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true">Insert</button>
+              </label>
+            </aside>
+            <p class="label">Ordered list</p>
+          </li>
+          <li class="listItem noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
+              </label>
+            </aside>
+            <p class="label">Unordered list</p>
+          </li>
+        </ul>
+        <h2>Formatting</h2>
+        <ul>
+          <li class="listItem noLink">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch">
                 <span></span>
               </label>
             </aside>
             <p class="label">Bold</p>
           </li>
-          <li class="listItem">
+          <li class="listItem noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <input type="checkbox" data-type="switch">
                 <span></span>
               </label>
             </aside>
             <p class="label">Italic</p>
           </li>
-          <li class="listItem">
+          <li class="listItem noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <input type="checkbox" data-type="switch">
                 <span></span>
               </label>
             </aside>
             <p class="label">Underline</p>
           </li>
-          <li class="listItem">
+          <li class="listItem noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <input type="checkbox" data-type="switch">
                 <span></span>
               </label>
             </aside>

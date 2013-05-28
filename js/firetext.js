@@ -848,14 +848,16 @@ document.addEventListener('mousedown', function(event) {
 
 function processActions(eventAttribute, target) {
   if (target && target.getAttribute) {
-    if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('listItem')) {
-      target = target.parentNode;
-    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('listItem')) {
-      target = target.parentNode.parentNode;
-    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('listItem')) {
-      target = target.parentNode.parentNode.parentNode;
-    } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('listItem')) {
-      target = target.parentNode.parentNode.parentNode.parentNode;
+    if (target.hasAttribute(eventAttribute) != true) {
+      if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('listItem')) {
+        target = target.parentNode;
+      } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('listItem')) {
+        target = target.parentNode.parentNode;
+      } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('listItem')) {
+        target = target.parentNode.parentNode.parentNode;
+      } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('listItem')) {
+        target = target.parentNode.parentNode.parentNode.parentNode;
+      }
     }
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'loadToEditor') {
@@ -882,6 +884,9 @@ function processActions(eventAttribute, target) {
       saveFromEditor();
     } else if (calledFunction == 'formatDoc') {
       formatDoc(target.getAttribute(eventAttribute + '-action'));
+      if (target.getAttribute(eventAttribute + '-back') == 'true') {
+        navBack();
+      }
     } else if (calledFunction == 'createFromDialog') {
       createFromDialog();
     } else if (calledFunction == 'editDocs') {
