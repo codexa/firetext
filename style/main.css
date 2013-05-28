@@ -141,3 +141,11 @@ html, body {
   background: #008aaa;
   transition: background 0.2s ease;
 }
+
+/* Browser */
+
+#browserFrame {
+  width: 100%;
+  border: none;
+  outline: none;
+}

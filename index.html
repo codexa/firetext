@@ -180,6 +180,7 @@
       <div role="toolbar">
         <ul>
           <li><button class="pack-icon-setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
+          <li><button href="#" data-click="browser" data-click-location="about">About</button></li> <!--Need icon-->
         </ul>
         <ul>
         </ul>
@@ -292,6 +293,14 @@
       </article>
     </div>
   </section>
+  
+  <section role="region" id="browser">
+    <header>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <h1 id="browserTitle">Browser</h1>
+    </header>
+    <iframe src="" role="main" class="header-only" mozbrowser id="browserFrame" remote></iframe>
+  </section>
 
   <section role="region" id="settings" class="skin-dark">
     <header>
@@ -374,6 +383,7 @@
       </article>
     </div>
   </section>
+  
   <section role="region" id="settings-gDrive" class="skin-dark">
     <header>
       <button data-click="navBack"><span class="icon icon-back">back</span></button>

@@ -17,14 +17,14 @@
   opacity: .99;
   visibility: hidden;
   transform: scale(1, 2);
-  transition: transform 1s, opacity .5s, .5s visibility 1s;
+  transition: transform .6s, opacity .4s, .4s visibility 0s;
 }
 
 [role="edit"][data-type="edit"].current {
   opacity: 1;
   visibility: visible;
   transform: none;
-  transition: transform .5s, opacity .5s, 0s visibility 0s;
+  transition: transform .4s, opacity .4s, 0s visibility 0s;
 }
 
 /* Header */

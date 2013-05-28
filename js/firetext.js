@@ -904,6 +904,21 @@ function processActions(eventAttribute, target) {
       } else {
         editFullScreen();
       }
+    } else if (calledFunction == 'browser') {
+      var browseLocation = '';
+      if (target.getAttribute(eventAttribute + '-location') == 'about') {
+        browseLocation = 'resources/about.html'
+      } else {
+        browseLocation = target.getAttribute(eventAttribute + '-location');
+      }
+      document.getElementById('browserFrame').src = browseLocation;
+      nav('browser');
+      document.getElementById('browserFrame').addEventListener('mozbrowsertitlechange', function () {
+        document.getElementById('browserTitle').textContent = this.contentDocument.title;      
+      });
+      document.getElementById('browserFrame').addEventListener('mozbrowserclose', function () {
+        navBack();      
+      });
     }
   }
 }
