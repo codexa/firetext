@@ -912,19 +912,26 @@ function processActions(eventAttribute, target) {
       }
     } else if (calledFunction == 'browser') {
       var browseLocation = '';
+      var browserFrame = document.getElementById('browserFrame');
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
         browseLocation = 'resources/about.html'
       } else {
         browseLocation = target.getAttribute(eventAttribute + '-location');
       }
-      document.getElementById('browserFrame').src = browseLocation;
+      browserFrame.src = browseLocation;
       nav('browser');
       editFullScreen(false);
-      document.getElementById('browserFrame').addEventListener('mozbrowsertitlechange', function (e) {
+      browserFrame.addEventListener('mozbrowsertitlechange', function (e) {
         document.getElementById('browserTitle').textContent = e.detail;      
       });
-      document.getElementById('browserFrame').addEventListener('mozbrowserclose', function () {
+      browserFrame.addEventListener('mozbrowserclose', function () {
         navBack();      
+      });
+      browserFrame.addEventListener('mozbrowserloadstart', function() {
+        document.getElementById('browserSpinner').classList.add('shown');
+      }); 
+      browserFrame.addEventListener('mozbrowserloadend', function() {
+        document.getElementById('browserSpinner').classList.remove('shown');
       });
     }
   }
