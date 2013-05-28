@@ -61,7 +61,7 @@ html, body {
 }
 
 [data-type="list"] aside.icon.icon-dropbox {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAcCAYAAAB2+A+pAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QULEjsuglM4yQAAAfdJREFUSMe91UuITmEcBvAfTZNplIyFGuNSNJKYEsWOsrdgh5SlYcfCJUpRLJDclm4LK2PLwgZlEpKxMENSFkxmYYE0jc/m/+k4nXO+93yDp/6d3nPO8zzvOe//QjX68Ri7pGMHHmG5NrEHjUwMJXDu5jiDdQzn4U1OoBmvK3gjJZwx9LQyPVxCbsZPfMKCDGdR3Gu0iCNFhrMwkUDOxhoM1ORMoAtm4jK+p/yOHFZhdU1OD77hisi+yRq7foDOjFgnHtbgT+YzfrQF4SvWV3zNhviaKo3C5OzAiRLCVXQn/MrZuF6icSqOthSHMi+/wLI2esBSPMvoHEslDuCm6eNGagLOiOs7/MC5aZheCI23Oe3S3pw/m2FsrGG4Kfp7Xqe/jLCzRUZeigQsQwfOtNDYnSe9SqzBL9hXYLo3nqVo/C6p8zXbXgO30Ys+3GmDf7FpPoypmuRbkfl1OFNRZn9kWld0nhRsxpxoKh9xL5HXXeWxPzMCi3a9Fscz65Nxr2yMNkIzCfMxnhNpzuHTBQZnsbhgLo+HVjKaR7A1BEZi/bzi/EbjnZex3pbSOIowhqNYGef5ObHc5mIFDmY2UwvDIXa/jXJ5Gtcn7fbbLW2YNmP7dCdML67VrO+F/iLW4X2F4YcYEP8MgwWmB/wn9EW7HMKSdgR+AQ4KaJppqhyVAAAAAElFTkSuQmCC);
+  background-image: url(icons/navic/dropbox.svg);
   background-position: center;
 }
 
