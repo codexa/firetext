@@ -33,6 +33,10 @@
   width: calc(100% / 4);
 }
 
+[role="tablist"][data-items="4.1"] > [role="tab"] {
+  width: calc(100% / 4.1);
+}
+
 [role="tablist"][data-items="5"] > [role="tab"] {
   width: calc(100% / 5);
 }

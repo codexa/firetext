@@ -865,11 +865,12 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
       if (navLocation == 'welcome' | navLocation == 'open') {
-        updateDocLists();
-        editFullScreen(false);     
+        updateDocLists();     
       } else if (navLocation == 'settings') {
         settings();
-        editFullScreen(false);
+      }
+      if (document.getElementById(navLocation).getAttribute('role') != 'dialog') {
+        editFullScreen(false);      
       }
       nav(navLocation);
     } else if (calledFunction == 'navBack') {
@@ -950,7 +951,7 @@ function editFullScreen(enter) {
     
     // Special editor UI
     document.querySelector('#edit header:first-child').style.display = 'none';
-    document.getElementById('editTabs').setAttribute('data-items', '4');
+    document.getElementById('editTabs').setAttribute('data-items', '4.1');
     document.querySelector('#editTabs .tabToolbar').classList.add('visible');
   } else {
     // Exit fullscreen
