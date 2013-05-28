@@ -919,6 +919,7 @@ function processActions(eventAttribute, target) {
       }
       document.getElementById('browserFrame').src = browseLocation;
       nav('browser');
+      editFullScreen(false);
       document.getElementById('browserFrame').addEventListener('mozbrowsertitlechange', function (e) {
         document.getElementById('browserTitle').textContent = e.detail;      
       });
