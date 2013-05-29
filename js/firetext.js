@@ -9,7 +9,9 @@
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, bold, italic, underline, editState, rawEditor, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, tabRaw, tabDesign;
+var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, editState, rawEditor, tabRaw, tabDesign;
+var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
+var dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList;
 var storage = navigator.getDeviceStorage("sdcard");
 
 /* Start
@@ -37,6 +39,9 @@ function init() {
   bold = document.getElementById('bold');
   italic = document.getElementById('italic');
   underline = document.getElementById('underline');
+  boldCheckbox = document.getElementById('boldCheckbox');
+  italicCheckbox = document.getElementById('italicCheckbox');
+  underlineCheckbox = document.getElementById('underlineCheckbox');
   
   // Init extIcon
   extIcon();
@@ -763,18 +768,24 @@ function updateToolbar() {
   if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
     if (editor.contentDocument.queryCommandState("bold")) {
       bold.classList.add('active');
+      boldCheckbox.checked = true;
     } else {
       bold.classList.remove('active');
+      boldCheckbox.checked = false;
     }
     if (editor.contentDocument.queryCommandState("italic")) {
       italic.classList.add('active');
+      italicCheckbox.checked = true;
     } else {
       italic.classList.remove('active');
+      italicCheckbox.checked = false;
     }
     if (editor.contentDocument.queryCommandState("underline")) {
       underline.classList.add('active');
+      underlineCheckbox.checked = true;
     } else {
       underline.classList.remove('active');
+      underlineCheckbox.checked = false;
     }
   }
 }
