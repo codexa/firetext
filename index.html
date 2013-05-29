@@ -136,7 +136,7 @@
         <img src="style/icons/FiretextExtic.png" id="extIconFile" height="200px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
           <legend id="fileTypeLegend" class="action">
-            <select name="File type" id="createDialogFileType">
+            <select name="File type" id="createDialogFileType" data-change="extIcon">
               <option>.html</option>
               <option>.docx</option>
               <option>.txt</option>
@@ -321,6 +321,19 @@
               </label>
             </aside>
             <p class="label">Heading</p>
+          </li>
+          <li class="listItem noLink">
+            <aside class="pack-end">
+              <label>
+                <select style="margin-top: 12px;" data-change="justify">
+                  <option selected>Left</option>
+                  <option>Right</option>
+                  <option>Center</option>
+                  <option>Justified</option>
+                </select>
+              </label>
+            </aside>
+            <p class="label">Alignment</p>
           </li>
         </ul>
       </article>

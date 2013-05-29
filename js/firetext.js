@@ -47,7 +47,6 @@ function init() {
   extIcon();
   
   // Add event listeners
-  document.getElementById('createDialogFileType').addEventListener('change', function() {extIcon();});
   toolbar.addEventListener(
     'mousedown', function mouseDown(event) {
       event.preventDefault();
@@ -855,6 +854,11 @@ document.addEventListener('keypress', function(event) {
 
 document.addEventListener('mousedown', function(event) {
   processActions('data-mouse-down', event.target);
+});
+
+
+document.addEventListener('change', function(event) {
+  processActions('data-change', event.target);
 });
 
 function processActions(eventAttribute, target) {
