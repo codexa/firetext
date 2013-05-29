@@ -44,12 +44,14 @@ section[role="dialog"].current {
 /* Handle sidebars */
 [data-type="sidebar"] {
   opacity: 0;
-  transition: 0s opacity .5s;
+  visibility: collapse;
+  transition: opacity .4s, .4s visibility 0s;
 }
 
 [data-type="sidebar"].active {
   opacity: 1;
-  transition: 0s opacity;
+  visibility: visible;
+  transition: opacity .4s, 0s visibility 0s;
 }
 
 [data-state="drawer"].current {

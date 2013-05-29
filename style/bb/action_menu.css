@@ -4,36 +4,15 @@
 
 form[role=dialog] {
   visibility: hidden;
-  opacity: .99;
-  
-  transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -webkit-transform: translateY(100%);
-  -o-transform: translateY(100%);
-  -ms-transform: translateY(100%);  
-  
-  transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -webkit-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  -ms-transition: all .5s ease;  
+  opacity: .99;  
+  transform: translateY(100%);  
+  transition: all .4s ease; 
 }
 
 form[role=dialog].current {
   visibility: visible;
-  opacity: 1;
-  
+  opacity: 1;  
   transform: none;
-  -moz-transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -ms-transform: none; 
-  
-  transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -webkit-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  -ms-transition: all .5s ease;   
 }
 
 /* Main dialog setup */
