@@ -7,9 +7,6 @@ function nav(location) {
     tempLoc = location;
     if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
       sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
-      if (document.querySelector('.sidebar-faded-button')) {
-        document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
-      }
       setTimeout(function() {nav2();}, 500);
     } else {
       nav2();
@@ -47,22 +44,16 @@ function navBack() {
   updateDocLists();
 }
 
-function sidebar(name, hidden) {
+function sidebar(name) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
     if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
       document.getElementById('sidebar_' + name).classList.remove('active');
       document.querySelector('.current').setAttribute('data-state', 'none');
-      if (document.querySelector('.sidebar-faded-button')) {
-        document.querySelector('.sidebar-faded-button').classList.remove('sidebar-faded-button');
-      }
     } else {
       document.getElementById('sidebar_' + name).classList.add('active');
       document.querySelector('.current').setAttribute('data-state', 'drawer'); 
       if (document.getElementById('sidebar_' + name).getAttribute('data-position') == 'right') {
         document.querySelector('.current').setAttribute('data-position', 'right'); 
-      }
-      if (document.getElementById(hidden)) {
-        document.getElementById(hidden).classList.add('sidebar-faded-button');
       }
     }
   }

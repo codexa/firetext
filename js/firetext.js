@@ -608,6 +608,19 @@ function initEditor() {
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
   
+  // Hide and show toolbar.
+  // For reviewers, just in case this looks like a security problem:
+  // This frame is sandboxed, so I had to add the listeners to do this.
+  // The content CANNOT call any of the parents functions, so this is not a security issue.
+  doc.setAttribute('data-focus', 'hideToolbar');
+  doc.setAttribute('data-blur', 'showToolbar');
+  doc.addEventListener('focus', function (event) {
+    processActions('data-focus', event.target);
+  });
+  doc.addEventListener('blur', function (event) {
+    processActions('data-blur', event.target);
+  });
+  
   // Initialize Raw Editor
   rawEditor.setAttribute('contentEditable', 'true');
   
@@ -856,9 +869,16 @@ document.addEventListener('mousedown', function(event) {
   processActions('data-mouse-down', event.target);
 });
 
-
 document.addEventListener('change', function(event) {
   processActions('data-change', event.target);
+});
+
+document.addEventListener('focus', function(event) {
+  processActions('data-focus', event.target);
+});
+
+document.addEventListener('blur', function(event) {
+  processActions('data-blur', event.target);
 });
 
 function processActions(eventAttribute, target) {
@@ -891,15 +911,11 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'navBack') {
       navBack();
     } else if (calledFunction == 'sidebar') {
-      var hiddenElement = target.getAttribute(eventAttribute + '-hidden')
-      if (hiddenElement == 'this') {
-        hiddenElement = target.id;
-      }
-      sidebar(target.getAttribute(eventAttribute + '-id'), hiddenElement);
+      sidebar(target.getAttribute(eventAttribute + '-id'));
     } else if (calledFunction == 'saveFromEditor') {
       saveFromEditor();
     } else if (calledFunction == 'formatDoc') {
-      formatDoc(target.getAttribute(eventAttribute + '-action'));
+      formatDoc(target.getAttribute(eventAttribute + '-action'), true, target.getAttribute(eventAttribute + '-value'));
       if (target.getAttribute(eventAttribute + '-back') == 'true') {
         navBack();
       }
@@ -954,6 +970,12 @@ function processActions(eventAttribute, target) {
         justifyDirection = 'Full';
       }
       formatDoc('justify'+justifyDirection);
+    } else if (calledFunction == 'hideToolbar') {
+      document.getElementById('edit-bar').style.display = 'none';
+      editor.classList.add('no-toolbar');
+    } else if (calledFunction == 'showToolbar') {
+      document.getElementById('edit-bar').style.display = 'block';
+      editor.classList.remove('no-toolbar');
     }
   }
 }
@@ -982,6 +1004,7 @@ function editFullScreen(enter) {
     document.querySelector('#edit header:first-child').style.display = 'none';
     document.getElementById('editTabs').setAttribute('data-items', '4.1');
     document.querySelector('#editTabs .tabToolbar').classList.add('visible');
+    editor.classList.add('fullscreen');
   } else {
     // Exit fullscreen
     if (document.cancelFullScreen) {
@@ -996,5 +1019,6 @@ function editFullScreen(enter) {
     document.querySelector('#edit header:first-child').style.display = 'block';
     document.getElementById('editTabs').setAttribute('data-items', '2');
     document.querySelector('#editTabs .tabToolbar').classList.remove('visible');
+    editor.classList.remove('fullscreen');
   }
 }

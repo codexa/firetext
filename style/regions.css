@@ -61,8 +61,3 @@ section[role="dialog"].current {
 [data-state="drawer"][data-position="right"].current {
   transform: translateX(-80%) !important;
 }
-
-.sidebar-faded-button {
-  opacity: 0 !important;
-  transition: opacity .5s;
-}

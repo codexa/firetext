@@ -82,7 +82,7 @@
 
   <section role="region" id="welcome">
     <header>
-      <button data-click="sidebar" data-click-id="welcome" data-click-hidden="this" id="welcome-sidebar-button"><span class="icon icon-menu">Menu</span></button>
+      <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-menu">Menu</span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-compose">New</span></button>
         <button data-click="editDocs"><span class="icon icon-edit">Edit</span></button>
@@ -213,7 +213,7 @@
         <li id="tab-design" role="tab">
           <a href="#" data-click="tab" data-click-name="design">Design</a>
           <div role="tabpanel">
-            <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
+            <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
                 <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
@@ -316,7 +316,7 @@
           <li class="listItem noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" id="headingCheckbox">
+                <input type="checkbox" data-type="switch" id="headingCheckbox" data-click="formatDoc" data-click-action="heading" data-click-value="h1">
                 <span></span>
               </label>
             </aside>

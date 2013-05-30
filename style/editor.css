@@ -24,6 +24,18 @@
   height: calc(100% - 5rem - 40px);
 }
 
+.editor.no-toolbar {
+  height: calc(100% - 5rem);
+}
+
+.editor.fullscreen {
+  height: calc(100% - 40px);
+}
+
+.editor.fullscreen.no-toolbar {
+  height: calc(100%);
+}
+
 #rawEditor {
   border: none;
   padding: 10px;
