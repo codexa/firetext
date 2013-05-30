@@ -1,5 +1,5 @@
 {
-  "name": "FireText",
+  "name": "Firetext",
   "description": "A word processor for Firefox OS",
   "version": "0.2",
   "type": "privileged",
@@ -19,47 +19,47 @@
   },
   "locales": {
     "ar": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "محرر نصوص لفايرفوكس OS"
     },
     "de": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Ein Text-Editor für Firefox OS"
     },
     "el": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Ένα κείμενο-editor για τον Firefox OS"
     },
     "en-US": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "A word processor for Firefox OS"
     },
     "es": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Un editor de texto para Firefox OS"
     },
     "fr": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Un éditeur de texte pour Firefox OS"
     },
     "it": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Un editor di testo per Firefox OS"
     },
     "pt-BR": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Um editor de texto para Firefox OS"
     },
     "ru": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Текстовый редактор для Firefox OS"
     },
     "tr": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "Firefox OS için bir metin editörü"
     },
     "zh-TW": {
-  	  "name": "FireText",
+  	  "name": "Firetext",
   	  "description": "文本编辑器，火狐OS"
     }
   },

@@ -948,6 +948,12 @@ function processActions(eventAttribute, target) {
       browserFrame.addEventListener('mozbrowserloadend', function() {
         document.getElementById('browserSpinner').classList.remove('shown');
       });
+    } else if (calledFunction == 'justify') {
+      var justifyDirection = document.getElementById('justify-select').value;
+      if (justifyDirection == 'Justified') {
+        justifyDirection = 'Full';
+      }
+      formatDoc('justify'+justifyDirection);
     }
   }
 }
