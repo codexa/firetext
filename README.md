@@ -1,4 +1,4 @@
-FireText
+Firetext
 ========
 
 FireText is a word processor for Firefox OS.  FireText currently supports html, and plain text files (more will be added later).
@@ -12,7 +12,7 @@ Current Features:
 Cooming soon:
 - Cloud services API support
 - Collaborative editing(hosted)
-- more format support(.rtf, .odml, .doc, .docx,...)
+- more format support(.rtf, .doc, .docx, .odt...)
 - file previewer
 
 Go to <a href="http://firetext.co.nf/">Firetext.co.nf</a> for more.
