@@ -79,7 +79,7 @@ function init() {
   if (getSettings('autoload') == true) {
     var latestDocs = RecentDocs.get();
     if (latestDocs.length >= 1) {
-      loadToEditor(latestDocs[0][0], latestDocs[0][1]);
+      loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2]);
     } else {
       nav('welcome');    
     }
@@ -144,7 +144,7 @@ RecentDocs.add = function(file) {
     
     // Remove duplicates
     for (var i = 0; i < docsTMP.length; i++) {
-      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2]) {
         docsTMP.splice(i, 1);
         break;
       }
@@ -175,13 +175,13 @@ RecentDocs.remove = function(file, merged) {
     // Remove item
     for (var i = 0; i < docsTMP.length; i++) {
       if (!merged) {
-        if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1]) {
+        if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2]) {
           docsTMP.splice(i, 1);
           break;
         }
       }
       else {
-        if (file == docsTMP[i][0] + docsTMP[i][1]) {
+        if (file == docsTMP[i][0] + docsTMP[i][1] + docsTMP[i][2]) {
           docsTMP.splice(i, 1);
           break;
         }
@@ -196,7 +196,7 @@ RecentDocs.remove = function(file, merged) {
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  docsInFolder(function(DOCS) {
+  docsInFolder('Documents/', function(DOCS) {
     buildDocList(DOCS, [dirList, docBrowserDirList], "Documents Found");
     buildDocList(RecentDocs.get(), [docList], "Recent Documents");
   });
@@ -211,10 +211,10 @@ function buildDocListItems(DOCS, listElms, description, output) {
   description = tmp.textContent;
     
   // Generate item
-  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-filename="' + DOCS[0][0] + '" data-click-filetype="' + DOCS[0][1] + '">';
+  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'">';
   output += '<a href="#">';
   output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-  output += '<p>'+DOCS[0][0]+'<em>'+DOCS[0][1]+'</em></p>';
+  output += '<p>'+DOCS[0][0]+DOCS[0][1]+'<em>'+DOCS[0][2]+'</em></p>';
   output += '<p>'+description+'</p>';
   output += '</a></li>';
   
@@ -229,7 +229,7 @@ function buildDocListItems(DOCS, listElms, description, output) {
   }
   
   // build next item
-  loadFile(DOCS[1][0], DOCS[1][1], function(result) {
+  loadFile(DOCS[1][0], DOCS[1][1], DOCS[1][2], function(result) {
     buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output);
   });
 }
@@ -242,8 +242,8 @@ function buildDocList(DOCS, listElms, display) {
     }
     
     if (DOCS.length > 0) {
-      loadFile(DOCS[0][0], DOCS[0][1], function(result) {
-        buildDocListItems(DOCS, listElms, result, "")
+      loadFile(DOCS[0][0], DOCS[0][1], DOCS[0][2], function(result) {
+        buildDocListItems(DOCS, listElms, result, "");
       });
     } else {
       // No docs message
@@ -270,7 +270,7 @@ function buildEditDocList(DOCS, listElm, display) {
       for (var i = 0; i < DOCS.length; i++) {
         output += '<li>';
         output += '<label class="danger"><input type="checkbox" class="edit-selected"/><span></span></label>';
-        output += '<p>'+DOCS[i][0]+'<em>'+DOCS[i][1]+'</em></p>';
+        output += '<p>'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
         output += '</li>';
       }
     } else {
@@ -288,71 +288,73 @@ function buildEditDocList(DOCS, listElm, display) {
   }
 }
 
-function docsInFolder(callback) {
-  // List of documents
-  var docs = [];
+function docsInFolder(directory, callback) {
+  if (directory) {
+    // List of documents
+    var docs = [];
   
-  // Get all the docs in /Documents directory
-  var cursor = storage.enumerate("Documents");
+    // Get all the docs in the specified directory
+    var cursor = storage.enumerate(directory.substring(0, -1));
   
-  cursor.onerror = function() {
-    if (cursor.error.name == 'TypeMismatchError') {
-      saveFile('firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
-        deleteFile('firetext.temp');
-      });
-      updateDocLists();
-      return;
-    } else if (cursor.error.name == 'SecurityError') {
-      alert('Please allow Firetext to access your SD card.');
-    } else {
-      alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
-    }
-  };
-  cursor.onsuccess = function() {
-    // Get file
-    var file = cursor.result;
+    cursor.onerror = function() {
+      if (cursor.error.name == 'TypeMismatchError') {
+        saveFile('firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+          deleteFile('firetext.temp');
+        });
+        updateDocLists();
+        return;
+      } else if (cursor.error.name == 'SecurityError') {
+        alert('Please allow Firetext to access your SD card.');
+      } else {
+        alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+      }
+    };
+    cursor.onsuccess = function() {
+      // Get file
+      var file = cursor.result;
     
-    // Base case
-    if (!cursor.result) {
-      // Finished
-      callback(docs);
-      return;
-    }
+      // Base case
+      if (!cursor.result) {
+        // Finished
+        callback(docs);
+        return;
+      }
     
-    // Only get documents
-    if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+      // Only get documents
+      if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        cursor.continue();
+        return;
+      }
+    
+    
+      // At this point, the file should be vaild!    
+      // Get file properties
+      var directoryReplace = new RegExp((directory), 'i');
+      var filename = "";
+      var filetype = "";
+      switch(file.type) {
+        case "text\/plain":
+          filename = file.name.substring(0, file.name.length-4).replace(directoryReplace, '');
+          filetype = ".txt";
+          break;
+        case "text\/html":
+          filename = file.name.substring(0, file.name.length-5).replace(directoryReplace, '');
+          filetype = ".html";
+          break;
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+          filename = file.name.substring(0, file.name.length-5).replace(directoryReplace, '');
+          filetype = ".docx";
+          break;
+      }
+    
+      // Add to list of docs
+      docs.push([directory, filename, filetype]);
+    
+      // Check next file
       cursor.continue();
-      return;
     }
-    
-    
-    // At this point, the file should be vaild!
-    
-    // Get file properties
-    var filename = "";
-    var filetype = "";
-    switch(file.type) {
-      case "text\/plain":
-        filename = file.name.substring(0, file.name.length-4).replace(/Documents\//gi, '');
-        filetype = ".txt";
-        break;
-      case "text\/html":
-        filename = file.name.substring(0, file.name.length-5).replace(/Documents\//gi, '');
-        filetype = ".html";
-        break;
-      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        filename = file.name.substring(0, file.name.length-5).replace(/Documents\//gi, '');
-        filetype = ".docx";
-        break;
-    }
-    
-    // Add to list of docs
-    docs.push([filename, filetype]);
-    
-    // Check next file
-    cursor.continue();
+    return docs;
   }
-  return docs;
 }
 
 /* Display
@@ -388,6 +390,7 @@ function extIcon() {
 /* File IO
 ------------------------*/
 function createFromDialog() {
+  var directory = 'Documents/';
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
   if (filename == null | filename == undefined | filename == '')  {
@@ -411,7 +414,7 @@ function createFromDialog() {
       break;
   }
   var contentBlob = new Blob([' '], { "type" : type });
-  var filePath = ("Documents/" + filename + filetype);
+  var filePath = (directory + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
   req.onerror = function () {
     if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
@@ -423,7 +426,7 @@ function createFromDialog() {
   };  
   req.onsuccess = function () {  
     // Load to editor
-    loadToEditor(filename, filetype);
+    loadToEditor(directory, filename, filetype);
   };
   
   // Clear file fields
@@ -432,6 +435,7 @@ function createFromDialog() {
 }
 
 function saveFromEditor(banner) {
+  var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
   var content = "";
@@ -449,10 +453,10 @@ function saveFromEditor(banner) {
   if (banner != false) {
     banner = true;
   }
-  saveFile(filename, filetype, content, banner, function(){});
+  saveFile(directory, filename, filetype, content, banner, function(){});
 } 
 
-function saveFile(filename, filetype, content, showBanner, callback) {
+function saveFile(directory, filename, filetype, content, showBanner, callback) {
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -465,7 +469,7 @@ function saveFile(filename, filetype, content, showBanner, callback) {
       break;
   }
   var contentBlob = new Blob([content], { "type" : type });
-  var filePath = ("Documents/" + filename + filetype);
+  var filePath = (directory + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
   req.onsuccess = function () {
     if (showBanner) {
@@ -477,7 +481,7 @@ function saveFile(filename, filetype, content, showBanner, callback) {
     if (this.error.name == "NoModificationAllowedError") {
       var req2 = storage.delete(filePath);
       req2.onsuccess = function () {
-        saveFile(filename, filetype, content, showBanner, callback);
+        saveFile(directory, filename, filetype, content, showBanner, callback);
       };
       req2.onerror = function () {
         alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
@@ -489,17 +493,18 @@ function saveFile(filename, filetype, content, showBanner, callback) {
   };
 }
 
-function loadToEditor(filename, filetype) {
+function loadToEditor(directory, filename, filetype) {
   // Clear editor
   doc.innerHTML = '';
   rawEditor.textContent = '';
   
   // Set file name and type
+  document.getElementById('currentFileDirectory').textContent = directory;
   document.getElementById('currentFileName').textContent = filename;
   document.getElementById('currentFileType').textContent = filetype;
   
   // Set alert banner name and type
-  document.getElementById('save-banner-name').textContent = filename;
+  document.getElementById('save-banner-name').textContent = (directory + filename);
   document.getElementById('save-banner-type').textContent = filetype;
   
   // Show/hide toolbar
@@ -514,7 +519,7 @@ function loadToEditor(filename, filetype) {
   }
   
   // Fill editor
-  loadFile(filename, filetype, function(result) {
+  loadFile(directory, filename, filetype, function(result) {
     var content;
     
     switch (filetype) {
@@ -529,8 +534,7 @@ function loadToEditor(filename, filetype) {
         content = result;
         doc.innerHTML = content;
         rawEditor.textContent = content;
-        tabRaw.classList.remove('hidden');   
-        
+        tabRaw.classList.remove('hidden');        
         break;
     }             
         
@@ -540,14 +544,14 @@ function loadToEditor(filename, filetype) {
   });
   
   // Add file to recent docs
-  RecentDocs.add([filename, filetype]);
+  RecentDocs.add([directory, filename, filetype]);
   
   // Show editor
   nav('edit');  
 }
 
-function loadFile(filename, filetype, callback) {
-  var filePath = ("Documents/" + filename + filetype);
+function loadFile(directory, filename, filetype, callback) {
+  var filePath = (directory + filename + filetype);
   var req = storage.get(filePath);
   req.onsuccess = function () {
     var reader = new FileReader();
@@ -570,7 +574,7 @@ function loadFile(filename, filetype, callback) {
 }
 
 function deleteFile(name) {  
-  var path = ('Documents/'+name);
+  var path = name;
   var req = storage.delete(path);
   req.onsuccess = function () {
     // Code to show a deleted banner
@@ -581,10 +585,10 @@ function deleteFile(name) {
   }
 }
 
-function renameFile(name, type, newname) {
-  loadFile(name, type, function(result) {
-    var fullName = (name + type);
-    saveFile(name, type, result, function(){});
+function renameFile(directory, name, type, newname) {
+  loadFile(directory, name, type, function(result) {
+    var fullName = (directory + name + type);
+    saveFile(directory, name, type, result, function(){});
     deleteFile(fullName);
   });
 }
@@ -670,7 +674,7 @@ function editDocs() {
     editState = true;
     
     // Code to build list
-    docsInFolder(function(result) {
+    docsInFolder('Documents/', function(result) {
       buildEditDocList(result, docBrowserDirList, 'Documents found');
       watchCheckboxes();
     });
@@ -896,7 +900,7 @@ function processActions(eventAttribute, target) {
     }
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'loadToEditor') {
-      loadToEditor(target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
+      loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
       if (navLocation == 'welcome' | navLocation == 'open') {
