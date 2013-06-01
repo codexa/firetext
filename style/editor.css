@@ -38,11 +38,13 @@
 
 #rawEditor {
   border: none;
-  padding: 10px;
+  padding: 5px;
   padding-bottom: 6rem;
   font-size: 2em;
   outline: none;
   font-family: monospace;
+  display: block;
+  max-width: 100%;
 }
 
 [role="toolbar"] .hidden {

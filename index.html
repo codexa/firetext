@@ -37,6 +37,7 @@
   <link rel="stylesheet" type="text/css" href="style/main.css" />
   <link rel="stylesheet" type="text/css" href="style/editor.css" />
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
+  <link rel="stylesheet" type="text/css" href="resources/google-code-prettify/prettify.css"/>
 
   <!-- Shared code -->
   <script type="application/javascript" defer src="js/gesture_detector.js"></script>
@@ -48,6 +49,7 @@
   <!-- Resources -->
   <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
   <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
+  <script type="application/javascript" src="resources/google-code-prettify/prettify.js"></script>
 
 </head>
 <body role="application">
@@ -230,7 +232,7 @@
         <li id="tab-raw" role="tab">
           <a href="#" data-click="tab" data-click-name="raw">Raw</a>
           <div role="tabpanel">
-            <div id="rawEditor"></div>
+            <code class="prettyprint" id="rawEditor"></code>
           </div>
         </li>
         <div class="tabToolbar">

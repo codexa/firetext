@@ -534,7 +534,8 @@ function loadToEditor(directory, filename, filetype) {
         content = result;
         doc.innerHTML = content;
         rawEditor.textContent = content;
-        tabRaw.classList.remove('hidden');        
+        tabRaw.classList.remove('hidden');  
+        prettyPrint();
         break;
     }             
         
@@ -637,11 +638,15 @@ function watchDocument(filetype) {
   if (filetype == '.html') {
     doc.addEventListener('input', function() {
       updateViews(rawEditor, doc.innerHTML, 'text');
+      prettyPrint();
     });
         
     // Add listener to update design
     rawEditor.addEventListener('input', function() {
       updateViews(doc, rawEditor.textContent, 'html');
+    });
+    rawEditor.addEventListener('blur', function() {
+      prettyPrint();
     });
   }
 }
