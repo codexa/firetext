@@ -828,9 +828,12 @@ function settings() {
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
+  
+  /* Version 0.3
   var gDriveEnabled = document.querySelector('#gDrive-enabled input');
   var gDriveSettings = document.querySelector('#gDrive-settings-list');
   var gDriveUser = document.querySelector('#gDrive-settings-list'); 
+  */
   
   // Autosave
   autosaveEnabled.setAttribute('checked', getSettings('autosave'));
@@ -849,11 +852,14 @@ function settings() {
   dropboxEnabled.onchange = function toggleDropbox() {
     saveSettings('dropbox.enabled', this.checked);
   }
+  
+  /* Version 0.3
   // Google Drive
   gDriveEnabled.setAttribute('checked', getSettings('gDrive.enabled'))
   gDriveEnabled.onchange = function togglegDrive() {
     saveSettings('gDrive.enabled', this.checked);
   }
+  */
 }
 
 /* Actions (had to do this because of CSP policies)
