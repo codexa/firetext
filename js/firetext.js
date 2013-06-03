@@ -825,11 +825,9 @@ function saveSettings(name, value) {
 
 function settings() {
   // Select elements
-  var autosaveEnabled = document.querySelector('#autosave-enabled input');
-  var autoloadEnabled = document.querySelector('#autoload-enabled input');
-  var dropboxEnabled = document.querySelector('#dropbox-enabled input');
-  var dropboxSettings = document.querySelector('#dropbox-settings-list');
-  var dropboxUser = document.querySelector('#dropbox-settings-list');
+  var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
+  var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
+  var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   var gDriveEnabled = document.querySelector('#gDrive-enabled input');
   var gDriveSettings = document.querySelector('#gDrive-settings-list');
   var gDriveUser = document.querySelector('#gDrive-settings-list'); 

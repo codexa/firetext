@@ -361,19 +361,19 @@
         <div>
           <h2>General</h2>
           <ul>
-            <li class="listItem noLink" id="autosave-enabled">
+            <li class="listItem noLink">
               <aside class="pack-end">
                 <label>
-                  <input type="checkbox" data-type="switch" />
+                  <input type="checkbox" data-type="switch" id="autosave-enabled-switch" />
                   <span></span>
                 </label>
               </aside>
               <p class="label">Enable autosave</p>
             </li>
-            <li class="listItem noLink" id="autoload-enabled">
+            <li class="listItem noLink">
               <aside class="pack-end">
                 <label>
-                  <input type="checkbox" data-type="switch" />
+                  <input type="checkbox" data-type="switch" id="autoload-enabled-switch" />
                   <span></span>
                 </label>
               </aside>
@@ -384,11 +384,15 @@
         <div>
           <h2>Cloud Storage</h2>
           <ul>
-            <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
-              <a href="#">
-                <aside class="icon icon-dropbox"></aside>
-                <p>Dropbox</p>
-              </a>
+            <li class="listItem noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <aside class="icon icon-dropbox"></aside>
+              <p>Use Dropbox</p>
             </li>
             <li data-click="nav" data-click-location="settings-gDrive" class="listItem">
               <a href="#">
@@ -398,37 +402,6 @@
             </li>
           </ul>
         </div>
-      </article>
-    </div>
-  </section>
-
-  <section role="region" id="settings-dropbox" class="skin-dark">
-    <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
-      <h1>Dropbox Settings</h1>
-    </header>
-    <div role="main" class="header-only">
-      <article data-type="list" style="padding: 20px;">
-        <ul>
-          <li class="listItem" id="dropbox-enabled">
-            <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" />
-                <span></span>
-              </label>
-            </aside>
-            <p class="label">Use Dropbox</p>
-          </li>
-          <br>
-          <div id="dropbox-settings-list">
-            <li class="listItem" id="dropbox-username">
-              <input type="text" placeholder="Username" />
-            </li>
-            <li class="listItem" id="dropbox-password">
-              <input type="password" placeholder="Password" />
-            </li>
-          </div>
-        </ul>
       </article>
     </div>
   </section>
