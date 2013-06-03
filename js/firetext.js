@@ -94,17 +94,19 @@ function init() {
 function initSharing() {
   if (getSettings('dropbox.enabled') == true) {
     // Auth
-    dropAPI.client.authenticate(function(error, client) {});
-    
+    dropAPI.client.authenticate(function(error, client) {});    
     // Code to get dropbox files
   } else {
     dropboxDocsList.style.display = 'none';
   }
+  
+  /* Version 0.3
   if (getSettings('gDrive.enabled') == true) {
     // Code to get Google Drive files
   } else {
     gDriveDocsList.style.display = 'none';
   }
+  */
 }
 
 /* Recent Docs
@@ -465,10 +467,18 @@ function saveFile(directory, filename, filetype, content, showBanner, callback) 
     case ".txt":
       type = "text\/plain";
       break;
+    case ".docx":
+      type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     default:
       break;
   }
   var contentBlob = new Blob([content], { "type" : type });
+  
+  // Special handling for .docx
+  if (filetype == '.docx') {
+    //contentBlob = docx(contentBlob);
+  }
+  
   var filePath = (directory + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
   req.onsuccess = function () {
@@ -525,6 +535,12 @@ function loadToEditor(directory, filename, filetype) {
     switch (filetype) {
       case ".txt":
         content = txt.parse(result, "HTML");
+        doc.innerHTML = content;
+        tabRaw.classList.add('hidden');
+        tab(document.querySelector('#editTabs'), 'design');
+        break;
+      case ".docx":
+        //content = docx(result);
         doc.innerHTML = content;
         tabRaw.classList.add('hidden');
         tab(document.querySelector('#editTabs'), 'design');
