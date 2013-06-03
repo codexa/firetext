@@ -300,7 +300,7 @@ function docsInFolder(directory, callback) {
   
     cursor.onerror = function() {
       if (cursor.error.name == 'TypeMismatchError') {
-        saveFile('firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+        saveFile(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
           deleteFile('firetext.temp');
         });
         updateDocLists();
