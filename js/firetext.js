@@ -92,16 +92,31 @@ function init() {
 }
 
 function initSharing() {
+  // Dropbox
+  dropAPI.client.onError.addListener(function (error) {
+    if (window.console) {
+      console.error(error);
+      dropboxError(error);
+    }
+  });
   if (getSettings('dropbox.enabled') == 'true') {
     // Auth
-    dropAPI.client.authenticate(function(error, client) {});    
-    // Code to get dropbox files
-    dropboxDocsList.style.display = 'block';
+    dropAPI.client.authenticate(function(error, client) {
+      // Handle error
+      if (error) {
+        dropboxError(error);
+      } else {    
+        // Code to get dropbox files
+        dropboxDocsList.style.display = 'block';
+        dropboxDocsInFolder('/', function() {});
+      }
+    });    
   } else {
     dropboxDocsList.style.display = 'none';
   }
   
   /* Version 0.3
+  // Google Drive
   if (getSettings('gDrive.enabled') == true) {
     // Code to get Google Drive files
   } else {
@@ -565,7 +580,16 @@ function loadToEditor(directory, filename, filetype) {
   RecentDocs.add([directory, filename, filetype]);
   
   // Show editor
-  nav('edit');  
+  nav('edit');
+  
+  // Hide save button if autosave is enabled
+  if (getSettings('autosave') == 'true') {
+    document.getElementById('editorSaveButton').style.display = 'none';
+    document.getElementById('zenSaveButton').style.display = 'none';
+  } else {
+    document.getElementById('editorSaveButton').style.display = 'inline-block';
+    document.getElementById('zenSaveButton').style.display = 'inline-block';
+  }    
 }
 
 function loadFile(directory, filename, filetype, callback) {
@@ -860,6 +884,13 @@ function settings() {
   }
   autosaveEnabled.onchange = function toggleAutosave() {
     saveSettings('autosave', this.checked);
+    if (getSettings('autosave') == 'true') {
+      document.getElementById('editorSaveButton').style.display = 'none';
+      document.getElementById('zenSaveButton').style.display = 'none';
+    } else {
+      document.getElementById('editorSaveButton').style.display = 'inline-block';
+      document.getElementById('zenSaveButton').style.display = 'inline-block';
+    }
   }
   
   // Autoload
@@ -1020,6 +1051,50 @@ function processActions(eventAttribute, target) {
       document.getElementById('edit-bar').style.display = 'block';
       editor.classList.remove('no-toolbar');
     }
+  }
+}
+
+/* Dropbox
+------------------------*/ 
+function dropboxError(error) {
+  switch (error.status) {
+  case Dropbox.ApiError.INVALID_TOKEN:
+    alert('The session expired, retrying...');
+    dropAPI.client.authenticate(function(error, client) {});    
+    break;
+
+  case Dropbox.ApiError.OVER_QUOTA:
+    // The user is over their Dropbox quota.
+    // Tell them their Dropbox is full. Refreshing the page won't help.
+    alert('Your Dropbox is full :(');
+    break;
+
+  case Dropbox.ApiError.RATE_LIMITED:
+    alert('Dropbox API request limit was exceeded.\n\nPlease try again later.');
+    break;
+
+  case Dropbox.ApiError.NETWORK_ERROR:
+    alert('Your network appears to be unavailable.\n\nPlease check your connection and try again.');
+    break;
+
+  case Dropbox.ApiError.INVALID_PARAM:
+  case Dropbox.ApiError.OAUTH_ERROR:
+  case Dropbox.ApiError.INVALID_METHOD:
+  default:
+    alert('An error occured.\n\nInfo for Gurus:\n'+error.status);
+  }
+}
+
+function dropboxDocsInFolder(directory, callback) {
+  if (directory && dropAPI.client.readdir(directory)) {
+    var docs = dropAPI.client.readdir(directory, function(error, entries) {
+      if (error) {
+        dropboxError(error);
+        return;
+      } else {
+        alert("Your Dropbox contains " + entries.join(", "));
+      }
+    });
   }
 }
 
