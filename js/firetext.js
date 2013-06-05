@@ -536,10 +536,14 @@ function loadToEditor(directory, filename, filetype) {
   // Show/hide toolbar
   switch (filetype) {
     case ".html":
+      document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
+      editor.classList.remove('no-toolbar'); // 0.2 only
       toolbar.classList.remove('hidden');
       break;
     case ".txt":
     default:
+      document.getElementById('edit-bar').style.display = 'none'; // 0.2 only
+      editor.classList.add('no-toolbar'); // 0.2 only
       toolbar.classList.add('hidden');
       break;
   }
