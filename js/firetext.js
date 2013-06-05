@@ -76,7 +76,7 @@ function init() {
   initEditor();
   
   // Check for recent file, and if found, load it.
-  if (getSettings('autoload') == true) {
+  if (getSettings('autoload') == 'true') {
     var latestDocs = RecentDocs.get();
     if (latestDocs.length >= 1) {
       loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2]);
@@ -92,10 +92,11 @@ function init() {
 }
 
 function initSharing() {
-  if (getSettings('dropbox.enabled') == true) {
+  if (getSettings('dropbox.enabled') == 'true') {
     // Auth
     dropAPI.client.authenticate(function(error, client) {});    
     // Code to get dropbox files
+    dropboxDocsList.style.display = 'block';
   } else {
     dropboxDocsList.style.display = 'none';
   }
@@ -674,7 +675,7 @@ function updateViews(destView, source, contentType) {
     } else {
       destView.textContent = source;
     }
-    if (getSettings('autosave') == true) {
+    if (getSettings('autosave') == 'true') {
       saveFromEditor(false);
     }
   }
@@ -852,21 +853,34 @@ function settings() {
   */
   
   // Autosave
-  autosaveEnabled.setAttribute('checked', getSettings('autosave'));
+  if (getSettings('autosave') == 'true') {
+    autosaveEnabled.setAttribute('checked', '');
+  } else {  
+    autosaveEnabled.removeAttribute('checked');
+  }
   autosaveEnabled.onchange = function toggleAutosave() {
     saveSettings('autosave', this.checked);
   }
   
   // Autoload
-  autoloadEnabled.setAttribute('checked', getSettings('autoload'));
+  if (getSettings('autoload') == 'true') {
+    autoloadEnabled.setAttribute('checked', '');
+  } else {  
+    autoloadEnabled.removeAttribute('checked');
+  }
   autoloadEnabled.onchange = function toggleAutoload() {
     saveSettings('autoload', this.checked);
   }
   
   // Dropbox
-  dropboxEnabled.setAttribute('checked', getSettings('dropbox.enabled'))
+  if (getSettings('dropbox.enabled') == 'true') {
+    dropboxEnabled.setAttribute('checked', '');
+  } else {  
+    dropboxEnabled.removeAttribute('checked');
+  }
   dropboxEnabled.onchange = function toggleDropbox() {
     saveSettings('dropbox.enabled', this.checked);
+    initSharing();
   }
   
   /* Version 0.3
