@@ -640,7 +640,6 @@ function renameFile(directory, name, type, newname) {
 function initEditor() {
   /* Disabled until bug 811177 is fixed
   editor.contentWindow.document.designMode = "on";
-  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   doc = editor.contentDocument.body;
   */
 
@@ -653,6 +652,7 @@ function initEditor() {
   doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
+  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   
   // Hide and show toolbar.
   // For reviewers, just in case this looks like a security problem:
