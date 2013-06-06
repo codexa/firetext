@@ -1049,11 +1049,15 @@ function processActions(eventAttribute, target) {
       }
       formatDoc('justify'+justifyDirection);
     } else if (calledFunction == 'hideToolbar') {
-      document.getElementById('edit-bar').style.display = 'none';
-      editor.classList.add('no-toolbar');
+      if (document.getElementById('currentFileType').textContent != '.txt') {
+        document.getElementById('edit-bar').style.display = 'none';
+        editor.classList.add('no-toolbar');
+      }
     } else if (calledFunction == 'showToolbar') {
-      document.getElementById('edit-bar').style.display = 'block';
-      editor.classList.remove('no-toolbar');
+      if (document.getElementById('currentFileType').textContent != '.txt') {
+        document.getElementById('edit-bar').style.display = 'block';
+        editor.classList.remove('no-toolbar');
+      }
     }
   }
 }
