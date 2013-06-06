@@ -593,7 +593,7 @@ function loadToEditor(directory, filename, filetype) {
   } else {
     document.getElementById('editorSaveButton').style.display = 'inline-block';
     document.getElementById('zenSaveButton').style.display = 'inline-block';
-  }    
+  }  
 }
 
 function loadFile(directory, filename, filetype, callback) {
@@ -872,6 +872,7 @@ function settings() {
   // Select elements
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
+  var autozenEnabled = document.querySelector('#autozen-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   
   /* Version 0.3
@@ -903,8 +904,18 @@ function settings() {
   } else {  
     autoloadEnabled.removeAttribute('checked');
   }
-  autoloadEnabled.onchange = function toggleAutoload() {
+  autoloadEnabled.onchange = function () {
     saveSettings('autoload', this.checked);
+  }
+  
+  // Autozen
+  if (getSettings('autozen') == 'true') {
+    autozenEnabled.setAttribute('checked', '');
+  } else {  
+    autozenEnabled.removeAttribute('checked');
+  }
+  autozenEnabled.onchange = function () {
+    saveSettings('autozen', this.checked);
   }
   
   // Dropbox
@@ -913,7 +924,7 @@ function settings() {
   } else {  
     dropboxEnabled.removeAttribute('checked');
   }
-  dropboxEnabled.onchange = function toggleDropbox() {
+  dropboxEnabled.onchange = function () {
     saveSettings('dropbox.enabled', this.checked);
     initSharing();
   }
