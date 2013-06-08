@@ -76,7 +76,7 @@ function init() {
   initEditor();
   
   // Check for recent file, and if found, load it.
-  if (getSettings('autoload') == 'true') {
+  if (getSettings('autoload') == true) {
     var latestDocs = RecentDocs.get();
     if (latestDocs.length >= 1) {
       loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2]);
@@ -92,38 +92,19 @@ function init() {
 }
 
 function initSharing() {
-  // Dropbox
-  dropAPI.client.onError.addListener(function (error) {
-    if (window.console) {
-      console.error(error);
-      dropboxError(error);
-    }
-  });
-  if (getSettings('dropbox.enabled') == 'true') {
+  if (getSettings('dropbox.enabled') == true) {
     // Auth
-    dropAPI.client.authenticate(function(error, client) {
-      if (!error) {
-        // Code to get dropbox files
-        dropboxDocsList.style.display = 'block';
-        dropboxDocsInFolder(client, '/', function(DOCS) {
-          dropboxDirList.textContent = DOCS;
-        });
-      } else {
-        dropboxDocsList.style.display = 'none';      
-      }
-    });    
+    dropAPI.client.authenticate(function(error, client) {});
+    
+    // Code to get dropbox files
   } else {
     dropboxDocsList.style.display = 'none';
   }
-  
-  /* Version 0.3
-  // Google Drive
   if (getSettings('gDrive.enabled') == true) {
     // Code to get Google Drive files
   } else {
     gDriveDocsList.style.display = 'none';
   }
-  */
 }
 
 /* Recent Docs
@@ -317,7 +298,7 @@ function docsInFolder(directory, callback) {
   
     cursor.onerror = function() {
       if (cursor.error.name == 'TypeMismatchError') {
-        saveFile(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+        saveFile('firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
           deleteFile('firetext.temp');
         });
         updateDocLists();
@@ -484,18 +465,10 @@ function saveFile(directory, filename, filetype, content, showBanner, callback) 
     case ".txt":
       type = "text\/plain";
       break;
-    case ".docx":
-      type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     default:
       break;
   }
   var contentBlob = new Blob([content], { "type" : type });
-  
-  // Special handling for .docx
-  if (filetype == '.docx') {
-    //contentBlob = docx(contentBlob);
-  }
-  
   var filePath = (directory + filename + filetype);
   var req = storage.addNamed(contentBlob, filePath);
   req.onsuccess = function () {
@@ -537,14 +510,10 @@ function loadToEditor(directory, filename, filetype) {
   // Show/hide toolbar
   switch (filetype) {
     case ".html":
-      document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
-      editor.classList.remove('no-toolbar'); // 0.2 only
       toolbar.classList.remove('hidden');
       break;
     case ".txt":
     default:
-      document.getElementById('edit-bar').style.display = 'none'; // 0.2 only
-      editor.classList.add('no-toolbar'); // 0.2 only
       toolbar.classList.add('hidden');
       break;
   }
@@ -556,12 +525,6 @@ function loadToEditor(directory, filename, filetype) {
     switch (filetype) {
       case ".txt":
         content = txt.parse(result, "HTML");
-        doc.innerHTML = content;
-        tabRaw.classList.add('hidden');
-        tab(document.querySelector('#editTabs'), 'design');
-        break;
-      case ".docx":
-        //content = docx(result);
         doc.innerHTML = content;
         tabRaw.classList.add('hidden');
         tab(document.querySelector('#editTabs'), 'design');
@@ -585,16 +548,7 @@ function loadToEditor(directory, filename, filetype) {
   RecentDocs.add([directory, filename, filetype]);
   
   // Show editor
-  nav('edit');
-  
-  // Hide save button if autosave is enabled
-  if (getSettings('autosave') == 'true') {
-    document.getElementById('editorSaveButton').style.display = 'none';
-    document.getElementById('zenSaveButton').style.display = 'none';
-  } else {
-    document.getElementById('editorSaveButton').style.display = 'inline-block';
-    document.getElementById('zenSaveButton').style.display = 'inline-block';
-  }  
+  nav('edit');  
 }
 
 function loadFile(directory, filename, filetype, callback) {
@@ -645,6 +599,7 @@ function renameFile(directory, name, type, newname) {
 function initEditor() {
   /* Disabled until bug 811177 is fixed
   editor.contentWindow.document.designMode = "on";
+  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   doc = editor.contentDocument.body;
   */
 
@@ -657,7 +612,6 @@ function initEditor() {
   doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
-  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   
   // Hide and show toolbar.
   // For reviewers, just in case this looks like a security problem:
@@ -704,7 +658,7 @@ function updateViews(destView, source, contentType) {
     } else {
       destView.textContent = source;
     }
-    if (getSettings('autosave') == 'true') {
+    if (getSettings('autosave') == true) {
       saveFromEditor(false);
     }
   }
@@ -871,72 +825,37 @@ function saveSettings(name, value) {
 
 function settings() {
   // Select elements
-  var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
-  var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
-  var autozenEnabled = document.querySelector('#autozen-enabled-switch');
-  var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
-  
-  /* Version 0.3
+  var autosaveEnabled = document.querySelector('#autosave-enabled input');
+  var autoloadEnabled = document.querySelector('#autoload-enabled input');
+  var dropboxEnabled = document.querySelector('#dropbox-enabled input');
+  var dropboxSettings = document.querySelector('#dropbox-settings-list');
+  var dropboxUser = document.querySelector('#dropbox-settings-list');
   var gDriveEnabled = document.querySelector('#gDrive-enabled input');
   var gDriveSettings = document.querySelector('#gDrive-settings-list');
   var gDriveUser = document.querySelector('#gDrive-settings-list'); 
-  */
   
   // Autosave
-  if (getSettings('autosave') == 'true') {
-    autosaveEnabled.setAttribute('checked', '');
-  } else {  
-    autosaveEnabled.removeAttribute('checked');
-  }
+  autosaveEnabled.setAttribute('checked', getSettings('autosave'));
   autosaveEnabled.onchange = function toggleAutosave() {
     saveSettings('autosave', this.checked);
-    if (getSettings('autosave') == 'true') {
-      document.getElementById('editorSaveButton').style.display = 'none';
-      document.getElementById('zenSaveButton').style.display = 'none';
-    } else {
-      document.getElementById('editorSaveButton').style.display = 'inline-block';
-      document.getElementById('zenSaveButton').style.display = 'inline-block';
-    }
   }
   
   // Autoload
-  if (getSettings('autoload') == 'true') {
-    autoloadEnabled.setAttribute('checked', '');
-  } else {  
-    autoloadEnabled.removeAttribute('checked');
-  }
-  autoloadEnabled.onchange = function () {
+  autoloadEnabled.setAttribute('checked', getSettings('autoload'));
+  autoloadEnabled.onchange = function toggleAutoload() {
     saveSettings('autoload', this.checked);
   }
   
-  // Autozen
-  if (getSettings('autozen') == 'true') {
-    autozenEnabled.setAttribute('checked', '');
-  } else {  
-    autozenEnabled.removeAttribute('checked');
-  }
-  autozenEnabled.onchange = function () {
-    saveSettings('autozen', this.checked);
-  }
-  
   // Dropbox
-  if (getSettings('dropbox.enabled') == 'true') {
-    dropboxEnabled.setAttribute('checked', '');
-  } else {  
-    dropboxEnabled.removeAttribute('checked');
-  }
-  dropboxEnabled.onchange = function () {
+  dropboxEnabled.setAttribute('checked', getSettings('dropbox.enabled'))
+  dropboxEnabled.onchange = function toggleDropbox() {
     saveSettings('dropbox.enabled', this.checked);
-    initSharing();
   }
-  
-  /* Version 0.3
   // Google Drive
   gDriveEnabled.setAttribute('checked', getSettings('gDrive.enabled'))
   gDriveEnabled.onchange = function togglegDrive() {
     saveSettings('gDrive.enabled', this.checked);
   }
-  */
 }
 
 /* Actions (had to do this because of CSP policies)
@@ -1061,57 +980,12 @@ function processActions(eventAttribute, target) {
       }
       formatDoc('justify'+justifyDirection);
     } else if (calledFunction == 'hideToolbar') {
-      if (document.getElementById('currentFileType').textContent != '.txt') {
-        document.getElementById('edit-bar').style.display = 'none';
-        editor.classList.add('no-toolbar');
-      }
+      document.getElementById('edit-bar').style.display = 'none';
+      editor.classList.add('no-toolbar');
     } else if (calledFunction == 'showToolbar') {
-      if (document.getElementById('currentFileType').textContent != '.txt') {
-        document.getElementById('edit-bar').style.display = 'block';
-        editor.classList.remove('no-toolbar');
-      }
+      document.getElementById('edit-bar').style.display = 'block';
+      editor.classList.remove('no-toolbar');
     }
-  }
-}
-
-/* Dropbox
-------------------------*/ 
-function dropboxError(error) {
-  switch (error.status) {
-  case Dropbox.ApiError.INVALID_TOKEN:
-    alert('The session expired, retrying...');
-    dropAPI.client.authenticate(function(error, client) {});    
-    break;
-
-  case Dropbox.ApiError.OVER_QUOTA:
-    // The user is over their Dropbox quota.
-    // Tell them their Dropbox is full. Refreshing the page won't help.
-    alert('Your Dropbox is full :(');
-    break;
-
-  case Dropbox.ApiError.RATE_LIMITED:
-    alert('Dropbox API request limit was exceeded.\n\nPlease try again later.');
-    break;
-
-  case Dropbox.ApiError.NETWORK_ERROR:
-    alert('Your network appears to be unavailable.\n\nPlease check your connection and try again.');
-    break;
-
-  case Dropbox.ApiError.INVALID_PARAM:
-  case Dropbox.ApiError.OAUTH_ERROR:
-  case Dropbox.ApiError.INVALID_METHOD:
-  default:
-    alert('An error occured.\n\nInfo for Gurus:\n'+error.status);
-  }
-}
-
-function dropboxDocsInFolder(client, directory, callback) {
-  if (directory && client.readdir(directory)) {
-    var docs = client.readdir(directory, function(error, entries) {
-      if (!error) {
-        callback(entries);
-      }
-    });
   }
 }
 

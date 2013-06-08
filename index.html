@@ -50,10 +50,6 @@
   <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
   <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
   <script type="application/javascript" src="resources/google-code-prettify/prettify.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip-load.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip-inflate.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip-deflate.js"></script>
 
 </head>
 <body role="application">
@@ -74,6 +70,7 @@
       <h2>Help</h2>
       <ul>
         <li><a href="#" data-click="browser" data-click-location="about">About Firetext</a></li>
+        <li><a href="#">Firetext help</a></li>
       </ul>
       <div role="toolbar">
         <ul>
@@ -120,15 +117,12 @@
         </div>
         <div id="dropbox-docs-list">
           <h2>Dropbox</h2>
-          <ul id="dropboxDirList"></ul>
+          <ul id="dropboxDocsList"></ul>
         </div>
-        
-        <!-- Version 0.3
         <div id="gDrive-docs-list">
           <h2>Google Drive</h2>
           <ul id="gDriveDocsList"></ul>
         </div>
-        -->
       </article>
     </div>
   </section>
@@ -194,6 +188,7 @@
       <h2>Help</h2>
       <ul>
         <li><a href="#" data-click="browser" data-click-location="about">About Firetext</a></li>
+        <li><a href="#">Firetext help</a></li>
       </ul>
       <div role="toolbar">
         <ul>
@@ -209,7 +204,7 @@
     <header>
       <button data-click="nav" data-click-location="welcome"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
-        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
+        <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
         <button data-click="fullscreen"><span class="icon" style="background-image: url(style/icons/toolbar/fs.png);">Fullscreen</span></button>
         <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu">Menu</span></button>
       </menu>
@@ -227,26 +222,24 @@
                 <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
                 <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
                 <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
-              </ul>              
-              <ul>              
-                <!-- Version 0.3
+              </ul>
+              <ul>
                 <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
-                -->
-              </ul>              
+              </ul>
             </div>
           </div>
         </li>
         <li id="tab-raw" role="tab">
           <a href="#" data-click="tab" data-click-name="raw">Raw</a>
           <div role="tabpanel">
-            <code class="prettyprint lang-html" id="rawEditor"></code>
+            <code class="prettyprint" id="rawEditor"></code>
           </div>
         </li>
         <div class="tabToolbar">
           <img src="style/icons/navic/menu.png" alt="" class="tabButton"  data-click="sidebar" data-click-id="main" />
           <img src="style/icons/navic/close.png" alt="" class="tabButton" data-click="nav" data-click-location="welcome" style="border-right: 1px solid black;" />
           <img src="style/icons/navic/efs.png" alt="" class="tabButton" data-click="fullscreen" />
-          <img src="style/icons/navic/save.png" alt="" class="tabButton" data-click="saveFromEditor" id="zenSaveButton" />
+          <img src="style/icons/navic/save.png" alt="" class="tabButton" data-click="saveFromEditor" />
         </div>
       </ul>
     </div>
@@ -255,7 +248,6 @@
     </section>
   </section>
 
-  <!-- Version 0.3
   <form role="dialog" data-type="action" id="share">
     <header>Share</header>
     <menu>
@@ -265,7 +257,6 @@
       <button data-click="navBack">Cancel</button>
     </menu>
   </form>
-  -->
 
   <section role="dialog" id="format">
     <header>
@@ -324,8 +315,6 @@
             </aside>
             <p class="label">Underline</p>
           </li>
-          
-          <!-- Version 0.3
           <li class="listItem noLink">
             <aside class="pack-end">
               <label>
@@ -335,8 +324,6 @@
             </aside>
             <p class="label">Heading</p>
           </li>
-          -->
-          
           <li class="listItem noLink">
             <aside class="pack-end">
               <label>
@@ -374,63 +361,78 @@
         <div>
           <h2>General</h2>
           <ul>
-            <li class="listItem noLink">
+            <li class="listItem noLink" id="autosave-enabled">
               <aside class="pack-end">
                 <label>
-                  <input type="checkbox" data-type="switch" id="autosave-enabled-switch" />
+                  <input type="checkbox" data-type="switch" />
                   <span></span>
                 </label>
               </aside>
               <p class="label">Enable autosave</p>
             </li>
-            <li class="listItem noLink">
+            <li class="listItem noLink" id="autoload-enabled">
               <aside class="pack-end">
                 <label>
-                  <input type="checkbox" data-type="switch" id="autoload-enabled-switch" />
+                  <input type="checkbox" data-type="switch" />
                   <span></span>
                 </label>
               </aside>
               <p class="label">Load last file on startup</p>
-            </li>
-            <li class="listItem noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autozen-enabled-switch" />
-                  <span></span>
-                </label>
-              </aside>
-              <p class="label">Edit with Zen Mode</p>
             </li>
           </ul>
         </div>
         <div>
           <h2>Cloud Storage</h2>
           <ul>
-            <li class="listItem noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
-                  <span></span>
-                </label>
-              </aside>
-              <aside class="icon icon-dropbox"></aside>
-              <p>Use Dropbox</p>
+            <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
+              <a href="#">
+                <aside class="icon icon-dropbox"></aside>
+                <p>Dropbox</p>
+              </a>
             </li>
-            <!-- Version 0.3
             <li data-click="nav" data-click-location="settings-gDrive" class="listItem">
               <a href="#">
                 <aside class="icon" style="background-image: url(style/icons/navic/google-drive.svg);"></aside>
                 <p>Google Drive</p>
               </a>
             </li>
-            -->
           </ul>
         </div>
       </article>
     </div>
   </section>
 
-  <!-- Version 0.3
+  <section role="region" id="settings-dropbox" class="skin-dark">
+    <header>
+      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <h1>Dropbox Settings</h1>
+    </header>
+    <div role="main" class="header-only">
+      <article data-type="list" style="padding: 20px;">
+        <ul>
+          <li class="listItem" id="dropbox-enabled">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" />
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Use Dropbox</p>
+          </li>
+          <br>
+          <div id="dropbox-settings-list">
+            <li class="listItem" id="dropbox-username">
+              <input type="text" placeholder="Username" />
+            </li>
+            <li class="listItem" id="dropbox-password">
+              <input type="password" placeholder="Password" />
+            </li>
+          </div>
+        </ul>
+      </article>
+    </div>
+  </section>
+
   <section role="region" id="settings-gDrive" class="skin-dark">
     <header>
       <button data-click="navBack"><span class="icon icon-back">back</span></button>
@@ -461,7 +463,6 @@
       </article>
     </div>
   </section>
-  -->
 
 </body>
 </html>
