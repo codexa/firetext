@@ -102,13 +102,14 @@ function initSharing() {
   if (getSettings('dropbox.enabled') == 'true') {
     // Auth
     dropAPI.client.authenticate(function(error, client) {
-      // Handle error
-      if (error) {
-        dropboxError(error);
-      } else {    
+      if (!error) {
         // Code to get dropbox files
         dropboxDocsList.style.display = 'block';
-        dropboxDocsInFolder('/', function() {});
+        dropboxDocsInFolder(client, '/', function(DOCS) {
+          dropboxDirList.textContent = DOCS;
+        });
+      } else {
+        dropboxDocsList.style.display = 'none';      
       }
     });    
   } else {
@@ -1104,14 +1105,11 @@ function dropboxError(error) {
   }
 }
 
-function dropboxDocsInFolder(directory, callback) {
-  if (directory && dropAPI.client.readdir(directory)) {
-    var docs = dropAPI.client.readdir(directory, function(error, entries) {
-      if (error) {
-        dropboxError(error);
-        return;
-      } else {
-        alert("Your Dropbox contains " + entries.join(", "));
+function dropboxDocsInFolder(client, directory, callback) {
+  if (directory && client.readdir(directory)) {
+    var docs = client.readdir(directory, function(error, entries) {
+      if (!error) {
+        callback(entries);
       }
     });
   }
