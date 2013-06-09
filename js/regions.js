@@ -29,6 +29,15 @@ function nav2() {
     }
     regionHistory.push(tempLoc);
     document.getElementById(tempLoc).classList.add('current');
+    
+    /* Remove this section when porting to other projects */   
+    if (tempLoc == 'edit') {
+      // Start Zen Mode if autozen == true
+      if (getSettings('autozen') == 'true') {
+        editFullScreen(true);    
+      }
+    }
+    /* End of customized section */
   }
 }
 
@@ -39,9 +48,18 @@ function navBack() {
   
   // This is a weird way to do this, but I couldn't figure out a better one.
   nav(regionHistory.pop());
+    
+  /* Remove this section when porting to other projects */
+  if (tempLoc == 'edit') {
+    // Start Zen Mode if autozen == true
+    if (getSettings('autozen') == 'true') {
+      editFullScreen(true);    
+    }
+  }
   
   // Generate docs list
   updateDocLists();
+  /* End of customized section */
 }
 
 function sidebar(name) {
