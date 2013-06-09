@@ -13,6 +13,7 @@ var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, editS
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
 var dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList;
 var storage = navigator.getDeviceStorage("sdcard");
+var dropboxClient;
 
 /* Start
 ------------------------*/ 
@@ -103,10 +104,13 @@ function initSharing() {
     // Auth
     dropAPI.client.authenticate(function(error, client) {
       if (!error) {
+        // Set client
+        dropboxClient = client;
+        
         // Code to get dropbox files
         dropboxDocsList.style.display = 'block';
         dropboxDocsInFolder(client, '/', function(DOCS) {
-          dropboxDirList.textContent = DOCS;
+          buildDocList(DOCS, [dropboxDirList], "Dropbox Documents Found", 'dropbox');
         });
       } else {
         dropboxDocsList.style.display = 'none';      
@@ -221,7 +225,7 @@ function updateDocLists() {
   });
 }
 
-function buildDocListItems(DOCS, listElms, description, output) {
+function buildDocListItems(DOCS, listElms, description, output, location) {    
   // Remove HTML
   var tmp = document.createElement("DIV");
   tmp.innerHTML = description;
@@ -230,7 +234,7 @@ function buildDocListItems(DOCS, listElms, description, output) {
   description = tmp.textContent;
     
   // Generate item
-  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'">';
+  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
   output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
   output += '<p>'+DOCS[0][0]+DOCS[0][1]+'<em>'+DOCS[0][2]+'</em></p>';
@@ -249,11 +253,11 @@ function buildDocListItems(DOCS, listElms, description, output) {
   
   // build next item
   loadFile(DOCS[1][0], DOCS[1][1], DOCS[1][2], function(result) {
-    buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output);
-  });
+    buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location);
+  }, location);
 }
 
-function buildDocList(DOCS, listElms, display) {
+function buildDocList(DOCS, listElms, display, location) {
   if (listElms != undefined) {
     // Make sure list is not an edit list
     for (var i = 0; i < listElms.length; i++) {
@@ -262,8 +266,8 @@ function buildDocList(DOCS, listElms, display) {
     
     if (DOCS.length > 0) {
       loadFile(DOCS[0][0], DOCS[0][1], DOCS[0][2], function(result) {
-        buildDocListItems(DOCS, listElms, result, "");
-      });
+        buildDocListItems(DOCS, listElms, result, "", location);
+      }, location);
     } else {
       // No docs message
       var output = '<li style="margin-top: -5px" class="noLink">';
@@ -520,7 +524,7 @@ function saveFile(directory, filename, filetype, content, showBanner, callback) 
   };
 }
 
-function loadToEditor(directory, filename, filetype) {
+function loadToEditor(directory, filename, filetype, location) {
   // Clear editor
   doc.innerHTML = '';
   rawEditor.textContent = '';
@@ -579,7 +583,7 @@ function loadToEditor(directory, filename, filetype) {
     // Add listener to update views
     watchDocument(filetype);
     
-  });
+  }, location);
   
   // Add file to recent docs
   RecentDocs.add([directory, filename, filetype]);
@@ -597,27 +601,33 @@ function loadToEditor(directory, filename, filetype) {
   }  
 }
 
-function loadFile(directory, filename, filetype, callback) {
+function loadFile(directory, filename, filetype, callback, location) {
   var filePath = (directory + filename + filetype);
-  var req = storage.get(filePath);
-  req.onsuccess = function () {
-    var reader = new FileReader();
-    reader.readAsText(req.result);
-    reader.onerror = function () {
-      alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+  if (location == '' | location == 'internal' | !location) {
+    var req = storage.get(filePath);
+    req.onsuccess = function () {
+      var reader = new FileReader();
+      reader.readAsText(req.result);
+      reader.onerror = function () {
+        alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+      };
+      reader.onload = function () {
+        callback(this.result);
+      };
     };
-    reader.onload = function () {
-      callback(this.result);
+    req.onerror = function () {
+      if (this.error.name == "NotFoundError") {
+        // New file, leave user to edit and save it
+      }
+      else {
+        alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+      }
     };
-  };
-  req.onerror = function () {
-    if (this.error.name == "NotFoundError") {
-      // New file, leave user to edit and save it
-    }
-    else {
-      alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
-    }
-  };
+  } else if (location = 'dropbox') {
+    dropboxClient.readFile(filePath, function(e, d) {
+      callback(d);
+    });
+  }
 }
 
 function deleteFile(name) {  
@@ -986,7 +996,7 @@ function processActions(eventAttribute, target) {
     }
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'loadToEditor') {
-      loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'));
+      loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
       if (navLocation == 'welcome' | navLocation == 'open') {
@@ -1101,7 +1111,7 @@ function dropboxError(error) {
   case Dropbox.ApiError.OAUTH_ERROR:
   case Dropbox.ApiError.INVALID_METHOD:
   default:
-    alert('An error occured.\n\nInfo for Gurus:\n'+error.status);
+    alert('A Dropbox error occured.\n\nInfo for Gurus:\n'+error.status);
   }
 }
 
@@ -1109,6 +1119,21 @@ function dropboxDocsInFolder(client, directory, callback) {
   if (directory && client.readdir(directory)) {
     var docs = client.readdir(directory, function(error, entries) {
       if (!error) {
+        entries.forEach(function (e, i, a) {
+          var dir;
+          if (directory[directory.length - 1] != '/') {
+            dir = (directory + '/');
+          } else {
+            dir = directory;
+          }
+          e = (dir + e);
+          a[i] = fileAddress(e);
+          
+          // Only get documents
+          /*if (a[i][2] !== ".txt" && a[i][2] !== ".html" && a[i][2] !== ".htm" && a[i][2] !== ".docx") {
+            a.splice(i);
+          }*/
+        });
         callback(entries);
       }
     });
@@ -1158,9 +1183,17 @@ function editFullScreen(enter) {
   }
 }
 
-function fileAddress(path, callback) {
-  var path = path.split('/');
-  var file = path.pop().split('.');
-  path.shift();
-  callback(path, file[0], file[1]);
+function fileAddress(path) {
+  var file = new Array();
+  file[0] = path.substring(0, (path.lastIndexOf('/') + 1));
+  file[1] = path.substring((path.lastIndexOf('/') + 1), path.lastIndexOf('.')).replace(/\//, '');
+  file[2] = path.substring(path.lastIndexOf('.'), path.length).replace(/\//, '');
+  if (file[1] == '') {
+    file[0] = (file[0] + file[2]);
+    if (file[0][file[0].length - 1] != '/') {
+      file[0] = (file[0] + '/');
+    }
+    file[2] = '';
+  }
+  return [file[0], file[1], file[2]];
 }
