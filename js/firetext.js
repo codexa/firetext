@@ -1157,3 +1157,10 @@ function editFullScreen(enter) {
     editor.classList.remove('fullscreen');
   }
 }
+
+function fileAddress(path, callback) {
+  var path = path.split('/');
+  var file = path.pop().split('.');
+  path.shift();
+  callback(path, file[0], file[1]);
+}
