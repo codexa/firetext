@@ -55,6 +55,12 @@ html, body {
   background-size: 3rem;
 }
 
+[data-type="list"] aside.icon.icon-document-dropbox {
+  background-image: url(icons/extic/Dboxdocfile.svg);
+  background-position: center;
+  background-size: 3rem;
+}
+
 [data-type="list"] aside.icon.icon-arrow {
   background-image: url(icons/navic/arrow.svg);
   background-position: center;

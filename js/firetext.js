@@ -225,18 +225,32 @@ function updateDocLists() {
   });
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location) {    
+function buildDocListItems(DOCS, listElms, description, output, location) {  
+  // Remove invalid docs
+  if (Array.isArray(DOCS[0]) == false | DOCS[0][2].charAt(0) != '.') {
+    buildDocList(DOCS.slice(1, DOCS.length), listElms, display, location);
+  }
+    
   // Remove HTML
   var tmp = document.createElement("DIV");
   tmp.innerHTML = description;
   description = tmp.textContent;
   tmp.innerHTML = description;
   description = tmp.textContent;
+  
+  // Icon selector
+  var icon;
+  if (location != 'internal' && location && location != '') {
+    icon = ('document-' + location);
+  } else {
+    icon = 'document';
+    location = 'internal';
+  }
     
   // Generate item
   output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
-  output += '<aside class="icon icon-document"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
+  output += '<aside class="icon icon-'+icon+'"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
   output += '<p>'+DOCS[0][0]+DOCS[0][1]+'<em>'+DOCS[0][2]+'</em></p>';
   output += '<p>'+description+'</p>';
   output += '</a></li>';
@@ -258,7 +272,12 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
 }
 
 function buildDocList(DOCS, listElms, display, location) {
-  if (listElms != undefined) {
+  if (listElms && DOCS) {
+    // Remove invalid docs
+    if (Array.isArray(DOCS[0]) == false | DOCS[0][2].charAt(0) != '.') {
+      buildDocList(DOCS.slice(1, DOCS.length), listElms, display, location);
+    }
+  
     // Make sure list is not an edit list
     for (var i = 0; i < listElms.length; i++) {
       listElms[i].setAttribute("data-type", "list");
@@ -458,6 +477,7 @@ function createFromDialog() {
 }
 
 function saveFromEditor(banner) {
+  var location = document.getElementById('currentFileLocation').textContent;
   var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
@@ -476,10 +496,10 @@ function saveFromEditor(banner) {
   if (banner != false) {
     banner = true;
   }
-  saveFile(directory, filename, filetype, content, banner, function(){});
+  saveFile(directory, filename, filetype, content, banner, function(){}, location);
 } 
 
-function saveFile(directory, filename, filetype, content, showBanner, callback) {
+function saveFile(directory, filename, filetype, content, showBanner, callback, location) {
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -501,27 +521,32 @@ function saveFile(directory, filename, filetype, content, showBanner, callback) 
   }
   
   var filePath = (directory + filename + filetype);
-  var req = storage.addNamed(contentBlob, filePath);
-  req.onsuccess = function () {
-    if (showBanner) {
-      showSaveBanner();
-    }
-    callback();
-  };
-  req.onerror = function () {
-    if (this.error.name == "NoModificationAllowedError") {
-      var req2 = storage.delete(filePath);
-      req2.onsuccess = function () {
-        saveFile(directory, filename, filetype, content, showBanner, callback);
-      };
-      req2.onerror = function () {
+  
+  if (location == '' | location == 'internal' | !location) {
+    var req = storage.addNamed(contentBlob, filePath);
+    req.onsuccess = function () {
+      if (showBanner) {
+        showSaveBanner();
+      }
+      callback();
+    };
+    req.onerror = function () {
+      if (this.error.name == "NoModificationAllowedError") {
+        var req2 = storage.delete(filePath);
+        req2.onsuccess = function () {
+          saveFile(directory, filename, filetype, content, showBanner, callback);
+        };
+        req2.onerror = function () {
+          alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+        }
+      }
+      else {
         alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
       }
-    }
-    else {
-      alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
-    }
-  };
+    };
+  } else if (location == 'dropbox') {
+    dropboxClient.writeFile(filePath, content, function() {});
+  }
 }
 
 function loadToEditor(directory, filename, filetype, location) {
@@ -530,6 +555,7 @@ function loadToEditor(directory, filename, filetype, location) {
   rawEditor.textContent = '';
   
   // Set file name and type
+  document.getElementById('currentFileLocation').textContent = location;
   document.getElementById('currentFileDirectory').textContent = directory;
   document.getElementById('currentFileName').textContent = filename;
   document.getElementById('currentFileType').textContent = filetype;
@@ -1130,9 +1156,9 @@ function dropboxDocsInFolder(client, directory, callback) {
           a[i] = fileAddress(e);
           
           // Only get documents
-          /*if (a[i][2] !== ".txt" && a[i][2] !== ".html" && a[i][2] !== ".htm" && a[i][2] !== ".docx") {
-            a.splice(i);
-          }*/
+          if (a[i][2] != '.txt' && a[i][2] != '.docx' && a[i][2] != '.html' && a[i][2] != '.htm') {
+            a.splice(i, 1);
+          }
         });
         callback(entries);
       }
@@ -1194,6 +1220,7 @@ function fileAddress(path) {
       file[0] = (file[0] + '/');
     }
     file[2] = '';
+    file[1] = '';
   }
   return [file[0], file[1], file[2]];
 }
