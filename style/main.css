@@ -114,15 +114,35 @@ html, body {
 #createDialogFileType {
   position: absolute;
   padding-top: 11px;  
-  width: 100%;
-  height: 100%;  
-  background: none;  
-  border: none;
-  border-radius: 0;
 }
 
-#createDialogFileType:active {
+#locationLegend {
+  width: 100%;
+}
+
+#createDialogFileLocation {
+  text-align: center;
+}
+  
+legend.action { 
+  background: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+}
+
+legend.action:active {
   background-color: #008caa;
+  outline: none;
+}
+
+legend.action select {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: none;
+  border-radius: 0;
 }
 
 /* Tab Toolbar */

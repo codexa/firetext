@@ -109,7 +109,7 @@
       </menu>
     </div>
     <div role="main" class="header-only">
-      <article data-type="list" class="docsList">
+      <article data-type="list" class="docsList" id="welcome-docs-list">
         <div id="recent-docs-list">
           <h2>Recents</h2>
           <ul id="docs"></ul>
@@ -141,7 +141,7 @@
     <div role="main" class="header-only">
       <div class="form">
         <br>
-        <img src="style/icons/FiretextExtic.png" id="extIconFile" height="200px" style="display:block; margin: 10px auto;"/>
+        <img src="style/icons/FiretextExtic.png" id="extIconFile" height="150px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
           <legend id="fileTypeLegend" class="action">
             <select name="File type" id="createDialogFileType" data-change="extIcon">
@@ -157,6 +157,12 @@
               <button type="reset" data-mouse-down="clearCreateForm">Clear</button>
             </p>
           </section>
+          <legend class="action" id="locationLegend">
+            <select name="Location" id="createDialogFileLocation">
+              <option>Internal</option>
+              <option>Dropbox</option>
+            </select>
+          </legend>
         </fieldset>
         <br>
         <button class="button-block" data-click="createFromDialog">Create</button>
@@ -171,7 +177,14 @@
     </header>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
-        <ul id="openDialogDirList"></ul>
+        <div id="open-device-docs-list">
+          <h2>Device</h2>
+          <ul id="openDialogDirList"></ul>
+        </div>
+        <div id="open-dropbox-docs-list">
+          <h2>Dropbox</h2>
+          <ul id="openDialogDropboxDirList"></ul>
+        </div>
       </article>
     </div>
   </section>
