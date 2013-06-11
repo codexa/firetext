@@ -323,16 +323,16 @@ function buildEditDocList(DOCS, listElm, display, location) {
         output += '<label class="danger"><input type="checkbox" class="edit-selected"/><span></span></label>';
         output += '<p data-location="'+location+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
         output += '</li>';
-      }
+      }   
+       
+      // Make list an edit list
+      listElm.setAttribute("data-type","edit");
     } else {
       output += '<li style="margin-top: -5px" class="noLink">';
       output += '<p>No ' + display + '</p>';
       output += "<p>Click the compose icon to create one.</p>";
       output += '</li>';
     }
-    
-    // Make list an edit list
-    listElm.setAttribute("data-type","edit");
     
     // Display output HTML
     listElm.innerHTML = output;
@@ -529,12 +529,11 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
     case ".html":
       type = "text\/html";
       break;
-    case ".txt":
-      type = "text\/plain";
-      break;
     case ".docx":
       type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    case ".txt":
     default:
+      type = "text\/plain";
       break;
   }
   var contentBlob = new Blob([content], { "type" : type });
@@ -731,8 +730,6 @@ function initEditor() {
   // For reviewers, just in case this looks like a security problem:
   // This frame is sandboxed, so I had to add the listeners to do this.
   // The content CANNOT call any of the parents functions, so this is not a security issue.
-  doc.setAttribute('data-focus', 'hideToolbar');
-  doc.setAttribute('data-blur', 'showToolbar');
   doc.addEventListener('focus', function (event) {
     processActions('data-focus', event.target);
   });

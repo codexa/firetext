@@ -36,6 +36,20 @@ function nav2() {
       if (getSettings('autozen') == 'true') {
         editFullScreen(true);    
       }
+      
+      // Lock screen in portrait
+      if (screen.lockOrientation) {
+        screen.lockOrientation('portrait');
+      } else if (screen.mozLockOrientation) {
+        screen.mozLockOrientation('portrait');
+      }
+    } else {
+      // Unlock screen
+      if (screen.unlockOrientation) {
+        screen.unlockOrientation();
+      } else if (screen.mozUnlockOrientation) {
+        screen.mozUnlockOrientation();
+      }
     }
     /* End of customized section */
   }
