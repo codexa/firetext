@@ -136,6 +136,9 @@
   <section role="dialog" id="add">
     <header>
       <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <menu type="toolbar">
+       <button data-click="createFromDialog">create</button>
+      </menu>
       <h1>New document</h1>
     </header>
     <div role="main" class="header-only">
@@ -164,8 +167,6 @@
             </select>
           </legend>
         </fieldset>
-        <br>
-        <button class="button-block" data-click="createFromDialog">Create</button>
       </div>
     </div>
   </section>
@@ -192,8 +193,8 @@
   <section data-type="sidebar" id="sidebar_main" class="skin-organic" data-position="right">
     <header>
       <menu type="toolbar">
-       <button data-click="sidebar" data-click-id="main"><span class="icon icon-back">back</span></button>
-    </menu>
+        <button data-click="sidebar" data-click-id="main"><span class="icon icon-back">back</span></button>
+      </menu>
       <h1>Menu</h1>
     </header>
     <nav>
