@@ -636,16 +636,16 @@ function loadToEditor(directory, filename, filetype, location) {
   }, location);
   
   // Temporary fix until new recentDocs function
-  if (location && location == '' && location == 'internal') {
+  if (location | location == '' | location == 'internal') {
     // Add file to recent docs
-    RecentDocs.add([directory, filename, filetype], location);
+    RecentDocs.add([directory, filename, filetype], 'internal');
   }
   
   // Show editor
   nav('edit');
   
   // Hide save button if autosave is enabled
-  if (getSettings('autosave') == 'true') {
+  if (getSettings('autosave') != 'false') {
     document.getElementById('editorSaveButton').style.display = 'none';
     document.getElementById('zenSaveButton').style.display = 'none';
   } else {
@@ -769,7 +769,7 @@ function updateViews(destView, source, contentType) {
     } else {
       destView.textContent = source;
     }
-    if (getSettings('autosave') == 'true') {
+    if (getSettings('autosave') != 'false') {
       saveFromEditor(false);
     }
   }
@@ -954,14 +954,14 @@ function settings() {
   */
   
   // Autosave
-  if (getSettings('autosave') == 'true') {
+  if (getSettings('autosave') != 'false') {
     autosaveEnabled.setAttribute('checked', '');
   } else {  
     autosaveEnabled.removeAttribute('checked');
   }
   autosaveEnabled.onchange = function toggleAutosave() {
     saveSettings('autosave', this.checked);
-    if (getSettings('autosave') == 'true') {
+    if (getSettings('autosave') != 'false') {
       document.getElementById('editorSaveButton').style.display = 'none';
       document.getElementById('zenSaveButton').style.display = 'none';
     } else {
