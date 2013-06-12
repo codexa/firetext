@@ -11,9 +11,8 @@
 ------------------------*/
 var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, openDialogDropboxList, welcomeDocsList, openDialogDropboxArea, editState, rawEditor, tabRaw, tabDesign;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
-var dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList;
+var dropboxClient, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, dropboxAuthed = new CustomEvent('dropboxAuthed');;
 var storage = navigator.getDeviceStorage("sdcard");
-var dropboxClient;
 
 /* Start
 ------------------------*/ 
@@ -47,6 +46,18 @@ function init() {
   italicCheckbox = document.getElementById('italicCheckbox');
   underlineCheckbox = document.getElementById('underlineCheckbox');
   
+  // Initalize recent docs
+  RecentDocs.init();
+  
+  // Initialize sharing
+  initSharing();
+  
+  // Update Doc Lists
+  updateDocLists();
+  
+  // Initialize the editor
+  initEditor();
+  
   // Init extIcon
   extIcon();
   
@@ -70,29 +81,24 @@ function init() {
     }
   );
   
-  // Initialize sharing
-  initSharing();
-  
-  // Initalize recent docs
-  RecentDocs.init();
-  
-  // Initialize the editor
-  initEditor();
-  
   // Check for recent file, and if found, load it.
   if (getSettings('autoload') == 'true') {
     var latestDocs = RecentDocs.get();
     if (latestDocs.length >= 1) {
-      loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2]);
+      // Wait until Dropbox is authenticated
+      if (latestDocs[0][3] == 'dropbox') {
+        window.addEventListener('dropboxAuthed', function() {
+          loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);        
+        });
+      } else {
+        loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);
+      }
     } else {
       nav('welcome');    
     }
   } else {
     nav('welcome');
   }
-  
-  // Update Doc Lists
-  updateDocLists();
 }
 
 function initSharing() {
@@ -109,14 +115,13 @@ function initSharing() {
       if (!error) {
         // Set client
         dropboxClient = client;
+        window.dispatchEvent(dropboxAuthed);
         
         // Code to get dropbox files
         dropboxDocsList.style.display = 'block';
         openDialogDropboxArea.style.display = 'block';
         document.getElementById('locationLegend').style.display = 'inline-block';
-        dropboxDocsInFolder(client, '/', function(DOCS) {
-          buildDocList(DOCS, [dropboxDirList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
-        });
+        updateDocLists();
       } else {
         dropboxDocsList.style.display = 'none';
         openDialogDropboxArea.style.display = 'none';
@@ -127,6 +132,20 @@ function initSharing() {
     document.getElementById('locationLegend').value = 'Internal';
     dropboxDocsList.style.display = 'none';
     openDialogDropboxArea.style.display = 'none';
+    
+    // Close any open Dropbox files
+    if (document.getElementById('currentFileLocation').textContent == 'dropbox') {
+      nav('welcome');
+      nav('settings');    
+    }
+    
+    // Remove Dropbox recents
+    var dropRecents = RecentDocs.get();
+    for (var i = 0; i < dropRecents.length; i++) {
+      if (dropRecents[i][3] == 'dropbox') {
+        RecentDocs.remove([dropRecents[i][0], dropRecents[i][1], dropRecents[i][2]], dropRecents[i][3]);
+      }
+    }  
   }
   
   /* Version 0.3
@@ -174,16 +193,18 @@ RecentDocs.add = function(file, location) {
   if (localStorage["firetext.docs.recent"] != undefined) {
     var docsTMP = this.get();
     
+    file.push(location);
+    
     // Remove duplicates
     for (var i = 0; i < docsTMP.length; i++) {
-      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == location) {
+      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == file[3]) {
         docsTMP.splice(i, 1);
         break;
       }
     }
     
     // Add item
-    docsTMP.splice(0, 0, [file, location]);
+    docsTMP.splice(0, 0, file);
     
     // Remove extra items
     if (docsTMP.length > 4) {
@@ -204,16 +225,18 @@ RecentDocs.remove = function(file, location, merged) {
   if (localStorage["firetext.docs.recent"] != undefined) {
     var docsTMP = this.get();
     
+    file.push(location);
+    
     // Remove item
     for (var i = 0; i < docsTMP.length; i++) {
       if (!merged) {
-        if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == location) {
+        if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == file[3]) {
           docsTMP.splice(i, 1);
           break;
         }
       }
       else {
-        if (file + location == docsTMP[i][0] + docsTMP[i][1] + docsTMP[i][2] + docsTMP[i][3]) {
+        if (file == docsTMP[i][0] + docsTMP[i][1] + docsTMP[i][2] + docsTMP[i][3]) {
           docsTMP.splice(i, 1);
           break;
         }
@@ -239,7 +262,7 @@ function updateDocLists() {
   }
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location) {
+function buildDocListItems(DOCS, listElms, description, output, location) {    
   // Remove HTML
   var tmp = document.createElement("DIV");
   tmp.innerHTML = description;
@@ -279,6 +302,11 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
     return;
   }
   
+  // Per doc locations
+  if (DOCS[1][3] && DOCS[1][3] != location) {
+    location = DOCS[1][3];
+  }
+  
   // build next item
   loadFile(DOCS[1][0], DOCS[1][1], DOCS[1][2], function(result) {
     buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location);
@@ -286,13 +314,17 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
 }
 
 function buildDocList(DOCS, listElms, display, location) {
-  if (listElms && DOCS) {    
+  if (listElms && DOCS) {
     // Make sure list is not an edit list
     for (var i = 0; i < listElms.length; i++) {
       listElms[i].setAttribute("data-type", "list");
     }
     
     if (DOCS.length > 0) {
+      // Per doc locations
+      if (DOCS[0][3] && DOCS[0][3] != location) {
+        location = DOCS[0][3];
+      }
       loadFile(DOCS[0][0], DOCS[0][1], DOCS[0][2], function(result) {
         buildDocListItems(DOCS, listElms, result, "", location);
       }, location);
@@ -567,7 +599,7 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
         alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
       }
     };
-  } else if (location == 'dropbox') {
+  } else if (location == 'dropbox' && dropboxClient) {
     dropboxClient.writeFile(filePath, contentBlob, function() { });
     callback();
   }
@@ -635,11 +667,8 @@ function loadToEditor(directory, filename, filetype, location) {
     
   }, location);
   
-  // Temporary fix until new recentDocs function
-  if (location | location == '' | location == 'internal') {
-    // Add file to recent docs
-    RecentDocs.add([directory, filename, filetype], 'internal');
-  }
+  // Add file to recent docs
+  RecentDocs.add([directory, filename, filetype], location);
   
   // Show editor
   nav('edit');
@@ -676,7 +705,7 @@ function loadFile(directory, filename, filetype, callback, location) {
         alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
       }
     };
-  } else if (location = 'dropbox') {
+  } else if (location = 'dropbox' && dropboxClient) {
     dropboxClient.readFile(filePath, function(e, d) {
       callback(d);
     });
@@ -694,7 +723,7 @@ function deleteFile(name, location) {
       // Code to show an error banner (the alert is temporary)
       alert('Delete unsuccessful :(\n\nInfo for gurus:\n"' + this.error.name + '"');
     }
-  } else if (location == 'dropbox') {
+  } else if (location == 'dropbox' && dropboxClient) {
     dropboxClient.remove(path, function(e) { });
   }
 }
