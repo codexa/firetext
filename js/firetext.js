@@ -9,7 +9,7 @@
 
 /* Globals
 ------------------------*/
-var editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, openDialogDropboxList, welcomeDocsList, openDialogDropboxArea, editState, rawEditor, tabRaw, tabDesign;
+var loadSpinner, editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, openDialogDropboxList, welcomeDocsList, openDialogDropboxArea, editState, rawEditor, tabRaw, tabDesign;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
 var dropboxClient, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, dropboxAuthed = new CustomEvent('dropboxAuthed');;
 var storage = navigator.getDeviceStorage("sdcard");
@@ -23,6 +23,8 @@ window.setInterval(updateToolbar, 100);
 ------------------------*/
 function init() {
   // Select important elements for later
+  loadSpinner = document.getElementById('loadSpinner');
+  loadSpinner.classList.add('shown');
   tabDesign = document.getElementById('tab-design');
   tabRaw = document.getElementById('tab-raw');
   editor = document.getElementById('editor');
@@ -88,17 +90,20 @@ function init() {
       // Wait until Dropbox is authenticated
       if (latestDocs[0][3] == 'dropbox') {
         window.addEventListener('dropboxAuthed', function() {
-          loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);        
+          loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);
+          loadSpinner.classList.remove('shown');
         });
       } else {
         loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);
+        loadSpinner.classList.remove('shown');
       }
     } else {
       nav('welcome');    
     }
   } else {
     nav('welcome');
-  }
+    loadSpinner.classList.remove('shown');
+  }  
 }
 
 function initSharing() {
@@ -132,6 +137,12 @@ function initSharing() {
     document.getElementById('locationLegend').value = 'Internal';
     dropboxDocsList.style.display = 'none';
     openDialogDropboxArea.style.display = 'none';
+    
+    // Sign out
+    if (dropboxClient) {
+      dropAPI.client.signOut();
+      dropboxClient = null;
+    }
     
     // Close any open Dropbox files
     if (document.getElementById('currentFileLocation').textContent == 'dropbox') {
@@ -225,17 +236,21 @@ RecentDocs.remove = function(file, location, merged) {
   if (localStorage["firetext.docs.recent"] != undefined) {
     var docsTMP = this.get();
     
-    file.push(location);
+    if (!merged) {
+      merged = location;
+    }    
+    if (merged != true) {
+      file.push(location);
+    }
     
     // Remove item
     for (var i = 0; i < docsTMP.length; i++) {
-      if (!merged) {
+      if (merged != true) {
         if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == file[3]) {
           docsTMP.splice(i, 1);
           break;
         }
-      }
-      else {
+      } else {
         if (file == docsTMP[i][0] + docsTMP[i][1] + docsTMP[i][2] + docsTMP[i][3]) {
           docsTMP.splice(i, 1);
           break;
@@ -256,7 +271,7 @@ function updateDocLists() {
     buildDocList(DOCS, [dirList, docBrowserDirList], "Documents Found", 'internal');
   });
   if (getSettings('dropbox.enabled') == 'true' && dropboxClient) {
-    dropboxDocsInFolder(dropboxClient, '/', function(DOCS) {
+    dropboxDocsInFolder(dropboxClient, '/Documents/', function(DOCS) {
       buildDocList(DOCS, [dropboxDirList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
     });
   }
@@ -404,7 +419,7 @@ function docsInFolder(directory, callback) {
       }
     
       // Only get documents
-      if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+      if (file.type !== "text/plain" && file.type !== "text/html") { // && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
         cursor.continue();
         return;
       }
@@ -517,7 +532,7 @@ function createFromDialog() {
       loadToEditor(directory, filename, filetype, 'internal');
     };
   } else if (location == 'dropbox') {
-    directory = '/';
+    directory = ('/' + directory);
     saveFile(directory, filename, filetype, ' ', false, function () {  
       // Load to editor
       loadToEditor(directory, filename, filetype, location);      
@@ -532,7 +547,7 @@ function createFromDialog() {
   document.getElementById('createDialogFileLocation').value = 'Internal';
 }
 
-function saveFromEditor(banner) {
+function saveFromEditor(banner, spinner) {
   var location = document.getElementById('currentFileLocation').textContent;
   var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
@@ -552,10 +567,13 @@ function saveFromEditor(banner) {
   if (banner != false) {
     banner = true;
   }
-  saveFile(directory, filename, filetype, content, banner, function(){}, location);
+  if (spinner != false) {
+    spinner = true;
+  }
+  saveFile(directory, filename, filetype, content, banner, function(){}, location, spinner);
 } 
 
-function saveFile(directory, filename, filetype, content, showBanner, callback, location) {
+function saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner) {
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -600,8 +618,10 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
       }
     };
   } else if (location == 'dropbox' && dropboxClient) {
-    dropboxClient.writeFile(filePath, contentBlob, function() { });
-    callback();
+    if (showSpinner != false) {
+      loadSpinner.classList.add('shown');
+    }
+    dropboxClient.writeFile(filePath, contentBlob, function() { loadSpinner.classList.remove('shown'); callback(); });    
   }
 }
 
@@ -636,51 +656,52 @@ function loadToEditor(directory, filename, filetype, location) {
   }
   
   // Fill editor
-  loadFile(directory, filename, filetype, function(result) {
-    var content;
+  loadFile(directory, filename, filetype, function(result, error) {
+    if (!error) {
+      var content;
+  
+      switch (filetype) {
+        case ".txt":
+          content = txt.parse(result, "HTML");
+          doc.innerHTML = content;
+          tabRaw.classList.add('hidden');
+          tab(document.querySelector('#editTabs'), 'design');
+          break;
+        case ".docx":
+          //content = docx(result);
+          doc.innerHTML = content;
+          tabRaw.classList.add('hidden');
+          tab(document.querySelector('#editTabs'), 'design');
+          break;
+        case ".html":
+        default:
+          content = result;
+          doc.innerHTML = content;
+          rawEditor.textContent = content;
+          tabRaw.classList.remove('hidden');  
+          prettyPrint();
+          break;
+      }             
     
-    switch (filetype) {
-      case ".txt":
-        content = txt.parse(result, "HTML");
-        doc.innerHTML = content;
-        tabRaw.classList.add('hidden');
-        tab(document.querySelector('#editTabs'), 'design');
-        break;
-      case ".docx":
-        //content = docx(result);
-        doc.innerHTML = content;
-        tabRaw.classList.add('hidden');
-        tab(document.querySelector('#editTabs'), 'design');
-        break;
-      case ".html":
-      default:
-        content = result;
-        doc.innerHTML = content;
-        rawEditor.textContent = content;
-        tabRaw.classList.remove('hidden');  
-        prettyPrint();
-        break;
-    }             
-        
-    // Add listener to update views
-    watchDocument(filetype);
-    
-  }, location);
+      // Add listener to update views
+      watchDocument(filetype);
   
-  // Add file to recent docs
-  RecentDocs.add([directory, filename, filetype], location);
+      // Add file to recent docs
+      RecentDocs.add([directory, filename, filetype], location);
   
-  // Show editor
-  nav('edit');
+      // Show editor
+      nav('edit');
   
-  // Hide save button if autosave is enabled
-  if (getSettings('autosave') != 'false') {
-    document.getElementById('editorSaveButton').style.display = 'none';
-    document.getElementById('zenSaveButton').style.display = 'none';
-  } else {
-    document.getElementById('editorSaveButton').style.display = 'inline-block';
-    document.getElementById('zenSaveButton').style.display = 'inline-block';
-  }  
+      // Hide save button if autosave is enabled
+      if (getSettings('autosave') != 'false') {
+        document.getElementById('editorSaveButton').style.display = 'none';
+        document.getElementById('zenSaveButton').style.display = 'none';
+      } else {
+        document.getElementById('editorSaveButton').style.display = 'inline-block';
+        document.getElementById('zenSaveButton').style.display = 'inline-block';
+      }
+    } 
+  }, location); 
 }
 
 function loadFile(directory, filename, filetype, callback, location) {
@@ -706,13 +727,15 @@ function loadFile(directory, filename, filetype, callback, location) {
       }
     };
   } else if (location = 'dropbox' && dropboxClient) {
+    loadSpinner.classList.add('shown');
     dropboxClient.readFile(filePath, function(e, d) {
+      loadSpinner.classList.remove('shown');
       callback(d);
     });
   }
 }
 
-function deleteFile(name, location) {  
+function deleteFile(name, location) {
   var path = name;
   if (!location | location == '' | location == 'internal') {
     var req = storage.delete(path);
@@ -799,7 +822,7 @@ function updateViews(destView, source, contentType) {
       destView.textContent = source;
     }
     if (getSettings('autosave') != 'false') {
-      saveFromEditor(false);
+      saveFromEditor(false, false);
     }
   }
 }
@@ -823,7 +846,7 @@ function editDocs() {
       buildEditDocList(result, docBrowserDirList, 'Documents found', 'internal');
     });
     if (getSettings('dropbox.enabled') == 'true' && dropboxClient) {
-      dropboxDocsInFolder(dropboxClient, '/', function(DOCS) {
+      dropboxDocsInFolder(dropboxClient, '/Documents', function(DOCS) {
         buildEditDocList(DOCS, dropboxDirList, "Dropbox Documents Found", 'dropbox');
       });
     }
@@ -913,7 +936,7 @@ function deleteSelected(confirmed) {
       var location = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].getAttribute('data-location');
       
       // Remove from RecentDocs
-      RecentDocs.remove(filename, location, true);
+      RecentDocs.remove((filename + location), true);
       
       // Delete file
       deleteFile(filename, location);
@@ -1223,7 +1246,7 @@ function dropboxDocsInFolder(client, directory, callback) {
           entries[i] = fileAddress(entries[i]);
           
           // Only get documents
-          if (entries[i][2] != '.txt' && entries[i][2] != '.docx' && entries[i][2] != '.html' && entries[i][2] != '.htm') {
+          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm') { // && entries[i][2] != '.docx') {
             entries.splice(i, 1);
             i = (i - 1);
           }
@@ -1241,6 +1264,10 @@ function dropboxDocsInFolder(client, directory, callback) {
           }
         }
         callback(entries);
+      } else {
+        client.mkdir(directory, function() {
+          callback(dropboxDocsInFolder(client, directory, function(l) { return l; }));
+        });
       }
     });
   }

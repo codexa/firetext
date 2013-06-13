@@ -57,6 +57,7 @@
 
 </head>
 <body role="application">
+  <div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
 
   <section data-type="sidebar" id="sidebar_welcome" class="skin-organic">
     <header>
@@ -149,7 +150,9 @@
           <legend id="fileTypeLegend" class="action">
             <select name="File type" id="createDialogFileType" data-change="extIcon">
               <option>.html</option>
+              <!-- Disabled until fully implemented
               <option>.docx</option>
+              -->
               <option>.txt</option>
             </select>
             <select id="dummy" style="visibility:hidden; width: 80%;"></select>
@@ -374,7 +377,7 @@
       <button data-click="navBack"><span class="icon icon-back">back</span></button>
       <h1 id="browserTitle">Browser</h1>
     </header>
-    <div class="spinner" id="browserSpinner"><div></div></div>
+    <div class="spinner center" id="browserSpinner"><div></div></div>
     <iframe src="" role="main" class="header-only" mozbrowser id="browserFrame" remote></iframe>
   </section>
 

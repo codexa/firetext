@@ -180,13 +180,16 @@ legend.action select {
   border-radius: 5px;
   background-color: rgba(0,0,0,.9);
   padding: 10px;
-  position: fixed;
-  left: calc(50% - 53px / 2);
-  top: calc(50% - 53px / 2);
   opacity: 0;
   display: inline-block;
   visibility: hidden;
-  transition: opacity .3s, .3s visibility 0s;
+  transition: opacity .3s, .3s visibility 0s, transform .3s;
+}
+
+.spinner.center {
+  position: fixed;
+  left: calc(50% - 53px / 2);
+  top: calc(50% - 53px / 2);
 }
 
 .spinner.shown {
