@@ -31,7 +31,7 @@ function nav2() {
     document.getElementById(tempLoc).classList.add('current');
     
     /* Remove this section when porting to other projects */   
-    if (tempLoc == 'edit') {
+    if (tempLoc == 'edit') {    
       // Start Zen Mode if autozen == true
       if (getSettings('autozen') == 'true') {
         editFullScreen(true);    
@@ -43,13 +43,27 @@ function nav2() {
       } else if (screen.mozLockOrientation) {
         screen.mozLockOrientation('portrait');
       }
+      
+      // Save edit status
+      saveSettings('autoload.wasEditing', 'true');
+      saveSettings('autoload.dir', document.getElementById('currentFileDirectory').textContent);
+      saveSettings('autoload.name', document.getElementById('currentFileName').textContent);
+      saveSettings('autoload.ext', document.getElementById('currentFileType').textContent);
+      saveSettings('autoload.loc', document.getElementById('currentFileLocation').textContent);  
+      
     } else {
       // Unlock screen
       if (screen.unlockOrientation) {
         screen.unlockOrientation();
       } else if (screen.mozUnlockOrientation) {
         screen.mozUnlockOrientation();
-      }
+      } 
+      saveSettings('autoload.wasEditing', 'false');
+    }
+  
+    // Update docs lists
+    if (tempLoc == 'open' | tempLoc == 'welcome') {
+      updateDocLists();
     }
     /* End of customized section */
   }
@@ -62,18 +76,6 @@ function navBack() {
   
   // This is a weird way to do this, but I couldn't figure out a better one.
   nav(regionHistory.pop());
-    
-  /* Remove this section when porting to other projects */
-  if (tempLoc == 'edit') {
-    // Start Zen Mode if autozen == true
-    if (getSettings('autozen') == 'true') {
-      editFullScreen(true);    
-    }
-  }
-  
-  // Generate docs list
-  updateDocLists();
-  /* End of customized section */
 }
 
 function sidebar(name) {

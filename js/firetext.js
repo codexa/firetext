@@ -85,16 +85,16 @@ function init() {
   
   // Check for recent file, and if found, load it.
   if (getSettings('autoload') == 'true') {
-    var latestDocs = RecentDocs.get();
-    if (latestDocs.length >= 1) {
+    var lastDoc = [getSettings('autoload.dir'), getSettings('autoload.name'), getSettings('autoload.ext'), getSettings('autoload.loc')];
+    if (getSettings('autoload.wasEditing') == 'true') {
       // Wait until Dropbox is authenticated
-      if (latestDocs[0][3] == 'dropbox') {
+      if (lastDoc[3] == 'dropbox') {
         window.addEventListener('dropboxAuthed', function() {
-          loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);
+          loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
           loadSpinner.classList.remove('shown');
         });
       } else {
-        loadToEditor(latestDocs[0][0], latestDocs[0][1], latestDocs[0][2], latestDocs[0][3]);
+        loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
         loadSpinner.classList.remove('shown');
       }
     } else {
@@ -546,6 +546,7 @@ function createFromDialog() {
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
   document.getElementById('createDialogFileLocation').value = 'Internal';
+  extIcon();
 }
 
 function saveFromEditor(banner, spinner) {
@@ -713,6 +714,7 @@ function loadFile(directory, filename, filetype, callback, location) {
       reader.readAsText(req.result);
       reader.onerror = function () {
         alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+        callback(this.error.name, true);
       };
       reader.onload = function () {
         callback(this.result);
@@ -730,7 +732,11 @@ function loadFile(directory, filename, filetype, callback, location) {
     loadSpinner.classList.add('shown');
     dropboxClient.readFile(filePath, function(e, d) {
       loadSpinner.classList.remove('shown');
-      callback(d);
+      if (!e) {
+        callback(d);
+      } else {
+        callback(e.status, true);
+      }
     });
   }
 }
@@ -810,6 +816,12 @@ function watchDocument(filetype) {
     rawEditor.addEventListener('blur', function() {
       prettyPrint();
     });
+  } else {
+    doc.addEventListener('input', function() {
+      if (getSettings('autosave') != 'false') {
+        saveFromEditor(false, false);
+      }    
+    });    
   }
 }
 
