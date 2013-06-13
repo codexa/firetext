@@ -98,7 +98,8 @@ function init() {
         loadSpinner.classList.remove('shown');
       }
     } else {
-      nav('welcome');    
+      nav('welcome');
+      loadSpinner.classList.remove('shown');  
     }
   } else {
     nav('welcome');
