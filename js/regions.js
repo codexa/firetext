@@ -97,5 +97,11 @@ function tab(list, name) {
       document.querySelector('.selected').classList.remove('selected');
     }
     document.getElementById('tab-'+name).classList.add('selected');
+    
+    /* Remove this section when porting to other projects */
+    if (name == 'raw') {
+      prettyPrint();
+    }
+    /* End of customized section */
   }
 }

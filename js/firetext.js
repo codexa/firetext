@@ -679,7 +679,6 @@ function loadToEditor(directory, filename, filetype, location) {
           doc.innerHTML = content;
           rawEditor.textContent = content;
           tabRaw.classList.remove('hidden');  
-          prettyPrint();
           break;
       }             
     
@@ -801,7 +800,6 @@ function watchDocument(filetype) {
   if (filetype == '.html') {
     doc.addEventListener('input', function() {
       updateViews(rawEditor, doc.innerHTML, 'text');
-      prettyPrint();
     });
         
     // Add listener to update design
