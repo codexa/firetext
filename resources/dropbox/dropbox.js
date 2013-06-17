@@ -6,5 +6,5 @@ dropAPI.client = new Dropbox.Client({
 
 dropAPI.client.authDriver(new Dropbox.Drivers.Popup({
   rememberUser: true,
-  receiverUrl: "http://codexa.co.nf/firetext/dropbox-success/"
+  receiverUrl: "http://firetext.codexa.org/dropbox-success/"
 }));
