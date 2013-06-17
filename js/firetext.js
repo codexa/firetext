@@ -118,7 +118,7 @@ function initSharing() {
   if (getSettings('dropbox.enabled') == 'true') {
     // Auth
     dropAPI.client.authenticate(function(error, client) {
-      if (!error) {
+      if (!error && client) {
         // Set client
         dropboxClient = client;
         window.dispatchEvent(dropboxAuthed);
@@ -779,7 +779,7 @@ function initEditor() {
   doc = document.createElement('DIV');
   doc.setAttribute('contentEditable', 'true');
   doc.id = 'tempEditDiv';
-  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px);');
+  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px); word-wrap: break-word;');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
   editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
