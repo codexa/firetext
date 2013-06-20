@@ -6,7 +6,7 @@
   "launch_path": "/index.html",
   "developer": {
     "name": "Codexa",
-    "url": "http://firetext.codexa.org/"
+    "url": "http://www.codexa.org"
   },
   "permissions": {
     "device-storage:sdcard":{ 
