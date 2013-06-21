@@ -26,4 +26,4 @@ Cooming soon:
 - Format support for .doc, .rtf, .odt, and .fodt.
 - Night mode.
 
-Go to <a href="http://firetext.co.nf/">Firetext.co.nf</a> for more.
+Go to <a href="http://firetext.codexa.org">firetext.codexa.org</a> for more.
