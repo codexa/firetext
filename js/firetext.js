@@ -1175,19 +1175,6 @@ function processActions(eventAttribute, target) {
       }
       browserFrame.src = browseLocation;
       nav('browser');
-      editFullScreen(false);
-      browserFrame.addEventListener('mozbrowsertitlechange', function (e) {
-        document.getElementById('browserTitle').textContent = e.detail;      
-      });
-      browserFrame.addEventListener('mozbrowserclose', function () {
-        navBack();      
-      });
-      browserFrame.addEventListener('mozbrowserloadstart', function() {
-        document.getElementById('browserSpinner').classList.add('shown');
-      }); 
-      browserFrame.addEventListener('mozbrowserloadend', function() {
-        document.getElementById('browserSpinner').classList.remove('shown');
-      });
     } else if (calledFunction == 'justify') {
       var justifyDirection = document.getElementById('justify-select').value;
       if (justifyDirection == 'Justified') {

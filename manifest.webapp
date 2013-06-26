@@ -12,9 +12,6 @@
     "device-storage:sdcard":{ 
       "description": "Required for document storage.",
       "access": "readwrite"
-    },
-    "browser": {
-      "description": "Required to authorize sharing, display about."
     }
   },
   "locales": {

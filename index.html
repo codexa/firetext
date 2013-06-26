@@ -372,13 +372,9 @@
     </div>
   </section>
 
-  <section role="region" id="browser">
-    <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
-      <h1 id="browserTitle">Browser</h1>
-    </header>
-    <div class="spinner center" id="browserSpinner"><div></div></div>
-    <iframe src="" role="main" class="header-only" mozbrowser id="browserFrame" remote></iframe>
+  <section role="dialog" id="browser">
+    <button data-click="navBack" class="top-button">Back</button>
+    <iframe src="" role="main" id="browserFrame" remote></iframe>
   </section>
 
   <section role="region" id="settings" class="skin-dark">

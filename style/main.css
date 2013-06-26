@@ -171,11 +171,21 @@ legend.action select {
 
 /* Browser */
 
+.top-button {
+  border-radius: 0;
+  border: none;
+  outline: none;
+  margin: 0;
+}
+
 #browserFrame {
   width: 100%;
   border: none;
   outline: none;
+  height: calc(100% - 3.9rem);
 }
+
+/* Spinner (Throbber) */
 
 .spinner {
   border-radius: 5px;
