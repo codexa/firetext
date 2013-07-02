@@ -1,6 +1,6 @@
 {
   "name": "Firetext",
-  "description": "A word processor for Firefox OS",
+  "description": "A Word Processor for Firefox OS",
   "version": "0.2.1",
   "type": "privileged",
   "launch_path": "/index.html",
@@ -62,7 +62,8 @@
   },
   "default_locale": "en-US",
   "icons": {
-    "60": "/style/icons/app_icon.png",
-    "128": "/style/icons/app_logo.png"
+    "64": "/style/icons/ic/app_logo64.png",
+    "128": "/style/icons/ic/app_logo128.png",
+    "256": "/style/icons/ic/app_logo256.png"
   }
 }
