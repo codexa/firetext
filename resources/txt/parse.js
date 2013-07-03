@@ -8,7 +8,7 @@ txt.parse = function (data, type) {
   if (type == "HTML") {
     var tmp = document.createElement("DIV");
     tmp.innerHTML = output;
-    output =  "</pre>" +tmp.textContent + "</pre>";
+    output = tmp.textContent;
     output = data.replace(/\n/gi, '<br/>');
     return output;
   }
@@ -22,7 +22,10 @@ txt.encode = function (data, type) {
   if (type == "HTML") {
     output = data.replace(/<br\/>/gi, '\n');
     output = output.replace(/<br>/gi, '\n');
-    return output;
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = output;
+    return tmp.textContent;
+    return tmp;
   }
   // Didn't convert to TXT, return false
   return false;
