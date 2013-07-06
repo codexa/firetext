@@ -11,7 +11,7 @@
 ------------------------*/
 var loadSpinner, editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, openDialogDropboxList, welcomeDocsList, openDialogDropboxArea, editState, rawEditor, tabRaw, tabDesign;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
-var dropboxClient, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, dropboxAuthed = new CustomEvent('dropboxAuthed');;
+var dropboxClient, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, dropboxAuthed = new CustomEvent('dropboxAuthed');
 var storage = navigator.getDeviceStorage("sdcard");
 
 /* Start
