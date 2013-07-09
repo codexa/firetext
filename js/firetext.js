@@ -131,6 +131,8 @@ function initSharing() {
       } else {
         dropboxDocsList.style.display = 'none';
         openDialogDropboxArea.style.display = 'none';
+        document.getElementById('locationLegend').style.display = 'none';
+        document.getElementById('locationLegend').value = 'Internal';
       }
     });    
   } else {
