@@ -1172,6 +1172,8 @@ function processActions(eventAttribute, target) {
       var browserFrame = document.getElementById('browserFrame');
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
         browseLocation = 'resources/about.html'
+      } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
+        browseLocation = 'http://firetext.codexa.org/support'
       } else {
         browseLocation = target.getAttribute(eventAttribute + '-location');
       }
