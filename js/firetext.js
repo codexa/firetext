@@ -1010,6 +1010,7 @@ function settings() {
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
+  var nightmodeEnabled = document.querySelector('#nightmode-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   
   /* Version 0.3
@@ -1053,6 +1054,16 @@ function settings() {
   }
   autozenEnabled.onchange = function () {
     saveSettings('autozen', this.checked);
+  }
+  
+  // Night Mode
+  if (getSettings('nightmode') == 'true') {
+    nightmodeEnabled.setAttribute('checked', '');
+  } else {  
+    nightmodeEnabled.removeAttribute('checked');
+  }
+  nightmodeEnabled.onchange = function () {
+    saveSettings('nightmode', this.checked);
   }
   
   // Dropbox
