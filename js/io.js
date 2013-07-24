@@ -23,7 +23,7 @@ function startIO(api) {
         startIO('file');
         return;
       }
-    }
+    };
 
     request.onerror = function () {
       deviceAPI = null;
@@ -31,9 +31,128 @@ function startIO(api) {
       alert("Unable to get the space used by the SDCard: " + this.error);
       startIO('file');
       return;
-    }
+    };
   } else {
     // Check for File API
+  }
+}
+
+
+/* Directory IO
+------------------------*/
+function docsInFolder(directory, callback) {
+  if (directory) {
+    // List of documents
+    var docs = [];
+  
+    if (deviceAPI == 'deviceStorage') {
+      // Get all the docs in the specified directory
+      var cursor = storage.enumerate(directory.substring(0, -1));
+    
+      cursor.onerror = function() {
+        if (cursor.error.name == 'TypeMismatchError') {
+          saveFile(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+            deleteFile('firetext.temp');
+          });
+          updateDocLists();
+          return;
+        } else if (cursor.error.name == 'SecurityError') {
+          alert('Please allow Firetext to access your SD card.');
+        } else {
+          alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+        }
+      };
+      cursor.onsuccess = function() {
+        // Get file
+        var file = cursor.result;
+      
+        // Base case
+        if (!cursor.result) {
+          // Finished
+          callback(docs);
+          return;
+        }
+      
+        // Only get documents
+        if (file.type !== "text/plain" && file.type !== "text/html") { // && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+          cursor.continue();
+          return;
+        }      
+      
+        // At this point, the file should be vaild!    
+        // Get file properties
+        var directoryReplace = new RegExp((directory), 'i');
+        var filename = "";
+        var filetype = "";
+        switch(file.type) {
+          case "text\/plain":
+            filename = file.name.substring(0, file.name.length-4).replace(directoryReplace, '');
+            filetype = ".txt";
+            break;
+          case "text\/html":
+            filename = file.name.substring(0, file.name.length-5).replace(directoryReplace, '');
+            filetype = ".html";
+            break;
+          case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            filename = file.name.substring(0, file.name.length-5).replace(directoryReplace, '');
+            filetype = ".docx";
+            break;
+        }
+      
+        // Add to list of docs
+        docs.push([directory, filename, filetype]);
+      
+        // Check next file
+        cursor.continue();
+      };
+    } else if (deviceAPI == 'file') {
+      // TODO
+    } else {
+      alert('Firetext can not find an internal storage method :(');
+    }
+    return docs;
+  }
+}
+
+function dropboxDocsInFolder(client, directory, callback) {
+  if (directory && client.readdir(directory)) {
+    var docs = client.readdir(directory, function(error, entries) {
+      if (!error) {
+        for (var i = 0; i < entries.length; i++) {
+          var dir;
+          if (directory[directory.length - 1] != '/') {
+            dir = (directory + '/');
+          } else {
+            dir = directory;
+          }
+          entries[i] = (dir + entries[i]);
+          entries[i] = fileAddress(entries[i]);
+          
+          // Only get documents
+          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm') { // && entries[i][2] != '.docx') {
+            entries.splice(i, 1);
+            i = (i - 1);
+          }
+        }
+        // Remove folders
+        for (var i = 0; i < entries.length; i++) {
+          if (Array.isArray(entries[i]) == false | entries[i][2].length == 1 | entries[i][2][0] != '.') {
+            entries.splice(i, 1);
+          }
+        }
+        for (var i = 0; i < entries.length; i++) {
+          if (Array.isArray(entries[i]) == false | entries[i][2].length <= 1 | entries[i][2][0] != '.') {
+            entries.splice(i, 1);
+            i = (i - 1);
+          }
+        }
+        callback(entries);
+      } else {
+        client.mkdir(directory, function() {
+          callback(dropboxDocsInFolder(client, directory, function(l) { return l; }));
+        });
+      }
+    });
   }
 }
 
@@ -340,3 +459,20 @@ function renameFile(directory, name, type, newname, location) {
     deleteFile(fullName, location);
   }, location);
 }
+
+function fileAddress(path) {
+  var file = new Array();
+  file[0] = path.substring(0, (path.lastIndexOf('/') + 1));
+  file[1] = path.substring((path.lastIndexOf('/') + 1), path.lastIndexOf('.')).replace(/\//, '');
+  file[2] = path.substring(path.lastIndexOf('.'), path.length).replace(/\//, '');
+  if (file[1] == '') {
+    file[0] = (file[0] + file[2]);
+    if (file[0][file[0].length - 1] != '/') {
+      file[0] = (file[0] + '/');
+    }
+    file[2] = '';
+    file[1] = '';
+  }
+  return [file[0], file[1], file[2]];
+}
+
