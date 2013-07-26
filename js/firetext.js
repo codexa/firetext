@@ -20,7 +20,7 @@ var welcomeRecentsArea, welcomeRecentsList;
 
 // Dropbox
 var welcomeDropboxArea, welcomeDropboxList, openDialogDropboxArea, openDialogDropboxList;
-var dropboxClient, dropboxAuthed = new CustomEvent('dropboxAuthed');
+var dropboxClient = undefined, dropboxAuthed = new CustomEvent('dropboxAuthed');
 
 // Google Drive
 var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogleList;
@@ -135,32 +135,35 @@ function init() {
 
 function initSharing() {
   // Dropbox
-  dropAPI.client.onError.addListener(function (error) {
-    if (window.console) {
-      console.error(error);
-      dropboxError(error);
-    }
-  });
   if (getSettings('dropbox.enabled') == 'true') {
-    // Auth
-    dropAPI.client.authenticate(function(error, client) {
-      if (!error && client) {
-        // Set client
-        dropboxClient = client;
-        window.dispatchEvent(dropboxAuthed);
-        
-        // Code to get dropbox files
-        welcomeDropboxArea.style.display = 'block';
-        openDialogDropboxArea.style.display = 'block';
-        locationLegend.style.display = 'inline-block';
-        updateDocLists();
-      } else {
-        welcomeDropboxArea.style.display = 'none';
-        openDialogDropboxArea.style.display = 'none';
-        locationLegend.style.display = 'none';
-        locationLegend.value = 'Internal';
+    // Error Handler
+    dropAPI.client.onError.addListener(function (error) {
+      if (window.console) {
+        console.error(error);
+        dropboxError(error);
       }
-    });    
+    });
+    if (!dropboxClient) {
+      // Auth
+      dropAPI.client.authenticate(function(error, client) {
+        if (!error && client) {
+          // Set client
+          dropboxClient = client;
+          window.dispatchEvent(dropboxAuthed);
+          
+          // Code to get dropbox files
+          welcomeDropboxArea.style.display = 'block';
+          openDialogDropboxArea.style.display = 'block';
+          locationLegend.style.display = 'inline-block';
+          updateDocLists();
+        } else {
+          welcomeDropboxArea.style.display = 'none';
+          openDialogDropboxArea.style.display = 'none';
+          locationLegend.style.display = 'none';
+          locationLegend.value = 'Internal';
+        }
+      });   
+    } 
   } else {
     locationLegend.style.display = 'none';
     locationLegend.value = 'Internal';
@@ -170,7 +173,7 @@ function initSharing() {
     // Sign out
     if (dropboxClient) {
       dropAPI.client.signOut();
-      dropboxClient = null;
+      dropboxClient = undefined;
     }
     
     // Close any open Dropbox files
@@ -189,7 +192,7 @@ function initSharing() {
   }
   
   // Google Drive
-  if (getSettings('gdrive.enabled') == true) {
+  if (getSettings('gdrive.enabled') == 'true') {
     // Code to get Google Drive files
     welcomeGoogleArea.style.display = 'block';
     openDialogGoogleArea.style.display = 'block';
@@ -710,12 +713,7 @@ function settings() {
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
   var nightmodeEnabled = document.querySelector('#nightmode-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
-  
-  /* Version 0.3
-  var gDriveEnabled = document.querySelector('#gDrive-enabled input');
-  var gDriveSettings = document.querySelector('#gDrive-settings-list');
-  var gDriveUser = document.querySelector('#gDrive-settings-list'); 
-  */
+  var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
   
   // Autosave
   if (getSettings('autosave') != 'false') {
@@ -777,11 +775,11 @@ function settings() {
   
   // Google Drive
   if (getSettings('gdrive.enabled') == 'true') {
-    gDriveEnabled.setAttribute('checked', '');
+    gdriveEnabled.setAttribute('checked', '');
   } else {  
-    gDriveEnabled.removeAttribute('checked');
+    gdriveEnabled.removeAttribute('checked');
   }
-  gDriveEnabled.onchange = function () {
+  gdriveEnabled.onchange = function () {
     saveSettings('gdrive.enabled', this.checked);
     initSharing();
   }
