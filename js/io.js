@@ -6,7 +6,7 @@ var storage, deviceAPI;
 /* Init
 ------------------------*/
 function startIO(api) {
-  if (navigator.getDeviceStorage('sdcard') && api != 'file') {
+  if (window.navigator.getDeviceStorage && api != 'file') {
     // Use deviceStorage API
     deviceAPI = 'deviceStorage';
     storage = navigator.getDeviceStorage('sdcard');
@@ -34,7 +34,16 @@ function startIO(api) {
     };
   } else {
     // Check for File API
+    
+    // If nonexistent, disable internal storage
+    deviceAPI = 'none';    
+    disableInternalStorage();
   }
+}
+
+function disableInternalStorage() {
+  welcomeDeviceArea.style.display = 'none';
+  openDialogDeviceArea.style.display = 'none';
 }
 
 
@@ -108,7 +117,7 @@ function docsInFolder(directory, callback) {
     } else if (deviceAPI == 'file') {
       // TODO
     } else {
-      alert('Firetext can not find an internal storage method :(');
+      disableInternalStorage();
     }
     return docs;
   }
@@ -207,7 +216,7 @@ function createFromDialog() {
     } else if (deviceAPI == 'file') {
       // TODO
     } else {
-      alert('Firetext can not find an internal storage method :(');
+      disableInternalStorage();
     }
   } else if (location == 'dropbox') {
     directory = ('/' + directory);
@@ -222,7 +231,6 @@ function createFromDialog() {
   // Clear file fields
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
-  document.getElementById('createDialogFileLocation').value = 'Internal';
   extIcon();
 }
 
@@ -300,7 +308,7 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
     } else if (deviceAPI == 'file') {
       // TODO
     } else {
-      alert('Firetext can not find an internal storage method :(');
+      disableInternalStorage();
     }
   } else if (location == 'dropbox' && dropboxClient) {
     if (showSpinner != false) {
@@ -415,7 +423,7 @@ function loadFile(directory, filename, filetype, callback, location) {
     } else if (deviceAPI == 'file') {
       // TODO
     } else {
-      alert('Firetext can not find an internal storage method :(');    
+      disableInternalStorage();
     }
   } else if (location = 'dropbox' && dropboxClient) {
     loadSpinner.classList.add('shown');
@@ -445,7 +453,7 @@ function deleteFile(name, location) {
     } else if (deviceAPI == 'file') {
       // TODO
     } else {
-      alert('Firetext can not find an internal storage method :(');    
+      disableInternalStorage();
     }
   } else if (location == 'dropbox' && dropboxClient) {
     dropboxClient.remove(path, function(e) { });

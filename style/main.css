@@ -23,6 +23,14 @@ html, body {
   overflow: scroll;
 }
 
+.redAlert {
+  color: red;
+  font-size: 2rem;
+  text-align: center;
+  display: block;
+  margin: 1rem;
+}
+
 /* Lists */
 
 [data-type="list"], [data-type="edit"] {

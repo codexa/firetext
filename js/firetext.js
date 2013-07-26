@@ -12,7 +12,8 @@
 ------------------------*/
 // Misc
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
-var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox, locationLegend;
+var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
+var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -45,6 +46,7 @@ function init() {
   toolbar = document.getElementById('edit-zone');
   editWindow = document.getElementById('edit');
   locationLegend = document.getElementById('locationLegend');
+  locationSelect = document.getElementById('createDialogFileLocation');
   
   // Lists
   welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -115,10 +117,15 @@ function init() {
     if (getSettings('autoload.wasEditing') == 'true') {
       // Wait until Dropbox is authenticated
       if (lastDoc[3] == 'dropbox') {
-        window.addEventListener('dropboxAuthed', function() {
-          loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-          loadSpinner.classList.remove('shown');
-        });
+        if (getSettings('dropbox.enabled') == 'true') {
+          window.addEventListener('dropboxAuthed', function() {
+            loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+            loadSpinner.classList.remove('shown');
+          });
+        } else {
+          nav('welcome');
+          loadSpinner.classList.remove('shown');         
+        }
       } else {
         loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
         loadSpinner.classList.remove('shown');
@@ -154,19 +161,25 @@ function initSharing() {
           // Code to get dropbox files
           welcomeDropboxArea.style.display = 'block';
           openDialogDropboxArea.style.display = 'block';
-          locationLegend.style.display = 'inline-block';
+          locationDropbox = document.createElement('option');
+          locationDropbox.textContent = 'Dropbox';
+          locationSelect.appendChild(locationDropbox);
           updateDocLists();
         } else {
           welcomeDropboxArea.style.display = 'none';
           openDialogDropboxArea.style.display = 'none';
-          locationLegend.style.display = 'none';
-          locationLegend.value = 'Internal';
+          if (locationSelect.value == 'Dropbox') {
+            locationSelect.removeChild(locationDropbox);
+            locationDropbox = undefined;
+          }
         }
       });   
     } 
   } else {
-    locationLegend.style.display = 'none';
-    locationLegend.value = 'Internal';
+    if (locationSelect.value == 'Dropbox') {
+      locationSelect.removeChild(locationDropbox);
+      locationDropbox = undefined;
+    }
     welcomeDropboxArea.style.display = 'none';
     openDialogDropboxArea.style.display = 'none';
     
@@ -196,11 +209,15 @@ function initSharing() {
     // Code to get Google Drive files
     welcomeGoogleArea.style.display = 'block';
     openDialogGoogleArea.style.display = 'block';
-    locationLegend.style.display = 'inline-block';
+    locationGoogle = document.createElement('option');
+    locationGoogle.textContent = 'Google Drive';
+    locationSelect.appendChild(locationGoogle);
     updateDocLists();
   } else {
-    locationLegend.style.display = 'none';
-    locationLegend.value = 'Internal';
+    if (locationSelect.value == 'Google Drive') {
+      locationSelect.removeChild(locationGoogle);
+      locationGoogle = undefined;
+    }
     welcomeGoogleArea.style.display = 'none';
     openDialogGoogleArea.style.display = 'none';
     
@@ -211,6 +228,25 @@ function initSharing() {
         RecentDocs.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3]);
       }
     }      
+  }
+  
+  // Location Select
+  if (locationSelect.length == 0) {
+    document.getElementById('add-dialog-create-button').style.pointerEvents = 'none';
+    document.getElementById('add-dialog-create-button').style.color = '#999';
+    var noStorageNotice = document.createElement('div');
+    noStorageNotice.id = 'no-storage-notice';
+    noStorageNotice.classList.add('redAlert');
+    noStorageNotice.textContent = 'You have not set up a storage method!';
+    document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
+    document.querySelector('#add [role="main"]').style.display = 'none';
+  } else {
+    document.getElementById('add-dialog-create-button').style.pointerEvents = 'auto';
+    document.getElementById('add-dialog-create-button').style.color = 'white';
+    document.querySelector('#add [role="main"]').style.display = 'block';
+    if (document.getElementById('no-storage-notice')) {
+      document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
+    }
   }
 }
 
@@ -917,7 +953,7 @@ function dropboxError(error) {
   switch (error.status) {
   case Dropbox.ApiError.INVALID_TOKEN:
     alert('The session expired, retrying...');
-    dropAPI.client.authenticate(function(error, client) {});    
+    initSharing(); 
     break;
 
   case Dropbox.ApiError.OVER_QUOTA:
