@@ -5,23 +5,37 @@
  * or at http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-'use strict'; 
+'use strict';
+
 
 /* Globals
 ------------------------*/
-var loadSpinner, editor, toolbar, editWindow, docList, dirList, doc, docBrowserDirList, openDialogDropboxList, welcomeDocsList, openDialogDropboxArea, editState, rawEditor, tabRaw, tabDesign;
-var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
-var dropboxClient, dropboxDocsList, dropboxDirList, gDriveDocsList, gDriveDirList, dropboxAuthed = new CustomEvent('dropboxAuthed');
+// Misc
+var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
+var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox, locationLegend;
+
+// Lists
+var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
+var welcomeRecentsArea, welcomeRecentsList;
+
+// Dropbox
+var welcomeDropboxArea, welcomeDropboxList, openDialogDropboxArea, openDialogDropboxList;
+var dropboxClient, dropboxAuthed = new CustomEvent('dropboxAuthed');
+
+// Google Drive
+var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogleList;
+
 
 /* Start
 ------------------------*/ 
 window.addEventListener('DOMContentLoaded', function() { init(); });
 window.setInterval(updateToolbar, 100);
 
+
 /* Initalize
 ------------------------*/
 function init() {
-  // Select important elements for later
+  /* Select important elements for later */
   loadSpinner = document.getElementById('loadSpinner');
   loadSpinner.classList.add('shown');
   tabDesign = document.getElementById('tab-design');
@@ -30,16 +44,26 @@ function init() {
   rawEditor = document.getElementById('rawEditor');
   toolbar = document.getElementById('edit-zone');
   editWindow = document.getElementById('edit');
-  docList = document.getElementById('docs');
-  dirList = document.getElementById('openDialogDirList');
-  dropboxDocsList = document.getElementById('dropbox-docs-list');
-  dropboxDirList = document.getElementById('dropboxDirList');
-  gDriveDocsList  = document.getElementById('gDrive-docs-list');
-  gDriveDirList = document.getElementById('gDriveDirList');
-  docBrowserDirList = document.getElementById('docBrowserDirList');
-  openDialogDropboxArea = document.getElementById('open-dropbox-docs-list');
-  openDialogDropboxList = document.getElementById('openDialogDropboxDirList');
+  locationLegend = document.getElementById('locationLegend');
+  
+  // Lists
   welcomeDocsList = document.getElementById('welcome-docs-list');
+  welcomeDeviceArea = document.getElementById('welcome-device-area');
+  welcomeDeviceList = document.getElementById('welcome-device-list');
+  openDialogDeviceArea = document.getElementById('open-dialog-device-area');
+  openDialogDeviceList = document.getElementById('open-dialog-device-list');
+  welcomeRecentsArea = document.getElementById('welcome-recents-area');
+  welcomeRecentsList = document.getElementById('welcome-recents-list');
+  welcomeDropboxArea = document.getElementById('welcome-dropbox-area');
+  welcomeDropboxList = document.getElementById('welcome-dropbox-list');
+  openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
+  openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
+  welcomeGoogleArea  = document.getElementById('welcome-google-area');
+  welcomeGoogleList = document.getElementById('welcome-google-list');
+  openDialogGoogleArea = document.getElementById('open-dialog-google-area');
+  openDialogGoogleList = document.getElementById('open-dialog-google-list');
+  
+  // Formatting
   bold = document.getElementById('bold');
   italic = document.getElementById('italic');
   underline = document.getElementById('underline');
@@ -126,21 +150,21 @@ function initSharing() {
         window.dispatchEvent(dropboxAuthed);
         
         // Code to get dropbox files
-        dropboxDocsList.style.display = 'block';
+        welcomeDropboxArea.style.display = 'block';
         openDialogDropboxArea.style.display = 'block';
-        document.getElementById('locationLegend').style.display = 'inline-block';
+        locationLegend.style.display = 'inline-block';
         updateDocLists();
       } else {
-        dropboxDocsList.style.display = 'none';
+        welcomeDropboxArea.style.display = 'none';
         openDialogDropboxArea.style.display = 'none';
-        document.getElementById('locationLegend').style.display = 'none';
-        document.getElementById('locationLegend').value = 'Internal';
+        locationLegend.style.display = 'none';
+        locationLegend.value = 'Internal';
       }
     });    
   } else {
-    document.getElementById('locationLegend').style.display = 'none';
-    document.getElementById('locationLegend').value = 'Internal';
-    dropboxDocsList.style.display = 'none';
+    locationLegend.style.display = 'none';
+    locationLegend.value = 'Internal';
+    welcomeDropboxArea.style.display = 'none';
     openDialogDropboxArea.style.display = 'none';
     
     // Sign out
@@ -164,15 +188,29 @@ function initSharing() {
     }  
   }
   
-  /* Version 0.3
   // Google Drive
-  if (getSettings('gDrive.enabled') == true) {
+  if (getSettings('gdrive.enabled') == true) {
     // Code to get Google Drive files
+    welcomeGoogleArea.style.display = 'block';
+    openDialogGoogleArea.style.display = 'block';
+    locationLegend.style.display = 'inline-block';
+    updateDocLists();
   } else {
-    gDriveDocsList.style.display = 'none';
+    locationLegend.style.display = 'none';
+    locationLegend.value = 'Internal';
+    welcomeGoogleArea.style.display = 'none';
+    openDialogGoogleArea.style.display = 'none';
+    
+    // Remove Google recents
+    var driveRecents = RecentDocs.get();
+    for (var i = 0; i < driveRecents.length; i++) {
+      if (driveRecents[i][3] == 'gdrive') {
+        RecentDocs.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3]);
+      }
+    }      
   }
-  */
 }
+
 
 /* Recent Docs
 ------------------------*/
@@ -268,16 +306,17 @@ RecentDocs.remove = function(file, location, merged) {
   }
 }
 
+
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  buildDocList(RecentDocs.get(), [docList], "Recent Documents", 'internal');
+  buildDocList(RecentDocs.get(), [welcomeRecentsList], "Recent Documents", 'internal');
   docsInFolder('Documents/', function(DOCS) {
-    buildDocList(DOCS, [dirList, docBrowserDirList], "Documents Found", 'internal');
+    buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
   });
   if (getSettings('dropbox.enabled') == 'true' && dropboxClient) {
     dropboxDocsInFolder(dropboxClient, '/Documents/', function(DOCS) {
-      buildDocList(DOCS, [dropboxDirList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
+      buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
     });
   }
 }
@@ -422,6 +461,7 @@ function extIcon() {
   }
 }
 
+
 /* Editor
 ------------------------*/ 
 function initEditor() {
@@ -495,27 +535,28 @@ function updateViews(destView, source, contentType) {
   }
 }
 
+
 /* Edit Mode
 ------------------------*/ 
 function editDocs() {
   if (editState == true) {
     updateDocLists();
     editState = false;
-    document.getElementById('recent-docs-list').style.display = 'block';
+    welcomeRecentsArea.style.display = 'block';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
     navBack();
   } else {    
-    document.getElementById('recent-docs-list').style.display = 'none';
+    welcomeRecentsArea.style.display = 'none';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
     editState = true;
     
     // Code to build list
     docsInFolder('Documents/', function(result) {
-      buildEditDocList(result, docBrowserDirList, 'Documents found', 'internal');
+      buildEditDocList(result, welcomeDeviceList, 'Documents found', 'internal');
     });
     if (getSettings('dropbox.enabled') == 'true' && dropboxClient) {
       dropboxDocsInFolder(dropboxClient, '/Documents', function(DOCS) {
-        buildEditDocList(DOCS, dropboxDirList, "Dropbox Documents Found", 'dropbox');
+        buildEditDocList(DOCS, welcomeDropboxList, "Dropbox Documents Found", 'dropbox');
       });
     }
     watchCheckboxes();
@@ -616,6 +657,7 @@ function deleteSelected(confirmed) {
   }
 }
 
+
 /* Format
 ------------------------*/ 
 function formatDoc(sCmd, sValue) {
@@ -647,6 +689,7 @@ function updateToolbar() {
     }
   }
 }
+
 
 /* Settings
 ------------------------*/ 
@@ -732,14 +775,18 @@ function settings() {
     initSharing();
   }
   
-  /* Version 0.3
   // Google Drive
-  gDriveEnabled.setAttribute('checked', getSettings('gDrive.enabled'))
-  gDriveEnabled.onchange = function togglegDrive() {
-    saveSettings('gDrive.enabled', this.checked);
+  if (getSettings('gdrive.enabled') == 'true') {
+    gDriveEnabled.setAttribute('checked', '');
+  } else {  
+    gDriveEnabled.removeAttribute('checked');
   }
-  */
+  gDriveEnabled.onchange = function () {
+    saveSettings('gdrive.enabled', this.checked);
+    initSharing();
+  }
 }
+
 
 /* Actions (had to do this because of CSP policies)
 ------------------------*/ 
@@ -864,6 +911,7 @@ function processActions(eventAttribute, target) {
     }
   }
 }
+
 
 /* Dropbox
 ------------------------*/ 
