@@ -38,7 +38,7 @@
   -moz-box-sizing: border-box;
   transition: transform 0.3s ease, padding 0.3s ease;
   border-bottom: solid 0.1rem #dbd9d9;
-  color: #000;
+  color: #2c2c2c;
   margin: 0;
   display: block;
   position: relative;

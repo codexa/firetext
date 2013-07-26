@@ -11,7 +11,7 @@
 /* Globals
 ------------------------*/
 // Misc
-var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
+var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
 
@@ -32,11 +32,34 @@ var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogle
 window.addEventListener('DOMContentLoaded', function() { init(); });
 window.setInterval(updateToolbar, 100);
 
+function checkDevice() {
+  var width, height;
+  if (window.screen) {
+    width = window.screen.availWidth;
+    height = window.screen.availHeight;
+  } else if (window.innerWidth && window.innerHeight) {
+    width = window.innerWidth;
+    height = window.innerHeight;
+  } else if (document.body) {
+    width = document.body.clientWidth;
+    height = document.body.clientHeight;
+  }  
+  if (width <= 766) {      
+    deviceType = 'mobile';  
+  } else {
+    deviceType = 'desktop';
+  }
+}
+
 
 /* Initalize
 ------------------------*/
 function init() {
+  // Find device type
+  checkDevice();
+
   /* Select important elements for later */
+  // Misc
   loadSpinner = document.getElementById('loadSpinner');
   loadSpinner.classList.add('shown');
   tabDesign = document.getElementById('tab-design');
@@ -924,6 +947,14 @@ function processActions(eventAttribute, target) {
       } else {
         browseLocation = target.getAttribute(eventAttribute + '-location');
       }
+      
+      // Open a new tab on desktop browsers
+      if (deviceType == 'desktop') {
+        window.open(browseLocation);
+        return;
+      }
+      
+      // Open the internal browser on mobile
       browserFrame.src = browseLocation;
       nav('browser');
     } else if (calledFunction == 'justify') {
