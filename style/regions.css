@@ -14,6 +14,7 @@ section[role="region"], section[role="dialog"] {
 section[role="region"] {
   visibility: hidden;
   opacity: .99;  
+  -webkit-transform: translateX(-100%); 
   transform: translateX(-100%); 
 }
 
@@ -21,23 +22,27 @@ section[role="region"].current, [role="region"].parent, [role="dialog"].parent {
   visibility: visible;
   opacity: 1;
   z-index: 100;  
+  -webkit-transform: none;
   transform: none;
 }
 
 section[role="region"].current ~ section[role="region"] {  
   opacity: .99;  
+  -webkit-transform: translateX(100%);
   transform: translateX(100%);
 }
 
 section[role="dialog"] {
   visibility: hidden;
   opacity: .99;  
+  -webkit-transform: translateY(100%);
   transform: translateY(100%);
 }
 
 section[role="dialog"].current {
   visibility: visible;
   opacity: 1;  
+  -webkit-transform: none; 
   transform: none; 
 }
 
@@ -45,19 +50,23 @@ section[role="dialog"].current {
 [data-type="sidebar"] {
   opacity: 0;
   visibility: collapse;
+  -webkit-transition: opacity .4s, .4s visibility 0s;
   transition: opacity .4s, .4s visibility 0s;
 }
 
 [data-type="sidebar"].active {
   opacity: 1;
   visibility: visible;
+  -webkit-transition: opacity .4s, 0s visibility 0s;
   transition: opacity .4s, 0s visibility 0s;
 }
 
 [data-state="drawer"].current {
+  -webkit-transform: translateX(80%) !important;
   transform: translateX(80%) !important;
 }
 
 [data-state="drawer"][data-position="right"].current {
+  -webkit-transform: translateX(-80%) !important;
   transform: translateX(-80%) !important;
 }
