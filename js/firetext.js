@@ -61,7 +61,7 @@ function init() {
   /* Select important elements for later */
   // Misc
   loadSpinner = document.getElementById('loadSpinner');
-  loadSpinner.classList.add('shown');
+  spinner();
   tabDesign = document.getElementById('tab-design');
   tabRaw = document.getElementById('tab-raw');
   editor = document.getElementById('editor');
@@ -143,27 +143,27 @@ function init() {
         if (getSettings('dropbox.enabled') == 'true') {
           window.addEventListener('dropboxAuthed', function() {
             loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-            loadSpinner.classList.remove('shown');
+            spinner('hide');
           });
         } else {
           nav('welcome');
-          loadSpinner.classList.remove('shown');         
+          spinner('hide');         
         }
       } else {
         loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-        loadSpinner.classList.remove('shown');
+        spinner('hide');
       }
     } else {
       nav('welcome');
-      loadSpinner.classList.remove('shown');  
+      spinner('hide'); 
     }
   } else {
     nav('welcome');
-    loadSpinner.classList.remove('shown');
+    spinner('hide');
   }  
 }
 
-function initSharing() {
+function initSharing() {  
   // Dropbox
   if (getSettings('dropbox.enabled') == 'true') {
     // Error Handler
@@ -196,7 +196,7 @@ function initSharing() {
             locationDropbox = undefined;
           }
         }
-      });   
+      });
     } 
   } else {
     if (locationSelect.value == 'Dropbox') {
@@ -1019,6 +1019,14 @@ function clearCreateForm() {
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
   extIcon();
+}
+
+function spinner(state) {
+  if (state == 'hide') {
+    loadSpinner.classList.remove('shown');  
+  } else {
+    loadSpinner.classList.add('shown');  
+  }
 }
 
 function editFullScreen(enter) {
