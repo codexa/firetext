@@ -245,7 +245,7 @@ legend.action select {
   opacity: 0;
   display: inline-block;
   visibility: hidden;
-  transition: opacity .3s, .3s visibility 0s, transform .3s;
+  transition: opacity .3s, .3s visibility 0s;
 }
 
 .spinner.center {
@@ -266,10 +266,27 @@ legend.action select {
   background-position: center;
   width: 33px;
   height: 33px;
-  animation: .5s spin infinite steps(30);
+  -webkit-animation: spin .5s steps(30) infinite;
+  animation: spin .5s steps(30) infinite;
 }
 
 @keyframes spin{
+  0%{
+    -webkit-transform:rotate(0turn);
+    -moz-transform:rotate(0turn);
+    -ms-transform:rotate(0turn);
+    transform:rotate(0turn)
+  }
+
+  100%{
+    -webkit-transform:rotate(1turn);
+    -moz-transform:rotate(1turn);
+    -ms-transform:rotate(1turn);
+    transform:rotate(1turn)
+  }
+}
+
+@-webkit-keyframes spin{
   0%{
     -webkit-transform:rotate(0turn);
     -moz-transform:rotate(0turn);
