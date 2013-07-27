@@ -689,7 +689,7 @@ function deleteSelected(confirmed) {
   if (editState == true) {
     // Get selected files
     var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
-    var selected = Array.filter( checkboxes, function(elm) {
+    var selected = Array.prototype.filter.call( checkboxes, function(elm) {
       return elm.checked;
     });
     
