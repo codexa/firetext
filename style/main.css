@@ -115,6 +115,7 @@ section.skin-organic > header:first-child h1 {
 [data-type="list"] aside.icon.icon-arrow {
   background-image: url(icons/navic/arrow.svg);
   background-position: center;
+  background-size: auto 30%;
 }
 
 [data-type="list"] aside.icon.icon-dropbox {
