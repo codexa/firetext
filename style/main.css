@@ -10,11 +10,13 @@ html, body {
   background: black;
 }
 
-@font-face {
-  font-family: 'Philosopher';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Philosopher'), url(fonts/philosopher.woff) format('woff');
+.firetext {
+  text-indent: -9999px;
+  background-image: url(icons/app/firetext.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto 40%;
+  vertical-align: middle;
 }
 
 [role="main"].header-only {
