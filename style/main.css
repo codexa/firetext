@@ -62,12 +62,12 @@ section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
 section > header:first-child button:not(:disabled):active .icon:after,
 section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
 section > header:first-child menu[type="toolbar"] button:not(:disabled):active {
-  background: #999 !important;
+  background: #dfdfdf !important;
 }
 
 section > header:first-child > button .icon:after,
 section > header:first-child > a .icon:after {
-  background: #dfdfdf;
+  background: #eee
 }
 
 section.skin-organic > header:first-child h1 {
@@ -115,6 +115,7 @@ section.skin-organic > header:first-child h1 {
 [data-type="list"] aside.icon.icon-arrow {
   background-image: url(icons/navic/arrow.svg);
   background-position: center;
+  background-size: auto 30%;
 }
 
 [data-type="list"] aside.icon.icon-dropbox {
