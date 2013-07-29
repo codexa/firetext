@@ -265,7 +265,7 @@ function initSharing() {
     document.querySelector('#add [role="main"]').style.display = 'none';
   } else {
     document.getElementById('add-dialog-create-button').style.pointerEvents = 'auto';
-    document.getElementById('add-dialog-create-button').style.color = 'white';
+    document.getElementById('add-dialog-create-button').style.color = 'auto';
     document.querySelector('#add [role="main"]').style.display = 'block';
     if (document.getElementById('no-storage-notice')) {
       document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
