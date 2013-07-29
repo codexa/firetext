@@ -62,8 +62,8 @@
   },
   "default_locale": "en-US",
   "icons": {
-    "64": "/style/icons/ic/app_logo64.png",
-    "128": "/style/icons/ic/app_logo128.png",
-    "256": "/style/icons/ic/app_logo256.png"
+    "64": "/style/icons/app/64.png",
+    "128": "/style/icons/app/128.png",
+    "256": "/style/icons/app/256.png"
   }
 }

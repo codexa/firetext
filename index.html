@@ -96,9 +96,8 @@
       <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-menu">Menu</span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-compose">New</span></button>
-        <button data-click="editDocs"><span class="icon icon-edit">Edit</span></button>
       </menu>
-      <h1 style="font-family: 'Philosopher';">Firetext</h1>
+      <h1 style="font-family: 'Philosopher';"><img src="style/icons/app/firetext.svg" height="18px" alt="Firetext"></h1>
     </header>
     <div role="edit" data-type="edit" id="welcome-edit-mode">
       <section>
@@ -147,7 +146,7 @@
     <div role="main" class="header-only">
       <div class="form">
         <br>
-        <img src="style/icons/FiretextExtic.png" id="extIconFile" height="150px" style="display:block; margin: 10px auto;"/>
+        <img alt="" src="style/icons/extensions/default.png" id="extIconFile" height="150px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
           <legend id="fileTypeLegend" class="action">
             <select name="File type" id="createDialogFileType" data-change="extIcon">
@@ -231,8 +230,8 @@
     <header>
       <button data-click="nav" data-click-location="welcome"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
-        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
-        <button data-click="fullscreen"><span class="icon" style="background-image: url(style/icons/toolbar/fs.png);">Fullscreen</span></button>
+        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon" style="background-image: url(style/icons/editor/save.png);">Save</span></button>
+        <button data-click="fullscreen"><span class="icon" style="background-image: url(style/icons/editor/fs.png);">Fullscreen</span></button>
         <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu">Menu</span></button>
       </menu>
       <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
@@ -245,10 +244,10 @@
             <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
-                <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-                <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-                <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-                <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
+                <li><button class="sticky" id="bold" style="background-image: url(style/icons/editor/white/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
+                <li><button class="sticky" id="italic" style="background-image: url(style/icons/editor/white/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
+                <li><button class="sticky" id="underline" style="background-image: url(style/icons/editor/white/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button style="background-image: url(style/icons/editor/white/more.png);" data-click="nav" data-click-location="format">Format</button></li>
               </ul>
               <ul>
                 <!-- Version 0.3
@@ -265,10 +264,10 @@
           </div>
         </li>
         <div class="tabToolbar">
-          <img src="style/icons/navic/menu.png" alt="" class="tabButton"  data-click="sidebar" data-click-id="main" />
-          <img src="style/icons/navic/close.png" alt="" class="tabButton" data-click="nav" data-click-location="welcome" style="border-right: 1px solid black;" />
-          <img src="style/icons/navic/efs.png" alt="" class="tabButton" data-click="fullscreen" />
-          <img src="style/icons/navic/save.png" alt="" class="tabButton" data-click="saveFromEditor" id="zenSaveButton" />
+          <img src="style/icons/misc/menu.svg" alt="" class="tabButton"  data-click="sidebar" data-click-id="main" />
+          <img src="style/icons/misc/close.png" alt="" class="tabButton" data-click="nav" data-click-location="welcome" style="border-right: 1px solid black;" />
+          <img src="style/icons/editor/efs.png" alt="" class="tabButton" data-click="fullscreen" />
+          <img src="style/icons/editor/save.png" alt="" class="tabButton" data-click="saveFromEditor" id="zenSaveButton" />
         </div>
       </ul>
     </div>
@@ -298,28 +297,28 @@
       <article data-type="list">
         <h2>Elements</h2>
         <ul>
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside class="icon" style="background-image: url(style/icons/navic/numbered-list.svg);"></aside>
+            <aside class="icon" style="background-image: url(style/icons/editor/numbered-list.svg);"></aside>
             <p class="label">Ordered list</p>
           </li>
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside class="icon" style="background-image: url(style/icons/navic/list.svg);"></aside>
+            <aside class="icon" style="background-image: url(style/icons/editor/list.svg);"></aside>
             <p class="label">Unordered list</p>
           </li>
         </ul>
         <h2>Formatting</h2>
         <ul>
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <input type="checkbox" data-type="switch" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
@@ -328,7 +327,7 @@
             </aside>
             <p class="label">Bold</p>
           </li>
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <input type="checkbox" data-type="switch" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
@@ -337,7 +336,7 @@
             </aside>
             <p class="label">Italic</p>
           </li>
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <input type="checkbox" data-type="switch" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
@@ -348,7 +347,7 @@
           </li>
 
           <!-- Version 0.3
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <input type="checkbox" data-type="switch" id="headingCheckbox" data-click="formatDoc" data-click-action="heading" data-click-value="h1">
@@ -359,7 +358,7 @@
           </li>
           -->
 
-          <li class="listItem noLink">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
                 <select style="margin-top: 12px;" data-change="justify" id="justify-select">
@@ -392,7 +391,7 @@
         <div>
           <h2>Editing</h2>
           <ul>
-            <li class="listItem noLink">
+            <li class="noLink">
               <aside class="pack-end">
                 <label>
                   <input type="checkbox" data-type="switch" id="autosave-enabled-switch" />
@@ -401,7 +400,7 @@
               </aside>
               <p class="label">Enable <b>autosave</b></p>
             </li>
-            <li class="listItem noLink">
+            <li class="noLink">
               <aside class="pack-end">
                 <label>
                   <input type="checkbox" data-type="switch" id="autoload-enabled-switch" />
@@ -413,7 +412,7 @@
           </ul>
           <h2>Visual</h2>
           <ul>
-            <li class="listItem noLink">
+            <li class="noLink">
               <aside class="pack-end">
                 <label>
                   <input type="checkbox" data-type="switch" id="autozen-enabled-switch" />
@@ -422,7 +421,7 @@
               </aside>
               <p class="label">Edit with <b>Zen Mode</b></p>
             </li>
-            <li class="listItem noLink">
+            <li class="noLink">
 			  <aside class="pack-end">
 				<label>
 				  <input type="checkbox" data-type="switch" id="nightmode-enabled-switch" />
@@ -436,7 +435,7 @@
         <div>
           <h2>Cloud Storage</h2>
           <ul>
-            <li class="listItem noLink">
+            <li class="noLink">
               <aside class="pack-end">
                 <label>
                   <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
@@ -446,7 +445,7 @@
               <aside class="icon icon-dropbox"></aside>
               <p>Use <b>Dropbox</b></p>
             </li>
-            <li class="listItem noLink">
+            <li class="noLink">
                 <aside class="pack-end">
                   <label>
                     <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />

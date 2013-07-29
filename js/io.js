@@ -1,6 +1,6 @@
 /* Globals
 ------------------------*/
-var storage, deviceAPI;
+var storage, deviceAPI, locationDevice;
 
 
 /* Init
@@ -36,9 +36,17 @@ function startIO(api) {
     // Check for File API
     
     // If nonexistent, disable internal storage
-    deviceAPI = 'none';    
-    disableInternalStorage();
+    if (1 == 1) { // Temp
+      deviceAPI = 'none';    
+      disableInternalStorage();
+      return;
+    }
   }
+  
+  // Create storage option
+  locationDevice = document.createElement('option');
+  locationDevice.textContent = 'Internal';
+  locationSelect.appendChild(locationDevice);
 }
 
 function disableInternalStorage() {
@@ -116,8 +124,6 @@ function docsInFolder(directory, callback) {
       };
     } else if (deviceAPI == 'file') {
       // TODO
-    } else {
-      disableInternalStorage();
     }
     return docs;
   }
@@ -215,8 +221,6 @@ function createFromDialog() {
       };
     } else if (deviceAPI == 'file') {
       // TODO
-    } else {
-      disableInternalStorage();
     }
   } else if (location == 'dropbox') {
     directory = ('/' + directory);
@@ -307,8 +311,6 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
       };
     } else if (deviceAPI == 'file') {
       // TODO
-    } else {
-      disableInternalStorage();
     }
   } else if (location == 'dropbox' && dropboxClient) {
     if (showSpinner != false) {
@@ -422,8 +424,6 @@ function loadFile(directory, filename, filetype, callback, location) {
       };
     } else if (deviceAPI == 'file') {
       // TODO
-    } else {
-      disableInternalStorage();
     }
   } else if (location = 'dropbox' && dropboxClient) {
     loadSpinner.classList.add('shown');
@@ -452,8 +452,6 @@ function deleteFile(name, location) {
       }
     } else if (deviceAPI == 'file') {
       // TODO
-    } else {
-      disableInternalStorage();
     }
   } else if (location == 'dropbox' && dropboxClient) {
     dropboxClient.remove(path, function(e) { });

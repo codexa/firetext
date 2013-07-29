@@ -7,7 +7,7 @@ html, body {
   padding: 0;  
   font-size: 10px;
   font-family: sans-serif;  
-  background: url(images/bg.png) black;
+  background: black;
 }
 
 @font-face {
@@ -46,7 +46,7 @@ form[role=dialog].current {
 }
 
 
-/* headers.css */
+/* Headers */
 section > header:first-child {
   background: #eee;
   color: #1f1f1f;
@@ -60,12 +60,12 @@ section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
 section > header:first-child button:not(:disabled):active .icon:after,
 section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
 section > header:first-child menu[type="toolbar"] button:not(:disabled):active {
-  background: #999 !important;
+  background: #dfdfdf !important;
 }
 
 section > header:first-child > button .icon:after,
 section > header:first-child > a .icon:after {
-  background: #dfdfdf;
+  background: none;
 }
 
 section.skin-organic > header:first-child h1 {
@@ -97,43 +97,55 @@ section.skin-organic > header:first-child h1 {
 }
 
 
-/* Icons */
-[data-type="list"] aside.icon.icon-document {
-  background-image: url(icons/extic/Ftdocfile.svg);
-  background-position: center;
-  background-size: 3rem;
-}
-
-[data-type="list"] aside.icon.icon-document-dropbox {
-  background-image: url(icons/extic/Dboxdocfile.svg);
-  background-position: center;
-  background-size: 3rem;
-}
-
-[data-type="list"] aside.icon.icon-arrow {
-  background-image: url(icons/navic/arrow.svg);
-  background-position: center;
-}
-
-[data-type="list"] aside.icon.icon-dropbox {
-  background-image: url(icons/navic/dropbox.svg);
-  background-size: 5rem;
-  background-position: center;
-}
-
-[data-type="list"] aside.icon.icon-gDrive {
-  background-image: url(icons/navic/google-drive.svg);
-  background-position: center;
-}
-
-
 /* Buttons */
 .button-block {
   width: 96%;
   margin-left: 2%;
 }
 
-/* Base icons */
+
+/* Icons */
+section > header:first-child .icon {
+  background-size: 3rem;
+  background-position: center !important;
+}
+
+.icon-document {
+  background-image: url(icons/extensions/firetext.svg) !important;
+}
+
+.icon-document-dropbox {
+  background-image: url(icons/extensions/dropbox.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-dropbox {
+  background-image: url(icons/cloud/dropbox.svg) !important;
+  background-size: 5rem !important;
+  background-position: center !important;
+}
+
+[data-type="list"] aside.icon.icon-gDrive {
+  background-image: url(icons/cloud/google-drive.svg) !important;
+}
+
+.icon-compose {
+  background-image: url(icons/misc/create.svg) !important;
+}
+
+.icon-menu {
+  background-image: url(icons/misc/menu.svg) !important;
+  background-size: 2rem !important;
+}
+
+section > header:first-child :first-child .icon-menu {
+  background-position: -.5rem center !important;
+}
+
+.icon-arrow {
+  background-image: url(icons/misc/arrow.svg) !important;
+  background-size: 1rem !important;
+}
+
 [role="toolbar"] .pack-icon-setting {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAACkUlEQVR42uVXS2gTURTVgdEKhZCd6Y9arFirqK0ESveiCCJYySZkmW0I2cYYIgjWvWaRtvjBlW5c1KVudOkmME0caIjEIIGAODGZfMdz4Q0Mj9f5MAMueuEww7vv3sN9cz9vThiG8V9wzImZ2BlIwDS/ztYkzo9IPBPPAtvAL2AXWyROv8N0z2hvkMQKYMpE07RPeGYZ9mnNVPb7fRUu5KCI3xgupdls7sPFahDEZ4HfbolHo5GWTqejfokXgG8igslk0ieIdJ1OR6nX60ueiPGMsG/6mo90PB7/VRSllMvlHmDrOrCWz+e3aI103N4/iP4t8zXjhnhbFEWv1/uRSqXuYst1gBxNWeymisXiBu0R2dZqNaoEWUjMILGyMPhIM5nMPdhdBk4fVeeqql7iIycZDoftcDi8YEc8DexZy4OkUqnsUKQcqRAopyd8OjQajQ/RaHTDKbkk1Olnq2U2m93C+qzLdrhitW23219ZPiwCklNWP7RmryzLN8xv6gInAd20L5fLL2C7bPr2SrxOeh/EEbfEHw2LoHzuk97HUdsTA2eAXVFyeTjqx3xytVqtd+TbqY4PReVUKpU2XZCeBzTeXtf1n47JhefToxpItVq9aEO6BKgiW9T3S7i+4hTxzGAw+E5Thho+HznqlI7ygmnD3h/xkZIt+eh2u4fxePwWXM/ZEjORgdVCobCJhn9giEUniBToAwfJZPIOfFwDzrExKXsaiyiHeWr4XsZiLBa7CTcrwClfFwGaMh4vAhSpHPjVh2oTJ/GcgPcv1vLDN63R8QZ22cNo26MpQw2f9d5lIEJAnb4nHbL3VSKRuO336sPrZBptbMos8lMtFArRjeMqMBfkZY/fJ9mt2cgx/oX5B6GHMzFcsA8aAAAAAElFTkSuQmCC);
 }
@@ -211,6 +223,7 @@ legend.action select {
 .tabButton {
   float: right;
   padding: 5px;
+  max-height: 30px;
 }
 
 .tabButton:active {
@@ -238,8 +251,8 @@ legend.action select {
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 8px;
-  background: #eee;
-  border: 2px solid rgba(31,31,31,.9);
+  background: rgba(238,238,238,1);
+  border: 2px solid rgb(31,31,31);
   padding: 10px;
   opacity: 0;
   display: inline-block;

@@ -191,7 +191,7 @@ function initSharing() {
         } else {
           welcomeDropboxArea.style.display = 'none';
           openDialogDropboxArea.style.display = 'none';
-          if (locationSelect.value == 'Dropbox') {
+          if (locationDropbox) {
             locationSelect.removeChild(locationDropbox);
             locationDropbox = undefined;
           }
@@ -199,7 +199,7 @@ function initSharing() {
       });
     } 
   } else {
-    if (locationSelect.value == 'Dropbox') {
+    if (locationDropbox) {
       locationSelect.removeChild(locationDropbox);
       locationDropbox = undefined;
     }
@@ -237,7 +237,7 @@ function initSharing() {
     locationSelect.appendChild(locationGoogle);
     updateDocLists();
   } else {
-    if (locationSelect.value == 'Google Drive') {
+    if (locationGoogle) {
       locationSelect.removeChild(locationGoogle);
       locationGoogle = undefined;
     }
@@ -254,7 +254,7 @@ function initSharing() {
   }
   
   // Location Select
-  if (locationSelect.length == 0) {
+  if (locationSelect.length < 1) {
     document.getElementById('add-dialog-create-button').style.pointerEvents = 'none';
     document.getElementById('add-dialog-create-button').style.color = '#999';
     var noStorageNotice = document.createElement('div');
@@ -406,7 +406,7 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   }
       
   // Generate item
-  output += '<li class="fileListItem listItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
+  output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
   output += '<aside class="icon icon-'+icon+'"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
   output += '<p>'+directory+DOCS[0][1]+'<em>'+DOCS[0][2]+'</em></p>';
@@ -512,15 +512,10 @@ function showSaveBanner() {
 function extIcon() {
   var extf = document.getElementById('extIconFile');
   var option = document.getElementById('createDialogFileType').value;
-  if (option == ".html") {
-    extf.src = "style/icons/extic/FTichtml.png";
-  } else if (option == ".txt") {
-    extf.src = "style/icons/extic/FTictxt.png";
-  } else if (option == '.docx') {
-    extf.src = "style/icons/extic/FTicdocx.png";  
-  } else {
-    extf.src = "style/icons/FiretextExtic.png";
+  if (option != '.html' && option != '.txt' && option != '.docx' && option != '.doc' && option != '.rtf') {
+    option = 'default';
   }
+  extf.src = ('style/icons/extensions/'+option.replace(/./, '')+'.png');
 }
 
 
@@ -880,14 +875,11 @@ document.addEventListener('blur', function(event) {
 function processActions(eventAttribute, target) {
   if (target && target.getAttribute) {
     if (target.hasAttribute(eventAttribute) != true) {
-      if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains('listItem')) {
+      while (target.parentNode && target.parentNode.getAttribute) {
         target = target.parentNode;
-      } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.classList && target.parentNode.parentNode.classList.contains('listItem')) {
-        target = target.parentNode.parentNode;
-      } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.classList.contains('listItem')) {
-        target = target.parentNode.parentNode.parentNode;
-      } else if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode && target.parentNode.parentNode.parentNode.parentNode.classList && target.parentNode.parentNode.parentNode.parentNode.classList.contains('listItem')) {
-        target = target.parentNode.parentNode.parentNode.parentNode;
+        if (target.hasAttribute(eventAttribute)) {
+          break;
+        }
       }
     }
     var calledFunction = target.getAttribute(eventAttribute);
