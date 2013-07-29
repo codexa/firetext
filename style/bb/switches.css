@@ -84,6 +84,7 @@ label input[data-type="switch"] + span:before {
   bottom: 0;
   width: 5.4rem;
   z-index: -1;
+  transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
 }
 
@@ -96,6 +97,7 @@ label input[data-type="switch"] + span:before {
 label input[data-type="switch"] + span:after {
   left: 100%;
   background: #e6e6e6;
+  -webkit-transform: translateX(-5.4rem);
   transform: translateX(-5.4rem);
 }
 
@@ -122,10 +124,12 @@ label input[data-type="switch"]:checked + span {
 }
 
 label input[data-type="switch"]:checked + span:before {
+  -webkit-transform: translateX(5.4rem);
   transform: translateX(5.4rem);
 }
 
 label input[data-type="switch"]:checked + span:after {
+  -webkit-transform: translateX(0);
   transform: translateX(0);
 }
 
