@@ -117,6 +117,7 @@
   opacity: .4;
   transform: translateX(-102%);
   background: #EEE;
+  transition: -webkit-transform .4s ease, opacity .4s, .4s visibility 0s;
   transition: transform .4s ease, opacity .4s, .4s visibility 0s;
 }
 

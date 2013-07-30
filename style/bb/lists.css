@@ -38,6 +38,7 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  transition: -webkit-transform 0.3s ease, padding 0.3s ease;
   transition: transform 0.3s ease, padding 0.3s ease;
   border-bottom: solid 0.1rem #aeaeae;
   color: #2c2c2c;

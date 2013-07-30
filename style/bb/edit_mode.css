@@ -16,14 +16,18 @@
   pointer-events: none;
   opacity: .99;
   visibility: hidden;
+  -webkit-transform: scale(1, 2);
   transform: scale(1, 2);
+  transition: -webkit-transform .6s, opacity .4s, .4s visibility 0s;
   transition: transform .6s, opacity .4s, .4s visibility 0s;
 }
 
 [role="edit"][data-type="edit"].current {
   opacity: 1;
   visibility: visible;
+  -webkit-transform: none;
   transform: none;
+  transition: -webkit-transform .4s, opacity .4s, 0s visibility 0s;
   transition: transform .4s, opacity .4s, 0s visibility 0s;
 }
 
