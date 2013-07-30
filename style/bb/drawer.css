@@ -204,7 +204,7 @@ section[data-type="sidebar"] > nav > ul > li {
 }
 
 section[data-type="sidebar"] > nav > ul > li:active {
-  background: #00ABCC;  
+  background: #6f6f6f;  
 }
 
 section[data-type="sidebar"] > nav > ul > li > a { 
