@@ -34,6 +34,16 @@ section > header:first-child :first-child .icon-menu {
   background-size: 1.5rem !important;
 }
 
+.icon-efs {
+  background-image: url(icons/editor/efs.svg) !important;
+  background-size: 1.5rem !important;
+}
+
+.icon-fs {
+  background-image: url(icons/editor/fs.svg) !important;
+  background-size: 3rem !important;
+}
+
 .icon-back {
   background-image: url(icons/misc/back.svg) !important;
   background-size: 1rem !important;
@@ -42,6 +52,10 @@ section > header:first-child :first-child .icon-menu {
 .icon-arrow {
   background-image: url(icons/misc/arrow.svg) !important;
   background-size: 1rem !important;
+}
+
+.icon-save {
+  background-image: url(icons/editor/save.png) !important;
 }
 
 [role="toolbar"] .pack-icon-setting {

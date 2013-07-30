@@ -148,8 +148,8 @@ form[role="dialog"][data-type="object"] > menu > button:active {
 
 form[role="dialog"][data-type="action"] > menu > button:last-child:active,
 form[role="dialog"][data-type="object"] > menu > button:last-child:active {
-  border: solid 0.1rem #008aaa;
-  background: #008aaa;
+  border: solid 0.1rem #aeaeae;
+  background: #dfdfdf;
   color: #333;
 }
 
