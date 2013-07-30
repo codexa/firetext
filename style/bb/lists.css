@@ -21,7 +21,7 @@
 
 /* Title divisors */
 [data-type="list"] header {
-  border-bottom: 0.1rem solid #ff4E00;
+  border-bottom: 0.1rem solid #aeaeae;
   padding: 0.5rem 1rem;
   margin: 0;
   font-size: 1.6rem;
@@ -39,7 +39,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   transition: transform 0.3s ease, padding 0.3s ease;
-  border-bottom: solid 0.1rem #dbd9d9;
+  border-bottom: solid 0.1rem #aeaeae;
   color: #2c2c2c;
   margin: 0;
   display: block;
@@ -64,7 +64,7 @@
 
 [data-type="list"] li > a:after {
   content: "";
-  background-color: #b1f1ff;
+  background-color: #eee;
   opacity: 0;
   pointer-events: none;
   position: absolute;
