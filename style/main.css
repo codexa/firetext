@@ -139,7 +139,7 @@ legend.action select {
 }
 
 .tabButton:active {
-  background: #008aaa;
+  background: #dfdfdf;
   transition: background 0.2s ease;
 }
 
