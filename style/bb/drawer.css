@@ -54,7 +54,7 @@ section[role="drawer"]:target > header:first-child > a:last-of-type {
 section[data-type="sidebar"] {
   position: absolute;
   width: 80%;
-  background: url(drawer/images/ui/pattern.png) repeat;
+  background-color: #2c2c2c;
   height: 100%;
   top: 0;
   left: 0;
@@ -73,7 +73,7 @@ section[data-type="sidebar"] > header {
   z-index: 10;
   height: 5rem;
   color: #fff;
-  background: url(drawer/images/ui/header.png) repeat-x left top;
+  background-color: #2c2c2c;
 }
 
 section[data-type="sidebar"] > header:after {
@@ -118,11 +118,6 @@ section[data-type="sidebar"] > header menu[type="toolbar"] button {
   -moz-box-sizing: border-box;
   min-width: 5rem;
   text-align: center;
-}
-
-section[data-type="sidebar"] > header menu[type="toolbar"] a:last-child,
-section[data-type="sidebar"] > header menu[type="toolbar"] button:last-child {
-  background: url(drawer/images/ui/separator.png) no-repeat left center;
 }
 
 section[data-type="sidebar"] > header menu[type="toolbar"] {
@@ -187,8 +182,7 @@ section[data-type="sidebar"] > nav > h2 {
   line-height: 3.3rem;
   text-indent: 3rem;
   color: #fff;
-  background: url(drawer/images/ui/pattern_subheader.png) repeat left top;
-  border-bottom: 1px solid #596068; 
+  background-color: #1d1d1d;
   margin: 0;
   padding-right: 0.8rem;
 }
@@ -217,8 +211,7 @@ section[data-type="sidebar"] > nav > ul > li > a {
   text-decoration: none;
   color: #fff;
   font-size: 1.6rem;
-  line-height: 4.35rem;
-  border-bottom: 1px solid #596068; 
+  line-height: 4.35rem; 
   text-indent: 3rem;
   padding-right: 0.8rem;
   width: 100%;
