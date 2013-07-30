@@ -57,8 +57,8 @@
 }
 
 [role="tablist"] > [role="tab"] > a:active {
-  background-color: #008aaa;
-  color: #fff;
+  background-color: #6f6f6f;
+  color: #eee;
 }
 
 [role="tablist"] > [role="tab"][aria-disabled="true"] > a:active {
