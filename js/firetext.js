@@ -134,6 +134,14 @@ function init() {
     }
   );
   
+    welcomeDocsList.addEventListener(
+    'contextmenu', function contextmenu(event) {
+      editDocs();
+    }
+  );
+
+  // Show edit mode on long press
+
   // Check for recent file, and if found, load it.
   if (getSettings('autoload') == 'true') {
     var lastDoc = [getSettings('autoload.dir'), getSettings('autoload.name'), getSettings('autoload.ext'), getSettings('autoload.loc')];
