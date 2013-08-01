@@ -23,7 +23,7 @@ Cooming soon:
 - Cloud services API support
 - Social profile integration
 - Collaborative editing (hosted)
-- Format support for .doc, .rtf, .odt, and .fodt.
+- Format support for .doc, .rtf, .odt, .fodt and .pdf.
 - Night mode.
 
 Go to <a href="http://firetext.codexa.org">firetext.codexa.org</a> for more.
