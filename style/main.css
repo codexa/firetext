@@ -10,6 +10,12 @@ html, body {
   background: black;
 }
 
+@font-face {
+font-family: 'Open Sans';
+font-style: normal;
+src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
+}
+
 .firetext {
   text-indent: -9999px;
   background-image: url(icons/app/firetext.svg);
@@ -55,10 +61,13 @@ form[role=dialog].current {
 }
 
 [data-type="list"] h2, [data-type="edit"] h2 {
-  background: #cacaca;
-  padding: 10px 20px;
-  color: #2c2c2c;
+  background: #CACACA;
+  padding: 5px 20px;
+  color: #2C2C2C;
   margin: 0 0;
+  font-family: "Open Sans";
+  font-weight: normal;
+  font-size: 180%;
 }
 
 [data-type="list"] li a, [data-type="edit"] li a, .noLink {
