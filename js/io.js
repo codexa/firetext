@@ -34,9 +34,11 @@ function startIO(api) {
     };
   } else {
     // Check for File API
-    
-    // If nonexistent, disable internal storage
-    if (1 == 1) { // Temp
+    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+    if (window.requestFileSystem) {
+      deviceAPI = 'file';
+    } else {
+      // If nonexistent, disable internal storage
       deviceAPI = 'none';    
       disableInternalStorage();
       return;
