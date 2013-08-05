@@ -49,6 +49,10 @@ function checkDevice() {
   } else {
     deviceType = 'desktop';
   }
+  
+  if (window.opera) {
+    alert('Warning, your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
+  }
 }
 
 

@@ -11,9 +11,9 @@ html, body {
 }
 
 @font-face {
-font-family: 'Open Sans';
-font-style: normal;
-src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
+  font-family: 'Open Sans';
+  font-style: normal;
+  src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 }
 
 .firetext {
@@ -27,6 +27,8 @@ src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 
 [role="main"].header-only {
   height: calc(100% - 5rem);
+    height: -moz-calc(100% - 5rem);
+    height: -webkit-calc(100% - 5rem);
   overflow: scroll;
 }
 
@@ -43,14 +45,25 @@ src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 form[role=dialog] {
   visibility: hidden;
   opacity: .99;  
-  transform: translateY(100%);  
-  transition: all .4s ease; 
+  transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+  transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -o-transition: all .4s ease;
 }
 
 form[role=dialog].current {
   visibility: visible;
   opacity: 1;  
   transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
 }
 
 
@@ -134,6 +147,9 @@ legend.action select {
   opacity: 0;
   visibility: hidden;
   transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    -webkit-transition: opacity .3s;
+    -o-transition: opacity .3s;
 }
 
 .tabToolbar.visible {
@@ -150,6 +166,9 @@ legend.action select {
 .tabButton:active {
   background: #dfdfdf;
   transition: background 0.2s ease;
+    -moz-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
 }
 
 
@@ -166,6 +185,8 @@ legend.action select {
   border: none;
   outline: none;
   height: calc(100% - 3.9rem);
+    height: -moz-calc(100% - 3.9rem);
+    height: -webkit-calc(100% - 3.9rem);
 }
 
 
@@ -179,6 +200,9 @@ legend.action select {
   display: inline-block;
   visibility: hidden;
   transition: opacity .3s, .3s visibility 0s;
+    -moz-transition: opacity .3s, .3s visibility 0s;
+    -webkit-transition: opacity .3s, .3s visibility 0s;
+    -o-transition: opacity .3s, .3s visibility 0s;
   pointer-events: none;
 }
 
@@ -189,13 +213,20 @@ legend.action select {
 .spinner.center {
   position: fixed;
   left: calc(50% - 53px / 2);
+    left: -moz-calc(50% - 53px / 2);
+    left: -webkit-calc(50% - 53px / 2);
   top: calc(50% - 53px / 2);
+    top: -moz-calc(50% - 53px / 2);
+    top: -webkit-calc(50% - 53px / 2);
 }
 
 .spinner.shown {
   opacity: 1;
   visibility: visible;
   transition: opacity .3s, 0s visibility 0s;
+    -moz-transition: opacity .3s, 0s visibility 0s;
+    -webkit-transition: opacity .3s, 0s visibility 0s;
+    -o-transition: opacity .3s, 0s visibility 0s;
 }
 
 .spinner > div {
@@ -204,38 +235,55 @@ legend.action select {
   background-position: center;
   width: 33px;
   height: 33px;
-  -webkit-animation: spin .5s steps(30) infinite;
   animation: spin .5s steps(30) infinite;
+    -moz-animation: spin .5s steps(30) infinite;
+    -webkit-animation: spin .5s steps(30) infinite;
+    -o-animation: spin .5s steps(30) infinite;
 }
 
 @keyframes spin{
   0%{
-    -webkit-transform:rotate(0turn);
-    -moz-transform:rotate(0turn);
-    -ms-transform:rotate(0turn);
-    transform:rotate(0turn)
+    transform: rotate(0turn);
+      -moz-transform: rotate(0turn);
+      -webkit-transform: rotate(0turn);
+      -o-transform: rotate(0turn);
+      -ms-transform: rotate(0turn);
   }
-
   100%{
-    -webkit-transform:rotate(1turn);
-    -moz-transform:rotate(1turn);
-    -ms-transform:rotate(1turn);
-    transform:rotate(1turn)
+    transform: rotate(1turn);
+      -moz-transform: rotate(1turn);
+      -webkit-transform: rotate(1turn);
+      -o-transform: rotate(1turn);
+      -ms-transform: rotate(1turn);
   }
 }
-
+@-moz-keyframes spin{
+  0%{
+    transform: rotate(0turn);
+      -moz-transform: rotate(0turn);
+  }
+  100%{
+    transform: rotate(1turn);
+      -moz-transform: rotate(1turn);
+  }
+}
 @-webkit-keyframes spin{
   0%{
-    -webkit-transform:rotate(0turn);
-    -moz-transform:rotate(0turn);
-    -ms-transform:rotate(0turn);
-    transform:rotate(0turn)
+    transform: rotate(0turn);
+      -webkit-transform: rotate(0turn);
   }
-
   100%{
-    -webkit-transform:rotate(1turn);
-    -moz-transform:rotate(1turn);
-    -ms-transform:rotate(1turn);
-    transform:rotate(1turn)
+    transform: rotate(1turn);
+      -webkit-transform: rotate(1turn);
   }
-} 
+}
+@-o-keyframes spin{
+  0%{
+    transform: rotate(0turn);
+      -o-transform: rotate(0turn);
+  }
+  100%{
+    transform: rotate(1turn);
+      -o-transform: rotate(1turn);
+  }
+}

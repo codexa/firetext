@@ -36,7 +36,9 @@ section > header:first-child form {
 section > header:first-child input[type="text"] {
   width: 100%;
   height: 3rem;
-  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   padding: 0 0.8rem;
   border: solid 0.1rem #9d4123;
   border-top-color: #a6501e;
@@ -81,7 +83,9 @@ section > header:first-child menu[type="toolbar"] button {
   float: left;
   background: none;
   padding: 0 1.75rem;
-  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   text-align: center;
   text-shadow: none;
   position: relative;
@@ -129,6 +133,9 @@ section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):
 section > header:first-child menu[type="toolbar"] button:not(:disabled):active  {
   background: #dfdfdf !important;
   transition: background 0.2s ease;
+    -moz-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
 }
 
 /* Disabled state */
@@ -157,6 +164,7 @@ section > header:first-child .icon {
   overflow: hidden;
   position: relative;
   height: 4.9rem;
+  text-indent: -100%;
 }
 
 /* Navigation links (back, cancel, etc) */

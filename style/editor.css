@@ -5,36 +5,34 @@
   overflow: scroll;
 }
 
-/* Disabled temporarily
-.editor {
-  border: none;
-  padding: 10px;
-  font-size: 2em;
-  outline: none;
-  width: 100%;
-  height: calc(100% - 5rem - 40px);
-}
- */
-
 .editor {
   border: none;
   font-size: 2em;
   outline: none;
   width: 100%;
-  height: calc(100% - 5rem - 40px);
+  height: calc(100% - 5rem - 4rem);
+    height: -moz-calc(100% - 5rem - 4rem);
+    height: -webkit-calc(100% - 5rem - 4rem);
   word-wrap: break-word;
 }
 
 .editor.no-toolbar {
   height: calc(100% - 5rem);
+    height: -moz-calc(100% - 5rem);
+    height: -webkit-calc(100% - 5rem);
 }
 
 .editor.fullscreen {
-  height: calc(100% - 40px);
+  height: calc(100% - 4rem);
+    -moz-height: calc(100% - 4rem);
+    -webkit-height: calc(100% - 4rem);
 }
 
 .editor.fullscreen.no-toolbar {
+  height: 100%;
   height: calc(100%);
+    height: -moz-calc(100%);
+    height: -webkit-calc(100%);
 }
 
 #rawEditor {

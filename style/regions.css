@@ -9,34 +9,49 @@ section[role="region"], section[role="dialog"] {
   right: 0px;  
   background-color: #eee;  
   transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -o-transition: all .4s ease;
 }
 
 section[role="region"] {
   visibility: hidden;
   opacity: .99;  
-  -webkit-transform: translateX(-100%); 
-  transform: translateX(-100%); 
+  transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    -o-transform: translateX(-100%); 
+    -ms-transform: translateX(-100%); 
 }
 
 section[role="region"].current, [role="region"].parent, [role="dialog"].parent {
   visibility: visible;
   opacity: 1;
   z-index: 100;  
-  -webkit-transform: none;
   transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
 }
 
 section[role="region"].current ~ section[role="region"] {  
   opacity: .99;  
-  -webkit-transform: translateX(100%);
   transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    -o-transform: translateX(100%);
+    -ms-transform: translateX(100%);
 }
 
 section[role="dialog"] {
   visibility: hidden;
-  opacity: .99;  
-  -webkit-transform: translateY(100%);
+  opacity: .99;
   transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -ms-transform: translateY(100%);
 }
 
 section[role="dialog"] + .background {
@@ -45,32 +60,45 @@ section[role="dialog"] + .background {
 
 section[role="dialog"].current {
   visibility: visible;
-  opacity: 1;  
-  -webkit-transform: none; 
-  transform: none; 
+  opacity: 1;
+  transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
 }
 
 /* Handle sidebars */
 [data-type="sidebar"] {
   opacity: 0;
   visibility: collapse;
-  -webkit-transition: opacity .4s, .4s visibility 0s;
   transition: opacity .4s, .4s visibility 0s;
+    -moz-transition: opacity .4s, .4s visibility 0s;
+    -webkit-transition: opacity .4s, .4s visibility 0s;
+    -o-transition: opacity .4s, .4s visibility 0s;
 }
 
 [data-type="sidebar"].active {
   opacity: 1;
   visibility: visible;
-  -webkit-transition: opacity .4s, 0s visibility 0s;
   transition: opacity .4s, 0s visibility 0s;
+    -moz-transition: opacity .4s, 0s visibility 0s;
+    -webkit-transition: opacity .4s, 0s visibility 0s;
+    -o-transition: opacity .4s, 0s visibility 0s;
 }
 
 [data-state="drawer"].current {
-  -webkit-transform: translateX(80%) !important;
   transform: translateX(80%) !important;
+    -moz-transform: translateX(80%) !important;
+    -webkit-transform: translateX(80%) !important;
+    -o-transform: translateX(80%) !important;
+    -ms-transform: translateX(80%) !important;
 }
 
 [data-state="drawer"][data-position="right"].current {
-  -webkit-transform: translateX(-80%) !important;
   transform: translateX(-80%) !important;
+    -moz-transform: translateX(-80%) !important;
+    -webkit-transform: translateX(-80%) !important;
+    -o-transform: translateX(-80%) !important;
+    -ms-transform: translateX(-80%) !important;
 }

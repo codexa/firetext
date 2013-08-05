@@ -16,19 +16,41 @@
   pointer-events: none;
   opacity: .99;
   visibility: hidden;
-  -webkit-transform: scale(1, 2);
   transform: scale(1, 2);
-  transition: -webkit-transform .6s, opacity .4s, .4s visibility 0s;
-  transition: transform .6s, opacity .4s, .4s visibility 0s;
+    -moz-transform: scale(1, 2);
+    -webkit-transform: scale(1, 2);
+    -o-transform: scale(1, 2);
+    -ms-transform: scale(1, 2);
+  transition: transform .6s,
+              -moz-transform .6s,
+              -webkit-transform .6s,
+              -o-transform .6s,
+              -ms-transform .6s,
+              opacity .4s,
+              .4s visibility 0s;
+    -moz-transition: -moz-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
+    -webkit-transition: -webkit-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
+    -o-transition: -o-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
 }
 
 [role="edit"][data-type="edit"].current {
   opacity: 1;
   visibility: visible;
-  -webkit-transform: none;
   transform: none;
-  transition: -webkit-transform .4s, opacity .4s, 0s visibility 0s;
-  transition: transform .4s, opacity .4s, 0s visibility 0s;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+  transition: transform .4s,
+              -moz-transform .4s,
+              -webkit-transform .4s,
+              -o-transform .4s,
+              -ms-transform .4s,
+              opacity .4s,
+              0s visibility 0s;
+    -moz-transition: -moz-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+    -webkit-transition: -webkit-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+    -o-transition: -o-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
 }
 
 /* Header */
@@ -95,7 +117,9 @@
   font-weight: normal;
   background: none;
   padding: 0 1.75rem;
-  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   text-align: center;
   text-shadow: none;
   position: relative;
@@ -117,6 +141,9 @@
 [role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
   background: #008aaa !important;
   transition: background 0.2s ease;
+    -moz-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
   color: #fff;
 }
 
@@ -174,7 +201,9 @@
   height: 3.8rem;
   margin: 0 0 1rem;
   padding: 0 1.5rem;
-  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   display: inline-block;
   vertical-align: middle;
   text-overflow: ellipsis;
@@ -244,6 +273,8 @@
 
 [role="edit"][data-type="edit"] menu button {
   width: calc((100% - 1rem) / 2);
+    width: -moz-calc((100% - 1rem) / 2);
+    width: -webkit-calc((100% - 1rem) / 2);
 }
 
 [role="edit"][data-type="edit"] menu button.full {

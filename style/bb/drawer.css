@@ -6,6 +6,9 @@
 section[role="drawer"] {
   width: 100%;
   transition: all 0.25s ease;
+    -moz-transition: all 0.25s ease;
+    -webkit-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
   position: relative;
   left: -2rem;
   z-index: 100;
@@ -14,6 +17,10 @@ section[role="drawer"] {
 
 section[role="drawer"]:target {
   transform: translateX(80%);
+    -moz-transform: translateX(80%);
+    -webkit-transform: translateX(80%);
+    -o-transform: translateX(80%);
+    -ms-transform: translateX(80%);
 }
 
 /* Overwrite headers.css to increase menu icon */
@@ -85,8 +92,6 @@ section[data-type="sidebar"] > header:after {
   top: 100%;
   left: 0;
   right: 0;
-  background: url(drawer/images/ui/shadow_header.png) repeat-x left top;
-  background-size: auto 100%;
 }
 
 section[data-type="sidebar"] > header h1 {
@@ -116,8 +121,10 @@ section[data-type="sidebar"] > header menu[type="toolbar"] button {
   line-height: 4.9rem;
   float: left; 
   background: none; 
-  padding: 0 1.75rem; 
-  -moz-box-sizing: border-box;
+  padding: 0 1.75rem;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   min-width: 5rem;
   text-align: center;
 }
@@ -157,7 +164,6 @@ section[data-type="sidebar"] > header .icon {
 section[data-type="sidebar"]:after { 
   content: "";
   width: 1rem;
-  background: url(drawer/images/ui/shadow.png) right top repeat-y;
   height: 100%;
   position: absolute;
   top: 0;
@@ -169,12 +175,20 @@ section[data-type="sidebar"][data-position="right"]:after {
   right: auto;
   left: 0;
   transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
 }
 
 section[data-type="sidebar"] > nav {
-  overflow-y: visible;
-  max-height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: calc(100% - 5rem);
+    max-height: -moz-calc(100% - 5rem);
+    max-height: -webkit-calc(100% - 5rem);
   margin-right: -0.8rem;
+  width: 100%;
 }
 
 section[data-type="sidebar"] > nav > h2 {
@@ -190,7 +204,23 @@ section[data-type="sidebar"] > nav > h2 {
 }
 
 section[data-type="sidebar"] [role="toolbar"] {
-  position: absolute;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 80%;
+  right: auto;
+  z-index: 101;
+}
+
+section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
+  left: auto;
+  right: 0;
+}
+
+section[data-type="sidebar"] [role="toolbar"] + nav {
+  max-height: calc(100% - 5rem - 4rem);
+    max-height: -moz-calc(100% - 5rem - 4rem);
+    max-height: -webkit-calc(100% - 5rem - 4rem);
 }
 
 section[data-type="sidebar"] > nav > ul { 
@@ -202,6 +232,9 @@ section[data-type="sidebar"] > nav > ul {
 section[data-type="sidebar"] > nav > ul > li {
   list-style: none;
   transition: background 0.2s ease;
+    -moz-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
 }
 
 section[data-type="sidebar"] > nav > ul > li:active {
@@ -216,7 +249,9 @@ section[data-type="sidebar"] > nav > ul > li > a {
   text-indent: 3rem;
   padding-right: 0.8rem;
   width: 100%;
-  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
