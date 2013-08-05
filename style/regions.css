@@ -39,6 +39,10 @@ section[role="dialog"] {
   transform: translateY(100%);
 }
 
+section[role="dialog"] + .background {
+  display: none;
+}
+
 section[role="dialog"].current {
   visibility: visible;
   opacity: 1;  
