@@ -261,12 +261,8 @@ function saveFromEditor(banner, spinner) {
       content = doc.textContent;
       break;
   }
-  if (banner != false) {
-    banner = true;
-  }
-  if (spinner != false) {
-    spinner = true;
-  }
+  banner = !!banner;
+  spinner = !!spinner;
   saveFile(directory, filename, filetype, content, banner, function(){}, location, spinner);
 } 
 
