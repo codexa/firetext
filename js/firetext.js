@@ -51,7 +51,7 @@ function checkDevice() {
   }
   
   if (window.opera) {
-    alert('Warning, your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
+    alert('Warning: Your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
   }
 }
 

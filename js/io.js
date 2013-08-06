@@ -10,6 +10,10 @@ function startIO(api) {
     // Use deviceStorage API
     deviceAPI = 'deviceStorage';
     storage = navigator.getDeviceStorage('sdcard');
+    if (!storage) {
+      startIO('file');
+      return;
+    }
     
     // Check for SD card
     var request = storage.available();

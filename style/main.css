@@ -159,8 +159,8 @@ legend.action select {
 
 .tabButton {
   float: right;
-  padding: 5px;
-  max-height: 30px;
+  padding: 7px;
+  max-height: 25px;
 }
 
 .tabButton:active {
