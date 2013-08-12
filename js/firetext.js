@@ -103,9 +103,6 @@ function init() {
   // Initalize recent docs
   RecentDocs.init();
   
-  // Initialize sharing
-  initSharing();
-  
   // Initialize the editor
   initEditor();
   
@@ -142,6 +139,9 @@ function init() {
   startIO(null, function() {
     // Update Doc Lists
     updateDocLists();
+    
+    // Initialize sharing
+    initSharing();
     
     // Check for recent file, and if found, load it.
     if (getSettings('autoload') == 'true') {
