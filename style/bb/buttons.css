@@ -36,8 +36,8 @@ button:active,
 a[role="button"]:active,
 button.recommend:active,
 a.recommend[role="button"]:active  {
-  border-color: #008aaa;
-  background: #008aaa;
+  border-color: #eee;
+  background: #eee;
   color: #333;
 }
 
@@ -218,8 +218,8 @@ ol.compact {
 /* Pressed */
 .compact > li button:active,
 .compact > li a[role="button"]:active {
-  border-color: #008aaa;
-  background: #008aaa;
+  border-color: #eee;
+  background: #eee;
 }
 
 /* Disabled */
