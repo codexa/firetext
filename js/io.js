@@ -250,27 +250,27 @@ function createFromDialog() {
   
   // Save the file
   if (!location | location == '' | location == 'internal') {
+    var type = "text";
+    switch (filetype) {
+      case ".html":
+        type = "text\/html";
+        break;
+      case ".txt":
+        type = "text\/plain";
+        break;
+      case ".docx":
+        type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        break;
+      default:
+        break;
+    }
+    var contentBlob = new Blob([' '], { "type" : type });
     if (deviceAPI == 'deviceStorage') {
-      var type = "text";
-      switch (filetype) {
-        case ".html":
-          type = "text\/html";
-          break;
-        case ".txt":
-          type = "text\/plain";
-          break;
-        case ".docx":
-          type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-          break;
-        default:
-          break;
-      }
-      var contentBlob = new Blob([' '], { "type" : type });
       var filePath = (directory + filename + filetype);
       var req = storage.addNamed(contentBlob, filePath);
       req.onerror = function () {
         if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
-          alert('This file already exists, please choose another name.'); 
+          alert('This file already exists, please choose another name.');
         }
         else {
           alert('File creation unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
@@ -281,7 +281,31 @@ function createFromDialog() {
         loadToEditor(directory, filename, filetype, 'internal');
       };
     } else if (deviceAPI == 'file') {
-      // TODO
+      storage.root.getDirectory(directory, {}, function(dirEntry) {
+        dirEntry.getFile(filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
+          fileEntry.createWriter(function(fileWriter){
+            fileWriter.onwriteend = function(e) {
+              loadToEditor(directory, filename, filetype, 'internal');
+            };
+            
+            fileWriter.onerror = function(e) {
+              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
+            };
+            
+            fileWriter.write(contentBlob);
+          }, function(err) {
+            alert("Error writing to new file :(\n\ncode: " + err.code);
+          });
+        }, function(err) {
+          if(err.code === FileError.INVALID_MODIFICATION_ERR) {
+            alert('This file already exists, please choose another name.');
+          } else {
+            alert("File creation unsuccessful :(\n\ncode: " + err.code);
+          }
+        });
+      }, function(err) {
+        alert("Error opening directory: " + directory + "\n\ncode" + err.code);
+      });
     }
   } else if (location == 'dropbox') {
     directory = ('/' + directory);
