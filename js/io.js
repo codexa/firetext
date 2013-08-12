@@ -590,7 +590,14 @@ function deleteFile(name, location) {
         alert('Delete unsuccessful :(\n\nInfo for gurus:\n"' + this.error.name + '"');
       }
     } else if (deviceAPI == 'file') {
-      // TODO
+      storage.root.getFile(path, {}, function(fileEntry) {
+	    fileEntry.remove(function() {
+		}, function(err) {
+		  alert('Delete unsuccessful :(\n\ncode: ' + err.code);
+		});
+	  }, function(err) {
+	    alert('Delete unsuccessful :(\n\ncode: ' + err.code);
+	  });
     }
   } else if (location == 'dropbox' && dropboxClient) {
     dropboxClient.remove(path, function(e) { });
