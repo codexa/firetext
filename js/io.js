@@ -5,13 +5,13 @@ var storage, deviceAPI, locationDevice;
 
 /* Init
 ------------------------*/
-function startIO(api) {
+function startIO(api, callback) {
   if (window.navigator.getDeviceStorage && api != 'file') {
     // Use deviceStorage API
     deviceAPI = 'deviceStorage';
     storage = navigator.getDeviceStorage('sdcard');
     if (!storage) {
-      startIO('file');
+      startIO('file', callback);
       return;
     }
     
@@ -24,8 +24,10 @@ function startIO(api) {
         deviceAPI = null;
         storage = null;
         alert("The SDCard on your device is shared, and thus not available.");
-        startIO('file');
+        startIO('file', callback);
         return;
+      } else {
+        callback();
       }
     };
 
@@ -33,7 +35,7 @@ function startIO(api) {
       deviceAPI = null;
       storage = null;
       alert("Unable to get the space used by the SDCard: " + this.error);
-      startIO('file');
+      startIO('file', callback);
       return;
     };
   } else {
@@ -44,15 +46,17 @@ function startIO(api) {
         alert("Error, could not initialize filesystem");
         deviceAPI = 'none';
         disableInternalStorage();
+        callback();
       }
       var requestFs = function(grantedBytes) {
         if(grantedBytes > 0) {
           requestFileSystem(PERSISTENT, grantedBytes, function(fs) {
             storage = fs;
             deviceAPI = 'file';
+            callback();
           }, onFSError);
         } else {
-          onFSError
+          onFSError();
         }
       }
       if(navigator.webkitPersistentStorage) {
@@ -62,12 +66,14 @@ function startIO(api) {
       } else {
         deviceAPI = 'none';
         disableInternalStorage();
+        callback();
         return;
       }
     } else {
       // If nonexistent, disable internal storage
       deviceAPI = 'none';
       disableInternalStorage();
+      callback();
       return;
     }
   }

@@ -100,17 +100,11 @@ function init() {
   italicCheckbox = document.getElementById('italicCheckbox');
   underlineCheckbox = document.getElementById('underlineCheckbox');
   
-  // Initialize IO
-  startIO();
-  
   // Initalize recent docs
   RecentDocs.init();
   
   // Initialize sharing
   initSharing();
-  
-  // Update Doc Lists
-  updateDocLists();
   
   // Initialize the editor
   initEditor();
@@ -143,34 +137,40 @@ function init() {
       editDocs();
     }
   );
-
-  // Check for recent file, and if found, load it.
-  if (getSettings('autoload') == 'true') {
-    var lastDoc = [getSettings('autoload.dir'), getSettings('autoload.name'), getSettings('autoload.ext'), getSettings('autoload.loc')];
-    if (getSettings('autoload.wasEditing') == 'true') {
-      // Wait until Dropbox is authenticated
-      if (lastDoc[3] == 'dropbox') {
-        if (getSettings('dropbox.enabled') == 'true') {
-          window.addEventListener('dropboxAuthed', function() {
-            loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+  
+  // Initialize IO
+  startIO(null, function() {
+    // Update Doc Lists
+    updateDocLists();
+    
+    // Check for recent file, and if found, load it.
+    if (getSettings('autoload') == 'true') {
+      var lastDoc = [getSettings('autoload.dir'), getSettings('autoload.name'), getSettings('autoload.ext'), getSettings('autoload.loc')];
+      if (getSettings('autoload.wasEditing') == 'true') {
+        // Wait until Dropbox is authenticated
+        if (lastDoc[3] == 'dropbox') {
+          if (getSettings('dropbox.enabled') == 'true') {
+            window.addEventListener('dropboxAuthed', function() {
+              loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+              spinner('hide');
+            });
+          } else {
+            nav('welcome');
             spinner('hide');
-          });
+          }
         } else {
-          nav('welcome');
-          spinner('hide');         
+          loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+          spinner('hide');
         }
       } else {
-        loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+        nav('welcome');
         spinner('hide');
       }
     } else {
       nav('welcome');
-      spinner('hide'); 
+      spinner('hide');
     }
-  } else {
-    nav('welcome');
-    spinner('hide');
-  }  
+  });
 }
 
 function initSharing() {  
