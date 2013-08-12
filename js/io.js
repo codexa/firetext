@@ -287,30 +287,26 @@ function createFromDialog() {
         loadToEditor(directory, filename, filetype, 'internal');
       };
     } else if (deviceAPI == 'file') {
-      storage.root.getDirectory(directory, {}, function(dirEntry) {
-        dirEntry.getFile(filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
-          fileEntry.createWriter(function(fileWriter){
-            fileWriter.onwriteend = function(e) {
-              loadToEditor(directory, filename, filetype, 'internal');
-            };
-            
-            fileWriter.onerror = function(e) {
-              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
-            };
-            
-            fileWriter.write(contentBlob);
-          }, function(err) {
-            alert("Error writing to new file :(\n\ncode: " + err.code);
-          });
+      storage.root.getFile(directory + filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
+        fileEntry.createWriter(function(fileWriter){
+          fileWriter.onwriteend = function(e) {
+            loadToEditor(directory, filename, filetype, 'internal');
+          };
+          
+          fileWriter.onerror = function(e) {
+            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
+          };
+          
+          fileWriter.write(contentBlob);
         }, function(err) {
-          if(err.code === FileError.INVALID_MODIFICATION_ERR) {
-            alert('This file already exists, please choose another name.');
-          } else {
-            alert("File creation unsuccessful :(\n\ncode: " + err.code);
-          }
+          alert("Error writing to new file :(\n\ncode: " + err.code);
         });
       }, function(err) {
-        alert("Error opening directory: " + directory + "\n\ncode" + err.code);
+        if(err.code === FileError.INVALID_MODIFICATION_ERR) {
+          alert('This file already exists, please choose another name.');
+        } else {
+          alert("File creation unsuccessful :(\n\ncode: " + err.code);
+        }
       });
     }
   } else if (location == 'dropbox') {
@@ -397,28 +393,24 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
         }
       };
     } else if (deviceAPI == 'file') {
-      storage.root.getDirectory(directory, {}, function(dirEntry) {
-        dirEntry.getFile(filename + filetype, {create: true}, function(fileEntry) {
-          fileEntry.createWriter(function(fileWriter){
-            fileWriter.onwriteend = function(e) {
-              if (showBanner) {
-                showSaveBanner();
-              }
-              callback();
-            };
-            
-            fileWriter.onerror = function(e) {
-              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
-            };
-            fileWriter.write(contentBlob);
-          }, function(err) {
-            alert("Error writing to file :(\n\ncode: " + err.code);
-          });
+      storage.root.getFile(directory + filename + filetype, {create: true}, function(fileEntry) {
+        fileEntry.createWriter(function(fileWriter){
+          fileWriter.onwriteend = function(e) {
+            if (showBanner) {
+              showSaveBanner();
+            }
+            callback();
+          };
+          
+          fileWriter.onerror = function(e) {
+            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
+          };
+          fileWriter.write(contentBlob);
         }, function(err) {
-          alert("Error opening file :(\n\ncode: " + err.code);
+          alert("Error writing to file :(\n\ncode: " + err.code);
         });
       }, function(err) {
-        alert("Error opening directory: " + directory + "\n\ncode" + err.code);
+        alert("Error opening file :(\n\ncode: " + err.code);
       });
     }
   } else if (location == 'dropbox' && dropboxClient) {
@@ -532,29 +524,21 @@ function loadFile(directory, filename, filetype, callback, location) {
         }
       };
     } else if (deviceAPI == 'file') {
-      storage.root.getDirectory(directory, {}, function(dirEntry) {
-        dirEntry.getFile(filename + filetype, {}, function(fileEntry) {
-          fileEntry.file(function(file) {
-            var reader = new FileReader();
-            
-            reader.onerror = function () {
-              alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
-              callback(this.error.name, true);
-            };
-            reader.onload = function () {
-              callback(this.result);
-            };
-            
-            reader.readAsText(file);
-          }, function(err) {
-            alert("Error opening file\n\ncode: " + err.code);
-          });
+      storage.root.getFile(directory + filename + filetype, {}, function(fileEntry) {
+        fileEntry.file(function(file) {
+          var reader = new FileReader();
+          
+          reader.onerror = function () {
+            alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+            callback(this.error.name, true);
+          };
+          reader.onload = function () {
+            callback(this.result);
+          };
+          
+          reader.readAsText(file);
         }, function(err) {
-          if (err.code === FileError.NOT_FOUND_ERR) {
-            
-          } else {
-            alert("Load unsuccessful :(\n\nError code: " + err.code);
-          }
+          alert("Error opening file\n\ncode: " + err.code);
         });
       }, function(err) {
         if (err.code === FileError.NOT_FOUND_ERR) {
@@ -591,13 +575,13 @@ function deleteFile(name, location) {
       }
     } else if (deviceAPI == 'file') {
       storage.root.getFile(path, {}, function(fileEntry) {
-	    fileEntry.remove(function() {
-		}, function(err) {
-		  alert('Delete unsuccessful :(\n\ncode: ' + err.code);
-		});
-	  }, function(err) {
-	    alert('Delete unsuccessful :(\n\ncode: ' + err.code);
-	  });
+        fileEntry.remove(function() {
+        }, function(err) {
+          alert('Delete unsuccessful :(\n\ncode: ' + err.code);
+        });
+      }, function(err) {
+        alert('Delete unsuccessful :(\n\ncode: ' + err.code);
+      });
     }
   } else if (location == 'dropbox' && dropboxClient) {
     dropboxClient.remove(path, function(e) { });
