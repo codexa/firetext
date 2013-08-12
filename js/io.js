@@ -343,7 +343,7 @@ function saveFromEditor(banner, spinner) {
   banner = !!banner;
   spinner = !!spinner;
   saveFile(directory, filename, filetype, content, banner, function(){}, location, spinner);
-} 
+}
 
 function saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner) {
   var type = "text";
@@ -391,7 +391,29 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
         }
       };
     } else if (deviceAPI == 'file') {
-      // TODO
+      storage.root.getDirectory(directory, {}, function(dirEntry) {
+        dirEntry.getFile(filename + filetype, {create: true}, function(fileEntry) {
+          fileEntry.createWriter(function(fileWriter){
+            fileWriter.onwriteend = function(e) {
+              if (showBanner) {
+                showSaveBanner();
+              }
+              callback();
+            };
+            
+            fileWriter.onerror = function(e) {
+              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
+            };
+            fileWriter.write(contentBlob);
+          }, function(err) {
+            alert("Error writing to file :(\n\ncode: " + err.code);
+          });
+        }, function(err) {
+          alert("Error opening file :(\n\ncode: " + err.code);
+        });
+      }, function(err) {
+        alert("Error opening directory: " + directory + "\n\ncode" + err.code);
+      });
     }
   } else if (location == 'dropbox' && dropboxClient) {
     if (showSpinner != false) {
