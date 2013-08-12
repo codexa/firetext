@@ -152,7 +152,39 @@ function docsInFolder(directory, callback) {
         cursor.continue();
       };
     } else if (deviceAPI == 'file') {
-      // TODO
+      storage.root.getDirectory(directory, {}, function(dirEntry) {
+	    dirReader = dirEntry.createReader()
+		var readDirContents = function(results) {
+		  if(!results.length) {
+		    callback(docs);
+			return;
+		  } else {
+		    var fileparts;
+			var filetype;
+			var filename;
+		    for(var i = 0; i < results.length; i++) {
+			  if (!results[i].isFile) {
+			    continue;
+			  }
+			  fileparts = results[i].name.split(".");
+			  filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
+			  filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
+			  if (filetype !== ".text" && filetype !== ".html") { // && filetype !== ".docx") {
+			    continue;
+		      }
+			  docs.push([directory, filename, filetype]);
+			}
+			dirReader.readEntries(readDirContents);
+		  }
+		}
+		dirReader.readEntries(readDirContents);
+	  }, function(err) {
+		if(err.code == FileError.NOT_FOUND_ERR) {
+		  callback();
+		} else {
+		  alert("Error\ncode: " + err.code);
+		}
+	  });
     }
     return docs;
   }
