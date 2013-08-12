@@ -55,7 +55,7 @@ section > header:first-child :first-child .icon-menu {
 }
 
 .icon-save {
-  background-image: url(icons/editor/save.png) !important;
+  background-image: url(icons/editor/save.svg) !important;
 }
 
 [role="toolbar"] .pack-icon-setting {
