@@ -153,38 +153,38 @@ function docsInFolder(directory, callback) {
       };
     } else if (deviceAPI == 'file') {
       storage.root.getDirectory(directory, {}, function(dirEntry) {
-	    dirReader = dirEntry.createReader()
-		var readDirContents = function(results) {
-		  if(!results.length) {
-		    callback(docs);
-			return;
-		  } else {
-		    var fileparts;
-			var filetype;
-			var filename;
-		    for(var i = 0; i < results.length; i++) {
-			  if (!results[i].isFile) {
-			    continue;
-			  }
-			  fileparts = results[i].name.split(".");
-			  filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
-			  filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-			  if (filetype !== ".text" && filetype !== ".html") { // && filetype !== ".docx") {
-			    continue;
-		      }
-			  docs.push([directory, filename, filetype]);
-			}
-			dirReader.readEntries(readDirContents);
-		  }
-		}
-		dirReader.readEntries(readDirContents);
-	  }, function(err) {
-		if(err.code == FileError.NOT_FOUND_ERR) {
-		  callback();
-		} else {
-		  alert("Error\ncode: " + err.code);
-		}
-	  });
+        dirReader = dirEntry.createReader()
+        var readDirContents = function(results) {
+          if(!results.length) {
+            callback(docs);
+            return;
+          } else {
+            var fileparts;
+            var filetype;
+            var filename;
+            for(var i = 0; i < results.length; i++) {
+              if (!results[i].isFile) {
+                continue;
+              }
+              fileparts = results[i].name.split(".");
+              filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
+              filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
+              if (filetype !== ".text" && filetype !== ".html") { // && filetype !== ".docx") {
+                continue;
+              }
+              docs.push([directory, filename, filetype]);
+            }
+            dirReader.readEntries(readDirContents);
+          }
+        }
+        dirReader.readEntries(readDirContents);
+      }, function(err) {
+        if(err.code == FileError.NOT_FOUND_ERR) {
+          callback();
+        } else {
+          alert("Error\ncode: " + err.code);
+        }
+      });
     }
     return docs;
   }
@@ -480,7 +480,37 @@ function loadFile(directory, filename, filetype, callback, location) {
         }
       };
     } else if (deviceAPI == 'file') {
-      // TODO
+      storage.root.getDirectory(directory, {}, function(dirEntry) {
+        dirEntry.getFile(filename + filetype, {}, function(fileEntry) {
+          fileEntry.file(function(file) {
+            var reader = new FileReader();
+            
+            reader.onerror = function () {
+              alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+              callback(this.error.name, true);
+            };
+            reader.onload = function () {
+              callback(this.result);
+            };
+            
+            reader.readAsText(file);
+          }, function(err) {
+            alert("Error opening file\n\ncode: " + err.code);
+          });
+        }, function(err) {
+          if (err.code === FileError.NOT_FOUND_ERR) {
+            
+          } else {
+            alert("Load unsuccessful :(\n\nError code: " + err.code);
+          }
+        });
+      }, function(err) {
+        if (err.code === FileError.NOT_FOUND_ERR) {
+          
+        } else {
+          alert("Load unsuccessful :(\n\nError code: " + err.code);
+        }
+      });
     }
   } else if (location = 'dropbox' && dropboxClient) {
     loadSpinner.classList.add('shown');
