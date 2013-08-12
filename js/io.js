@@ -40,10 +40,33 @@ function startIO(api) {
     // Check for File API
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     if (window.requestFileSystem) {
-      deviceAPI = 'file';
+      var onFSError = function() {
+        alert("Error, could not initialize filesystem");
+        deviceAPI = 'none';
+        disableInternalStorage();
+      }
+      var requestFs = function(grantedBytes) {
+        if(grantedBytes > 0) {
+          requestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+            storage = fs;
+            deviceAPI = 'file';
+          }, onFSError);
+        } else {
+          onFSError
+        }
+      }
+      if(navigator.webkitPersistentStorage) {
+        navigator.webkitPersistentStorage.requestQuota( /*5MB*/5*1024*1024, requestFs, onFSError );
+      } else if(webkitStorageInfo) {
+        webkitStorageInfo.requestQuota( PERSISTENT, /*5MB*/5*1024*1024, requestFs, onFSError );
+      } else {
+        deviceAPI = 'none';
+        disableInternalStorage();
+        return;
+      }
     } else {
       // If nonexistent, disable internal storage
-      deviceAPI = 'none';    
+      deviceAPI = 'none';
       disableInternalStorage();
       return;
     }
