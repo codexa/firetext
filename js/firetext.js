@@ -393,13 +393,17 @@ function updateDocLists() {
   }
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location) {    
-  // Remove HTML
-  var tmp = document.createElement("DIV");
-  tmp.innerHTML = description;
-  description = tmp.textContent;
-  tmp.innerHTML = description;
-  description = tmp.textContent;
+function buildDocListItems(DOCS, listElms, description, output, location) {
+  // Convert to html
+  switch (DOCS[0][2]) {
+    case ".txt":
+      description = txt.parse(description, "HTML");
+      break;
+    case ".docx":
+    case ".html":
+    default:
+      break;
+  } 
   
   // UI refinements
   var icon, directory;
@@ -418,9 +422,12 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   // Generate item
   output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
-  output += '<aside class="icon icon-'+icon+'"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-  output += '<p>'+directory+DOCS[0][1]+'<em>'+DOCS[0][2]+'</em></p>';
-  output += '<p>'+description+'</p>';
+  output += '<div class="fileItemDescription">'+description+'</div>';
+  output += '<div class="fileItemInfo">';
+  output += '<aside class="icon icon-arrow pack-end"></aside>';  
+  output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
+  output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
+  output += '</div>'; 
   output += '</a></li>';
   
   // Display output HTML
