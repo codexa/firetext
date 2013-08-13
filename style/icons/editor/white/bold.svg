@@ -2,8 +2,9 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-<path d="M353.94,242.326C372.689,220.055,384,191.322,384,160c0-70.58-57.421-128-128-128h-64h-64H96v448h32h64h96
-	c70.579,0,128-57.421,128-128C416,305.522,391.101,264.752,353.94,242.326z M192,96h50.75c27.984,0,50.75,28.71,50.75,64
-	s-22.766,64-50.75,64H192V96z M271.5,416H192V288h79.5c29.226,0,53,28.711,53,64C324.5,387.29,300.725,416,271.5,416z"/>
+	 width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
+<path fill="#DFDFDF" d="M20.738,14.199c1.1-1.305,1.762-2.988,1.762-4.824c0-4.136-3.365-7.5-7.5-7.5h-3.75H7.5H5.625v26.25H7.5
+	h3.75h5.625c4.135,0,7.5-3.365,7.5-7.5C24.375,17.902,22.916,15.513,20.738,14.199z M11.25,5.625h2.974
+	c1.64,0,2.974,1.682,2.974,3.75s-1.334,3.75-2.974,3.75H11.25V5.625z M15.908,24.375H11.25v-7.5h4.658
+	c1.713,0,3.105,1.682,3.105,3.75S17.621,24.375,15.908,24.375z"/>
 </svg>
