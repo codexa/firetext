@@ -159,7 +159,7 @@ function docsInFolder(directory, callback) {
       };
     } else if (deviceAPI == 'file') {
       storage.root.getDirectory(directory, {}, function(dirEntry) {
-        dirReader = dirEntry.createReader()
+        var dirReader = dirEntry.createReader()
         var readDirContents = function(results) {
           if(!results.length) {
             callback(docs);
