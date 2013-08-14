@@ -116,7 +116,7 @@ form[role=dialog].current {
   background: #dfdfdf;
   color: #6f6f6f;
   font-size: 1.2rem;
-  height: 5rem;
+  height: auto;
   overflow: hidden;
   padding-top: 1rem;
 }
