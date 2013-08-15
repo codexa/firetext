@@ -46,10 +46,9 @@
   text-decoration: none;
   line-height: 4rem;
   text-align: center;
-  color: #FFF;
   float: left;
   width: 100%;
-  background: #C7C7C7 no-repeat center top;
+  background: #C7C7C7;
   position: relative;
   color: #737373;
   transition: all .5s;
