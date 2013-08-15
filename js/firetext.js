@@ -173,7 +173,7 @@ function init() {
   });
 }
 
-function initSharing() {  
+function initSharing() {
   // Dropbox
   if (getSettings('dropbox.enabled') == 'true') {
     // Error Handler
@@ -189,32 +189,41 @@ function initSharing() {
         if (!error && client) {
           // Set client
           dropboxClient = client;
-          window.dispatchEvent(dropboxAuthed);
           
           // Code to get dropbox files
+          updateDocLists();
+          
+          // Show UI elements
           welcomeDropboxArea.style.display = 'block';
           openDialogDropboxArea.style.display = 'block';
           locationDropbox = document.createElement('option');
           locationDropbox.textContent = 'Dropbox';
           locationSelect.appendChild(locationDropbox);
-          updateDocLists();
+          
+          // Dispatch auth event
+          window.dispatchEvent(dropboxAuthed);
+          
+          // This is a workaround for a very weird bug...          
+          setTimeout(updateAddDialog, 1);
         } else {
+          // Hide/Remove UI elements
           welcomeDropboxArea.style.display = 'none';
           openDialogDropboxArea.style.display = 'none';
           if (locationDropbox) {
             locationSelect.removeChild(locationDropbox);
             locationDropbox = undefined;
           }
-        }
+        }                
       });
     } 
   } else {
+    // Hide/Remove UI elements
+    welcomeDropboxArea.style.display = 'none';
+    openDialogDropboxArea.style.display = 'none';
     if (locationDropbox) {
       locationSelect.removeChild(locationDropbox);
       locationDropbox = undefined;
     }
-    welcomeDropboxArea.style.display = 'none';
-    openDialogDropboxArea.style.display = 'none';
     
     // Sign out
     if (dropboxClient) {
@@ -240,19 +249,22 @@ function initSharing() {
   // Google Drive
   if (getSettings('gdrive.enabled') == 'true') {
     // Code to get Google Drive files
+    updateDocLists();
+    
+    // Show UI Elements
     welcomeGoogleArea.style.display = 'block';
     openDialogGoogleArea.style.display = 'block';
     locationGoogle = document.createElement('option');
     locationGoogle.textContent = 'Google Drive';
     locationSelect.appendChild(locationGoogle);
-    updateDocLists();
   } else {
+    // Hide/Remove UI elements
+    welcomeGoogleArea.style.display = 'none';
+    openDialogGoogleArea.style.display = 'none';
     if (locationGoogle) {
       locationSelect.removeChild(locationGoogle);
       locationGoogle = undefined;
     }
-    welcomeGoogleArea.style.display = 'none';
-    openDialogGoogleArea.style.display = 'none';
     
     // Remove Google recents
     var driveRecents = RecentDocs.get();
@@ -260,23 +272,34 @@ function initSharing() {
       if (driveRecents[i][3] == 'gdrive') {
         RecentDocs.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3]);
       }
-    }      
+    }
   }
   
-  // Location Select
+  updateAddDialog();
+}
+
+function updateAddDialog() {
   if (locationSelect.length < 1) {
+    // Disable elements
     document.getElementById('add-dialog-create-button').style.pointerEvents = 'none';
     document.getElementById('add-dialog-create-button').style.color = '#999';
-    var noStorageNotice = document.createElement('div');
-    noStorageNotice.id = 'no-storage-notice';
-    noStorageNotice.classList.add('redAlert');
-    noStorageNotice.textContent = 'You have not set up a storage method!';
-    document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
     document.querySelector('#add [role="main"]').style.display = 'none';
+    
+    // Create notice
+    if (!document.getElementById('no-storage-notice')) {
+      var noStorageNotice = document.createElement('div');
+      noStorageNotice.id = 'no-storage-notice';
+      noStorageNotice.classList.add('redAlert');
+      noStorageNotice.textContent = 'You have not set up a storage method!';
+      document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
+    }
   } else {
+    // Enable elements
     document.getElementById('add-dialog-create-button').style.pointerEvents = 'auto';
     document.getElementById('add-dialog-create-button').style.color = 'auto';
     document.querySelector('#add [role="main"]').style.display = 'block';
+  
+    // Remove notice if present
     if (document.getElementById('no-storage-notice')) {
       document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
     }
