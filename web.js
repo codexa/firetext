@@ -11,8 +11,8 @@ var app = express.createServer(
   // set this to a secret value to encrypt session cookies
   express.session({ secret: process.env.SESSION_SECRET || 'secret123' }),
   require('faceplate').middleware({
-    app_id: process.env.617055521650127,
-    secret: process.env.aeaeaba4f97088ee66a735fd66149425,
+    app_id: process.env.XXXAPPID,
+    secret: process.env.XXXAPSECRET,
     scope:  'user_likes,user_photos,user_photo_video_tags'
   })
 );
