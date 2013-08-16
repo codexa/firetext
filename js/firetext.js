@@ -1063,10 +1063,13 @@ function dropboxError(error) {
 function night() {
   if (getSettings('nightmode') == 'true') {
     html.classList.add('night');
+    doc.style.color = '#fff';
   } else if (getSettings('nightmode') == 'false') {
-    html.classList.remove('night');  
+    html.classList.remove('night');
+    doc.style.color = '#000';
   } else {
     html.classList.remove('night');
+    doc.style.color = '#000';
     window.addEventListener('devicelight', function(event) {
       if (getSettings('nightmode') == 'auto') {
         console.log(event.value);
