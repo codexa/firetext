@@ -11,6 +11,7 @@
 /* Globals
 ------------------------*/
 // Misc
+var html = document.getElementsByTagName('html')[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
@@ -171,6 +172,9 @@ function init() {
       spinner('hide');
     }
   });
+  
+  // Initialize Night Mode
+  night();
 }
 
 function initSharing() {
@@ -805,7 +809,7 @@ function settings() {
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
-  var nightmodeEnabled = document.querySelector('#nightmode-enabled-switch');
+  var nightmodeSelect = document.querySelector('#nightmode-select');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
   
@@ -848,13 +852,29 @@ function settings() {
   
   // Night Mode
   if (getSettings('nightmode') == 'true') {
-    nightmodeEnabled.setAttribute('checked', '');
-  } else {  
-    nightmodeEnabled.removeAttribute('checked');
+    nightmodeSelect.value = 'Always On';
+  } else if (getSettings('nightmode') == 'false') { 
+    nightmodeSelect.value = 'Always Off';
+  } else {
+    nightmodeSelect.value = 'Auto';  
   }
-  nightmodeEnabled.onchange = function () {
-    saveSettings('nightmode', this.checked);
-  }
+  nightmodeSelect.addEventListener('change', function () {
+    // Convert
+    var convertedNightValue;
+    if (nightmodeSelect.value == 'Always On') {
+      convertedNightValue = 'true';
+    } else if (nightmodeSelect.value == 'Always Off') { 
+      convertedNightValue = 'false';
+    } else {
+      convertedNightValue = 'auto';
+    }  
+    
+    // Save
+    saveSettings('nightmode', convertedNightValue);
+    
+    // Update
+    night();
+  });
   
   // Dropbox
   if (getSettings('dropbox.enabled') == 'true') {
@@ -1014,33 +1034,49 @@ function processActions(eventAttribute, target) {
 ------------------------*/ 
 function dropboxError(error) {
   switch (error.status) {
-  case Dropbox.ApiError.INVALID_TOKEN:
-    alert('The session expired, retrying...');
-    initSharing(); 
-    break;
-
   case Dropbox.ApiError.OVER_QUOTA:
     // The user is over their Dropbox quota.
     // Tell them their Dropbox is full. Refreshing the page won't help.
     alert('Your Dropbox is full :(');
     break;
 
-  case Dropbox.ApiError.RATE_LIMITED:
-    alert('Dropbox API request limit was exceeded.\n\nPlease try again later.');
-    break;
 
   case Dropbox.ApiError.NETWORK_ERROR:
     alert('Your network appears to be unavailable.\n\nPlease check your connection and try again.');
     break;
-    
-  case 404:
-    break;
-  
+
+  case Dropbox.ApiError.RATE_LIMITED:
+  case Dropbox.ApiError.INVALID_TOKEN:
   case Dropbox.ApiError.INVALID_PARAM:
   case Dropbox.ApiError.OAUTH_ERROR:
-  case Dropbox.ApiError.INVALID_METHOD:
+  case Dropbox.ApiError.INVALID_METHOD:    
+  case 404:  
   default:
-    alert('A Dropbox error occured.\n\nInfo for Gurus:\n'+error.status);
+    // TBD Code to Notify Fireanalytic
+    break;
+  }
+}
+
+
+/* Night Mode
+------------------------*/ 
+function night() {
+  if (getSettings('nightmode') == 'true') {
+    html.classList.add('night');
+  } else if (getSettings('nightmode') == 'false') {
+    html.classList.remove('night');  
+  } else {
+    html.classList.remove('night');
+    window.addEventListener('devicelight', function(event) {
+      if (getSettings('nightmode') == 'auto') {
+        console.log(event.value);
+        if (event.value < 50) {
+          html.classList.add('night');
+        } else {
+          html.classList.remove('night');
+        }
+      }
+    });    
   }
 }
 
