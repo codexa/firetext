@@ -24,8 +24,8 @@
 
 .editor.fullscreen {
   height: calc(100% - 4rem);
-    -moz-height: calc(100% - 4rem);
-    -webkit-height: calc(100% - 4rem);
+    height: -moz-calc(100% - 4rem);
+    height: -webkit-calc(100% - 4rem);
 }
 
 .editor.fullscreen.no-toolbar {

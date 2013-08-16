@@ -1,5 +1,5 @@
-.night {
-  background: #000;
+.night, .night body {
+  background: #222222;
   color: #fff;
 }
 
