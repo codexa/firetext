@@ -98,6 +98,5 @@ function handle_facebook_request(req, res) {
     render_page(req, res);
   }
 }
-
 app.get('/', handle_facebook_request);
 app.post('/', handle_facebook_request);
