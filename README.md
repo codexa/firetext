@@ -1,29 +1,39 @@
-Firetext
-========
+Facebook/Heroku sample app -- Node.js
+=====================================
 
-Firetext is a word processor for Firefox OS.  Firetext currently supports html, and plain text files (more will be added later).
+This is a sample app showing use of the Facebook Graph API, written in Node.js, designed for deployment to [Heroku](http://www.heroku.com/).
 
-You can run Firetext on a Firefox OS device, or on the <a href="https://addons.mozilla.org/en-US/firefox/addon/firefox-os-simulator/">Firefox OS Simulator</a>.
+Run locally
+-----------
 
-Current Features:
-- Supports: .html, .txt, .docx
-- File I/O: open, edit, close, save, delete
-- Formatting: bold, underline, italic, align
-- Elements: ordered list, unordered list
-- Zen Mode
-- Raw mode for HTML documents
-- Dropbox API
-- Autoload on startup
-- Autosave
-- Syntax highlighting
+Install dependencies:
 
-Cooming soon:
-- Formatting: font color, background color, font size.
-- Elements: images, tables, horizontal lines.
-- Cloud services API support
-- Social profile integration
-- Collaborative editing (hosted)
-- Format support for .doc, .rtf, .odt, .fodt and .pdf.
-- Night mode.
+    npm bundle install
 
-Go to <a href="http://firetext.codexa.org">firetext.codexa.org</a> for more.
+[Create an app on Facebook](https://developers.facebook.com/apps) and set the Website URL to `http://localhost:5000/`.
+
+Copy the App ID and Secret from the Facebook app settings page into your `.env`:
+
+    echo FACEBOOK_APP_ID=12345 >> .env
+    echo FACEBOOK_SECRET=abcde >> .env
+
+Launch the app with [Foreman](http://blog.daviddollar.org/2011/05/06/introducing-foreman.html):
+
+    foreman start
+
+Deploy to Heroku via Facebook integration
+-----------------------------------------
+
+The easiest way to deploy is to create an app on Facebook and click Cloud Services -> Get Started, then choose Node.js from the dropdown.  You can then `git clone` the resulting app from Heroku.
+
+Deploy to Heroku directly
+-------------------------
+
+If you prefer to deploy yourself, push this code to a new Heroku app on the Cedar stack, then copy the App ID and Secret into your config vars:
+
+    heroku create --stack cedar
+    git push heroku master
+    heroku config:add FACEBOOK_APP_ID=12345 FACEBOOK_SECRET=abcde
+
+Enter the URL for your Heroku app into the Website URL section of the Facebook app settings page, hen you can visit your app on the web.
+
