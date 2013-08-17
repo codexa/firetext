@@ -19,3 +19,4 @@ Use NPM, run this command to install gloablly:
 
 1. Go to **app.js** directory
 2. Open shell and run ```npm start```
+3. Go to ```http://localhost:3000``` (default node port)
