@@ -14,3 +14,8 @@ Use NPM, run this command to install gloablly:
 
 **Nodemon Installation:**
 - ```npm install -g nodemon```
+
+**Run:**
+
+1. Go to **app.js** directory
+2. Open shell and run ```npm start```
