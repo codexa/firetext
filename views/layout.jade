@@ -1,7 +1,15 @@
-doctype 5
+!!! 5
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+head
+    meta(charset='utf-8')
+    title Firetext
+
+    // Scripts 
+    script(type='application/javascript', src='js/firetext.js')
+    script(type='application/javascript', src='js/io.js')
+
+    // Stylesheets 
+    link(rel='stylesheet', type='text/css', href='style/main.css')
+
+  body(role='application')
     block content
