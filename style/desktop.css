@@ -55,6 +55,9 @@
   section[data-type="sidebar"], section[data-type="sidebar"] [role="toolbar"] {
     width: 400px;
   }
+  section[data-type="sidebar"] > nav {
+    overflow-y: hidden;
+  }
   [data-state="drawer"].current {
     transform: translateX(400px) !important;
       -moz-transform: translateX(400px) !important;
