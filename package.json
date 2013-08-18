@@ -1,15 +1,16 @@
 {
-  "name": "application-name",
+  "name": "Firetext",
   "version": "0.0.1",
+  "description": "Word Processor",
   "private": true,
-  "scripts": {
-    "start": "nodemon app.js"
-  },
+
   "dependencies": {
     "express": "3.3.5",
     "jade": "*"
   },
-  "devDependencies": {
-    "nodemon": "*"
+
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
   }
 }

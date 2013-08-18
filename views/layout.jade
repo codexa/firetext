@@ -4,12 +4,29 @@ head
     meta(charset='utf-8')
     title Firetext
 
-    // Scripts 
-    script(type='application/javascript', src='js/firetext.js')
-    script(type='application/javascript', src='js/io.js')
+    // External scripts 
+    script(type='text/javascript', src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+    script(type='text/javascript', src="https://login.persona.org/include.js")
+    
+    // Firetext scripts
+    script(type='application/javascript', src='/scripts/firetext.js')
+    script(type='application/javascript', src='/scripts/io.js')
+    script(type='text/javascript', src='/scripts/persona.js', defer)
+    script(type='text/javascript', src="/scripts/utils/ajaxpagefetcher.js")
 
     // Stylesheets 
-    link(rel='stylesheet', type='text/css', href='style/main.css')
+    link(rel='stylesheet', type='text/css', href='/style/main.css')
+    link(rel='stylesheet', type='text/css', href='/style/headers.css')
+    
+    // Google Analytics
+    script
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        
+        ga('create', 'UA-41224040-5', 'herokuapp.com');
+        ga('send', 'pageview');
 
-  body(role='application')
+  body(role='application', id="main-container")
     block content

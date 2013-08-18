@@ -1,0 +1,32 @@
+extends layout
+
+block content  
+    header
+      button(data-click="sidebar", data-click-id="welcome"): span.icon.icon-menu Menu
+      menu(type="toolbar")
+        button(data-click="nav", data-click-location="add"): span.icon.icon-compose New
+      h1.firetext Firetext
+    div(role="edit", data-type="edit", id="welcome-edit-mode")
+      section
+        header
+          menu(type="toolbar")
+            button(data-click="editDocs") Done
+          h1 Edit docs
+      menu#selectButtons
+        button(data-click="selectAll") Select all
+        button.danger(data-click="delete") Delete selected
+    div.header-only(role="main")
+      article.docsList#welcome-docs-list(data-type="list")
+        di#welcome-recents-area
+          h2 Recents
+          ul#welcome-recents-list
+        div#welcome-device-area
+          h2 Device
+          ul#welcome-device-list
+        div#welcome-dropbox-area
+          h2 Dropbox
+          ul#welcome-dropbox-list
+        div#welcome-google-area
+          h2 Google Drive
+          ul#welcome-google-list
+    

@@ -1,10 +1,17 @@
 extends layout
 
 block content
-  img(src="img/firetext.png")
-  <div>
-  h1= title
-  p Welcome to #{title}
-  p To develop #{title} install Node.js(http://nodejs.org/) and (via nodejs NPM[node package manager])Express.js(http://expressjs.com/)
-  p Jade (http://jade-lang.com) is used for templating html
-  </div>
+
+  style
+    div {
+      display: inline-block;
+      padding: 20px;
+    }
+  
+  img(src="/img/firetext.svg", height="300")
+  div(style="display: inline-block; padding: 20px;")
+    h1= title
+    p Welcome to #{title}
+    p To develop #{title} install Node.js(http://nodejs.org/) and (via nodejs NPM[node package manager])Express.js(http://expressjs.com/)
+    p Jade (http://jade-lang.com) is used for templating html
+    button#signin Proceed to app
