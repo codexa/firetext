@@ -1,9 +1,10 @@
 {
   "name": "Firetext",
   "version": "0.0.1",
-  "description": "Word Processor",
+  "author": "Codexa <support@codexa.org>",
+  "description": "Word Processor Web App",
   "private": true,
-   "scripts": {
+  "scripts": {
     "start": "node web.js"
   },
 
