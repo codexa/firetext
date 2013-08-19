@@ -54,12 +54,14 @@ section > header:first-child :first-child .icon-menu {
 
 .icon-close {
   background-image: url(icons/misc/close.svg) !important;
-  background-size: 1.5rem !important;
+}
+
+section > header:first-child :first-child .icon-close {
+  background-size: 1.8rem !important;
 }
 
 .icon-efs {
   background-image: url(icons/editor/efs.svg) !important;
-  background-size: 1.5rem !important;
 }
 
 .icon-fs {

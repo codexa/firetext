@@ -205,6 +205,7 @@ legend.action select {
 .tabToolbar {
   opacity: 0;
   visibility: hidden;
+  height: 4rem;
   transition: opacity .3s;
     -moz-transition: opacity .3s;
     -webkit-transition: opacity .3s;
@@ -216,14 +217,25 @@ legend.action select {
   visibility: visible;
 }
 
-.tabButton {
+.tabToolbar button,
+.tabToolbar .button,
+.tabToolbar input[type="button"] {
   float: right;
-  padding: 7px;
-  max-height: 25px;
+  padding: 0;
+  width: 5rem;
+  height: 100%;
+  background: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  font-size: 0;
+  border-radius: 0;
 }
 
-.tabButton:active {
-  background: #dfdfdf;
+.tabToolbar button:active,
+.tabToolbar .button:active,
+.tabToolbar input[type="button"]:active {
+  background-color: #dfdfdf;
   transition: background 0.2s ease;
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;

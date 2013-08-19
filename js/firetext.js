@@ -1065,20 +1065,28 @@ var ncss, dcss = document.getElementsByTagName("link")[25];
 function night() {
   if (getSettings('nightmode') == 'true') {
     // Add nighticons.css to DOM
-    ncss = document.createElement("link");
-    ncss.rel = "stylesheet";
-    ncss.type = "text/css";
-    ncss.href = "style/nighticons.css";
-    head.insertBefore(ncss, dcss);
+    if (!ncss) {
+      ncss = document.createElement("link");
+      ncss.rel = "stylesheet";
+      ncss.type = "text/css";
+      ncss.href = "style/nighticons.css";
+      head.insertBefore(ncss, dcss);
+    }
     
     html.classList.add('night');
     doc.style.color = '#fff';
   } else if (getSettings('nightmode') == 'false') {
-    head.removeChild(ncss);
+    if (ncss) {
+      head.removeChild(ncss);
+      ncss = null;
+    }
     html.classList.remove('night');
     doc.style.color = '#000';
   } else {
-    head.removeChild(ncss);
+    if (ncss) {
+      head.removeChild(ncss);
+      ncss = null;
+    }
     html.classList.remove('night');
     doc.style.color = '#000';
     window.addEventListener('devicelight', function(event) {

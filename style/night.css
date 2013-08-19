@@ -19,10 +19,10 @@
 
 
 /* Headers */
-section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
-section > header:first-child button:not(:disabled):active .icon:after,
-section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
-section > header:first-child menu[type="toolbar"] button:not(:disabled):active {
+.night section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
+.night section > header:first-child button:not(:disabled):active .icon:after,
+.night section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
+.night section > header:first-child menu[type="toolbar"] button:not(:disabled):active {
     background-color: #222 !important;
 }
 
