@@ -8,6 +8,7 @@
 .editor {
   border: none;
   font-size: 2em;
+  font-family: "Open Sans", Sans-serif;
   outline: none;
   width: 100%;
   height: calc(100% - 5rem - 4rem);
@@ -33,6 +34,10 @@
   height: calc(100%);
     height: -moz-calc(100%);
     height: -webkit-calc(100%);
+}
+
+#tempEditDiv {
+  font-family: "Open Sans", Sans-serif;
 }
 
 #rawEditor {
