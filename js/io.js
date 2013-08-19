@@ -505,6 +505,7 @@ function loadFile(directory, filename, filetype, callback, location) {
     if (deviceAPI == 'deviceStorage') {
       var req = storage.get(filePath);
       req.onsuccess = function () {
+        var file = req.result;
         var reader = new FileReader();
 
         if( filetype ===".docx" ) {
