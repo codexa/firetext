@@ -126,7 +126,7 @@ function docsInFolder(directory, callback) {
         }
       
         // Only get documents
-        if (file.type !== "text/plain" && file.type !== "text/html") { // && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
           cursor.continue();
           return;
         }      
@@ -175,7 +175,7 @@ function docsInFolder(directory, callback) {
               fileparts = results[i].name.split(".");
               filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
               filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-              if (filetype !== ".text" && filetype !== ".html") { // && filetype !== ".docx") {
+              if (filetype !== ".text" && filetype !== ".html" && filetype !== ".docx") {
                 continue;
               }
               docs.push([directory, filename, filetype]);
@@ -464,8 +464,8 @@ function loadToEditor(directory, filename, filetype, location) {
           tab(document.querySelector('#editTabs'), 'design');
           break;
         case ".docx":
-          //content = docx(result);
-          doc.innerHTML = content;
+          content = result;
+          doc.appendChild(content);
           tabRaw.classList.add('hidden');
           tab(document.querySelector('#editTabs'), 'design');
           break;
@@ -506,13 +506,26 @@ function loadFile(directory, filename, filetype, callback, location) {
       var req = storage.get(filePath);
       req.onsuccess = function () {
         var reader = new FileReader();
-        reader.readAsText(req.result);
+
+        if( filetype ===".docx" ) {
+          reader.readAsArrayBuffer(file);
+        } else {
+          reader.readAsText(file);
+        }
         reader.onerror = function () {
           alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
           callback(this.error.name, true);
         };
         reader.onload = function () {
-          callback(this.result);
+          var file;
+          if( filetype === ".docx" ) {
+            var docxEditor = new DocxEditor(this.result);
+            file = docxEditor.HTMLout();
+          } else {
+            file = this.result;
+          }
+          
+          callback(file);
         };
       };
       req.onerror = function () {
@@ -533,10 +546,22 @@ function loadFile(directory, filename, filetype, callback, location) {
             callback(this.error.name, true);
           };
           reader.onload = function () {
-            callback(this.result);
+            var file;
+            if( filetype === ".docx" ) {
+              var docxEditor = new DocxEditor(this.result);
+              file = docxEditor.HTMLout();
+            } else {
+              file = this.result;
+            }
+            
+            callback(file);
           };
           
-          reader.readAsText(file);
+          if( filetype ===".docx" ) {
+            reader.readAsArrayBuffer(file);
+          } else {
+            reader.readAsText(file);
+          }
         }, function(err) {
           alert("Error opening file\n\ncode: " + err.code);
         });

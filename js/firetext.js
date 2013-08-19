@@ -396,7 +396,11 @@ function updateDocLists() {
 function buildDocListItems(DOCS, listElms, description, output, location) {    
   // Remove HTML
   var tmp = document.createElement("DIV");
-  tmp.innerHTML = description;
+  if( typeof description === "string" ) {
+    tmp.innerHTML = description;	
+  } else {
+    tmp.appendChild(description);
+  }
   description = tmp.textContent;
   tmp.innerHTML = description;
   description = tmp.textContent;
