@@ -11,7 +11,7 @@
 /* Globals
 ------------------------*/
 // Misc
-var html = document.getElementsByTagName('html')[0];
+var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
@@ -1060,21 +1060,25 @@ function dropboxError(error) {
 
 /* Night Mode
 ------------------------*/
+var ncss, dcss = document.getElementsByTagName("link")[25];
+
 function night() {
   if (getSettings('nightmode') == 'true') {
-    html.classList.add('night');
-    /* Add nighticons.css to DOM
-    var ncss = document.createElement("link");
-    var dcss = document.getElementsByTagName("link")[25];
+    // Add nighticons.css to DOM
+    ncss = document.createElement("link");
     ncss.rel = "stylesheet";
     ncss.type = "text/css";
     ncss.href = "style/nighticons.css";
-    document.getElementsByTagName("head")[0].insertBefore(ncss, dcss); */
+    head.insertBefore(ncss, dcss);
+    
+    html.classList.add('night');
     doc.style.color = '#fff';
   } else if (getSettings('nightmode') == 'false') {
+    head.removeChild(ncss);
     html.classList.remove('night');
     doc.style.color = '#000';
   } else {
+    head.removeChild(ncss);
     html.classList.remove('night');
     doc.style.color = '#000';
     window.addEventListener('devicelight', function(event) {
