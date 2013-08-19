@@ -247,10 +247,10 @@
             <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
-                <li><button class="sticky" id="bold" style="background-image: url(style/icons/editor/white/bold.svg);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-                <li><button class="sticky" id="italic" style="background-image: url(style/icons/editor/white/italic.svg);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-                <li><button class="sticky" id="underline" style="background-image: url(style/icons/editor/white/underline.svg);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-                <li><button style="background-image: url(style/icons/editor/white/more.svg);" data-click="nav" data-click-location="format">Format</button></li>
+                <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold">Bold</button></li>
+                <li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic">Italic</button></li>
+                <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button class="icon-more" data-click="nav" data-click-location="format">Format</button></li>
               </ul>
               <ul>
                 <!-- Version 0.3
@@ -267,10 +267,10 @@
           </div>
         </li>
         <div class="tabToolbar">
-          <img src="style/icons/misc/menu.svg" alt="" class="tabButton"  data-click="sidebar" data-click-id="main" />
-          <img src="style/icons/misc/close.svg" alt="" class="tabButton" data-click="nav" data-click-location="welcome"/>
-          <img src="style/icons/editor/efs.svg" alt="" class="tabButton" data-click="fullscreen" />
-          <img src="style/icons/editor/save.svg" alt="" class="tabButton" data-click="saveFromEditor" id="zenSaveButton" />
+          <button data-click="sidebar" data-click-id="main"><span class="tabButton icon-menu">Menu</span></button>
+          <button data-click="nav" data-click-location="welcome"><span class="tabButton icon-close">Close</span></button>
+          <button data-click="fullscreen"><span class="tabButton icon-fs">Fullscreen</span></button>
+          <button data-click="saveFromEditor" id="zenSaveButton"><span class="tabButton icon-save">Save</span></button>
         </div>
       </ul>
     </div>
@@ -307,7 +307,7 @@
                 <button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside class="icon" style="background-image: url(style/icons/editor/numbered-list.svg);"></aside>
+            <aside class="icon icon-ordlist"></aside>
             <p class="label">Ordered list</p>
           </li>
           <li class="noLink">
@@ -316,7 +316,7 @@
                 <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside class="icon" style="background-image: url(style/icons/editor/list.svg);"></aside>
+            <aside class="icon icon-unlist"></aside>
             <p class="label">Unordered list</p>
           </li>
         </ul>

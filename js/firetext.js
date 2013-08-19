@@ -1059,10 +1059,17 @@ function dropboxError(error) {
 
 
 /* Night Mode
-------------------------*/ 
+------------------------*/
 function night() {
   if (getSettings('nightmode') == 'true') {
     html.classList.add('night');
+    /* Add nighticons.css to DOM
+    var ncss = document.createElement("link");
+    var dcss = document.getElementsByTagName("link")[25];
+    ncss.rel = "stylesheet";
+    ncss.type = "text/css";
+    ncss.href = "style/nighticons.css";
+    document.getElementsByTagName("head")[0].insertBefore(ncss, dcss); */
     doc.style.color = '#fff';
   } else if (getSettings('nightmode') == 'false') {
     html.classList.remove('night');

@@ -252,8 +252,7 @@ legend.action select {
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 8px;
-  background: rgba(238,238,238,1);
-  border: 2px solid rgb(31,31,31);
+  background-color: #eee;
   padding: 10px;
   opacity: 0;
   display: inline-block;
