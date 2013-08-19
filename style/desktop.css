@@ -41,6 +41,9 @@
     transition: opacity .4s, visibility 0s;
       -webkit-transition: opacity .4s, visibility 0s;
   }
+  [role="main"].header-only {
+    overflow: auto;
+  }
   
   /* Tabs */
   [role="tablist"] > [role="tab"] {
@@ -54,6 +57,9 @@
   /* Drawer/Sidebar */
   section[data-type="sidebar"], section[data-type="sidebar"] [role="toolbar"] {
     width: 400px;
+  }
+  section[data-type="sidebar"] > nav {
+    overflow-y: hidden;
   }
   [data-state="drawer"].current {
     transform: translateX(400px) !important;

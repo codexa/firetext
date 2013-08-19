@@ -15,6 +15,13 @@
 [data-type="list"] aside.icon.icon-gDrive {
   background-image: url(icons/cloud/google-drive.svg) !important;
 }
+[data-type="list"] aside.icon.icon-ordlist {
+  background-image: url(icons/editor/numbered-list.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-unlist {
+  background-image: url(icons/editor/list.svg) !important;
+}
 
 .icon-compose {
   background-image: url(icons/misc/create.svg) !important;
@@ -29,14 +36,32 @@ section > header:first-child :first-child .icon-menu {
   background-position: left;
 }
 
+.icon-bold {
+  background-image: url(icons/editor/white/bold.svg) !important;
+}
+
+.icon-italic {
+  background-image: url(icons/editor/white/italic.svg) !important;
+}
+
+.icon-underline {
+  background-image: url(icons/editor/white/underline.svg) !important;
+}
+
+.icon-more {
+  background-image: url(icons/editor/white/more.svg) !important;
+}
+
 .icon-close {
   background-image: url(icons/misc/close.svg) !important;
-  background-size: 1.5rem !important;
+}
+
+section > header:first-child :first-child .icon-close {
+  background-size: 1.8rem !important;
 }
 
 .icon-efs {
   background-image: url(icons/editor/efs.svg) !important;
-  background-size: 1.5rem !important;
 }
 
 .icon-fs {

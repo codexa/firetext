@@ -11,6 +11,7 @@
 /* Globals
 ------------------------*/
 // Misc
+var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
@@ -171,9 +172,12 @@ function init() {
       spinner('hide');
     }
   });
+  
+  // Initialize Night Mode
+  night();
 }
 
-function initSharing() {  
+function initSharing() {
   // Dropbox
   if (getSettings('dropbox.enabled') == 'true') {
     // Error Handler
@@ -189,32 +193,41 @@ function initSharing() {
         if (!error && client) {
           // Set client
           dropboxClient = client;
-          window.dispatchEvent(dropboxAuthed);
           
           // Code to get dropbox files
+          updateDocLists();
+          
+          // Show UI elements
           welcomeDropboxArea.style.display = 'block';
           openDialogDropboxArea.style.display = 'block';
           locationDropbox = document.createElement('option');
           locationDropbox.textContent = 'Dropbox';
           locationSelect.appendChild(locationDropbox);
-          updateDocLists();
+          
+          // Dispatch auth event
+          window.dispatchEvent(dropboxAuthed);
+          
+          // This is a workaround for a very weird bug...          
+          setTimeout(updateAddDialog, 1);
         } else {
+          // Hide/Remove UI elements
           welcomeDropboxArea.style.display = 'none';
           openDialogDropboxArea.style.display = 'none';
           if (locationDropbox) {
             locationSelect.removeChild(locationDropbox);
             locationDropbox = undefined;
           }
-        }
+        }                
       });
     } 
   } else {
+    // Hide/Remove UI elements
+    welcomeDropboxArea.style.display = 'none';
+    openDialogDropboxArea.style.display = 'none';
     if (locationDropbox) {
       locationSelect.removeChild(locationDropbox);
       locationDropbox = undefined;
     }
-    welcomeDropboxArea.style.display = 'none';
-    openDialogDropboxArea.style.display = 'none';
     
     // Sign out
     if (dropboxClient) {
@@ -240,19 +253,22 @@ function initSharing() {
   // Google Drive
   if (getSettings('gdrive.enabled') == 'true') {
     // Code to get Google Drive files
+    updateDocLists();
+    
+    // Show UI Elements
     welcomeGoogleArea.style.display = 'block';
     openDialogGoogleArea.style.display = 'block';
     locationGoogle = document.createElement('option');
     locationGoogle.textContent = 'Google Drive';
     locationSelect.appendChild(locationGoogle);
-    updateDocLists();
   } else {
+    // Hide/Remove UI elements
+    welcomeGoogleArea.style.display = 'none';
+    openDialogGoogleArea.style.display = 'none';
     if (locationGoogle) {
       locationSelect.removeChild(locationGoogle);
       locationGoogle = undefined;
     }
-    welcomeGoogleArea.style.display = 'none';
-    openDialogGoogleArea.style.display = 'none';
     
     // Remove Google recents
     var driveRecents = RecentDocs.get();
@@ -260,23 +276,34 @@ function initSharing() {
       if (driveRecents[i][3] == 'gdrive') {
         RecentDocs.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3]);
       }
-    }      
+    }
   }
   
-  // Location Select
+  updateAddDialog();
+}
+
+function updateAddDialog() {
   if (locationSelect.length < 1) {
+    // Disable elements
     document.getElementById('add-dialog-create-button').style.pointerEvents = 'none';
     document.getElementById('add-dialog-create-button').style.color = '#999';
-    var noStorageNotice = document.createElement('div');
-    noStorageNotice.id = 'no-storage-notice';
-    noStorageNotice.classList.add('redAlert');
-    noStorageNotice.textContent = 'You have not set up a storage method!';
-    document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
     document.querySelector('#add [role="main"]').style.display = 'none';
+    
+    // Create notice
+    if (!document.getElementById('no-storage-notice')) {
+      var noStorageNotice = document.createElement('div');
+      noStorageNotice.id = 'no-storage-notice';
+      noStorageNotice.classList.add('redAlert');
+      noStorageNotice.textContent = 'You have not set up a storage method!';
+      document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
+    }
   } else {
+    // Enable elements
     document.getElementById('add-dialog-create-button').style.pointerEvents = 'auto';
     document.getElementById('add-dialog-create-button').style.color = 'auto';
     document.querySelector('#add [role="main"]').style.display = 'block';
+  
+    // Remove notice if present
     if (document.getElementById('no-storage-notice')) {
       document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
     }
@@ -393,17 +420,20 @@ function updateDocLists() {
   }
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location) {    
-  // Remove HTML
-  var tmp = document.createElement("DIV");
-  if( typeof description === "string" ) {
-    tmp.innerHTML = description;	
-  } else {
-    tmp.appendChild(description);
+function buildDocListItems(DOCS, listElms, description, output, location) {
+  // Convert to html
+  switch (DOCS[0][2]) {
+    case ".txt":
+      description = txt.parse(description, "HTML");
+      break;
+    case ".docx":
+      var tmp = document.createElement("DIV");
+      tmp.appendChild(description);
+      description = tmp.textContent;
+    case ".html":
+    default:
+      break;
   }
-  description = tmp.textContent;
-  tmp.innerHTML = description;
-  description = tmp.textContent;
   
   // UI refinements
   var icon, directory;
@@ -422,9 +452,12 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   // Generate item
   output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
-  output += '<aside class="icon icon-'+icon+'"></aside><aside class="icon icon-arrow pack-end"></aside>'; 
-  output += '<p>'+directory+DOCS[0][1]+'<em>'+DOCS[0][2]+'</em></p>';
-  output += '<p>'+description+'</p>';
+  output += '<div class="fileItemDescription">'+description+'</div>';
+  output += '<div class="fileItemInfo">';
+  output += '<aside class="icon icon-arrow pack-end"></aside>';  
+  output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
+  output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
+  output += '</div>'; 
   output += '</a></li>';
   
   // Display output HTML
@@ -779,7 +812,7 @@ function settings() {
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
-  var nightmodeEnabled = document.querySelector('#nightmode-enabled-switch');
+  var nightmodeSelect = document.querySelector('#nightmode-select');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
   
@@ -822,13 +855,29 @@ function settings() {
   
   // Night Mode
   if (getSettings('nightmode') == 'true') {
-    nightmodeEnabled.setAttribute('checked', '');
-  } else {  
-    nightmodeEnabled.removeAttribute('checked');
+    nightmodeSelect.value = 'Always On';
+  } else if (getSettings('nightmode') == 'false') { 
+    nightmodeSelect.value = 'Always Off';
+  } else {
+    nightmodeSelect.value = 'Auto';  
   }
-  nightmodeEnabled.onchange = function () {
-    saveSettings('nightmode', this.checked);
-  }
+  nightmodeSelect.addEventListener('change', function () {
+    // Convert
+    var convertedNightValue;
+    if (nightmodeSelect.value == 'Always On') {
+      convertedNightValue = 'true';
+    } else if (nightmodeSelect.value == 'Always Off') { 
+      convertedNightValue = 'false';
+    } else {
+      convertedNightValue = 'auto';
+    }  
+    
+    // Save
+    saveSettings('nightmode', convertedNightValue);
+    
+    // Update
+    night();
+  });
   
   // Dropbox
   if (getSettings('dropbox.enabled') == 'true') {
@@ -988,33 +1037,71 @@ function processActions(eventAttribute, target) {
 ------------------------*/ 
 function dropboxError(error) {
   switch (error.status) {
-  case Dropbox.ApiError.INVALID_TOKEN:
-    alert('The session expired, retrying...');
-    initSharing(); 
-    break;
-
   case Dropbox.ApiError.OVER_QUOTA:
     // The user is over their Dropbox quota.
     // Tell them their Dropbox is full. Refreshing the page won't help.
     alert('Your Dropbox is full :(');
     break;
 
-  case Dropbox.ApiError.RATE_LIMITED:
-    alert('Dropbox API request limit was exceeded.\n\nPlease try again later.');
-    break;
 
   case Dropbox.ApiError.NETWORK_ERROR:
     alert('Your network appears to be unavailable.\n\nPlease check your connection and try again.');
     break;
-    
-  case 404:
-    break;
-  
+
+  case Dropbox.ApiError.RATE_LIMITED:
+  case Dropbox.ApiError.INVALID_TOKEN:
   case Dropbox.ApiError.INVALID_PARAM:
   case Dropbox.ApiError.OAUTH_ERROR:
-  case Dropbox.ApiError.INVALID_METHOD:
+  case Dropbox.ApiError.INVALID_METHOD:    
+  case 404:  
   default:
-    alert('A Dropbox error occured.\n\nInfo for Gurus:\n'+error.status);
+    // TBD Code to Notify Fireanalytic
+    break;
+  }
+}
+
+
+/* Night Mode
+------------------------*/
+var ncss, dcss = document.getElementsByTagName("link")[25];
+
+function night() {
+  if (getSettings('nightmode') == 'true') {
+    // Add nighticons.css to DOM
+    if (!ncss) {
+      ncss = document.createElement("link");
+      ncss.rel = "stylesheet";
+      ncss.type = "text/css";
+      ncss.href = "style/nighticons.css";
+      head.insertBefore(ncss, dcss);
+    }
+    
+    html.classList.add('night');
+    doc.style.color = '#fff';
+  } else if (getSettings('nightmode') == 'false') {
+    if (ncss) {
+      head.removeChild(ncss);
+      ncss = null;
+    }
+    html.classList.remove('night');
+    doc.style.color = '#000';
+  } else {
+    if (ncss) {
+      head.removeChild(ncss);
+      ncss = null;
+    }
+    html.classList.remove('night');
+    doc.style.color = '#000';
+    window.addEventListener('devicelight', function(event) {
+      if (getSettings('nightmode') == 'auto') {
+        console.log(event.value);
+        if (event.value < 50) {
+          html.classList.add('night');
+        } else {
+          html.classList.remove('night');
+        }
+      }
+    });    
   }
 }
 

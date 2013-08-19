@@ -11,8 +11,8 @@
   right: 0;
   bottom: 0;
   white-space: nowrap;
-  font-family: "MozTT", Sans-serif;
-  color: #fff;
+  font-family: "Moz", "Open Sans", Sans-serif;
+  color: #6f6f6f;
   pointer-events: none;
   opacity: .99;
   visibility: hidden;
@@ -78,7 +78,7 @@
 }
 
 [role="edit"][data-type="edit"] header h1 {
-  font: 2.5rem/5rem "MozTT", Sans-serif;
+  font: 2.5rem/5rem "Moz", "Open Sans", Sans-serif;
   text-align: left;
   color: #fff;
   white-space: nowrap;

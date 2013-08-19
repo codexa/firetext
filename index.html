@@ -42,6 +42,7 @@
   <link rel="stylesheet" type="text/css" href="style/icons.css"/>
   <link rel="stylesheet" type="text/css" href="style/desktop.css"/>
   <link rel="stylesheet" type="text/css" href="resources/google-code-prettify/prettify.css"/>
+  <link rel="stylesheet" type="text/css" href="style/night.css" />
 
   <!-- Shared code -->
   <script type="application/javascript" defer src="js/gesture_detector.js"></script>
@@ -80,7 +81,7 @@
     <nav>
       <h2>Document actions</h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="add">New document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="add">Create document</a></li>
         <li><a href="#" data-click="nav" data-click-location="open">Open document</a></li>
       </ul>
       <h2>Help</h2>
@@ -141,7 +142,7 @@
       <menu type="toolbar">
        <button data-click="createFromDialog" id="add-dialog-create-button">create</button>
       </menu>
-      <h1>New document</h1>
+      <h1>Create document</h1>
     </header>
     <div role="main" class="header-only">
       <div class="form">
@@ -233,7 +234,7 @@
       <button data-click="nav" data-click-location="welcome"><span class="icon icon-close">close</span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon icon-save">Save</span></button>
-        <button data-click="fullscreen"><span class="icon icon-fs">Fullscreen</span></button>
+        <button data-click="fullscreen"><span class="icon icon-fs">Zen Mode</span></button>
         <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu">Menu</span></button>
       </menu>
       <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
@@ -246,10 +247,10 @@
             <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
-                <li><button class="sticky" id="bold" style="background-image: url(style/icons/editor/white/bold.svg);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-                <li><button class="sticky" id="italic" style="background-image: url(style/icons/editor/white/italic.svg);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-                <li><button class="sticky" id="underline" style="background-image: url(style/icons/editor/white/underline.svg);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-                <li><button style="background-image: url(style/icons/editor/white/more.svg);" data-click="nav" data-click-location="format">Format</button></li>
+                <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold">Bold</button></li>
+                <li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic">Italic</button></li>
+                <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button class="icon-more" data-click="nav" data-click-location="format">Format</button></li>
               </ul>
               <ul>
                 <!-- Version 0.3
@@ -266,10 +267,10 @@
           </div>
         </li>
         <div class="tabToolbar">
-          <img src="style/icons/misc/menu.svg" alt="" class="tabButton"  data-click="sidebar" data-click-id="main" />
-          <img src="style/icons/misc/close.svg" alt="" class="tabButton" data-click="nav" data-click-location="welcome"/>
-          <img src="style/icons/editor/efs.svg" alt="" class="tabButton" data-click="fullscreen" />
-          <img src="style/icons/editor/save.svg" alt="" class="tabButton" data-click="saveFromEditor" id="zenSaveButton" />
+          <button data-click="sidebar" data-click-id="main" class="icon-menu">Menu</button>
+          <button data-click="nav" data-click-location="welcome" class="icon-close">Close</button>
+          <button data-click="fullscreen" class="icon-efs">Exit Zen Mode</button>
+          <button data-click="saveFromEditor" id="zenSaveButton" class="icon-save">Save</button>
         </div>
       </ul>
     </div>
@@ -306,7 +307,7 @@
                 <button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside class="icon" style="background-image: url(style/icons/editor/numbered-list.svg);"></aside>
+            <aside class="icon icon-ordlist"></aside>
             <p class="label">Ordered list</p>
           </li>
           <li class="noLink">
@@ -315,7 +316,7 @@
                 <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside class="icon" style="background-image: url(style/icons/editor/list.svg);"></aside>
+            <aside class="icon icon-unlist"></aside>
             <p class="label">Unordered list</p>
           </li>
         </ul>
@@ -428,10 +429,13 @@
             </li>
             <li class="noLink">
 			  <aside class="pack-end">
-				<label>
-				  <input type="checkbox" data-type="switch" id="nightmode-enabled-switch" />
-				  <span></span>
-				</label>
+                <label>
+                  <select style="margin-top: 12px;" id="nightmode-select">
+                    <option selected>Auto</option>
+                    <option>Always On</option>
+                    <option>Always Off</option>
+                  </select>
+                </label>
 			  </aside>
 			  <p class="label">Enable <b>Night Mode</b></p>
             </li>

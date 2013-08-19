@@ -6,8 +6,9 @@ html, body {
   margin: 0;
   padding: 0;  
   font-size: 10px;
-  font-family: sans-serif;  
-  background: black;
+  font-family: "Open Sans", sans-serif;  
+  background: #dfdfdf;
+  color: #6f6f6f;
 }
 
 @font-face {
@@ -73,17 +74,20 @@ form[role=dialog].current {
   padding: 0;
 }
 
-[data-type="list"] h2, [data-type="edit"] h2 {
+[data-type="list"] h2,
+[data-type="edit"] h2 {
   background: #CACACA;
   padding: 5px 20px;
   color: #2C2C2C;
   margin: 0 0;
   font-family: "Open Sans";
   font-weight: normal;
-  font-size: 180%;
+  font-size: 1.8rem;
 }
 
-[data-type="list"] li a, [data-type="edit"] li a, .noLink {
+[data-type="list"] li a,
+[data-type="edit"] li a,
+.noLink {
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -91,6 +95,61 @@ form[role=dialog].current {
 [data-type="edit"] li {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+
+/* File List */
+[data-type="list"] li.fileListItem {
+  height: auto;
+  background: #eee;
+  border-bottom: 2px solid #aeaeae;
+}
+
+[data-type="list"] li.fileListItem a {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+[data-type="list"] li.fileListItem > a > p,
+[data-type="list"] li.fileListItem > a > div {
+  padding: .5rem 2rem;
+}
+
+[data-type="list"] li.fileListItem .fileItemDescription {
+  background: #dfdfdf;
+  color: #6f6f6f;
+  font-size: 1.2rem;
+  max-height: 5rem;
+  overflow: hidden;
+  padding-top: 1rem;
+}
+
+[data-type="list"] li.fileListItem .fileItemInfo {
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+[data-type="list"] li.fileListItem .fileItemInfo aside.icon {
+  height: 2rem;
+  padding-top: 2.4rem;
+}
+
+[data-type="list"] li.fileListItem .fileItemName {
+  font-size: 1.8rem;
+  color: #2c2c2c;
+  font-weight: bold;
+  margin: 0;
+  padding: .4rem 0 0;
+}
+
+[data-type="list"] li.fileListItem .fileItemPath {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: -.4rem;
 }
 
 
@@ -146,6 +205,7 @@ legend.action select {
 .tabToolbar {
   opacity: 0;
   visibility: hidden;
+  height: 4rem;
   transition: opacity .3s;
     -moz-transition: opacity .3s;
     -webkit-transition: opacity .3s;
@@ -157,14 +217,25 @@ legend.action select {
   visibility: visible;
 }
 
-.tabButton {
+.tabToolbar button,
+.tabToolbar .button,
+.tabToolbar input[type="button"] {
   float: right;
-  padding: 7px;
-  max-height: 25px;
+  padding: 0;
+  width: 5rem;
+  height: 100%;
+  background: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  font-size: 0;
+  border-radius: 0;
 }
 
-.tabButton:active {
-  background: #dfdfdf;
+.tabToolbar button:active,
+.tabToolbar .button:active,
+.tabToolbar input[type="button"]:active {
+  background-color: #dfdfdf;
   transition: background 0.2s ease;
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
@@ -193,8 +264,7 @@ legend.action select {
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 8px;
-  background: rgba(238,238,238,1);
-  border: 2px solid rgb(31,31,31);
+  background-color: #eee;
   padding: 10px;
   opacity: 0;
   display: inline-block;
