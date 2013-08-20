@@ -438,6 +438,7 @@ function loadToEditor(directory, filename, filetype, location) {
   
   // Show/hide toolbar
   switch (filetype) {
+    case ".docx":
     case ".html":
       document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
       editor.classList.remove('no-toolbar'); // 0.2 only
