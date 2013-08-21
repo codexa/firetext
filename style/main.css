@@ -300,7 +300,7 @@ legend.action select {
 }
 
 .spinner > div {
-  background-image: url(bb/progress_activity/images/ui/default.png);
+  background-image: url(icons/misc/spinner.png);
   background-repeat: no-repeat;
   background-position: center;
   width: 33px;

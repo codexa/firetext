@@ -12,9 +12,11 @@
   background: #161616;
 }
 
-.night section[role="dialog"],
-.night form[role="dialog"] {
-  border: 1px solid #aeaeae;
+@media mobile, (min-width: 767px) {
+  .night section[role="dialog"],
+  .night form[role="dialog"] {
+    border: 1px solid #aeaeae;
+  }
 }
 
 
@@ -38,6 +40,10 @@
 .night .spinner {
   background: #2c2c2c;
   border: none;
+}
+
+.night .spinner > div {
+  background-image: url(icons/misc/spinner-night.png);
 }
 
 
