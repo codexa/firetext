@@ -2,16 +2,18 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Rectangle_1_copy_2_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-	 x="0px" y="0px" width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
+	 x="0px" y="0px" width="60px" height="60px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
 <defs>
-	<path id="SVGID_1_" enable-background="new    " d="M23.215,5H7.786C6.799,5,6,5.896,6,7v17c0,1.104,0.799,2,1.786,2H11v-7h9v7
-		h3.215C24.201,26,25,25.104,25,24V7C25,5.896,24.201,5,23.215,5z M22,15H9V6h13V15z"/>
+	<path id="SVGID_1_" enable-background="new    " d="M23.1201172,4h-0.2255859h-1.2773438H8.3833008h-1.277832H6.8798828
+		C5.8417969,4,5,4.9384766,5,6.0957031v16.7617188v1.046875C5,25.0615234,5.8417969,26,6.8798828,26h0.2255859h1.277832H10v-8
+		h0.2631836H11h8h0.7363281H20v8h1.6171875h1.2773438h0.2255859C24.1582031,26,25,25.0615234,25,23.9042969v-1.046875V6.0957031
+		C25,4.9384766,24.1582031,4,23.1201172,4z M21,14H9V5.0478516h1.0024414h0.2607422h9.4731445h0.2617188H21V14z"/>
 </defs>
 <clipPath id="SVGID_2_">
 	<use xlink:href="#SVGID_1_"  overflow="visible"/>
 </clipPath>
-<image overflow="visible" clip-path="url(#SVGID_2_)" width="30" height="30" id="Rectangle_1_copy_xA0_Image" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAACXBIWXMAAAsSAAALEgHS3X78AAAA
-GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABxJREFUeNrswTEBAAAAwqD1T20N
-D6AAAODRBBgACqoAARwbFHEAAAAASUVORK5CYII=">
+<image overflow="visible" clip-path="url(#SVGID_2_)" width="60" height="60" id="Rectangle_1_copy_xA0_Image" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAACXBIWXMAAAsSAAALEgHS3X78AAAA
+GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAChJREFUeNpiYqAZYBo1etToUaNH
+jR41etToUaNHjR41etRo8gFAgAEAVU8APawx8V0AAAAASUVORK5CYII=">
 </image>
 </svg>
