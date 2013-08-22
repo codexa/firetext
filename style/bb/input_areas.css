@@ -156,7 +156,6 @@ fieldset section textarea {
 
 fieldset section {
   display: block;
-  border-left: 0.1rem solid #ddd;
   border-radius: 0 0.3rem 0.3rem 0;
   overflow: hidden;
 }

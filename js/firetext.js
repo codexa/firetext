@@ -606,6 +606,8 @@ function initEditor() {
 function watchDocument(filetype) {
   // Add listener to update raw
   if (filetype == '.html') {
+    prettyPrint();
+      
     doc.addEventListener('input', function() {
       updateViews(rawEditor, doc.innerHTML, 'text');
     });

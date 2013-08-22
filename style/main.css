@@ -200,6 +200,36 @@ legend.action select {
   border-radius: 0;
 }
 
+aside.pack-end select {
+  background: none;
+  outline: none;
+  border: none;
+  border-radius: 0px;
+  font-size: 1.5rem;
+  position: absolute;
+  right: 0;
+  padding-top: 1.3rem;
+  text-align: right;
+  text-indent: 1.8rem;
+}
+
+aside.pack-end select:after {
+  content: "";
+  position: absolute;
+  top: 1.8rem;
+  width: 0;
+  height: 0;
+  margin-left: 0.5rem;
+  border: 0.4rem solid transparent;
+  border-top-color: #333;
+}
+
+legend.action select.dummy,
+aside select.dummy {
+  visibility: hidden;
+  width: 80%;
+}
+
 
 /* Tab Toolbar */
 .tabToolbar {
@@ -300,7 +330,7 @@ legend.action select {
 }
 
 .spinner > div {
-  background-image: url(bb/progress_activity/images/ui/default.png);
+  background-image: url(icons/misc/spinner.png);
   background-repeat: no-repeat;
   background-position: center;
   width: 33px;
