@@ -428,7 +428,7 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
       break;
     case ".docx":
       var tmp = document.createElement("DIV");
-      tmp.appendChild(description);
+      tmp.appendChild(description.HTMLout());
       description = tmp.innerHTML;
     case ".html":
     default:

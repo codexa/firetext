@@ -30,11 +30,13 @@ function DocxEditor(f) {
      * @type {Document}
      */
     var mainRels;
+    var mainPartPath;
     /**
      * the main document part
      * @type {Document}
      */
     var mainPart;
+    var helperArray;
     /**
      * Creates new namespace resolver mapping the property names of ns to the proper namespace
      * @param {object} ns object to map prefixes to namespaces
@@ -97,6 +99,19 @@ function DocxEditor(f) {
         return parser.parseFromString(zippedFile.asText(), "text/xml");
     }
 
+    function isBlockLevelHTML(node) {
+        var blockLevelElms = ["DIV"];
+        if(node.nodeType === Node.ELEMENT_NODE) {
+            for(var i = 0; i < blockLevelElms.length; i++) {
+                if(node.tagName === blockLevelElms[i]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
     function runParser(rElement) {
         var mainDoc = rElement.ownerDocument ? rElement.ownerDocument : rElement;
         var mainPartResolver = mainDoc.createNSResolver(mainDoc.documentElement);
@@ -114,25 +129,160 @@ function DocxEditor(f) {
         var mainPartResolver = mainDoc.createNSResolver(mainDoc.documentElement);
         var runIterator;
         var currentNode;
+        var currentHTML;
         var textElm;
-        var pElementHTML = document.createElement("p");
+        var pElementHTML = document.createElement("div");
+        var localHelperArray = [];
 
         runIterator = mainDoc.evaluate("./w:r", pElement, mainPartResolver, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
         currentNode = runIterator.iterateNext();
         while(currentNode) {
-            pElementHTML.appendChild(runParser(currentNode));
+            currentHTML = runParser(currentNode);
+            
+            localHelperArray.push({
+                html: currentHTML,
+                xml: currentNode
+            });
+
+            pElementHTML.appendChild(currentHTML);
             currentNode = runIterator.iterateNext();
         }
 
-        return pElementHTML;
+        return {
+            element: pElementHTML,
+            helperArray: localHelperArray
+        };
     }
+
+    function nodeExists(nodeToFind, node) {
+        for (var i = 0; i < node.childNodes.length; i++) {
+            if(node.childNodes[i] === nodeToFind) {
+                return true;
+            } else if(node.childNodes) {
+                if(nodeExists(nodeToFind, node.childNodes[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function getUnReferencedNodes(helperArray, DocNode) {
+        var unReferencedNodes = [];
+        for (var i = 0; i < helperArray.length; i++) {
+            if(!nodeExists(helperArray[i].html, DocNode)) {
+                unReferencedNodes.push(helperArray[i].xml);
+            }
+        }
+        return unReferencedNodes;
+    }
+
+    function removeNodes(listOfNodes) {
+        for (var i = 0; i < listOfNodes.length; i++) {
+            listOfNodes[i].parentNode.removeChild(listOfNodes[i]);
+        };
+    }
+
+    function mapHTMLtoXML(HTMLNode, nodeList) {
+        for (var i = 0; i < nodeList.length; i++) {
+            if(nodeList[i].html === HTMLNode) {
+                return nodeList[i].xml;
+            }
+        }
+    }
+
+    function insertNode(HTMLNode, DocNode, insertMethod, listOfNodes, mergeWith) {
+        var insertFunction;
+        var insertMethods = {
+            pMerger: function pMerger(HTMLNode, DocNode, insertMethod, listOfNodes, mergeWith) {
+                var currentNode;
+                var mainDoc = DocNode.ownerDocument ? DocNode.ownerDocument : DocNode;
+                var nodeToInsert;
+                var prevNode;
+
+                if(mergeWith) {
+                    nodeToInsert = mergeWith;
+                } else {
+                    nodeToInsert = mainDoc.createElementNS("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w:p");
+                }
+
+                for (var i = 0; i < HTMLNode.childNodes.length; i++) {
+                    currentNode = HTMLNode.childNodes[i];
+
+                    currentXmlNode = mapHTMLtoXML(currentNode, listOfNodes);
+
+                    prevNode = insertNode(currentNode, prevNode || nodeToInsert, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+                }
+
+                if(insertMethod === insertNode.INSERT_FIRST) {
+                    DocNode.insertBefore(nodeToInsert, DocNode.firstChild);
+                } else if(insertMethod === insertNode.INSERT_AFTER) {
+                    DocNode.parentNode.insertBefore(nodeToInsert, DocNode.nextSibling);
+                }
+                return nodeToInsert;
+            },
+            runMerger: function runMerger(HTMLNode, DocNode, insertMethod, listOfNodes, mergeWith) {
+                var relNode;
+                var newNode;
+                var mainDoc = DocNode.ownerDocument ? DocNode.ownerDocument : DocNode;
+                var mainDocResolver = mainDoc.createNSResolver(mainDoc.documentElement);
+                var textElm;
+
+                if(mergeWith) {
+                    nodeToInsert = mergeWith;
+                } else {
+                    nodeToInsert = mainDoc.createElementNS("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w:r");
+                }
+
+                textElm = mainDoc.evaluate("./w:t", nodeToInsert, mainDocResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                if(!textElm) {
+                    textElm = mainDoc.createElementNS("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w:t");
+                    nodeToInsert.appendChild(textElm);
+                }
+
+                if(HTMLNode.nodeType === Node.ELEMENT_NODE) {
+                    textElm.textContent = HTMLNode.textContent;
+                } else {
+                    textElm.textContent = HTMLNode.nodeValue;
+                }
+
+                if(insertMethod === insertNode.INSERT_FIRST) {
+                    DocNode.insertBefore(nodeToInsert, DocNode.firstChild);
+                } else if(insertMethod === insertNode.INSERT_AFTER) {
+                    DocNode.parentNode.insertBefore(nodeToInsert, DocNode.nextSibling);
+                }
+
+                return nodeToInsert;
+            }
+        };
+
+        if(HTMLNode.nodeType !== Node.ELEMENT_NODE) {
+            insertFunction = mergeMethods.runMerger;
+        } else {
+            switch(HTMLNode.tagName) {
+                case "DIV":
+                    insertFunction = insertMethods.pMerger;
+                    break;
+                case "SPAN":
+                    insertFunction = insertMethods.runMerger;
+                    break;
+            }
+        }
+
+        if(insertFunction) {
+            return insertFunction(HTMLNode, DocNode, insertMethod, listOfNodes, mergeWith);
+        }
+    }
+
+    insertNode.INSERT_AFTER = 1;
+    insertNode.INSERT_FIRST = 2;
 
     /**
      * Loads a new docx document into instance of DocxEditor
      * @param {ArrayBuffer | ArrayBufferView} f the docx file to load
      */
-    this.load = function load(f) {
+    this.load = function(f) {
         /**
          * temporary variable to store new file property
          * @see DocxEditor-file
@@ -155,7 +305,7 @@ function DocxEditor(f) {
          * the path to the main document part
          * @type {Node}
          */
-        var mainPartPath;
+        var tempMainPartPath;
         /**
          * temporary variable to store new mainPart property
          * @see DocxEditor-mainPart
@@ -185,11 +335,11 @@ function DocxEditor(f) {
         }
 
         // get main document part
-        mainPartPath = tempMainRels.evaluate("/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument']/@Target", tempMainRels, relsNSResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        if (!mainPartPath) {
+        tempMainPartPath = tempMainRels.evaluate("/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument']/@Target", tempMainRels, relsNSResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (!tempMainPartPath) {
             throw new Error("Invalid docx document");
         }
-        tempMainPart = getDocAsXML(tempZip, mainPartPath.textContent);
+        tempMainPart = getDocAsXML(tempZip, tempMainPartPath.textContent);
         if (!tempMainPart) {
             throw new Error("Invalid docx document");
         }
@@ -198,6 +348,7 @@ function DocxEditor(f) {
         file = tempFile;
         zip = tempZip;
         mainRels = tempMainRels;
+        mainPartPath = tempMainPartPath.textContent;
         mainPart = tempMainPart;
     };
 
@@ -214,6 +365,9 @@ function DocxEditor(f) {
      * @returns {string | Uint8Array | ArrayBuffer | Blob} docx file returned as type
      */
     this.generate = function (type) {
+        if(!type) {
+            type = "blob";
+        }
         // argument checking
         if (typeof type !== "string") {
             throw new TypeError("method generate of DocxEditor only accepts a string as a parameter")
@@ -244,7 +398,10 @@ function DocxEditor(f) {
         var paragraphIterator;
         var mainPartResolver = mainPart.createNSResolver(mainPart.documentElement);
         var currentNode;
+        var currentHTML;
         var output = document.createDocumentFragment();
+        var position = 0;
+        helperArray = [];
 
         bodyElm = mainPart.evaluate("/w:document/w:body", mainPart, mainPartResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
@@ -253,7 +410,17 @@ function DocxEditor(f) {
         paragraphIterator = mainPart.evaluate("./w:p", bodyElm, mainPartResolver, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
         currentNode = paragraphIterator.iterateNext();
         while( currentNode ) {
-            output.appendChild( pParser( currentNode ) );
+            currentP = pParser(currentNode);
+            currentHTML = currentP.element;
+
+            helperArray.push({
+                html: currentHTML,
+                xml: currentNode
+            });
+
+            helperArray = helperArray.concat(currentP.helperArray);
+
+            output.appendChild( currentHTML );
             currentNode = paragraphIterator.iterateNext();
         }
 
@@ -263,8 +430,51 @@ function DocxEditor(f) {
     /**
      * update html with new document fragment
      */
-	this.HTMLin = function() {
+	this.HTMLin = function(html) {
+        var currentNode;
+        var tempNode;
+        var prevNode;
+        var mainPartResolver = mainPart.createNSResolver(mainPart);
+        var mainPartChildren = [];
+        var bodyElm;
+        var serializer = new XMLSerializer();
+        var unReferencedNodes;
+        var currentXmlNode;
 
+        bodyElm = mainPart.evaluate("/w:document/w:body", mainPart, mainPartResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+        for (var i = 0; i < bodyElm.childNodes.length; i++) {
+            mainPartChildren[i] = bodyElm.childNodes[i]
+        };
+
+        unReferencedNodes = getUnReferencedNodes(helperArray, html);
+
+        for (var i = 0; i < html.childNodes.length; i++) {
+            currentNode = html.childNodes[i];
+
+            currentXmlNode = mapHTMLtoXML(currentNode, helperArray);
+
+            if(isBlockLevelHTML(currentNode)) {
+                if(tempNode) {
+                    prevNode = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+                    tempNode = undefined;
+                }
+
+                prevNode = insertNode(currentNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+            } else {
+                if(!tempNode) {
+                    tempNode = (html.ownerDocument ? html.ownerDocument : html).createElement("div");
+                }
+                tempNode.appendChild(currentNode);
+            }
+        }
+        if(tempNode) {
+            insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+        }
+
+        removeNodes(unReferencedNodes);
+
+        zip.file(mainPartPath, serializer.serializeToString(mainPart));
 	};
 
 	if(f) {

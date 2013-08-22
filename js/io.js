@@ -1,6 +1,6 @@
 /* Globals
 ------------------------*/
-var storage, deviceAPI, locationDevice;
+var storage, deviceAPI, locationDevice, docxeditor;
 
 
 /* Init
@@ -338,16 +338,19 @@ function saveFromEditor(banner, spinner) {
     case ".txt":
       content = txt.encode(doc.innerHTML, "HTML");
       break;
+    case ".docx":
+      content = doc;
+      break;
     default:
       content = doc.textContent;
       break;
   }
   banner = !!banner;
   spinner = !!spinner;
-  saveFile(directory, filename, filetype, content, banner, function(){}, location, spinner);
+  saveFile(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
 }
 
-function saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner) {
+function saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -355,18 +358,24 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
       break;
     case ".docx":
       type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      break;
     case ".txt":
     default:
       type = "text\/plain";
       break;
   }
-  var contentBlob = new Blob([content], { "type" : type });
-  
+  var contentBlob;
   // Special handling for .docx
   if (filetype == '.docx') {
-    //contentBlob = docx(contentBlob);
+    if(!docx) {
+      // load blank template
+    }
+    docx.HTMLin(content);
+    contentBlob = new Blob([docxeditor.generate("blob")], {type: type});
+  } else {
+    contentBlob = new Blob([content], { "type" : type });
   }
-  
+
   var filePath = (directory + filename + filetype);
   
   if (location == '' | location == 'internal' | !location) {
@@ -396,16 +405,22 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
       storage.root.getFile(directory + filename + filetype, {create: true}, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter){
           fileWriter.onwriteend = function(e) {
-            if (showBanner) {
-              showSaveBanner();
+            e.target.onwriteend = function(e) {
+              if (showBanner) {
+                showSaveBanner();
+              }
+              callback();
             }
-            callback();
+            e.target.onerror = function(e) {
+              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
+            }
+            e.target.write(contentBlob);
           };
           
           fileWriter.onerror = function(e) {
-            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
+            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
           };
-          fileWriter.write(contentBlob);
+          fileWriter.truncate(0);
         }, function(err) {
           alert("Error writing to file :(\n\ncode: " + err.code);
         });
@@ -465,7 +480,8 @@ function loadToEditor(directory, filename, filetype, location) {
           tab(document.querySelector('#editTabs'), 'design');
           break;
         case ".docx":
-          content = result;
+          docxeditor = result;
+          content = result.HTMLout();
           doc.appendChild(content);
           tabRaw.classList.add('hidden');
           tab(document.querySelector('#editTabs'), 'design');
@@ -521,8 +537,7 @@ function loadFile(directory, filename, filetype, callback, location) {
         reader.onload = function () {
           var file;
           if( filetype === ".docx" ) {
-            var docxEditor = new DocxEditor(this.result);
-            file = docxEditor.HTMLout();
+            file = new DocxEditor(this.result);
           } else {
             file = this.result;
           }
@@ -550,8 +565,7 @@ function loadFile(directory, filename, filetype, callback, location) {
           reader.onload = function () {
             var file;
             if( filetype === ".docx" ) {
-              var docxEditor = new DocxEditor(this.result);
-              file = docxEditor.HTMLout();
+              file = new DocxEditor(this.result);
             } else {
               file = this.result;
             }
