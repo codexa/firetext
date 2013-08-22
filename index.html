@@ -157,7 +157,7 @@
               -->
               <option>.txt</option>
             </select>
-            <select id="dummy" style="visibility:hidden; width: 80%;"></select>
+            <select id="dummy" class="dummy"></select>
           </legend>
           <section id="fileNameInput">
             <p>
@@ -166,8 +166,7 @@
             </p>
           </section>
           <legend class="action" id="locationLegend">
-            <select name="Location" id="createDialogFileLocation">
-            </select>
+            <select name="Location" id="createDialogFileLocation"></select>
           </legend>
         </fieldset>
       </div>
@@ -365,12 +364,13 @@
           <li class="noLink">
             <aside class="pack-end">
               <label>
-                <select style="margin-top: 12px;" data-change="justify" id="justify-select">
+                <select data-change="justify" id="justify-select">
                   <option selected>Left</option>
                   <option>Right</option>
                   <option>Center</option>
                   <option>Justified</option>
                 </select>
+                <select class="dummy"></select>
               </label>
             </aside>
             <p class="label">Alignment</p>
@@ -430,11 +430,12 @@
             <li class="noLink">
 			  <aside class="pack-end">
                 <label>
-                  <select style="margin-top: 12px;" id="nightmode-select">
+                  <select id="nightmode-select">
                     <option selected>Auto</option>
                     <option>Always On</option>
                     <option>Always Off</option>
                   </select>
+                  <select class="dummy"></select>
                 </label>
 			  </aside>
 			  <p class="label">Enable <b>Night Mode</b></p>

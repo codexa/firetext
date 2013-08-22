@@ -53,6 +53,30 @@
   border-color: #2c2c2c;
 }
 
+/* Input areas */
+.night fieldset {
+  background: #2c2c2c;
+  color: #dfdfdf;
+  border-color: transparent;
+}
+
+.night fieldset input,
+.night fieldset select {
+  color: #dfdfdf;
+}
+
+.night fieldset legend.action:after {
+  border-top-color: #dfdfdf;
+}
+
+.night fieldset legend:active {
+  background: #1a1a1a;
+}
+
+.night aside.pack-end select {
+  color: #dfdfdf;
+}
+
 
 /* Lists */
 .night [data-type="list"] h2,
