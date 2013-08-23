@@ -52,6 +52,7 @@ function startIO(api, callback) {
         if(grantedBytes > 0) {
           requestFileSystem(PERSISTENT, grantedBytes, function(fs) {
             storage = fs;
+            storage.root.getDirectory("Documents/", {create: true});
             deviceAPI = 'file';
             callback();
           }, onFSError);
