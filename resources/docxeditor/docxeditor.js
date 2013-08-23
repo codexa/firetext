@@ -460,6 +460,7 @@ function DocxEditor(f) {
         var currentNode;
         var tempNode;
         var prevNode;
+        var prevTempNode;
         var mainPartResolver = mainPart.createNSResolver(mainPart);
         var bodyElm;
         var serializer = new XMLSerializer();
@@ -481,16 +482,14 @@ function DocxEditor(f) {
             currentXmlNode = mapHTMLtoXML(currentNode, helperArray);
 
             if(isBlockLevelHTML(currentNode)) {
-                if(tempNode) {
-                    insertResult = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
-                    prevNode = insertResult.node;
-                    helperArray = helperArray.concat(insertResult.newList);
-                    tempNode = undefined;
-                }
+                tempNode = undefined;
+                prevTempNode = undefined;
 
                 insertResult = insertNode(currentNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
                 prevNode = insertResult.node;
-                helperArray = helperArray.concat(insertResult.newList);
+                if(insertResult.newList) {
+                    helperArray = helperArray.concat(insertResult.newList);
+                }
                 if(!currentXmlNode) {
                     helperArray.push({
                         html: currentNode,
@@ -499,15 +498,20 @@ function DocxEditor(f) {
                 }
             } else {
                 if(!tempNode) {
-                    tempNode = (html.ownerDocument ? html.ownerDocument : html).createElement("div");
+                    tempNode = mainPart.createElementNS("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w:p");
                 }
-                tempNode.appendChild(currentNode);
+                bodyElm.insertBefore(tempNode, prevNode && prevNode.nextSibling ? prevNode.nextSibling : null);
+                insertResult = insertNode(currentNode, prevTempNode || tempNode, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+                prevTempNode = insertResult.node;
+                if(insertResult.newList) {
+                    helperArray = helperArray.concat(insertResult.newList);
+                }
+                helperArray.push({
+                    html: currentNode,
+                    xml: insertResult.node
+                });
             }
             
-        }
-        if(tempNode) {
-            insertResult = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
-            helperArray = helperArray.concat(insertResult.newList);
         }
 
         removeNodes(unReferencedNodes);
