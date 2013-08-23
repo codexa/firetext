@@ -211,7 +211,7 @@ function dropboxDocsInFolder(client, directory, callback) {
           entries[i] = fileAddress(entries[i]);
           
           // Only get documents
-          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm') { // && entries[i][2] != '.docx') {
+          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.docx') {
             entries.splice(i, 1);
             i = (i - 1);
           }
@@ -270,7 +270,12 @@ function createFromDialog() {
       default:
         break;
     }
-    var contentBlob = new Blob([' '], { "type" : type });
+    var contentBlob;
+    if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+      contentBlob = new Blob([DocxEditor.blank], {type: type});
+    } else {
+      contentBlob = new Blob([' '], { "type" : type });
+    }
     if (deviceAPI == 'deviceStorage') {
       var filePath = (directory + filename + filetype);
       var req = storage.addNamed(contentBlob, filePath);
@@ -290,14 +295,20 @@ function createFromDialog() {
       storage.root.getFile(directory + filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter){
           fileWriter.onwriteend = function(e) {
-            loadToEditor(directory, filename, filetype, 'internal');
+            e.target.write(contentBlob);
+            e.target.onwriteend = function(e) {
+              loadToEditor(directory, filename, filetype, 'internal');
+            }
+            e.target.onerror = function(e) {
+              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
+            }
           };
           
           fileWriter.onerror = function(e) {
-            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.toString() + '"');
+            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
           };
           
-          fileWriter.write(contentBlob);
+          fileWriter.truncate(0);
         }, function(err) {
           alert("Error writing to new file :(\n\ncode: " + err.code);
         });
@@ -367,9 +378,6 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
   var contentBlob;
   // Special handling for .docx
   if (filetype == '.docx') {
-    if(!docx) {
-      // load blank template
-    }
     docx.HTMLin(content);
     contentBlob = new Blob([docxeditor.generate("blob")], {type: type});
   } else {
