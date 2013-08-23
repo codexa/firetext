@@ -32,6 +32,11 @@
   background-size: 2rem !important;
 }
 
+.icon-nightic {
+  background-image: url(icons/misc/night.svg) !important;
+  background-size: 2rem !important;
+}
+
 section > header:first-child :first-child .icon-menu {
   background-position: left;
 }
