@@ -169,12 +169,18 @@ function DocxEditor(f) {
 
     function getUnReferencedNodes(helperArray, DocNode) {
         var unReferencedNodes = [];
+        var referencedNodes = [];
         for (var i = 0; i < helperArray.length; i++) {
             if(!nodeExists(helperArray[i].html, DocNode)) {
                 unReferencedNodes.push(helperArray[i].xml);
+            } else {
+                referencedNodes.push(helperArray[i]);
             }
         }
-        return unReferencedNodes;
+        return {
+            unReferenced: unReferencedNodes,
+            referenced: referencedNodes
+        };
     }
 
     function removeNodes(listOfNodes) {
@@ -200,6 +206,8 @@ function DocxEditor(f) {
                 var nodeToInsert;
                 var prevNode;
                 var currentXmlNode;
+                var newList = [];
+                var insertResult;
 
                 if(mergeWith) {
                     nodeToInsert = mergeWith;
@@ -212,7 +220,19 @@ function DocxEditor(f) {
 
                     currentXmlNode = mapHTMLtoXML(currentNode, listOfNodes);
 
-                    prevNode = insertNode(currentNode, prevNode || nodeToInsert, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+                    insertResult = insertNode(currentNode, prevNode || nodeToInsert, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+
+                    if(!currentXmlNode) {
+                        newList.push({
+                            html: currentNode,
+                            xml: insertResult.node
+                        });
+                    }
+
+                    if(insertResult.newList) {
+                        newList = newList.concat(insertResult.newList);
+                    }
+                    prevNode = insertResult.node;
                 }
 
                 if(insertMethod === insertNode.INSERT_FIRST) {
@@ -220,7 +240,10 @@ function DocxEditor(f) {
                 } else if(insertMethod === insertNode.INSERT_AFTER) {
                     DocNode.parentNode.insertBefore(nodeToInsert, DocNode.nextSibling);
                 }
-                return nodeToInsert;
+                return {
+                    node: nodeToInsert,
+                    newList: newList
+                };
             },
             runMerger: function runMerger(HTMLNode, DocNode, insertMethod, listOfNodes, mergeWith) {
                 var mainDoc = DocNode.ownerDocument ? DocNode.ownerDocument : DocNode;
@@ -252,7 +275,9 @@ function DocxEditor(f) {
                     DocNode.parentNode.insertBefore(nodeToInsert, DocNode.nextSibling);
                 }
 
-                return nodeToInsert;
+                return {
+                    node: nodeToInsert,
+                };
             }
         };
 
@@ -438,10 +463,15 @@ function DocxEditor(f) {
         var serializer = new XMLSerializer();
         var unReferencedNodes;
         var currentXmlNode;
+        var unReferencedResult;
+        var insertResult;
 
         bodyElm = mainPart.evaluate("/w:document/w:body", mainPart, mainPartResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
-        unReferencedNodes = getUnReferencedNodes(helperArray, html);
+        unReferencedResult = getUnReferencedNodes(helperArray, html);
+        unReferencedNodes = unReferencedResult.unReferenced;
+        helperArray = unReferencedResult.referenced;
+
 
         for (var i = 0; i < html.childNodes.length; i++) {
             currentNode = html.childNodes[i];
@@ -450,20 +480,32 @@ function DocxEditor(f) {
 
             if(isBlockLevelHTML(currentNode)) {
                 if(tempNode) {
-                    prevNode = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+                    insertResult = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+                    prevNode = insertResult.node;
+                    helperArray = helperArray.concat(insertResult.newList);
                     tempNode = undefined;
                 }
 
-                prevNode = insertNode(currentNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+                insertResult = insertNode(currentNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+                prevNode = insertResult.node;
+                helperArray = helperArray.concat(insertResult.newList);
+                if(!currentXmlNode) {
+                    helperArray.push({
+                        html: currentNode,
+                        xml: insertResult.node
+                    });
+                }
             } else {
                 if(!tempNode) {
                     tempNode = (html.ownerDocument ? html.ownerDocument : html).createElement("div");
                 }
                 tempNode.appendChild(currentNode);
             }
+            
         }
         if(tempNode) {
-            insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+            insertReuslt = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+            helperArray = helperArray.concat(insertResult.newList);
         }
 
         removeNodes(unReferencedNodes);
