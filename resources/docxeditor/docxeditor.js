@@ -120,7 +120,9 @@ function DocxEditor(f) {
 
         textElm = mainDoc.evaluate("./w:t", rElement, mainPartResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         spanElm = document.createElement("span");
-        spanElm.appendChild(document.createTextNode(textElm.textContent));
+        if(textElm && textElm.textContent) {
+            spanElm.appendChild(document.createTextNode(textElm.textContent));
+        }
         return spanElm;
     }
 
@@ -504,7 +506,7 @@ function DocxEditor(f) {
             
         }
         if(tempNode) {
-            insertReuslt = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
+            insertResult = insertNode(tempNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
             helperArray = helperArray.concat(insertResult.newList);
         }
 
