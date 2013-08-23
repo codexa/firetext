@@ -130,7 +130,6 @@ function DocxEditor(f) {
         var runIterator;
         var currentNode;
         var currentHTML;
-        var textElm;
         var pElementHTML = document.createElement("div");
         var localHelperArray = [];
 
@@ -181,7 +180,7 @@ function DocxEditor(f) {
     function removeNodes(listOfNodes) {
         for (var i = 0; i < listOfNodes.length; i++) {
             listOfNodes[i].parentNode.removeChild(listOfNodes[i]);
-        };
+        }
     }
 
     function mapHTMLtoXML(HTMLNode, nodeList) {
@@ -200,6 +199,7 @@ function DocxEditor(f) {
                 var mainDoc = DocNode.ownerDocument ? DocNode.ownerDocument : DocNode;
                 var nodeToInsert;
                 var prevNode;
+                var currentXmlNode;
 
                 if(mergeWith) {
                     nodeToInsert = mergeWith;
@@ -223,11 +223,10 @@ function DocxEditor(f) {
                 return nodeToInsert;
             },
             runMerger: function runMerger(HTMLNode, DocNode, insertMethod, listOfNodes, mergeWith) {
-                var relNode;
-                var newNode;
                 var mainDoc = DocNode.ownerDocument ? DocNode.ownerDocument : DocNode;
                 var mainDocResolver = mainDoc.createNSResolver(mainDoc.documentElement);
                 var textElm;
+                var nodeToInsert;
 
                 if(mergeWith) {
                     nodeToInsert = mergeWith;
@@ -258,7 +257,7 @@ function DocxEditor(f) {
         };
 
         if(HTMLNode.nodeType !== Node.ELEMENT_NODE) {
-            insertFunction = mergeMethods.runMerger;
+            insertFunction = insertMethods.runMerger;
         } else {
             switch(HTMLNode.tagName) {
                 case "DIV":
@@ -400,7 +399,7 @@ function DocxEditor(f) {
         var currentNode;
         var currentHTML;
         var output = document.createDocumentFragment();
-        var position = 0;
+        var currentP;
         helperArray = [];
 
         bodyElm = mainPart.evaluate("/w:document/w:body", mainPart, mainPartResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
@@ -435,17 +434,12 @@ function DocxEditor(f) {
         var tempNode;
         var prevNode;
         var mainPartResolver = mainPart.createNSResolver(mainPart);
-        var mainPartChildren = [];
         var bodyElm;
         var serializer = new XMLSerializer();
         var unReferencedNodes;
         var currentXmlNode;
 
         bodyElm = mainPart.evaluate("/w:document/w:body", mainPart, mainPartResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-
-        for (var i = 0; i < bodyElm.childNodes.length; i++) {
-            mainPartChildren[i] = bodyElm.childNodes[i]
-        };
 
         unReferencedNodes = getUnReferencedNodes(helperArray, html);
 
