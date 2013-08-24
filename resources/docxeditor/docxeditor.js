@@ -224,17 +224,19 @@ function DocxEditor(f) {
 
                     insertResult = insertNode(currentNode, prevNode || nodeToInsert, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
 
-                    if(!currentXmlNode) {
-                        newList.push({
-                            html: currentNode,
-                            xml: insertResult.node
-                        });
-                    }
+                    if(insertResult) {
+                        if(!currentXmlNode && insertResult) {
+                            newList.push({
+                                html: currentNode,
+                                xml: insertResult.node
+                            });
+                        }
 
-                    if(insertResult.newList) {
-                        newList = newList.concat(insertResult.newList);
+                        if(insertResult.newList) {
+                            newList = newList.concat(insertResult.newList);
+                        }
+                        prevNode = insertResult.node;
                     }
-                    prevNode = insertResult.node;
                 }
 
                 if(insertMethod === insertNode.INSERT_FIRST) {
@@ -278,7 +280,7 @@ function DocxEditor(f) {
                 }
 
                 return {
-                    node: nodeToInsert,
+                    node: nodeToInsert
                 };
             }
         };
@@ -486,30 +488,44 @@ function DocxEditor(f) {
                 prevTempNode = undefined;
 
                 insertResult = insertNode(currentNode, prevNode || bodyElm, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
-                prevNode = insertResult.node;
-                if(insertResult.newList) {
-                    helperArray = helperArray.concat(insertResult.newList);
-                }
-                if(!currentXmlNode) {
-                    helperArray.push({
-                        html: currentNode,
-                        xml: insertResult.node
-                    });
+                if(insertResult) {
+                    prevNode = insertResult.node;
+                    if(insertResult.newList) {
+                        helperArray = helperArray.concat(insertResult.newList);
+                    }
+                    if(!currentXmlNode) {
+                        helperArray.push({
+                            html: currentNode,
+                            xml: insertResult.node
+                        });
+                    }
                 }
             } else {
                 if(!tempNode) {
                     tempNode = mainPart.createElementNS("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w:p");
+                    bodyElm.insertBefore(tempNode, prevNode && prevNode.nextSibling ? prevNode.nextSibling : null);
+                    prevNode = tempNode;
+                    helperArray.push({
+                        html: null,
+                        xml: tempNode
+                    });
                 }
-                bodyElm.insertBefore(tempNode, prevNode && prevNode.nextSibling ? prevNode.nextSibling : null);
-                insertResult = insertNode(currentNode, prevTempNode || tempNode, prevNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray);
-                prevTempNode = insertResult.node;
-                if(insertResult.newList) {
-                    helperArray = helperArray.concat(insertResult.newList);
+
+                insertResult = insertNode(currentNode, prevTempNode || tempNode, prevTempNode ? insertNode.INSERT_AFTER : insertNode.INSERT_FIRST, helperArray, currentXmlNode || null);
+                if(insertResult) {
+                    prevTempNode = insertResult.node;
+
+                    if(insertResult.newList) {
+                        helperArray = helperArray.concat(insertResult.newList);
+                    }
+                    if(!currentXmlNode) {
+                        helperArray.push({
+                            html: currentNode,
+                            xml: insertResult.node
+                        });
+                    }
                 }
-                helperArray.push({
-                    html: currentNode,
-                    xml: insertResult.node
-                });
+
             }
             
         }

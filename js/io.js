@@ -400,7 +400,7 @@ function saveFile(directory, filename, filetype, content, showBanner, callback, 
         if (this.error.name == "NoModificationAllowedError") {
           var req2 = storage.delete(filePath);
           req2.onsuccess = function () {
-            saveFile(directory, filename, filetype, content, showBanner, callback);
+            saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx);
           };
           req2.onerror = function () {
             alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
