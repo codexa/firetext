@@ -10,6 +10,9 @@
 
 /* Globals
 ------------------------*/
+var firetext = {};
+firetext.user = {};
+
 // Misc
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
