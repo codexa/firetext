@@ -59,7 +59,7 @@
     width: 400px;
   }
   section[data-type="sidebar"] > nav {
-    overflow-y: hidden;
+    height: calc(100% - 5rem - 4rem);
   }
   [data-state="drawer"].current {
     transform: translateX(400px) !important;
