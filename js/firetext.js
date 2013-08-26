@@ -110,6 +110,9 @@ function init() {
   // Initialize the editor
   initEditor();
   
+  // Init Client Id
+  initClientId();
+
   // Init extIcon
   extIcon();
   
@@ -178,6 +181,24 @@ function init() {
   
   // Initialize Night Mode
   night();
+}
+
+function initClientId() {
+  var ClId = firetext.user.$_ClientID,
+      CClId = localStorage.getItem("$#ClId");
+  // Client ID Verification and Validation
+  if (ClId === undefined && CClId === null){
+    firetext.user.genClId();
+  } else if(ClId === undefined){
+    firetext.user.$_ClientID = localStorage.getItem("$#ClId");
+  } else if (CClId === null){
+    localStorage.setItem("$#ClId", firetext.user.$_ClientID);
+  } else if(ClId.length/4 !== 16 || CClId.length/4 !== 16){
+    firetext.user.genClId();
+    initClientId();
+  } else {
+    console.log(ClId+" "+CClId);
+  }
 }
 
 function initSharing() {
