@@ -6,6 +6,9 @@ section > header:first-child {
   color: #1f1f1f;
   background: #eee;
   background-size: auto 100%;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   border-bottom: .2rem solid #aeaeae;
 }
 
