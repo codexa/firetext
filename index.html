@@ -9,14 +9,30 @@
 
   <title>Firetext</title>
 
-<<<<<<< HEAD
-  <!-- Scripts -->
-  <script type="application/javascript" src="js/firetext.js"></script>
-  <script type="application/javascript" src="js/regions.js"></script>
-  <script type="application/javascript" src="js/io.js"></script>
+  <!-- RequireJS -->
+  <script data-main="js/main.js" type="text/javascript" src="resources/requirejs/require.js"></script>
+  
+  <!-- Shared code -->
+  <script type="application/javascript" defer src="js/gesture_detector.js"></script>
 
-=======
->>>>>>> 8b7a724e22154fbbfd941312c0901af06fdf2ddd
+  <!-- Format parsers -->
+  <script type="application/javascript" src="resources/txt/parse.js"></script>
+  <script type="application/javascript" src="resources/stringview/stringview.js"></script>
+  
+  <!-- Modules -->
+  <script type="application/javascript" src="js/modules/clidgen.js"></script>
+  <script type="application/javascript" src="js/modules/userlog.js"></script>
+  <script type="application/javascript" src="js/modules/encrypt.js"></script>
+
+  <!-- Resources -->
+  <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
+  <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
+  <script type="application/javascript" src="resources/google/ga.js"></script>
+  <script type="application/javascript" src="resources/jszip/jszip.js"></script>
+  <script type="application/javascript" src="resources/jszip/jszip-load.js"></script>
+  <script type="application/javascript" src="resources/jszip/jszip-inflate.js"></script>
+  <script type="application/javascript" src="resources/jszip/jszip-deflate.js"></script>
+
   <!-- Building Blocks -->
   <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
@@ -44,33 +60,6 @@
   <link rel="stylesheet" type="text/css" href="style/desktop.css"/>
   <link rel="stylesheet" type="text/css" href="resources/gcprettify/prettify.css"/>
   <link rel="stylesheet" type="text/css" href="style/night.css" />
-
-  <!-- Shared code -->
-  <script type="application/javascript" defer src="js/gesture_detector.js"></script>
-
-  <!-- Format parsers -->
-  <script type="application/javascript" src="resources/txt/parse.js"></script>
-  <script type="application/javascript" src="resources/stringview/stringview.js"></script>
-<<<<<<< HEAD
-  <script type="application/javascript" src="resources/docxeditor/docxeditor.js"></script>
-  
-  <!-- Modules -->
-  <script type="application/javascript" src="js/modules/clidgen.js"></script>
-  <script type="application/javascript" src="js/modules/userlog.js"></script>
-  <script type="application/javascript" src="js/modules/encrypt.js"></script>
-=======
->>>>>>> 8b7a724e22154fbbfd941312c0901af06fdf2ddd
-
-  <!-- Resources -->
-  <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
-  <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
-  <script type="application/javascript" src="resources/google/ga.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip-load.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip-inflate.js"></script>
-  <script type="application/javascript" src="resources/jszip/jszip-deflate.js"></script>
-
-  <script data-main="js/main.js" type="text/javascript" src="resources/requirejs/require.js"></script>
 
 </head>
 <body role="application">

@@ -47,8 +47,8 @@
 
 [role="tablist"][data-items="5"] > [role="tab"] {
   width: calc(100% / 5);
-    -moz-width: calc(100% / 5);
-    -webkit-width: calc(100% / 5);
+    width: -moz-calc(100% / 5);
+    width: -webkit-calc(100% / 5);
 }
 
 [role="tablist"] > [role="tab"] > a {
