@@ -1,4 +1,10 @@
-// Copyright (C) Codexa Organisation 2013.
+/*
+* Plain Text Parser
+* Copyright (C) Codexa Organization 2013.
+*/
+
+'use strict';
+
 
 var txt = {};
 
