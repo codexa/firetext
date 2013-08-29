@@ -2,6 +2,7 @@ requirejs.config({
 	baseUrl: "resources",
 	paths: {
 		"app": "../js",
+		"module": "../js/modules",
 		"google-code-prettify": "gcprettify/prettify"
 	},
 	shim: {

@@ -10,11 +10,15 @@
 
 /* RequireJS
 ------------------------*/
-define(["requirejs/domReady", "app/io", "app/recent_docs", "app/regions", "app/settings"], function(domReady, io, RecentDocs, regions, settings) {
+define(["requirejs/domReady", "app/io", "app/recent_docs", "app/regions", "app/settings", "module/clidgen"], function(domReady, io, RecentDocs, regions, settings, ClientID) {
 
 
 /* Globals
 ------------------------*/
+// Global Namespace
+var firetext = {};
+firetext.user = {};
+
 // Misc
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
