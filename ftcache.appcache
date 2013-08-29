@@ -1,0 +1,9 @@
+CACHE MANIFEST
+# Cache for Cloud Services
+index.html
+
+NETWORK:
+*
+
+CACHE:
+# Other files to cache

@@ -36,6 +36,8 @@ var dropboxClient = undefined, dropboxAuthed = new CustomEvent('dropboxAuthed');
 // Google Drive
 var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogleList;
 
+// Cache
+var appCache = window.applicationCache;
 
 /* Start
 ------------------------*/
