@@ -1,3 +1,10 @@
+/*
+* RequireJS Configuration
+* Copyright (C) Codexa Organization 2013.
+*/
+
+'use strict';
+
 requirejs.config({
 	baseUrl: "resources",
 	paths: {
