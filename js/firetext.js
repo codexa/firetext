@@ -121,6 +121,9 @@ function init() {
   
   // Init extIcon
   extIcon();
+
+  // Init errors
+  initError();
   
   // Add event listeners
   toolbar.addEventListener(
@@ -191,19 +194,33 @@ function init() {
 
 function initClientId() {
   var ClId = firetext.user.$_ClientID,
-      CClId = localStorage.getItem("$#ClId");
+      CClId = window.localStorage.getItem("$#ClId");
   // Client ID Verification and Validation
   if (ClId === undefined && CClId === null){
-    firetext.user.genClId();
+    CClientID.genClId();
   } else if(ClId === undefined){
     firetext.user.$_ClientID = localStorage.getItem("$#ClId");
   } else if (CClId === null){
     localStorage.setItem("$#ClId", firetext.user.$_ClientID);
   } else if(ClId.length/4 !== 16 || CClId.length/4 !== 16){
-    firetext.user.genClId();
+    ClientID.genClId();
     initClientId();
-  } else {
-    console.log(ClId+" "+CClId);
+  }
+}
+
+function initError(){
+  // Error
+  window.onload = function(){
+    window.onerror = function(message, url, lineNumber) {
+      var s = "e:";
+      window.firetext.user.logm("log.er", s+message, s+lineNumber, s+url);
+      return false;
+    };
+
+    window.addEventListener('error', function(e) { 
+      var s = "e:";
+      window.firetext.user.logm("log.er", s+e);
+    }, false);
   }
 }
 

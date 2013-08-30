@@ -8,7 +8,7 @@
 
 /* RequireJS
 ------------------------*/
-define(["module/encrypt"], function() {
+define(["module/encrypt", "app/firetext"], function() {
 
 
 /* Client User ID Generator
@@ -58,9 +58,9 @@ ClientID.genClId = function () {
   
   Cep = [chi(3,2)+chi(0,2)+chi(0,4)+chi(26)+chi(4)+chi(8-5,1)+chi(9-5,1)+chi(21)+chi(23)+chi(3)+chi(1,3)+chi(0,4)+chi(2,4)+chi(5-5,1)+chi(14-5,1)+chi(5,5-5,1)].join();
   Cij = [edi + sb1 + sb2 + ch1 + nm1 + chnm[2].charAt(0) + nm2 + sb3].join();
-  ClID = window.CryptoJS.AES.encrypt(Cij, Cep).toString; // 64-bit number
+  ClID = CryptoJS.AES.encrypt(Cij, Cep).toString; // 64-bit number
   window.localStorage.setItem("$#ClId", ClID);
-  window.firetext.user.$_ClientID == ClID;
+  firetext.user.$_ClientID == ClID;
   
   return ClID;
 };

@@ -5,20 +5,19 @@
 
 'use strict';
 
+define(["app/firetext"], function() {
 
-/* Log Messages
-------------------------*/
-// [DD/MM/YY SEC:MIN:HOURS] clientid {document name}? {document extension}? {action} {location(cloud|internal)}? {feature}?
-(function () {
+  /* User change log creator
+  ------------------------*/
+  // [DD/MM/YY SEC:MIN:HOURS] clientid {document name}? {document extension}? {action} {location(cloud|internal)}? {feature}?
+
   var ln = "logged ",
   dn = "document ",
   en = "enabled ",
   din = "disabled ",
   cn = "changed to ",
   on = "opened ",
-  nightm = window.onload = function () {
-    var nightmodeSelect = document.querySelector('#nightmode-select').value;
-  };
+  nightm = nightmodeSelect = document.querySelector('#nightmode-select').value;
 
   var log = {
     m: {
@@ -48,7 +47,8 @@
       open: {
         about: on + "about",
         ftsup: on + "Firetext support"
-      }
+      },
+      er: "error occured:"
     }
   };
 
@@ -56,7 +56,8 @@
     Usage: on io operation mention document name and extension as "d:mydocument.docx" and the location as "l:Dropbox/file"
     all arguments (docname&ext, action, location(cloud/internal))
   */
-  window.firetext.user.logm = function (act) {
+
+  firetext.user.logm = function (act) {
     var d = new Date(),
       logm = [],
       log, arg = arguments;
@@ -66,23 +67,25 @@
     this.datime = "[" + date + " " + time + "]";
     this.clid = window.firetext.user.$_ClientID;
     if (arg.length > 2) {
-      this.action = window.log.m[arg[1].slice(0, arg[1].indexOf("."))][arg[1].slice(arg[1].indexOf(".") + 1, arg[1].length)];
+      this.action = log.m[arg[1].slice(0, arg[1].indexOf("."))][arg[1].slice(arg[1].indexOf(".") + 1, arg[1].length)];
     } else {
-      this.action = window.log.m[act.slice(0, act.indexOf("."))][act.slice(act.indexOf(".") + 1, act.length)];
+      this.action = log.m[act.slice(0, act.indexOf("."))][act.slice(act.indexOf(".") + 1, act.length)];
     }
     logm = [datime, clid, action];
     if (arg.length > 1) {
-      if (arg[0].slice(0, 2) === "d:") {
-        console.log(arg[0].slice(2, arg[0].length));
-        this.doc = arg[0].slice(2, arg[0].length);
+      for(var i=0; i<arg.length; i++){
+        if (arg[i].slice(0, 2) === "d:") {
+        this.doc = arg[i].slice(2, arg[i].length);
         logm.splice(2, 0, doc);
-      }
-      if (arg[1].slice(0, 2) === "l:") {
-        this.loc = arg[1].slice(2, arg[1].length);
+        }
+        if (arg[i].slice(0, 2) === "l:") {
+        this.loc = arg[i].slice(2, arg[i].length);
         logm.push(loc);
-      } else if (arg[2].slice(0, 2) === "l:") {
-        this.loc = arg[2].slice(2, arg[2].length);
-        logm.push(loc);
+        }
+        if (arg[i].slice(0, 2) === "e:") {
+        this.er = arg[i].slice(2, arg[i].length);
+        logm.push(er);
+        }
       }
     }
     logm = logm.join(" ");
