@@ -197,7 +197,7 @@ function initClientId() {
       CClId = window.localStorage.getItem("$#ClId");
   // Client ID Verification and Validation
   if (ClId === undefined && CClId === null){
-    CClientID.genClId();
+    ClientID.genClId();
   } else if(ClId === undefined){
     firetext.user.$_ClientID = localStorage.getItem("$#ClId");
   } else if (CClId === null){
@@ -1000,4 +1000,5 @@ function editFullScreen(enter) {
     editor.classList.remove('fullscreen');
   }
 }
+return firetext;
 });

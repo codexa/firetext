@@ -8,7 +8,7 @@
 
 /* RequireJS
 ------------------------*/
-define(["module/encrypt", "app/firetext"], function() {
+define(["module/encrypt", "app/firetext"], function(CryptoJS, firetext) {
 
 
 /* Client User ID Generator
