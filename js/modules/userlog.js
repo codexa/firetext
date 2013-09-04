@@ -5,11 +5,11 @@
 
 'use strict';
 
-define(["app/firetext"], function() {
+define(["app/firetext", "module/FileSaver"], function(firetext, saveAs) {
 
   /* User change log creator
   ------------------------*/
-  // [DD/MM/YY SEC:MIN:HOURS] clientid {document name}? {document extension}? {action} {location(cloud|internal)}? {feature}?
+  // [DD/MM/YY HOURS:MIN:SEC] clientid {document name}? {document extension}? {action} {location(cloud|internal)}? {feature}?
 
   var ln = "logged ",
   dn = "document ",
@@ -53,18 +53,19 @@ define(["app/firetext"], function() {
   };
 
   /*
-    Usage: on io operation mention document name and extension as "d:mydocument.docx" and the location as "l:Dropbox/file"
+    Usage: on io operation mention document name and extension as "d:mydocument.docx", the location as "l:Dropbox/file" and errors as "e:errormessage"
     all arguments (docname&ext, action, location(cloud/internal))
   */
 
   firetext.user.logm = function (act) {
     var d = new Date(),
       logm = [],
-      log, arg = arguments;
-    // DD/MM/YY 00:00:00
+      log, arg = arguments, fname;
+    // DD/MM/YY HH:MM:SS
     this.date = d.getUTCDate() + "/" + (d.getUTCMonth() + 1) + "/" + d.getUTCFullYear().toString().substr(2, 2);
-    this.time = d.getUTCSeconds() + ":" + d.getUTCMinutes() + ":" + d.getUTCHours();
+    this.time = d.getUTCHours()+ ":" +d.getUTCMinutes()+ ":" +d.getUTCSeconds(); 
     this.datime = "[" + date + " " + time + "]";
+    fname = date + " " + time + "log";
     this.clid = window.firetext.user.$_ClientID;
     if (arg.length > 2) {
       this.action = log.m[arg[1].slice(0, arg[1].indexOf("."))][arg[1].slice(arg[1].indexOf(".") + 1, arg[1].length)];
@@ -89,7 +90,9 @@ define(["app/firetext"], function() {
       }
     }
     logm = logm.join(" ");
-    log = console.log(logm); // need to implement write to file
+    // write to file
+    log = new Blob([logm], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "resources/userlog/"+fname+".txt");
     return log;
   };
 })();
