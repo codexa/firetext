@@ -8,12 +8,12 @@
     "name": "Codexa",
     "url": "http://www.codexa.org"
   },
-  "permissions": {
-    "device-storage:sdcard":{ 
-      "description": "Required for document storage.",
-      "access": "readwrite"
-    }
+  "icons": {
+    "64": "/style/icons/app/64.png",
+    "128": "/style/icons/app/128.png",
+    "256": "/style/icons/app/256.png"
   },
+  "default_locale": "en-US",
   "locales": {
     "ar": {
   	  "name": "Firetext",
@@ -60,10 +60,27 @@
   	  "description": "文本编辑器，火狐OS"
     }
   },
-  "default_locale": "en-US",
-  "icons": {
-    "64": "/style/icons/app/64.png",
-    "128": "/style/icons/app/128.png",
-    "256": "/style/icons/app/256.png"
+  "permissions": {
+    "device-storage:sdcard":{ 
+      "description": "Required for document storage.",
+      "access": "readwrite"
+    }
+  },
+  "activities": {
+    "open": {
+      "href": "./index.html",
+      "disposition": "window",
+      "filters": {
+        "path": {
+          "required": true;
+        },
+        "type": [
+          "text/plain",
+          "text/html",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ]
+      },
+      "returnValue": false
+    }
   }
 }
