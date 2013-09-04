@@ -2,7 +2,7 @@ Firetext
 ========
 
 Firetext is a word processor for Firefox OS.  Firetext currently supports html, docx, and plain text files (more will be added later).
-
+Latest stable nightly available at <a href="http://firetext.codexa.org/app/">Firetext.codexa.org/app/</a>.
 You can run Firetext on a Firefox OS device, or on the <a href="https://addons.mozilla.org/en-US/firefox/addon/firefox-os-simulator/">Firefox OS Simulator</a>.
 
 Current Features:
