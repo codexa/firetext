@@ -65,7 +65,7 @@ define(["app/firetext", "module/FileSaver"], function(firetext, saveAs) {
     this.date = d.getUTCDate() + "/" + (d.getUTCMonth() + 1) + "/" + d.getUTCFullYear().toString().substr(2, 2);
     this.time = d.getUTCHours()+ ":" +d.getUTCMinutes()+ ":" +d.getUTCSeconds(); 
     this.datime = "[" + date + " " + time + "]";
-    fname = date + " " + time + "log";
+    fname = date + " " + time + "log.txt";
     this.clid = window.firetext.user.$_ClientID;
     if (arg.length > 2) {
       this.action = log.m[arg[1].slice(0, arg[1].indexOf("."))][arg[1].slice(arg[1].indexOf(".") + 1, arg[1].length)];
@@ -92,7 +92,7 @@ define(["app/firetext", "module/FileSaver"], function(firetext, saveAs) {
     logm = logm.join(" ");
     // write to file
     log = new Blob([logm], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, "resources/userlog/"+fname+".txt");
+    saveAs(log, fname);
     return log;
   };
 })();
