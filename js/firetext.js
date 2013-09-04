@@ -145,7 +145,7 @@ function init() {
     }
   );
   
-    welcomeDocsList.addEventListener(
+  welcomeDocsList.addEventListener(
     'contextmenu', function contextmenu(event) {
       editDocs();
     }

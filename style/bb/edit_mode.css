@@ -61,20 +61,8 @@
   padding: 0;
   height: 5rem;
   color: #fff;
-  background: url(edit_mode/images/ui/alpha.png) repeat 0 0;
+  background: #2c2c2c repeat 0 0;
   border: none;
-}
-
-[role="edit"][data-type="edit"] header:after {
-  content: "";
-  display: block;
-  height: 0.3rem;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: url(edit_mode/images/ui/shadow.png) repeat-x 0 0;
-  background-size: auto 100%;
 }
 
 [role="edit"][data-type="edit"] header h1 {
@@ -139,7 +127,7 @@
 /* Press state */
 [role="edit"][data-type="edit"] header button:active .icon:after,
 [role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
-  background: #008aaa !important;
+  background: #dfdfdf !important;
   transition: background 0.2s ease;
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
@@ -187,7 +175,7 @@
   margin: 0;
   padding: 1.5rem;
   border-top: solid 0.1rem rgba(255, 255, 255, 0.1);
-  background: url(edit_mode/images/ui/alpha.png) repeat left top;
+  background: #2c2c2c repeat left top;
   display: block;
   overflow: hidden;
   position: absolute;
@@ -209,8 +197,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  background: #fafafa url(edit_mode/images/ui/default.png) repeat-x left bottom;
-  border: 0.1rem solid #a6a6a6;
+  background: #eee repeat-x left bottom;
+  border: none;
   border-radius: 0.3rem;
   font-size: 1.6rem;
   font-family: 'MozTT', Sans-serif;
@@ -226,31 +214,25 @@
 /* Press (default & recommend) */
 [role="edit"][data-type="edit"] menu button:active,
 [role="edit"][data-type="edit"] menu button.recommend:active {
-  border-color: #008aaa;
-  background: #008aaa;
+  background: #dfdfdf;
   color: #333;
 }
 
 /* Recommend */
 [role="edit"][data-type="edit"] menu button.recommend{
-  background-image: url(edit_mode/images/ui/recommend.png);
-  background-color: #00caf2;
-  border-color: #008eab;
+  background-color: #eee;
 }
 
 /* Danger */
 [role="edit"][data-type="edit"] menu button.danger{
-  background-image: url(edit_mode/images/ui/danger.png);
-  background-color: #b70404;
+  background-color: #890707;
   color: #fff;
   text-shadow: none;
-  border-color: #820000;
 }
 
 /* Danger Press */
 [role="edit"][data-type="edit"] menu button.danger:active{
-  background-image: url(edit_mode/images/ui/danger-press.png);
-  background-color: #890707;
+  background-color: #7a0a0a;
 }
 
 /* Disabled */
