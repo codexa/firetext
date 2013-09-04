@@ -72,7 +72,7 @@
       "disposition": "window",
       "filters": {
         "path": {
-          "required": true;
+          "required": true
         },
         "type": [
           "text/plain",
