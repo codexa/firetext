@@ -8,24 +8,14 @@
 
 /* RequireJS
 ------------------------*/
-define([], function() {
+define(function (require) {
+
+var firetext = require('firetext');
 
 
 /* Settings
 ------------------------*/ 
-var firetextSettings = {}
-
-firetextSettings.getSettings = function getSettings(name) {
-  name = ("firetext.settings."+name);
-  return localStorage.getItem(name);
-}
-
-firetextSettings.saveSettings = function saveSettings(name, value) {
-  name = ("firetext.settings."+name);
-  localStorage.setItem(name, value);
-}
-
-firetextSettings.settings = function settings() {
+function init() {
   // Select elements
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
@@ -35,14 +25,14 @@ firetextSettings.settings = function settings() {
   var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
 
   // Autosave
-  if (this.getSettings('autosave') != 'false') {
+  if (get('autosave') != 'false') {
     autosaveEnabled.setAttribute('checked', '');
   } else {  
     autosaveEnabled.removeAttribute('checked');
   }
   autosaveEnabled.onchange = function toggleAutosave() {
-    this.saveSettings('autosave', this.checked);
-    if (this.getSettings('autosave') != 'false') {
+    save('autosave', this.checked);
+    if (get('autosave') != 'false') {
       document.getElementById('editorSaveButton').style.display = 'none';
       document.getElementById('zenSaveButton').style.display = 'none';
     } else {
@@ -52,29 +42,29 @@ firetextSettings.settings = function settings() {
   }
 
   // Autoload
-  if (this.getSettings('autoload') == 'true') {
+  if (get('autoload') == 'true') {
     autoloadEnabled.setAttribute('checked', '');
   } else {  
     autoloadEnabled.removeAttribute('checked');
   }
   autoloadEnabled.onchange = function () {
-    this.saveSettings('autoload', this.checked);
+    save('autoload', this.checked);
   }
 
   // Autozen
-  if (this.getSettings('autozen') == 'true') {
+  if (get == 'true') {
     autozenEnabled.setAttribute('checked', '');
   } else {  
     autozenEnabled.removeAttribute('checked');
   }
   autozenEnabled.onchange = function () {
-    this.saveSettings('autozen', this.checked);
+    save('autozen', this.checked);
   }
 
   // Night Mode
-  if (this.getSettings('nightmode') == 'true') {
+  if (get == 'true') {
     nightmodeSelect.value = 'Always On';
-  } else if (this.getSettings('nightmode') == 'false') { 
+  } else if (get == 'false') { 
     nightmodeSelect.value = 'Always Off';
   } else {
     nightmodeSelect.value = 'Auto';  
@@ -91,35 +81,43 @@ firetextSettings.settings = function settings() {
     }  
 
     // Save
-    this.saveSettings('nightmode', convertedNightValue);
+    save('nightmode', convertedNightValue);
 
     // Update
-    night();
+    firetext.night();
   });
 
   // Dropbox
-  if (this.getSettings('dropbox.enabled') == 'true') {
+  if (get == 'true') {
     dropboxEnabled.setAttribute('checked', '');
   } else {  
     dropboxEnabled.removeAttribute('checked');
   }
   dropboxEnabled.onchange = function () {
-    this.saveSettings('dropbox.enabled', this.checked);
-    initSharing();
+    save('dropbox.enabled', this.checked);
+    firetext.initSharing();
   }
 
   // Google Drive
-  if (this.getSettings('gdrive.enabled') == 'true') {
+  if (get == 'true') {
     gdriveEnabled.setAttribute('checked', '');
   } else {  
     gdriveEnabled.removeAttribute('checked');
   }
   gdriveEnabled.onchange = function () {
-    this.saveSettings('gdrive.enabled', this.checked);
-    initSharing();
+    save('gdrive.enabled', this.checked);
+    firetext.initSharing();
   }
 }
 
-return firetextSettings;
+function get(name) {
+  name = ("firetext.settings."+name);
+  return localStorage.getItem(name);
+}
+
+function save(name, value) {
+  name = ("firetext.settings."+name);
+  localStorage.setItem(name, value);
+}
 
 });

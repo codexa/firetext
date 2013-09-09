@@ -2,7 +2,7 @@
  * Firetext
  * Copyright (C) Codexa Organization 2013.
  * Licenced released under the GPLv3. 
- * See LICENSE in "resources/license/gpl.txt"
+ * See LICENSE in "licenses/gpl.txt"
  * or at http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
@@ -11,15 +11,19 @@
 
 /* RequireJS
 ------------------------*/
-define(["requirejs/domReady", "app/io", "app/recent_docs", "app/regions", "app/settings", "module/clidgen"], function(domReady, io, RecentDocs, regions, settings, ClientID) {
+define(function (require) {
 
-
-/* Globals
-------------------------*/
-// Global Namespace
 var firetext = {};
-firetext.user = {};
+firetext.io = require('io');
+firetext.recents = require('recents');
+firetext.regions = require('regions');
+firetext.settings = require('settings');
 
+var domReady = require('settings');
+
+
+/* Variables
+------------------------*/
 // Misc
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
@@ -39,6 +43,7 @@ var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogle
 
 // Cache
 var appCache = window.applicationCache;
+
 
 /* Start
 ------------------------*/
@@ -66,7 +71,7 @@ function checkDevice() {
   if (window.opera) {
     alert('Warning: Your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
   }
-}
+};
 
 
 /* Initalize
@@ -152,7 +157,7 @@ function init() {
   );
   
   // Initialize IO
-  io.startIO(null, function() {
+  firetext.io.start(null, function() {
     // Update Doc Lists
     updateDocLists();
     
@@ -160,12 +165,12 @@ function init() {
     initSharing();
     
     // Check for recent file, and if found, load it.
-    if (settings.getSettings('autoload') == 'true') {
+    if (firetext.settings.get('autoload') == 'true') {
       var lastDoc = [settings.getSettings('autoload.dir'), settings.getSettings('autoload.name'), settings.getSettings('autoload.ext'), settings.getSettings('autoload.loc')];
-      if (settings.getSettings('autoload.wasEditing') == 'true') {
+      if (firetext.settings.get('autoload.wasEditing') == 'true') {
         // Wait until Dropbox is authenticated
         if (lastDoc[3] == 'dropbox') {
-          if (settings.getSettings('dropbox.enabled') == 'true') {
+          if (firetext.settings.get('dropbox.enabled') == 'true') {
             window.addEventListener('dropboxAuthed', function() {
               io.loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
               spinner('hide');
@@ -190,7 +195,7 @@ function init() {
 
   // Initialize Night Mode
   night();
-}
+};
 
 function initClientId() {
   var ClId = firetext.user.$_ClientID,
@@ -226,7 +231,7 @@ function initError(){
 
 function initSharing() {
   // Dropbox
-  if (settings.getSettings('dropbox.enabled') == 'true') {
+  if (firetext.settings.get('dropbox.enabled') == 'true') {
     // Error Handler
     dropAPI.client.onError.addListener(function (error) {
       if (window.console) {
@@ -298,7 +303,7 @@ function initSharing() {
   }
   
   // Google Drive
-  if (settings.getSettings('gdrive.enabled') == 'true') {
+  if (firetext.settings.get('gdrive.enabled') == 'true') {
     // Code to get Google Drive files
     updateDocLists();
     
@@ -357,6 +362,12 @@ function updateAddDialog() {
   }
 }
 
+firetext.disableInternalStorage = function () {
+  welcomeDeviceArea.style.display = 'none';
+  openDialogDeviceArea.style.display = 'none';
+};
+
+
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
@@ -364,7 +375,7 @@ function updateDocLists() {
   io.docsInFolder('Documents/', function(DOCS) {
     buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
   });
-  if (settings.getSettings('dropbox.enabled') == 'true' && dropboxClient) {
+  if (firetext.settings.get('dropbox.enabled') == 'true' && dropboxClient) {
     io.dropboxDocsInFolder(dropboxClient, '/Documents/', function(DOCS) {
       buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
     });
@@ -572,7 +583,7 @@ function watchDocument(filetype) {
     });
   } else {
     doc.addEventListener('input', function() {
-      if (settings.getSettings('autosave') != 'false') {
+      if (firetext.settings.get('autosave') != 'false') {
         io.saveFromEditor(false, false);
       }    
     });    
@@ -586,7 +597,7 @@ function updateViews(destView, source, contentType) {
     } else {
       destView.textContent = source;
     }
-    if (settings.getSettings('autosave') != 'false') {
+    if (firetext.settings.get('autosave') != 'false') {
       io.saveFromEditor(false, false);
     }
   }
@@ -601,7 +612,7 @@ function editDocs() {
     editState = false;
     welcomeRecentsArea.style.display = 'block';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
-    navBack();
+    regions.navBack();
   } else {    
     welcomeRecentsArea.style.display = 'none';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
@@ -611,7 +622,7 @@ function editDocs() {
     io.docsInFolder('Documents/', function(result) {
       buildEditDocList(result, welcomeDeviceList, 'Documents found', 'internal');
     });
-    if (settings.getSettings('dropbox.enabled') == 'true' && dropboxClient) {
+    if (firetext.settings.get('dropbox.enabled') == 'true' && dropboxClient) {
       io.dropboxDocsInFolder(dropboxClient, '/Documents', function(DOCS) {
         buildEditDocList(DOCS, welcomeDropboxList, "Dropbox Documents Found", 'dropbox');
       });
@@ -797,14 +808,14 @@ function processActions(eventAttribute, target) {
       if (navLocation == 'welcome' | navLocation == 'open') {
         updateDocLists();     
       } else if (navLocation == 'settings') {
-        settings.settings();
+        firetext.settings.init();
       }
       if (document.getElementById(navLocation).getAttribute('role') != 'dialog') {
         editFullScreen(false);      
       }
       regions.nav(navLocation);
     } else if (calledFunction == 'navBack') {
-      navBack();
+      regions.navBack();
     } else if (calledFunction == 'sidebar') {
       regions.sidebar(target.getAttribute(eventAttribute + '-id'));
     } else if (calledFunction == 'saveFromEditor') {
@@ -812,7 +823,7 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'formatDoc') {
       formatDoc(target.getAttribute(eventAttribute + '-action'), true, target.getAttribute(eventAttribute + '-value'));
       if (target.getAttribute(eventAttribute + '-back') == 'true') {
-        navBack();
+        regions.navBack();
       }
     } else if (calledFunction == 'createFromDialog') {
       io.createFromDialog();
@@ -840,7 +851,7 @@ function processActions(eventAttribute, target) {
       var browseLocation = '';
       var browserFrame = document.getElementById('browserFrame');
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
-        browseLocation = 'resources/about.html'
+        browseLocation = 'about.html'
       } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
         browseLocation = 'http://firetext.codexa.org/support'
       } else {
@@ -910,7 +921,7 @@ function dropboxError(error) {
 var ncss, dcss = document.getElementsByTagName("link")[25];
 
 function night() {
-  if (settings.getSettings('nightmode') == 'true') {
+  if (firetext.settings.get('nightmode') == 'true') {
     // Add nighticons.css to DOM
     if (!ncss) {
       ncss = document.createElement("link");
@@ -922,7 +933,7 @@ function night() {
     
     html.classList.add('night');
     doc.style.color = '#fff';
-  } else if (settings.getSettings('nightmode') == 'false') {
+  } else if (firetext.settings.get('nightmode') == 'false') {
     if (ncss) {
       head.removeChild(ncss);
       ncss = null;
@@ -937,7 +948,7 @@ function night() {
     html.classList.remove('night');
     doc.style.color = '#000';
     window.addEventListener('devicelight', function(event) {
-      if (settings.getSettings('nightmode') == 'auto') {
+      if (firetext.settings.get('nightmode') == 'auto') {
         console.log(event.value);
         if (event.value < 50) {
           html.classList.add('night');
@@ -1000,5 +1011,4 @@ function editFullScreen(enter) {
     editor.classList.remove('fullscreen');
   }
 }
-return firetext;
 });

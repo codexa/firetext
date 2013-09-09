@@ -8,42 +8,39 @@
 
 /* RequireJS
 ------------------------*/
-define([], function() {
+define(function (require) {
 
 
 /* Recent Docs
 ------------------------*/
-// RecentDocs Object
-var RecentDocs = {};
-
 // Initalize recent docs
-RecentDocs.init = function() {
-  if (localStorage["firetext.docs.recent"] == undefined) {
-    localStorage["firetext.docs.recent"] = JSON.stringify([]);
-  }
-}
-
-// Initalize recent docs
-RecentDocs.reset = function() {
-  if (localStorage["firetext.docs.recent"] != undefined) {
-    localStorage["firetext.docs.recent"] = JSON.stringify([]);
+function init() {
+  if (localStorage["firetext.recents"] == undefined) {
+    localStorage["firetext.recents"] = JSON.stringify([]);
   }
 }
 
 // Get recent docs
-RecentDocs.get = function() {
-  if (localStorage["firetext.docs.recent"] != undefined) {
-    return JSON.parse(localStorage["firetext.docs.recent"]);
+function get() {
+  if (localStorage["firetext.recents"] != undefined) {
+    return JSON.parse(localStorage["firetext.recents"]);
   }
   else {
-    this.init();
-    return this.get();
+    init();
+    return get();
+  }
+}
+
+// Reset recent docs
+function reset() {
+  if (localStorage["firetext.recents"] != undefined) {
+    localStorage["firetext.recents"] = JSON.stringify([]);
   }
 }
 
 // Add to recent docs
-RecentDocs.add = function(file, location) {
-  if (localStorage["firetext.docs.recent"] != undefined) {
+function add(file, location) {
+  if (localStorage["firetext.recents"] != undefined) {
     var docsTMP = this.get();
   
     file.push(location);
@@ -65,7 +62,7 @@ RecentDocs.add = function(file, location) {
     }
   
     // Save array
-    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
+    localStorage["firetext.recents"] = JSON.stringify(docsTMP);
   } else {
     this.init();
     this.add(file, location);
@@ -73,8 +70,8 @@ RecentDocs.add = function(file, location) {
 }
 
 // Remove from recent docs
-RecentDocs.remove = function(file, location, merged) {
-  if (localStorage["firetext.docs.recent"] != undefined) {
+function remove(file, location, merged) {
+  if (localStorage["firetext.recents"] != undefined) {
     var docsTMP = this.get();
   
     if (!merged) {
@@ -100,10 +97,8 @@ RecentDocs.remove = function(file, location, merged) {
     }
   
     // Save array
-    localStorage["firetext.docs.recent"] = JSON.stringify(docsTMP);
+    localStorage["firetext.recents"] = JSON.stringify(docsTMP);
   }
 }
-
-return RecentDocs;
 
 });

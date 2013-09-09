@@ -5,7 +5,7 @@
 
 'use strict';
 
-define(["app/firetext", "module/FileSaver"], function(firetext, saveAs) {
+define(["firetext", "lib/FileSaver"], function(firetext, saveAs) {
 
   /* User change log creator
   ------------------------*/

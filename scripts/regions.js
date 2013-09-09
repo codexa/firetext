@@ -1,5 +1,6 @@
 /*
-* Navigation
+* Regions
+* Navigation handler
 * Copyright (C) Codexa Organization 2013.
 */
 
@@ -8,32 +9,35 @@
 
 /* RequireJS
 ------------------------*/
-define(["app/firetext", "app/settings", "google-code-prettify", "gcprettify/lang-css", "gcprettify/lang-wiki"], function(firetext, settings, gcprettify) {
+define(function (require) {
+
+var firetext = require('firetext');
+firetext.settings = require('settings');
+var gcprettify = require('google-code-prettify');
 
 
 /* Variables
 ------------------------*/
 var regionHistory = new Array();
 var tempLoc = '';
-var regions = {};
 
 
 /* Navigation
 ------------------------*/
-regions.nav = function nav(location) {
+function nav(location) {
   tempLoc = '';
   if (document.getElementById(location)) {
     tempLoc = location;
     if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
-      this.sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
-      setTimeout(function() {this.nav2();}, 500);
+      sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
+      setTimeout(function() {regions.nav2();}, 500);
     } else {
-      this.nav2();
+      nav2();
     }
   }
 }
 
-regions.nav2 = function nav2() {   
+function nav2() {   
   if (document.getElementById(tempLoc)) { 
     if (document.querySelector('.current')) {
       if (document.getElementById(tempLoc).getAttribute('role') != 'region') {
@@ -52,8 +56,8 @@ regions.nav2 = function nav2() {
     /* Remove this section when porting to other projects */   
     if (tempLoc == 'edit') {    
       // Start Zen Mode if autozen == true
-      if (settings.getSettings('autozen') == 'true') {
-        editFullScreen(true);    
+      if (firetext.settings.get('autozen') == 'true') {
+        firetext.editFullScreen(true);    
       }
       
       // Lock screen in portrait
@@ -64,11 +68,11 @@ regions.nav2 = function nav2() {
       }
       
       // Save edit status
-      settings.saveSettings('autoload.wasEditing', 'true');
-      settings.saveSettings('autoload.dir', document.getElementById('currentFileDirectory').textContent);
-      settings.saveSettings('autoload.name', document.getElementById('currentFileName').textContent);
-      settings.saveSettings('autoload.ext', document.getElementById('currentFileType').textContent);
-      settings.saveSettings('autoload.loc', document.getElementById('currentFileLocation').textContent);  
+      firetext.settings.save('autoload.wasEditing', 'true');
+      firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
+      firetext.settings.save('autoload.name', document.getElementById('currentFileName').textContent);
+      firetext.settings.save('autoload.ext', document.getElementById('currentFileType').textContent);
+      firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);  
       
     } else {
       // Unlock screen
@@ -77,27 +81,27 @@ regions.nav2 = function nav2() {
       } else if (screen.mozUnlockOrientation) {
         screen.mozUnlockOrientation();
       } 
-      settings.saveSettings('autoload.wasEditing', 'false');
+      firetext.settings.save('autoload.wasEditing', 'false');
     }
   
     // Update docs lists
     if (tempLoc == 'open' | tempLoc == 'welcome') {
-      updateDocLists();
+      firetext.updateDocLists();
     }
     /* End of customized section */
   }
 }
 
-regions.navBack = function navBack() {
+function navBack() {
   document.querySelector('.current').classList.remove('parent');
   document.querySelector('.current').classList.remove('current');
   regionHistory.pop();
   
   // This is a weird way to do this, but I couldn't figure out a better one.
-  this.nav(regionHistory.pop());
+  nav(regionHistory.pop());
 }
 
-regions.sidebar = function sidebar(name) {
+function sidebar(name) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
     if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
       document.getElementById('sidebar_' + name).classList.remove('active');
@@ -112,7 +116,7 @@ regions.sidebar = function sidebar(name) {
   }
 }
 
-regions.tab = function tab(list, name) {
+function tab(list, name) {
   if (document.getElementById('tab-'+name)) {
     if (document.querySelector('.selected')) {
       document.querySelector('.selected').classList.remove('selected');
@@ -126,7 +130,5 @@ regions.tab = function tab(list, name) {
     /* End of customized section */
   }
 }
-
-return regions;
 
 });

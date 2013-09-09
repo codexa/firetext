@@ -8,24 +8,30 @@
 
 /* RequireJS
 ------------------------*/
-define(["docxeditor/docxeditor", "app/regions", "app/settings", "app/firetext"], function(DocxEditor, regions, settings, firetext) {
+define(function (require) {
+
+var firetext = require('firetext');
+firetext.regions = require('regions');
+firetext.settings = require('settings');
+firetext.recents = require('recents');
+
+var docx = require('parsers/docx');
 
 
-/* Globals
+/* Variables
 ------------------------*/
 var storage, deviceAPI, locationDevice, docxeditor;
-var io = {};
 
 
 /* Init
 ------------------------*/
-io.startIO = function startIO(api, callback) {
+function init(api, callback) {
   if (window.navigator.getDeviceStorage && api != 'file') {
     // Use deviceStorage API
     deviceAPI = 'deviceStorage';
     storage = navigator.getDeviceStorage('sdcard');
     if (!storage) {
-      startIO('file', callback);
+      init('file', callback);
       return;
     }
     
@@ -38,7 +44,7 @@ io.startIO = function startIO(api, callback) {
         deviceAPI = null;
         storage = null;
         alert("The SDCard on your device is shared, and thus not available.");
-        startIO('file', callback);
+        init('file', callback);
         return;
       } else {
         callback();
@@ -49,7 +55,7 @@ io.startIO = function startIO(api, callback) {
       deviceAPI = null;
       storage = null;
       alert("Unable to get the space used by the SDCard: " + this.error);
-      startIO('file', callback);
+      init('file', callback);
       return;
     };
   } else {
@@ -59,7 +65,7 @@ io.startIO = function startIO(api, callback) {
       var onFSError = function() {
         alert("Error, could not initialize filesystem");
         deviceAPI = 'none';
-        this.disableInternalStorage();
+        firetext.disableInternalStorage();
         callback();
       }
       var requestFs = function(grantedBytes) {
@@ -80,14 +86,14 @@ io.startIO = function startIO(api, callback) {
         webkitStorageInfo.requestQuota( PERSISTENT, /*5MB*/5*1024*1024, requestFs, onFSError );
       } else {
         deviceAPI = 'none';
-        this.disableInternalStorage();
+        firetext.disableInternalStorage();
         callback();
         return;
       }
     } else {
       // If nonexistent, disable internal storage
       deviceAPI = 'none';
-      this.disableInternalStorage();
+      firetext.disableInternalStorage();
       callback();
       return;
     }
@@ -99,15 +105,10 @@ io.startIO = function startIO(api, callback) {
   locationSelect.appendChild(locationDevice);
 }
 
-io.disableInternalStorage = function disableInternalStorage() {
-  welcomeDeviceArea.style.display = 'none';
-  openDialogDeviceArea.style.display = 'none';
-}
-
 
 /* Directory IO
 ------------------------*/
-io.docsInFolder = function docsInFolder(directory, callback) {
+function enumerate(directory, callback) {
   if (directory) {
     // List of documents
     var docs = [];
@@ -118,10 +119,10 @@ io.docsInFolder = function docsInFolder(directory, callback) {
     
       cursor.onerror = function() {
         if (cursor.error.name == 'TypeMismatchError') {
-          this.saveFile(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
-            this.deleteFile('firetext.temp');
+          save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+            remove('firetext.temp');
           });
-          updateDocLists();
+          firetext.updateDocLists();
           return;
         } else if (cursor.error.name == 'SecurityError') {
           alert('Please allow Firetext to access your SD card.');
@@ -211,7 +212,7 @@ io.docsInFolder = function docsInFolder(directory, callback) {
   }
 }
 
-io.dropboxDocsInFolder = function dropboxDocsInFolder(client, directory, callback) {
+function dropboxEnumerate(client, directory, callback) {
   if (directory && client.readdir(directory)) {
     var docs = client.readdir(directory, function(error, entries) {
       if (!error) {
@@ -256,7 +257,7 @@ io.dropboxDocsInFolder = function dropboxDocsInFolder(client, directory, callbac
 
 /* File IO
 ------------------------*/
-io.createFromDialog = function createFromDialog() {
+function createFromDialog() {
   var directory = 'Documents/';
   var location = document.getElementById('createDialogFileLocation').value;
   var filename = document.getElementById('createDialogFileName').value;
@@ -287,7 +288,7 @@ io.createFromDialog = function createFromDialog() {
     }
     var contentBlob;
     if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-      contentBlob = new Blob([DocxEditor.blank], {type: type});
+      contentBlob = new Blob([docx.blank], {type: type});
     } else {
       contentBlob = new Blob([' '], { "type" : type });
     }
@@ -304,7 +305,7 @@ io.createFromDialog = function createFromDialog() {
       };  
       req.onsuccess = function () {  
         // Load to editor
-        this.loadToEditor(directory, filename, filetype, 'internal');
+        loadToEditor(directory, filename, filetype, 'internal');
       };
     } else if (deviceAPI == 'file') {
       storage.root.getFile(directory + filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
@@ -312,7 +313,7 @@ io.createFromDialog = function createFromDialog() {
           fileWriter.onwriteend = function(e) {
             e.target.write(contentBlob);
             e.target.onwriteend = function(e) {
-              this.loadToEditor(directory, filename, filetype, 'internal');
+              loadToEditor(directory, filename, filetype, 'internal');
             }
             e.target.onerror = function(e) {
               alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
@@ -337,9 +338,9 @@ io.createFromDialog = function createFromDialog() {
     }
   } else if (location == 'dropbox') {
     directory = ('/' + directory);
-    this.saveFile(directory, filename, filetype, ' ', false, function () {  
+    save(directory, filename, filetype, ' ', false, function () {  
       // Load to editor
-      this.loadToEditor(directory, filename, filetype, location);      
+      loadToEditor(directory, filename, filetype, location);      
     }, location);
   } else {
     alert('Could not create file.  Please choose a valid location.');
@@ -348,10 +349,10 @@ io.createFromDialog = function createFromDialog() {
   // Clear file fields
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
-  extIcon();
+  firetext.extIcon();
 }
 
-io.saveFromEditor = function saveFromEditor(banner, spinner) {
+function saveFromEditor(banner, spinner) {
   var location = document.getElementById('currentFileLocation').textContent;
   var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
@@ -373,10 +374,10 @@ io.saveFromEditor = function saveFromEditor(banner, spinner) {
   }
   banner = !!banner;
   spinner = !!spinner;
-  this.saveFile(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
+  save(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
 }
 
-io.saveFile = function saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
+function save(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -394,7 +395,7 @@ io.saveFile = function saveFile(directory, filename, filetype, content, showBann
   // Special handling for .docx
   if (filetype == '.docx') {
     docx.HTMLin(content);
-    contentBlob = new Blob([docxeditor.generate("blob")], {type: type});
+    contentBlob = new Blob([docx.generate("blob")], {type: type});
   } else {
     contentBlob = new Blob([content], { "type" : type });
   }
@@ -453,13 +454,17 @@ io.saveFile = function saveFile(directory, filename, filetype, content, showBann
     }
   } else if (location == 'dropbox' && dropboxClient) {
     if (showSpinner != false) {
-      loadSpinner.classList.add('shown');
+      firetext.spinner();
     }
-    dropboxClient.writeFile(filePath, contentBlob, function() { loadSpinner.classList.remove('shown'); callback(); });    
+    dropboxClient.writeFile(filePath, contentBlob, function() { 
+      if (showSpinner != false) {
+        firetext.spinner('hide'); callback();
+      }
+    });    
   }
 }
 
-io.loadToEditor = function loadToEditor(directory, filename, filetype, location) {
+function loadToEditor(directory, filename, filetype, location) {
   // Clear editor
   doc.innerHTML = '';
   rawEditor.textContent = '';
@@ -491,7 +496,7 @@ io.loadToEditor = function loadToEditor(directory, filename, filetype, location)
   }
   
   // Fill editor
-  this.loadFile(directory, filename, filetype, function(result, error) {
+  load(directory, filename, filetype, function(result, error) {
     if (!error) {
       var content;
   
@@ -522,13 +527,13 @@ io.loadToEditor = function loadToEditor(directory, filename, filetype, location)
       watchDocument(filetype);
   
       // Add file to recent docs
-      RecentDocs.add([directory, filename, filetype], location);
+      firetext.recents.add([directory, filename, filetype], location);
   
       // Show editor
       nav('edit');
   
       // Hide save button if autosave is enabled
-      if (getSettings('autosave') != 'false') {
+      if (firetext.settings.get('autosave') != 'false') {
         document.getElementById('editorSaveButton').style.display = 'none';
         document.getElementById('zenSaveButton').style.display = 'none';
       } else {
@@ -539,7 +544,7 @@ io.loadToEditor = function loadToEditor(directory, filename, filetype, location)
   }, location); 
 }
 
-io.loadFile = function loadFile(directory, filename, filetype, callback, location) {
+function load(directory, filename, filetype, callback, location) {
   var filePath = (directory + filename + filetype);
   if (location == '' | location == 'internal' | !location) {
     if (deviceAPI == 'deviceStorage') {
@@ -560,7 +565,7 @@ io.loadFile = function loadFile(directory, filename, filetype, callback, locatio
         reader.onload = function () {
           var file;
           if( filetype === ".docx" ) {
-            file = new DocxEditor(this.result);
+            file = new docx(this.result);
           } else {
             file = this.result;
           }
@@ -588,7 +593,7 @@ io.loadFile = function loadFile(directory, filename, filetype, callback, locatio
           reader.onload = function () {
             var file;
             if( filetype === ".docx" ) {
-              file = new DocxEditor(this.result);
+              file = new docx(this.result);
             } else {
               file = this.result;
             }
@@ -596,7 +601,7 @@ io.loadFile = function loadFile(directory, filename, filetype, callback, locatio
             callback(file);
           };
           
-          if( filetype ===".docx" ) {
+          if (filetype === ".docx") {
             reader.readAsArrayBuffer(file);
           } else {
             reader.readAsText(file);
@@ -613,9 +618,9 @@ io.loadFile = function loadFile(directory, filename, filetype, callback, locatio
       });
     }
   } else if (location = 'dropbox' && dropboxClient) {
-    loadSpinner.classList.add('shown');
+    firetext.spinner();
     dropboxClient.readFile(filePath, function(e, d) {
-      loadSpinner.classList.remove('shown');
+      firetext.spinner('hide');
       if (!e) {
         callback(d);
       } else {
@@ -625,7 +630,7 @@ io.loadFile = function loadFile(directory, filename, filetype, callback, locatio
   }
 }
 
-io.deleteFile = function deleteFile(name, location) {
+function remove(name, location) {
   var path = name;
   if (!location | location == '' | location == 'internal') {
     if (deviceAPI == 'deviceStorage') {
@@ -652,29 +657,28 @@ io.deleteFile = function deleteFile(name, location) {
   }
 }
 
-io.renameFile = function renameFile(directory, name, type, newname, location) {
-  this.loadFile(directory, name, type, function(result) {
+function rename(directory, name, type, newname, location) {
+  load(directory, name, type, function(result) {
     var fullName = (directory + name + type);
-    this.saveFile(directory, name, type, result, function(){}, location);
-    this.deleteFile(fullName, location);
+    save(directory, name, type, result, function () {}, location);
+    remove(fullName, location);
   }, location);
 }
 
-io.fileAddress = function fileAddress(path) {
+function split(path) {
   var file = new Array();
   file[0] = path.substring(0, (path.lastIndexOf('/') + 1));
   file[1] = path.substring((path.lastIndexOf('/') + 1), path.lastIndexOf('.')).replace(/\//, '');
   file[2] = path.substring(path.lastIndexOf('.'), path.length).replace(/\//, '');
-  if (file[1] == '') {
+  if (file[1] == '' && file[2] == '') {
     file[0] = (file[0] + file[2]);
     if (file[0][file[0].length - 1] != '/') {
       file[0] = (file[0] + '/');
     }
-    file[2] = '';
     file[1] = '';
+    file[2] = '';
   }
   return [file[0], file[1], file[2]];
-}
+};
 
-return io;
 });

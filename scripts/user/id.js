@@ -8,16 +8,17 @@
 
 /* RequireJS
 ------------------------*/
-define(["module/encrypt", "app/firetext"], function(CryptoJS, firetext) {
+define(function (require) {
+
+var firetext = require('firetext');
+firetext.user = {};
+var CryptoJS = require('lib/encrypt');
 
 
-/* Client User ID Generator
+/* User ID Generator
 ------------------------*/
-// ClientID Object
-var ClientID = {};
-
 // generator 
-ClientID.genClId = function () {
+function generate() {
   var edi = "",
       ch1 = "",
 	  nm1 = "",
@@ -64,7 +65,5 @@ ClientID.genClId = function () {
   
   return ClID;
 };
-
-return ClientID;
 
 });

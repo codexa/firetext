@@ -6,9 +6,9 @@
 'use strict';
 
 
-var txt = {};
-
-txt.parse = function (data, type) {
+/* Parser
+------------------------*/
+function parse(data, type) {
   // Some code to convert TXT into something else
   output = "";
   if (type == "HTML") {
@@ -20,9 +20,9 @@ txt.parse = function (data, type) {
   }
   // Didn't parse, return false
   return false;
-};
+}
 
-txt.encode = function (data, type) {
+function encode(data, type) {
   // Some code to convert data to TXT
   output = "";
   if (type == "HTML") {
@@ -35,4 +35,4 @@ txt.encode = function (data, type) {
   }
   // Didn't convert to TXT, return false
   return false;
-};
+}
