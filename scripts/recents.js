@@ -6,22 +6,22 @@
 'use strict';
 
 
-/* RequireJS
-------------------------*/
-define(function (require) {
+/* Namespace Container
+------------------------*/ 
+firetext.recents = {};
 
 
 /* Recent Docs
 ------------------------*/
 // Initalize recent docs
-function init() {
+firetext.recents.init = function () {
   if (localStorage["firetext.recents"] == undefined) {
     localStorage["firetext.recents"] = JSON.stringify([]);
   }
-}
+};
 
 // Get recent docs
-function get() {
+firetext.recents.get = function () {
   if (localStorage["firetext.recents"] != undefined) {
     return JSON.parse(localStorage["firetext.recents"]);
   }
@@ -29,17 +29,17 @@ function get() {
     init();
     return get();
   }
-}
+};
 
 // Reset recent docs
-function reset() {
+firetext.recents.reset = function () {
   if (localStorage["firetext.recents"] != undefined) {
     localStorage["firetext.recents"] = JSON.stringify([]);
   }
-}
+};
 
 // Add to recent docs
-function add(file, location) {
+firetext.recents.add = function (file, location) {
   if (localStorage["firetext.recents"] != undefined) {
     var docsTMP = this.get();
   
@@ -67,10 +67,10 @@ function add(file, location) {
     this.init();
     this.add(file, location);
   }
-}
+};
 
 // Remove from recent docs
-function remove(file, location, merged) {
+firetext.recents.remove = function (file, location, merged) {
   if (localStorage["firetext.recents"] != undefined) {
     var docsTMP = this.get();
   
@@ -99,6 +99,4 @@ function remove(file, location, merged) {
     // Save array
     localStorage["firetext.recents"] = JSON.stringify(docsTMP);
   }
-}
-
-});
+};

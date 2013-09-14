@@ -7,35 +7,31 @@
 'use strict';
 
 
-/* RequireJS
-------------------------*/
-define(function (require) {
-
-var firetext = require('firetext');
-firetext.settings = require('settings');
-var gcprettify = require('google-code-prettify');
+/* Namespace Container
+------------------------*/ 
+var regions = {};
 
 
 /* Variables
 ------------------------*/
-var regionHistory = new Array();
+regions.history = new Array();
 var tempLoc = '';
 
 
 /* Navigation
 ------------------------*/
-function nav(location) {
+regions.nav = function (location) {
   tempLoc = '';
   if (document.getElementById(location)) {
     tempLoc = location;
     if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
-      sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
-      setTimeout(function() {regions.nav2();}, 500);
+      regions.sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
+      setTimeout(function() { nav2(); }, 500);
     } else {
       nav2();
     }
   }
-}
+};
 
 function nav2() {   
   if (document.getElementById(tempLoc)) { 
@@ -50,14 +46,14 @@ function nav2() {
     if (document.querySelector('.parent') && document.getElementById(tempLoc).getAttribute('role') == 'region') {
       document.querySelector('.parent').classList.remove('parent');
     }
-    regionHistory.push(tempLoc);
+    regions.history.push(tempLoc);
     document.getElementById(tempLoc).classList.add('current');
     
     /* Remove this section when porting to other projects */   
     if (tempLoc == 'edit') {    
       // Start Zen Mode if autozen == true
       if (firetext.settings.get('autozen') == 'true') {
-        firetext.editFullScreen(true);    
+        editFullScreen(true);    
       }
       
       // Lock screen in portrait
@@ -86,22 +82,22 @@ function nav2() {
   
     // Update docs lists
     if (tempLoc == 'open' | tempLoc == 'welcome') {
-      firetext.updateDocLists();
+      updateDocLists();
     }
     /* End of customized section */
   }
 }
 
-function navBack() {
+regions.navBack = function () {
   document.querySelector('.current').classList.remove('parent');
   document.querySelector('.current').classList.remove('current');
-  regionHistory.pop();
+  regions.history.pop();
   
   // This is a weird way to do this, but I couldn't figure out a better one.
-  nav(regionHistory.pop());
+  regions.nav(regions.history.pop());
 }
 
-function sidebar(name) {
+regions.sidebar = function (name) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
     if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
       document.getElementById('sidebar_' + name).classList.remove('active');
@@ -114,9 +110,9 @@ function sidebar(name) {
       }
     }
   }
-}
+};
 
-function tab(list, name) {
+regions.tab = function (list, name) {
   if (document.getElementById('tab-'+name)) {
     if (document.querySelector('.selected')) {
       document.querySelector('.selected').classList.remove('selected');
@@ -125,10 +121,8 @@ function tab(list, name) {
     
     /* Remove this section when porting to other projects */
     if (name == 'raw') {
-      gcprettify.prettyPrint();
+      prettyPrint();
     }
     /* End of customized section */
   }
-}
-
-});
+};

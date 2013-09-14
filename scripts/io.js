@@ -6,16 +6,9 @@
 'use strict';
 
 
-/* RequireJS
-------------------------*/
-define(function (require) {
-
-var firetext = require('firetext');
-firetext.regions = require('regions');
-firetext.settings = require('settings');
-firetext.recents = require('recents');
-
-var docx = require('parsers/docx');
+/* Namespace Container
+------------------------*/ 
+firetext.io = {};
 
 
 /* Variables
@@ -25,7 +18,7 @@ var storage, deviceAPI, locationDevice, docxeditor;
 
 /* Init
 ------------------------*/
-function init(api, callback) {
+firetext.io.init = function (api, callback) {
   if (window.navigator.getDeviceStorage && api != 'file') {
     // Use deviceStorage API
     deviceAPI = 'deviceStorage';
@@ -65,7 +58,7 @@ function init(api, callback) {
       var onFSError = function() {
         alert("Error, could not initialize filesystem");
         deviceAPI = 'none';
-        firetext.disableInternalStorage();
+        disableInternalStorage();
         callback();
       }
       var requestFs = function(grantedBytes) {
@@ -86,14 +79,14 @@ function init(api, callback) {
         webkitStorageInfo.requestQuota( PERSISTENT, /*5MB*/5*1024*1024, requestFs, onFSError );
       } else {
         deviceAPI = 'none';
-        firetext.disableInternalStorage();
+        disableInternalStorage();
         callback();
         return;
       }
     } else {
       // If nonexistent, disable internal storage
       deviceAPI = 'none';
-      firetext.disableInternalStorage();
+      disableInternalStorage();
       callback();
       return;
     }
@@ -105,10 +98,15 @@ function init(api, callback) {
   locationSelect.appendChild(locationDevice);
 }
 
+function disableInternalStorage() {
+  welcomeDeviceArea.style.display = 'none';
+  openDialogDeviceArea.style.display = 'none';
+};
+
 
 /* Directory IO
 ------------------------*/
-function enumerate(directory, callback) {
+firetext.io.enumerate = function (directory, callback) {
   if (directory) {
     // List of documents
     var docs = [];
@@ -210,49 +208,7 @@ function enumerate(directory, callback) {
     }
     return docs;
   }
-}
-
-function dropboxEnumerate(client, directory, callback) {
-  if (directory && client.readdir(directory)) {
-    var docs = client.readdir(directory, function(error, entries) {
-      if (!error) {
-        for (var i = 0; i < entries.length; i++) {
-          var dir;
-          if (directory[directory.length - 1] != '/') {
-            dir = (directory + '/');
-          } else {
-            dir = directory;
-          }
-          entries[i] = (dir + entries[i]);
-          entries[i] = fileAddress(entries[i]);
-          
-          // Only get documents
-          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.docx') {
-            entries.splice(i, 1);
-            i = (i - 1);
-          }
-        }
-        // Remove folders
-        for (var i = 0; i < entries.length; i++) {
-          if (Array.isArray(entries[i]) == false | entries[i][2].length == 1 | entries[i][2][0] != '.') {
-            entries.splice(i, 1);
-          }
-        }
-        for (var i = 0; i < entries.length; i++) {
-          if (Array.isArray(entries[i]) == false | entries[i][2].length <= 1 | entries[i][2][0] != '.') {
-            entries.splice(i, 1);
-            i = (i - 1);
-          }
-        }
-        callback(entries);
-      } else {
-        client.mkdir(directory, function() {
-          callback(dropboxDocsInFolder(client, directory, function(l) { return l; }));
-        });
-      }
-    });
-  }
-}
+};
 
 
 /* File IO
@@ -288,7 +244,7 @@ function createFromDialog() {
     }
     var contentBlob;
     if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-      contentBlob = new Blob([docx.blank], {type: type});
+      contentBlob = new Blob([firetext.parsers.docx.blank], {type: type});
     } else {
       contentBlob = new Blob([' '], { "type" : type });
     }
@@ -338,7 +294,7 @@ function createFromDialog() {
     }
   } else if (location == 'dropbox') {
     directory = ('/' + directory);
-    save(directory, filename, filetype, ' ', false, function () {  
+    firetext.io.save(directory, filename, filetype, ' ', false, function () {  
       // Load to editor
       loadToEditor(directory, filename, filetype, location);      
     }, location);
@@ -349,7 +305,7 @@ function createFromDialog() {
   // Clear file fields
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
-  firetext.extIcon();
+  extIcon();
 }
 
 function saveFromEditor(banner, spinner) {
@@ -374,10 +330,90 @@ function saveFromEditor(banner, spinner) {
   }
   banner = !!banner;
   spinner = !!spinner;
-  save(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
+  firetext.io.save(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
 }
 
-function save(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
+function loadToEditor(directory, filename, filetype, location) {
+  // Clear editor
+  doc.innerHTML = '';
+  rawEditor.textContent = '';
+  
+  // Set file name and type
+  document.getElementById('currentFileLocation').textContent = location;
+  document.getElementById('currentFileDirectory').textContent = directory;
+  document.getElementById('currentFileName').textContent = filename;
+  document.getElementById('currentFileType').textContent = filetype;
+  
+  // Set alert banner name and type
+  document.getElementById('save-banner-name').textContent = (directory + filename);
+  document.getElementById('save-banner-type').textContent = filetype;
+  
+  // Show/hide toolbar
+  switch (filetype) {
+    case ".docx":
+    case ".html":
+      document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
+      editor.classList.remove('no-toolbar'); // 0.2 only
+      toolbar.classList.remove('hidden');
+      break;
+    case ".txt":
+    default:
+      document.getElementById('edit-bar').style.display = 'none'; // 0.2 only
+      editor.classList.add('no-toolbar'); // 0.2 only
+      toolbar.classList.add('hidden');
+      break;
+  }
+  
+  // Fill editor
+  firetext.io.load(directory, filename, filetype, function(result, error) {
+    if (!error) {
+      var content;
+  
+      switch (filetype) {
+        case ".txt":
+          content = firetext.parsers.plain.parse(result, "HTML");
+          doc.innerHTML = content;
+          tabRaw.classList.add('hidden');
+          regions.tab(document.querySelector('#editTabs'), 'design');
+          break;
+        case ".docx":
+          docxeditor = result;
+          content = result.HTMLout();
+          doc.appendChild(content);
+          tabRaw.classList.add('hidden');
+          regions.tab(document.querySelector('#editTabs'), 'design');
+          break;
+        case ".html":
+        default:
+          content = result;
+          doc.innerHTML = content;
+          rawEditor.textContent = content;
+          tabRaw.classList.remove('hidden');  
+          break;
+      }             
+    
+      // Add listener to update views
+      watchDocument(filetype);
+  
+      // Add file to recent docs
+      firetext.recents.add([directory, filename, filetype], location);
+  
+      // Show editor
+      regions.nav('edit');
+  
+      // Hide save button if autosave is enabled
+      if (firetext.settings.get('autosave') != 'false') {
+        document.getElementById('editorSaveButton').style.display = 'none';
+        document.getElementById('zenSaveButton').style.display = 'none';
+      } else {
+        document.getElementById('editorSaveButton').style.display = 'inline-block';
+        document.getElementById('zenSaveButton').style.display = 'inline-block';
+      }
+    } 
+  }, location); 
+}
+
+firetext.io.save = function (directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -395,7 +431,7 @@ function save(directory, filename, filetype, content, showBanner, callback, loca
   // Special handling for .docx
   if (filetype == '.docx') {
     docx.HTMLin(content);
-    contentBlob = new Blob([docx.generate("blob")], {type: type});
+    contentBlob = new Blob([docxeditor.generate("blob")], {type: type});
   } else {
     contentBlob = new Blob([content], { "type" : type });
   }
@@ -415,7 +451,7 @@ function save(directory, filename, filetype, content, showBanner, callback, loca
         if (this.error.name == "NoModificationAllowedError") {
           var req2 = storage.delete(filePath);
           req2.onsuccess = function () {
-            saveFile(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx);
+            firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx);
           };
           req2.onerror = function () {
             alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
@@ -452,99 +488,12 @@ function save(directory, filename, filetype, content, showBanner, callback, loca
         alert("Error opening file :(\n\ncode: " + err.code);
       });
     }
-  } else if (location == 'dropbox' && dropboxClient) {
-    if (showSpinner != false) {
-      firetext.spinner();
-    }
-    dropboxClient.writeFile(filePath, contentBlob, function() { 
-      if (showSpinner != false) {
-        firetext.spinner('hide'); callback();
-      }
-    });    
+  } else if (location == 'dropbox') {
+    callback(cloud.dropbox.save(filePath, contentBlob, showSpinner));
   }
-}
+};
 
-function loadToEditor(directory, filename, filetype, location) {
-  // Clear editor
-  doc.innerHTML = '';
-  rawEditor.textContent = '';
-  
-  // Set file name and type
-  document.getElementById('currentFileLocation').textContent = location;
-  document.getElementById('currentFileDirectory').textContent = directory;
-  document.getElementById('currentFileName').textContent = filename;
-  document.getElementById('currentFileType').textContent = filetype;
-  
-  // Set alert banner name and type
-  document.getElementById('save-banner-name').textContent = (directory + filename);
-  document.getElementById('save-banner-type').textContent = filetype;
-  
-  // Show/hide toolbar
-  switch (filetype) {
-    case ".docx":
-    case ".html":
-      document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
-      editor.classList.remove('no-toolbar'); // 0.2 only
-      toolbar.classList.remove('hidden');
-      break;
-    case ".txt":
-    default:
-      document.getElementById('edit-bar').style.display = 'none'; // 0.2 only
-      editor.classList.add('no-toolbar'); // 0.2 only
-      toolbar.classList.add('hidden');
-      break;
-  }
-  
-  // Fill editor
-  load(directory, filename, filetype, function(result, error) {
-    if (!error) {
-      var content;
-  
-      switch (filetype) {
-        case ".txt":
-          content = txt.parse(result, "HTML");
-          doc.innerHTML = content;
-          tabRaw.classList.add('hidden');
-          tab(document.querySelector('#editTabs'), 'design');
-          break;
-        case ".docx":
-          docxeditor = result;
-          content = result.HTMLout();
-          doc.appendChild(content);
-          tabRaw.classList.add('hidden');
-          tab(document.querySelector('#editTabs'), 'design');
-          break;
-        case ".html":
-        default:
-          content = result;
-          doc.innerHTML = content;
-          rawEditor.textContent = content;
-          tabRaw.classList.remove('hidden');  
-          break;
-      }             
-    
-      // Add listener to update views
-      watchDocument(filetype);
-  
-      // Add file to recent docs
-      firetext.recents.add([directory, filename, filetype], location);
-  
-      // Show editor
-      nav('edit');
-  
-      // Hide save button if autosave is enabled
-      if (firetext.settings.get('autosave') != 'false') {
-        document.getElementById('editorSaveButton').style.display = 'none';
-        document.getElementById('zenSaveButton').style.display = 'none';
-      } else {
-        document.getElementById('editorSaveButton').style.display = 'inline-block';
-        document.getElementById('zenSaveButton').style.display = 'inline-block';
-      }
-    } 
-  }, location); 
-}
-
-function load(directory, filename, filetype, callback, location) {
+firetext.io.load = function (directory, filename, filetype, callback, location) {
   var filePath = (directory + filename + filetype);
   if (location == '' | location == 'internal' | !location) {
     if (deviceAPI == 'deviceStorage') {
@@ -611,26 +560,20 @@ function load(directory, filename, filetype, callback, location) {
         });
       }, function(err) {
         if (err.code === FileError.NOT_FOUND_ERR) {
-          
+          alert("Load unsuccessful :(\n\nError code: " + err.code);          
         } else {
           alert("Load unsuccessful :(\n\nError code: " + err.code);
         }
       });
     }
-  } else if (location = 'dropbox' && dropboxClient) {
-    firetext.spinner();
-    dropboxClient.readFile(filePath, function(e, d) {
-      firetext.spinner('hide');
-      if (!e) {
-        callback(d);
-      } else {
-        callback(e.status, true);
-      }
+  } else if (location = 'dropbox') {
+    cloud.dropbox.load(filePath, function (result, error) {
+      callback(result, error);
     });
   }
-}
+};
 
-function remove(name, location) {
+firetext.io.delete = function (name, location) {
   var path = name;
   if (!location | location == '' | location == 'internal') {
     if (deviceAPI == 'deviceStorage') {
@@ -652,20 +595,20 @@ function remove(name, location) {
         alert('Delete unsuccessful :(\n\ncode: ' + err.code);
       });
     }
-  } else if (location == 'dropbox' && dropboxClient) {
-    dropboxClient.remove(path, function(e) { });
+  } else if (location == 'dropbox') {
+    cloud.dropbox.delete(path);
   }
-}
+};
 
-function rename(directory, name, type, newname, location) {
-  load(directory, name, type, function(result) {
+firetext.io.rename = function (directory, name, type, newname, location) {
+  firetext.io.load(directory, name, type, function(result) {
     var fullName = (directory + name + type);
-    save(directory, name, type, result, function () {}, location);
-    remove(fullName, location);
+    firetext.io.save(directory, name, type, result, function () {}, location);
+    firetext.io.delete(fullName, location);
   }, location);
-}
+};
 
-function split(path) {
+firetext.io.split = function (path) {
   var file = new Array();
   file[0] = path.substring(0, (path.lastIndexOf('/') + 1));
   file[1] = path.substring((path.lastIndexOf('/') + 1), path.lastIndexOf('.')).replace(/\//, '');
@@ -680,5 +623,3 @@ function split(path) {
   }
   return [file[0], file[1], file[2]];
 };
-
-});

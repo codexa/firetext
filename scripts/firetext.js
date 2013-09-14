@@ -9,21 +9,13 @@
 'use strict';
 
 
-/* RequireJS
-------------------------*/
-define(function (require) {
-
-var firetext = {};
-firetext.io = require('io');
-firetext.recents = require('recents');
-firetext.regions = require('regions');
-firetext.settings = require('settings');
-
-var domReady = require('settings');
-
-
 /* Variables
 ------------------------*/
+// Namespaces
+var firetext = {};
+firetext.user = {};
+firetext.parsers = {};
+
 // Misc
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
@@ -34,10 +26,6 @@ var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoo
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
 var welcomeRecentsArea, welcomeRecentsList;
 
-// Dropbox
-var welcomeDropboxArea, welcomeDropboxList, openDialogDropboxArea, openDialogDropboxList;
-var dropboxClient = undefined, dropboxAuthed = new CustomEvent('dropboxAuthed');
-
 // Google Drive
 var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogleList;
 
@@ -47,36 +35,10 @@ var appCache = window.applicationCache;
 
 /* Start
 ------------------------*/
-domReady(init);
+window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
 window.setInterval(updateToolbar, 100);
 
-function checkDevice() {
-  var width, height;
-  if (window.screen) {
-    width = window.screen.availWidth;
-    height = window.screen.availHeight;
-  } else if (window.innerWidth && window.innerHeight) {
-    width = window.innerWidth;
-    height = window.innerHeight;
-  } else if (document.body) {
-    width = document.body.clientWidth;
-    height = document.body.clientHeight;
-  }  
-  if (width <= 766) {      
-    deviceType = 'mobile';  
-  } else {
-    deviceType = 'desktop';
-  }
-  
-  if (window.opera) {
-    alert('Warning: Your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
-  }
-};
-
-
-/* Initalize
-------------------------*/
-function init() {
+firetext.init = function () {
   // Find device type
   checkDevice();
 
@@ -119,7 +81,7 @@ function init() {
   underlineCheckbox = document.getElementById('underlineCheckbox');
   
   // Initalize recent docs
-  RecentDocs.init();
+  firetext.recents.init();
   
   // Initialize the editor
   initEditor();
@@ -127,8 +89,11 @@ function init() {
   // Init extIcon
   extIcon();
 
-  // Init errors
-  initError();
+  // Initiate user id
+  firetext.user.id.init();
+
+  // Init user log
+  firetext.user.log.init();
   
   // Add event listeners
   toolbar.addEventListener(
@@ -157,22 +122,19 @@ function init() {
   );
   
   // Initialize IO
-  firetext.io.start(null, function() {
-    // Update Doc Lists
-    updateDocLists();
-    
+  firetext.io.init(null, function() {
     // Initialize sharing
-    initSharing();
+    cloud.init();
     
     // Check for recent file, and if found, load it.
     if (firetext.settings.get('autoload') == 'true') {
-      var lastDoc = [settings.getSettings('autoload.dir'), settings.getSettings('autoload.name'), settings.getSettings('autoload.ext'), settings.getSettings('autoload.loc')];
+      var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
       if (firetext.settings.get('autoload.wasEditing') == 'true') {
         // Wait until Dropbox is authenticated
         if (lastDoc[3] == 'dropbox') {
           if (firetext.settings.get('dropbox.enabled') == 'true') {
-            window.addEventListener('dropboxAuthed', function() {
-              io.loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+            window.addEventListener('cloud.dropbox.authed', function() {
+              loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
               spinner('hide');
             });
           } else {
@@ -180,7 +142,7 @@ function init() {
             spinner('hide');
           }
         } else {
-          io.loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+          loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
           spinner('hide');
         }
       } else {
@@ -192,147 +154,13 @@ function init() {
       spinner('hide');
     }
   });
+  
+  // Update Doc Lists
+  updateDocLists();
 
   // Initialize Night Mode
   night();
 };
-
-function initClientId() {
-  var ClId = firetext.user.$_ClientID,
-      CClId = window.localStorage.getItem("$#ClId");
-  // Client ID Verification and Validation
-  if (ClId === undefined && CClId === null){
-    ClientID.genClId();
-  } else if(ClId === undefined){
-    firetext.user.$_ClientID = localStorage.getItem("$#ClId");
-  } else if (CClId === null){
-    localStorage.setItem("$#ClId", firetext.user.$_ClientID);
-  } else if(ClId.length/4 !== 16 || CClId.length/4 !== 16){
-    ClientID.genClId();
-    initClientId();
-  }
-}
-
-function initError(){
-  // Error
-  window.onload = function(){
-    window.onerror = function(message, url, lineNumber) {
-      var s = "e:";
-      window.firetext.user.logm("log.er", s+message, s+lineNumber, s+url);
-      return false;
-    };
-
-    window.addEventListener('error', function(e) { 
-      var s = "e:";
-      window.firetext.user.logm("log.er", s+e);
-    }, false);
-  }
-}
-
-function initSharing() {
-  // Dropbox
-  if (firetext.settings.get('dropbox.enabled') == 'true') {
-    // Error Handler
-    dropAPI.client.onError.addListener(function (error) {
-      if (window.console) {
-        console.error(error);
-        dropboxError(error);
-      }
-    });
-    if (!dropboxClient) {
-      // Auth
-      dropAPI.client.authenticate(function(error, client) {
-        if (!error && client) {
-          // Set client
-          dropboxClient = client;
-          
-          // Code to get dropbox files
-          updateDocLists();
-          
-          // Show UI elements
-          welcomeDropboxArea.style.display = 'block';
-          openDialogDropboxArea.style.display = 'block';
-          locationDropbox = document.createElement('option');
-          locationDropbox.textContent = 'Dropbox';
-          locationSelect.appendChild(locationDropbox);
-          
-          // Dispatch auth event
-          window.dispatchEvent(dropboxAuthed);
-          
-          // This is a workaround for a very weird bug...          
-          setTimeout(updateAddDialog, 1);
-        } else {
-          // Hide/Remove UI elements
-          welcomeDropboxArea.style.display = 'none';
-          openDialogDropboxArea.style.display = 'none';
-          if (locationDropbox) {
-            locationSelect.removeChild(locationDropbox);
-            locationDropbox = undefined;
-          }
-        }                
-      });
-    } 
-  } else {
-    // Hide/Remove UI elements
-    welcomeDropboxArea.style.display = 'none';
-    openDialogDropboxArea.style.display = 'none';
-    if (locationDropbox) {
-      locationSelect.removeChild(locationDropbox);
-      locationDropbox = undefined;
-    }
-    
-    // Sign out
-    if (dropboxClient) {
-      dropAPI.client.signOut();
-      dropboxClient = undefined;
-    }
-    
-    // Close any open Dropbox files
-    if (document.getElementById('currentFileLocation').textContent == 'dropbox') {
-      regions.nav('welcome');
-      regions.nav('settings');    
-    }
-    
-    // Remove Dropbox recents
-    var dropRecents = RecentDocs.get();
-    for (var i = 0; i < dropRecents.length; i++) {
-      if (dropRecents[i][3] == 'dropbox') {
-        RecentDocs.remove([dropRecents[i][0], dropRecents[i][1], dropRecents[i][2]], dropRecents[i][3]);
-      }
-    }  
-  }
-  
-  // Google Drive
-  if (firetext.settings.get('gdrive.enabled') == 'true') {
-    // Code to get Google Drive files
-    updateDocLists();
-    
-    // Show UI Elements
-    welcomeGoogleArea.style.display = 'block';
-    openDialogGoogleArea.style.display = 'block';
-    locationGoogle = document.createElement('option');
-    locationGoogle.textContent = 'Google Drive';
-    locationSelect.appendChild(locationGoogle);
-  } else {
-    // Hide/Remove UI elements
-    welcomeGoogleArea.style.display = 'none';
-    openDialogGoogleArea.style.display = 'none';
-    if (locationGoogle) {
-      locationSelect.removeChild(locationGoogle);
-      locationGoogle = undefined;
-    }
-    
-    // Remove Google recents
-    var driveRecents = RecentDocs.get();
-    for (var i = 0; i < driveRecents.length; i++) {
-      if (driveRecents[i][3] == 'gdrive') {
-        RecentDocs.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3]);
-      }
-    }
-  }
-  
-  updateAddDialog();
-}
 
 function updateAddDialog() {
   if (locationSelect.length < 1) {
@@ -362,31 +190,30 @@ function updateAddDialog() {
   }
 }
 
-firetext.disableInternalStorage = function () {
-  welcomeDeviceArea.style.display = 'none';
-  openDialogDeviceArea.style.display = 'none';
-};
-
 
 /* Doc lists
 ------------------------*/
 function updateDocLists() {
-  buildDocList(RecentDocs.get(), [welcomeRecentsList], "Recent Documents", 'internal');
-  io.docsInFolder('Documents/', function(DOCS) {
+  // Recents
+  buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal');
+  
+  // Internal
+  firetext.io.enumerate('Documents/', function(DOCS) {
     buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
   });
-  if (firetext.settings.get('dropbox.enabled') == 'true' && dropboxClient) {
-    io.dropboxDocsInFolder(dropboxClient, '/Documents/', function(DOCS) {
-      buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
-    });
-  }
+  
+  // Cloud
+  cloud.updateDocLists();
 }
 
 function buildDocListItems(DOCS, listElms, description, output, location) {
-  // Convert to html
+  // Handle description
+  if (!description) {
+    description = '';
+  }
   switch (DOCS[0][2]) {
     case ".txt":
-      description = txt.parse(description, "HTML");
+      description = firetext.parsers.plain.parse(description, "HTML");
       break;
     case ".docx":
       var tmp = document.createElement("DIV");
@@ -438,7 +265,7 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   }
   
   // build next item
-  io.loadFile(DOCS[1][0], DOCS[1][1], DOCS[1][2], function(result) {
+  firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function(result) {
     buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location);
   }, location);
 }
@@ -455,7 +282,7 @@ function buildDocList(DOCS, listElms, display, location) {
       if (DOCS[0][3] && DOCS[0][3] != location) {
         location = DOCS[0][3];
       }
-      io.loadFile(DOCS[0][0], DOCS[0][1], DOCS[0][2], function(result) {
+      firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function(result) {
         buildDocListItems(DOCS, listElms, result, "", location);
       }, location);
     } else {
@@ -584,7 +411,7 @@ function watchDocument(filetype) {
   } else {
     doc.addEventListener('input', function() {
       if (firetext.settings.get('autosave') != 'false') {
-        io.saveFromEditor(false, false);
+        saveFromEditor(false, false);
       }    
     });    
   }
@@ -598,7 +425,7 @@ function updateViews(destView, source, contentType) {
       destView.textContent = source;
     }
     if (firetext.settings.get('autosave') != 'false') {
-      io.saveFromEditor(false, false);
+      saveFromEditor(false, false);
     }
   }
 }
@@ -619,11 +446,11 @@ function editDocs() {
     editState = true;
     
     // Code to build list
-    io.docsInFolder('Documents/', function(result) {
+    firetext.io.docsInFolder('Documents/', function(result) {
       buildEditDocList(result, welcomeDeviceList, 'Documents found', 'internal');
     });
-    if (firetext.settings.get('dropbox.enabled') == 'true' && dropboxClient) {
-      io.dropboxDocsInFolder(dropboxClient, '/Documents', function(DOCS) {
+    if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
+      cloud.dropbox.enumerate('/Documents', function(DOCS) {
         buildEditDocList(DOCS, welcomeDropboxList, "Dropbox Documents Found", 'dropbox');
       });
     }
@@ -713,10 +540,10 @@ function deleteSelected(confirmed) {
       var location = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].getAttribute('data-location');
       
       // Remove from RecentDocs
-      RecentDocs.remove((filename + location), true);
+      firetext.recents.remove((filename + location), true);
       
       // Delete file
-      io.deleteFile(filename, location);
+      firetext.io.delete(filename, location);
       
       // Remove from list
       var elm = selected[i].parentNode.parentNode;
@@ -802,7 +629,7 @@ function processActions(eventAttribute, target) {
     }
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'loadToEditor') {
-      io.loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
+      loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
       if (navLocation == 'welcome' | navLocation == 'open') {
@@ -819,14 +646,14 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'sidebar') {
       regions.sidebar(target.getAttribute(eventAttribute + '-id'));
     } else if (calledFunction == 'saveFromEditor') {
-      io.saveFromEditor();
+      saveFromEditor();
     } else if (calledFunction == 'formatDoc') {
       formatDoc(target.getAttribute(eventAttribute + '-action'), true, target.getAttribute(eventAttribute + '-value'));
       if (target.getAttribute(eventAttribute + '-back') == 'true') {
         regions.navBack();
       }
     } else if (calledFunction == 'createFromDialog') {
-      io.createFromDialog();
+      createFromDialog();
     } else if (calledFunction == 'editDocs') {
       editDocs();
     } else if (calledFunction == 'extIcon') {
@@ -888,34 +715,6 @@ function processActions(eventAttribute, target) {
 }
 
 
-/* Dropbox
-------------------------*/ 
-function dropboxError(error) {
-  switch (error.status) {
-  case Dropbox.ApiError.OVER_QUOTA:
-    // The user is over their Dropbox quota.
-    // Tell them their Dropbox is full. Refreshing the page won't help.
-    alert('Your Dropbox is full :(');
-    break;
-
-
-  case Dropbox.ApiError.NETWORK_ERROR:
-    alert('Your network appears to be unavailable.\n\nPlease check your connection and try again.');
-    break;
-
-  case Dropbox.ApiError.RATE_LIMITED:
-  case Dropbox.ApiError.INVALID_TOKEN:
-  case Dropbox.ApiError.INVALID_PARAM:
-  case Dropbox.ApiError.OAUTH_ERROR:
-  case Dropbox.ApiError.INVALID_METHOD:    
-  case 404:  
-  default:
-    // TBD Code to Notify Fireanalytic
-    break;
-  }
-}
-
-
 /* Night Mode
 ------------------------*/
 var ncss, dcss = document.getElementsByTagName("link")[25];
@@ -962,7 +761,30 @@ function night() {
 
 
 /* Miscellaneous
-------------------------*/ 
+------------------------*/
+function checkDevice() {
+  var width, height;
+  if (window.screen) {
+    width = window.screen.availWidth;
+    height = window.screen.availHeight;
+  } else if (window.innerWidth && window.innerHeight) {
+    width = window.innerWidth;
+    height = window.innerHeight;
+  } else if (document.body) {
+    width = document.body.clientWidth;
+    height = document.body.clientHeight;
+  }  
+  if (width <= 766) {      
+    deviceType = 'mobile';  
+  } else {
+    deviceType = 'desktop';
+  }
+  
+  if (window.opera) {
+    alert('Warning: Your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
+  }
+};
+
 function clearCreateForm() {
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
@@ -1011,4 +833,3 @@ function editFullScreen(enter) {
     editor.classList.remove('fullscreen');
   }
 }
-});

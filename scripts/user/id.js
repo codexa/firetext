@@ -1,24 +1,36 @@
 /*
-* Client ID Generator
+* User ID
 * Copyright (C) Codexa Organization 2013.
 */
 
 'use strict';
 
 
-/* RequireJS
+/* Variables
 ------------------------*/
-define(function (require) {
-
-var firetext = require('firetext');
-firetext.user = {};
-var CryptoJS = require('lib/encrypt');
+// Namespace
+firetext.user.id = {};
 
 
-/* User ID Generator
+/* User ID
 ------------------------*/
-// generator 
-function generate() {
+firetext.user.id.init = function () {
+  var ClId = firetext.user.$_ClientID,
+      CClId = window.localStorage.getItem("$#ClId");
+  // Client ID Verification and Validation
+  if (ClId === undefined && CClId === null){
+    firetext.user.id.generate();
+  } else if(ClId === undefined){
+    firetext.user.$_ClientID = localStorage.getItem("$#ClId");
+  } else if (CClId === null){
+    localStorage.setItem("$#ClId", firetext.user.$_ClientID);
+  } else if(ClId.length/4 !== 16 || CClId.length/4 !== 16){
+    firetext.user.id.generate();
+    firetext.user.id.init();
+  }
+};
+
+firetext.user.id.generate = function () {
   var edi = "",
       ch1 = "",
 	  nm1 = "",
@@ -65,5 +77,3 @@ function generate() {
   
   return ClID;
 };
-
-});

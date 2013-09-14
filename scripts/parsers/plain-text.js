@@ -6,11 +6,17 @@
 'use strict';
 
 
+/* Variables
+------------------------*/
+// Namespace
+firetext.parsers.plain = {};
+
+
 /* Parser
 ------------------------*/
-function parse(data, type) {
+firetext.parsers.plain.parse = function (data, type) {
   // Some code to convert TXT into something else
-  output = "";
+  var output = "";
   if (type == "HTML") {
     output = data.replace(/</gi, '<pre><code>&lt;')
     			 .replace(/>/gi, '&gt;</code></pre>')
@@ -20,11 +26,11 @@ function parse(data, type) {
   }
   // Didn't parse, return false
   return false;
-}
+};
 
-function encode(data, type) {
+firetext.parsers.plain.encode = function (data, type) {
   // Some code to convert data to TXT
-  output = "";
+  var output = "";
   if (type == "HTML") {
     output = data.replace(/<br\/>/gi, '\n')
     			 .replace(/<br>/gi, '\n');
@@ -35,4 +41,4 @@ function encode(data, type) {
   }
   // Didn't convert to TXT, return false
   return false;
-}
+};
