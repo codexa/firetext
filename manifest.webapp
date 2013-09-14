@@ -78,7 +78,10 @@
           "text/plain",
           "text/html",
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        ]
+        ],
+        "editable": {
+          "required": false
+        }
       },
       "returnValue": false
     }

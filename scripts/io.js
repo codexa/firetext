@@ -409,7 +409,9 @@ function loadToEditor(directory, filename, filetype, location) {
         document.getElementById('editorSaveButton').style.display = 'inline-block';
         document.getElementById('zenSaveButton').style.display = 'inline-block';
       }
-    } 
+    } else {
+      alert('File could not be loaded. \n\nInfo for gurus:\n'+error);
+    }
   }, location); 
 }
 

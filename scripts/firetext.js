@@ -17,6 +17,8 @@ firetext.user = {};
 firetext.parsers = {};
 
 // Misc
+firetext.initialized = new CustomEvent('firetext.initialized');
+firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
 var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
@@ -153,6 +155,10 @@ firetext.init = function () {
       regions.nav('welcome');
       spinner('hide');
     }
+  
+    // Dispatch init event
+    window.dispatchEvent(firetext.initialized);
+    firetext.isInitialized = true;
   });
   
   // Update Doc Lists
