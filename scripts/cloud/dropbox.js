@@ -96,7 +96,7 @@ cloud.dropbox.load = function (path, callback) {
   }
 }
 
-cloud.dropbox.save = function (path, content, spinner) {
+cloud.dropbox.save = function (path, content, showSpinner) {
   if (cloud.dropbox.client && path && content) {
     if (showSpinner != false) {
       spinner();

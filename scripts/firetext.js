@@ -185,8 +185,7 @@ function updateAddDialog() {
     }
   } else {
     // Enable elements
-    document.getElementById('add-dialog-create-button').style.pointerEvents = 'auto';
-    document.getElementById('add-dialog-create-button').style.color = 'auto';
+    document.getElementById('add-dialog-create-button').style = 'pointer-events: auto;';
     document.querySelector('#add [role="main"]').style.display = 'block';
   
     // Remove notice if present
@@ -452,7 +451,7 @@ function editDocs() {
     editState = true;
     
     // Code to build list
-    firetext.io.docsInFolder('Documents/', function(result) {
+    firetext.io.enumerate('Documents/', function(result) {
       buildEditDocList(result, welcomeDeviceList, 'Documents found', 'internal');
     });
     if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
@@ -654,7 +653,7 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'saveFromEditor') {
       saveFromEditor();
     } else if (calledFunction == 'formatDoc') {
-      formatDoc(target.getAttribute(eventAttribute + '-action'), true, target.getAttribute(eventAttribute + '-value'));
+      formatDoc(target.getAttribute(eventAttribute + '-action'), target.getAttribute(eventAttribute + '-value'));
       if (target.getAttribute(eventAttribute + '-back') == 'true') {
         regions.navBack();
       }
@@ -672,6 +671,10 @@ function processActions(eventAttribute, target) {
       deselectAll();
     } else if (calledFunction == 'tab') {
       regions.tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
+    } else if (calledFunction == 'clearForm') {
+      if (target.parentNode.children[0]) {
+        target.parentNode.children[0].value = '';
+      }
     } else if (calledFunction == 'clearCreateForm') {
       clearCreateForm();
     } else if (calledFunction == 'fullscreen') {
@@ -715,6 +718,19 @@ function processActions(eventAttribute, target) {
       if (document.getElementById('currentFileType').textContent != '.txt') {
         document.getElementById('edit-bar').style.display = 'block';
         editor.classList.remove('no-toolbar');
+      }
+    } else if (calledFunction == 'hyperlink') {
+      if (target.getAttribute(eventAttribute + '-dialog')) {
+        formatDoc('createLink', document.getElementById('web-address').value);
+        regions.navBack();
+        regions.navBack();
+      } else {
+        regions.nav('hyperlink');
+        if (editor.contentDocument.queryCommandState("createLink")) {
+          document.getElementById('web-address').value = editor.contentDocument.queryCommandValue("createLink");
+        } else {
+          document.getElementById('web-address').value = '';        
+        }
       }
     }
   }

@@ -117,10 +117,10 @@ firetext.io.enumerate = function (directory, callback) {
     
       cursor.onerror = function() {
         if (cursor.error.name == 'TypeMismatchError') {
-          save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
-            remove('firetext.temp');
+          firetext.io.save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+            firetext.io.delete('firetext.temp');
           });
-          firetext.updateDocLists();
+          updateDocLists();
           return;
         } else if (cursor.error.name == 'SecurityError') {
           alert('Please allow Firetext to access your SD card.');

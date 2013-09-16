@@ -23,11 +23,11 @@ Current Features:
 - Zen Mode
 - Night Mode
 - Raw mode for HTML documents
+  - Syntax highlighting
 - Cloud services
   - Dropbox
 - Autoload
 - Autosave
-- Syntax highlighting
 
 Cooming soon:
 - Formatting

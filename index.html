@@ -291,7 +291,7 @@
     </section>
   </section>
 
-  <!-- Version 0.3
+  <!-- Version 0.4
   <form role="dialog" data-type="action" id="share">
     <header>Share</header>
     <menu>
@@ -313,6 +313,24 @@
       <article data-type="list">
         <h2>Elements</h2>
         <ul>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="formatDoc" data-click-action="insertHorizontalRule" data-click-back="true">Insert</button>
+              </label>
+            </aside>
+            <aside class="icon icon-hr"></aside>
+            <p class="label">Horizontal Rule</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="hyperlink">Insert</button>
+              </label>
+            </aside>
+            <aside class="icon icon-link"></aside>
+            <p class="label">Hyperlink</p>
+          </li>
           <li class="noLink">
             <aside class="pack-end">
               <label>
@@ -390,6 +408,30 @@
           </li>
         </ul>
       </article>
+    </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="dialog" data-type="action" id="hyperlink">
+      <header>
+      <button data-click="navBack"><span class="icon icon-close">Cancel</span></button>
+      <menu type="toolbar">
+        <button data-click="hyperlink" data-click-dialog="true">Okay</button>
+      </menu>
+      <h1>Hyperlink</h1>
+    </header>
+    <div role="main">
+      <div class="form">
+        <br>
+        <fieldset class="button-block">
+          <section>
+            <p>
+              <input placeholder="http://mysite.com/" required type="url" id="web-address" data-enter="hyperlink" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
     </div>
   </section>
   <div class="background"></div>

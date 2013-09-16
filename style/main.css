@@ -123,11 +123,12 @@ form[role=dialog].current {
 
 [data-type="list"] li.fileListItem .fileItemDescription {
   background: #dfdfdf;
-  color: #6f6f6f;
   font-size: 1.2rem;
   max-height: 5rem;
   overflow: hidden;
   padding-top: 1rem;
+  opacity: .8;
+  pointer-events: none;
 }
 
 [data-type="list"] li.fileListItem .fileItemInfo {
@@ -215,7 +216,7 @@ aside.pack-end select {
   right: 0;
   padding-top: 1.3rem;
   text-align: right;
-  text-indent: 1.8rem;
+  text-indent: 1.5rem;
 }
 
 aside.pack-end select:after {
