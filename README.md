@@ -20,6 +20,8 @@ Current Features:
 - Elements
   - ordered list
   - unordered list
+  - horizontal rules
+  - links
 - Zen Mode
 - Night Mode
 - Raw mode for HTML documents
@@ -40,7 +42,6 @@ Cooming soon:
 - Elements
   - images
   - tables
-  - horizontal lines
 - File IO
   - Filesystem API
 - Cloud services

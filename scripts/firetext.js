@@ -185,7 +185,7 @@ function updateAddDialog() {
     }
   } else {
     // Enable elements
-    document.getElementById('add-dialog-create-button').style = 'pointer-events: auto;';
+    document.getElementById('add-dialog-create-button').setAttribute('style', 'pointer-events: auto;');
     document.querySelector('#add [role="main"]').style.display = 'block';
   
     // Remove notice if present

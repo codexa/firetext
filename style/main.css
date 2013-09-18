@@ -108,6 +108,7 @@ form[role=dialog].current {
   height: auto;
   background: #eee;
   border-bottom: 2px solid #aeaeae;
+  cursor: pointer;
 }
 
 [data-type="list"] li.fileListItem a {

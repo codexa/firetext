@@ -64,6 +64,7 @@ section[role="dialog"] + .background {
 }
 
 section[role="dialog"].current {
+  z-index: 101;
   visibility: visible;
   opacity: 1;
   transform: none;

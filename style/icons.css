@@ -15,12 +15,21 @@
 [data-type="list"] aside.icon.icon-gDrive {
   background-image: url(icons/cloud/google-drive.svg) !important;
 }
+
 [data-type="list"] aside.icon.icon-ordlist {
   background-image: url(icons/editor/numbered-list.svg) !important;
 }
 
 [data-type="list"] aside.icon.icon-unlist {
   background-image: url(icons/editor/list.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-link {
+  background-image: url(icons/editor/link.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-hr {
+  background-image: url(icons/editor/hr.svg) !important;
 }
 
 .icon-compose {
@@ -32,9 +41,8 @@
   background-size: 2rem !important;
 }
 
-.icon-nightic {
+.icon-night {
   background-image: url(icons/misc/night.svg) !important;
-  background-size: 2rem !important;
 }
 
 section > header:first-child :first-child .icon-menu {

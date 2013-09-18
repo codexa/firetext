@@ -329,7 +329,7 @@
               </label>
             </aside>
             <aside class="icon icon-link"></aside>
-            <p class="label">Hyperlink</p>
+            <p class="label">Link</p>
           </li>
           <li class="noLink">
             <aside class="pack-end">
@@ -352,6 +352,20 @@
         </ul>
         <h2>Formatting</h2>
         <ul>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <select data-change="justify" id="justify-select">
+                  <option selected>Left</option>
+                  <option>Right</option>
+                  <option>Center</option>
+                  <option>Justified</option>
+                </select>
+                <select class="dummy"></select>
+              </label>
+            </aside>
+            <p class="label">Alignment</p>
+          </li>
           <li class="noLink">
             <aside class="pack-end">
               <label>
@@ -378,33 +392,6 @@
               </label>
             </aside>
             <p class="label">Underline</p>
-          </li>
-
-          <!-- Version 0.3
-          <li class="noLink">
-            <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="headingCheckbox" data-click="formatDoc" data-click-action="heading" data-click-value="h1">
-                <span></span>
-              </label>
-            </aside>
-            <p class="label">Heading</p>
-          </li>
-          -->
-
-          <li class="noLink">
-            <aside class="pack-end">
-              <label>
-                <select data-change="justify" id="justify-select">
-                  <option selected>Left</option>
-                  <option>Right</option>
-                  <option>Center</option>
-                  <option>Justified</option>
-                </select>
-                <select class="dummy"></select>
-              </label>
-            </aside>
-            <p class="label">Alignment</p>
           </li>
         </ul>
       </article>
@@ -493,6 +480,7 @@
                   <select class="dummy"></select>
                 </label>
 			  </aside>
+              <aside class="icon icon-night"></aside>
 			  <p class="label">Enable <b>Night Mode</b></p>
             </li>
           </ul>
