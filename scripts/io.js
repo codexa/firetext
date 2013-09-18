@@ -410,7 +410,7 @@ function loadToEditor(directory, filename, filetype, location) {
         document.getElementById('zenSaveButton').style.display = 'inline-block';
       }
     } else {
-      alert('File could not be loaded. \n\nInfo for gurus:\n'+error);
+      alert('File could not be loaded. \n\nInfo for gurus:\n'+result);
     }
   }, location); 
 }

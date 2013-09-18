@@ -203,7 +203,7 @@ function updateDocLists() {
   buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal');
   
   // Internal
-  firetext.io.enumerate('Documents/', function(DOCS) {
+  firetext.io.enumerate('/', function(DOCS) {
     buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
   });
   
@@ -378,6 +378,7 @@ function initEditor() {
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
   editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
+  editor.contentWindow.document.execCommand('enableObjectResizing', false, 'true');
   
   // Hide and show toolbar.
   // For reviewers, just in case this looks like a security problem:
@@ -731,6 +732,49 @@ function processActions(eventAttribute, target) {
         } else {
           document.getElementById('web-address').value = '';        
         }
+      }
+    } else if (calledFunction == 'image') {
+      if (target.getAttribute(eventAttribute + '-location')) {
+        // Get location
+        var location = target.getAttribute(eventAttribute + '-location');
+        
+        // Close location window
+        regions.navBack();
+        
+        // Pick image based on location
+        if (location == 'internal') {
+          var pick = new MozActivity({
+            name: "pick",
+            data: {
+              type: ["image/png", "image/jpg", "image/jpeg"]
+            }
+          });
+
+          pick.onsuccess = function () { 
+            var image = this.result.blob;
+            var reader = new FileReader();
+        
+            // Read blob
+            reader.addEventListener("loadend", function() {
+              formatDoc('insertImage', reader.result);
+              regions.navBack();
+            });
+        
+            reader.readAsDataURL(image);
+          };
+
+          pick.onerror = function () { 
+          };        
+        } else {
+          if (target.getAttribute(eventAttribute + '-dialog') == 'true') {
+            formatDoc('insertImage', document.getElementById('image-address').value);
+            regions.navBack();
+          } else {
+            regions.nav('image-web');
+          }
+        }
+      } else {
+        regions.nav('image-location');
       }
     }
   }

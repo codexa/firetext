@@ -43,6 +43,7 @@
   <script type="text/javascript" src="scripts/lib/stringview.js"></script>
 
   <!-- Parsers -->
+  <script type="text/javascript" src="scripts/parsers/base64.js"></script>
   <script type="text/javascript" src="scripts/parsers/docx.js"></script>
   <script type="text/javascript" src="scripts/parsers/plain-text.js"></script>
 
@@ -325,6 +326,15 @@
           <li class="noLink">
             <aside class="pack-end">
               <label>
+                <button data-click="image">Insert</button>
+              </label>
+            </aside>
+            <aside class="icon icon-image"></aside>
+            <p class="label">Image</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
                 <button data-click="hyperlink">Insert</button>
               </label>
             </aside>
@@ -399,7 +409,7 @@
   </section>
   <div class="background"></div>
   
-  <section role="dialog" data-type="action" id="hyperlink">
+  <section role="dialog" id="hyperlink">
       <header>
       <button data-click="navBack"><span class="icon icon-close">Cancel</span></button>
       <menu type="toolbar">
@@ -414,6 +424,40 @@
           <section>
             <p>
               <input placeholder="http://mysite.com/" required type="url" id="web-address" data-enter="hyperlink" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="action" id="image-location">
+    <header>Image location</header>
+    <menu>
+      <button data-click="image" data-click-location="web">The web</button> 
+      <button data-click="image" data-click-location="internal">Internal storage (beta)</button>
+      <button data-click="navBack">Cancel</button>
+    </menu>
+  </section>
+  <div class="background"></div>
+  
+  <section role="dialog" id="image-web">
+      <header>
+      <button data-click="navBack"><span class="icon icon-close">Cancel</span></button>
+      <menu type="toolbar">
+        <button data-click="image" data-click-location="web" data-click-dialog="true">Okay</button>
+      </menu>
+      <h1>Insert Image</h1>
+    </header>
+    <div role="main">
+      <div class="form">
+        <br>
+        <fieldset class="button-block">
+          <section>
+            <p>
+              <input placeholder="http://mysite.com/myimage.jpeg" required type="url" id="image-address" data-enter="image" data-enter-location="web" data-enter-dialog="true" />
               <button type="reset" data-mouse-down="clearForm">Clear</button>
             </p>
           </section>
@@ -480,7 +524,6 @@
                   <select class="dummy"></select>
                 </label>
 			  </aside>
-              <aside class="icon icon-night"></aside>
 			  <p class="label">Enable <b>Night Mode</b></p>
             </li>
           </ul>

@@ -1,3 +1,9 @@
+/* File Browser */
+.icon-arrow {
+  background-image: url(icons/misc/arrow.svg) !important;
+  background-size: 1rem !important;
+}
+
 .icon-document {
   background-image: url(icons/extensions/firetext.svg) !important;
 }
@@ -6,6 +12,12 @@
   background-image: url(icons/extensions/dropbox.svg) !important;
 }
 
+.icon-night {
+  background-image: url(icons/misc/night.svg) !important;
+}
+
+
+/* Settings */
 [data-type="list"] aside.icon.icon-dropbox {
   background-image: url(icons/cloud/dropbox.svg) !important;
   background-size: 5rem !important;
@@ -16,6 +28,24 @@
   background-image: url(icons/cloud/google-drive.svg) !important;
 }
 
+
+/* Formatting/Elements */
+[data-type="list"] aside.icon.icon-code {
+  background-image: url(icons/editor/code.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-hr {
+  background-image: url(icons/editor/hr.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-image {
+  background-image: url(icons/editor/image.svg) !important;
+}
+
+[data-type="list"] aside.icon.icon-link {
+  background-image: url(icons/editor/link.svg) !important;
+}
+
 [data-type="list"] aside.icon.icon-ordlist {
   background-image: url(icons/editor/numbered-list.svg) !important;
 }
@@ -24,45 +54,33 @@
   background-image: url(icons/editor/list.svg) !important;
 }
 
-[data-type="list"] aside.icon.icon-link {
-  background-image: url(icons/editor/link.svg) !important;
-}
 
-[data-type="list"] aside.icon.icon-hr {
-  background-image: url(icons/editor/hr.svg) !important;
+/* Editor */
+.icon-bold {
+  background-image: url(icons/editor/white/bold.svg) !important;
 }
 
 .icon-compose {
   background-image: url(icons/misc/create.svg) !important;
 }
 
-.icon-menu {
-  background-image: url(icons/misc/menu.svg) !important;
-  background-size: 2rem !important;
-}
-
-.icon-night {
-  background-image: url(icons/misc/night.svg) !important;
-}
-
-section > header:first-child :first-child .icon-menu {
-  background-position: left;
-}
-
-.icon-bold {
-  background-image: url(icons/editor/white/bold.svg) !important;
-}
-
 .icon-italic {
   background-image: url(icons/editor/white/italic.svg) !important;
+}
+
+.icon-more {
+  background-image: url(icons/editor/white/more.svg) !important;
 }
 
 .icon-underline {
   background-image: url(icons/editor/white/underline.svg) !important;
 }
 
-.icon-more {
-  background-image: url(icons/editor/white/more.svg) !important;
+
+/* Misc */
+.icon-back {
+  background-image: url(icons/misc/back.svg) !important;
+  background-size: 1rem !important;
 }
 
 .icon-close {
@@ -82,14 +100,13 @@ section > header:first-child :first-child .icon-close {
   background-size: 3rem !important;
 }
 
-.icon-back {
-  background-image: url(icons/misc/back.svg) !important;
-  background-size: 1rem !important;
+.icon-menu {
+  background-image: url(icons/misc/menu.svg) !important;
+  background-size: 2rem !important;
 }
 
-.icon-arrow {
-  background-image: url(icons/misc/arrow.svg) !important;
-  background-size: 1rem !important;
+section > header:first-child :first-child .icon-menu {
+  background-position: left;
 }
 
 .icon-save {
