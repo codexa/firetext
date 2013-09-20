@@ -21,7 +21,8 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
-var bold, italic, underline, boldCheckbox, italicCheckbox, underlineCheckbox;
+var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
+var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
 
 // Lists
@@ -76,10 +77,13 @@ firetext.init = function () {
   
   // Formatting
   bold = document.getElementById('bold');
-  italic = document.getElementById('italic');
-  underline = document.getElementById('underline');
   boldCheckbox = document.getElementById('boldCheckbox');
+  italic = document.getElementById('italic');
   italicCheckbox = document.getElementById('italicCheckbox');
+  justifySelect = document.getElementById('justify-select');
+  strikethrough = document.getElementById('strikethrough');
+  strikethroughCheckbox = document.getElementById('strikethroughCheckbox');
+  underline = document.getElementById('underline');
   underlineCheckbox = document.getElementById('underlineCheckbox');
   
   // Initalize recent docs
@@ -576,6 +580,7 @@ function formatDoc(sCmd, sValue) {
 
 function updateToolbar() {
   if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
+    // Bold
     if (editor.contentDocument.queryCommandState("bold")) {
       bold.classList.add('active');
       boldCheckbox.checked = true;
@@ -583,6 +588,8 @@ function updateToolbar() {
       bold.classList.remove('active');
       boldCheckbox.checked = false;
     }
+    
+    // Italic
     if (editor.contentDocument.queryCommandState("italic")) {
       italic.classList.add('active');
       italicCheckbox.checked = true;
@@ -590,12 +597,34 @@ function updateToolbar() {
       italic.classList.remove('active');
       italicCheckbox.checked = false;
     }
+    
+    // Justify
+    if (editor.contentDocument.queryCommandState("justifyCenter")) {
+      justifySelect.value = 'Center';
+    } else if (editor.contentDocument.queryCommandState("justifyFull")) {
+      justifySelect.value = 'Justified';
+    } else if (editor.contentDocument.queryCommandState("justifyRight")) {
+      justifySelect.value = 'Right';
+    } else {
+      justifySelect.value = 'Left';
+    }
+    
+    // Underline
     if (editor.contentDocument.queryCommandState("underline")) {
       underline.classList.add('active');
       underlineCheckbox.checked = true;
     } else {
       underline.classList.remove('active');
       underlineCheckbox.checked = false;
+    }
+    
+    // Strikethrough
+    if (editor.contentDocument.queryCommandState("strikeThrough")) {
+      strikethrough.classList.add('active');
+      strikethroughCheckbox.checked = true;
+    } else {
+      strikethrough.classList.remove('active');
+      strikethroughCheckbox.checked = false;
     }
   }
 }
@@ -714,7 +743,7 @@ function processActions(eventAttribute, target) {
       browserFrame.src = browseLocation;
       regions.nav('browser');
     } else if (calledFunction == 'justify') {
-      var justifyDirection = document.getElementById('justify-select').value;
+      var justifyDirection = justifySelect.value;
       if (justifyDirection == 'Justified') {
         justifyDirection = 'Full';
       }

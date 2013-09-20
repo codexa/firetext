@@ -84,6 +84,7 @@ firetext.recents.remove = function (file, location, merged) {
       merged = location;
     }    
     if (merged != true) {
+	  file.push('');
 	  file.push(location);
     }
   

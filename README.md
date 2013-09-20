@@ -7,22 +7,23 @@ You can run Firetext on a Firefox OS device, or on the <a href="https://addons.m
 
 Current Features:
 - Formats
+  - .docx
   - .html
   - .txt
-  - .docx
 - File I/O
   - deviceStorage API
 - Formatting
-  - bold
-  - underline
-  - italic
   - align
+  - bold
+  - italic
+  - strikethrough
+  - underline
 - Elements
+  - horizontal rules
+  - images
+  - links
   - ordered list
   - unordered list
-  - horizontal rules
-  - links
-  - images
 - Zen Mode
 - Night Mode
 - Raw mode for HTML documents
@@ -34,7 +35,6 @@ Current Features:
 
 Cooming soon:
 - Formatting
-  - strikethrough
   - superscript/subscript
   - font color
   - font size

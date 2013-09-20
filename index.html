@@ -263,6 +263,7 @@
                 <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold">Bold</button></li>
                 <li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic">Italic</button></li>
                 <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button class="sticky icon-strikethrough" id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough">Strikethrough</button></li>
                 <li><button class="icon-more" data-click="nav" data-click-location="format">Format</button></li>
               </ul>
               <ul>
@@ -393,6 +394,15 @@
               </label>
             </aside>
             <p class="label">Italic</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Strikethrough</p>
           </li>
           <li class="noLink">
             <aside class="pack-end">
@@ -530,19 +540,19 @@
             <li class="noLink">
               <aside class="pack-end">
                 <label>
+                  <button data-click="clearRecents">Clear</button>
+                </label>
+              </aside>
+              <p class="label">Clear <b>recents</b> list</p>
+            </li>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
                   <input type="checkbox" data-type="switch" id="logging-enabled-switch" />
                   <span></span>
                 </label>
               </aside>
               <p class="label">Enable <b>logging</b></p>
-            </li>
-            <li class="noLink">
-              <aside class="pack-end">
-                <label>
-                  <button data-click="clearRecents">Clear</button>
-                </label>
-              </aside>
-              <p class="label">Clear <b>recents</b> list</p>
             </li>
           </ul>
           <h2>Visual</h2>

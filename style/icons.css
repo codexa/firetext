@@ -72,6 +72,11 @@
   background-image: url(icons/editor/white/more.svg) !important;
 }
 
+.icon-strikethrough {
+  background-image: url(icons/editor/white/strikethrough.svg) !important;
+  background-size: 3rem !important;
+}
+
 .icon-underline {
   background-image: url(icons/editor/white/underline.svg) !important;
 }
