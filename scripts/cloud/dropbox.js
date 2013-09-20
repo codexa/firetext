@@ -45,6 +45,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
           }
           entries[i] = (dir + entries[i]);
           entries[i] = firetext.io.split(entries[i]);
+          entries[i].push('');
           
           // Only get documents
           if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.docx') {

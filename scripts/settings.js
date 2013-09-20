@@ -15,12 +15,23 @@ firetext.settings = {};
 ------------------------*/ 
 firetext.settings.init = function () {
   // Select elements
-  var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
+  var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
-  var nightmodeSelect = document.querySelector('#nightmode-select');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
+  var loggingEnabled = document.querySelector('#logging-enabled-switch');
+  var nightmodeSelect = document.querySelector('#nightmode-select');
+
+  // Autoload
+  if (firetext.settings.get('autoload') == 'true') {
+    autoloadEnabled.setAttribute('checked', '');
+  } else {  
+    autoloadEnabled.removeAttribute('checked');
+  }
+  autoloadEnabled.onchange = function () {
+    firetext.settings.save('autoload', this.checked);
+  }
 
   // Autosave
   if (firetext.settings.get('autosave') != 'false') {
@@ -39,16 +50,6 @@ firetext.settings.init = function () {
     }
   }
 
-  // Autoload
-  if (firetext.settings.get('autoload') == 'true') {
-    autoloadEnabled.setAttribute('checked', '');
-  } else {  
-    autoloadEnabled.removeAttribute('checked');
-  }
-  autoloadEnabled.onchange = function () {
-    firetext.settings.save('autoload', this.checked);
-  }
-
   // Autozen
   if (firetext.settings.get('autozen') == 'true') {
     autozenEnabled.setAttribute('checked', '');
@@ -57,6 +58,38 @@ firetext.settings.init = function () {
   }
   autozenEnabled.onchange = function () {
     firetext.settings.save('autozen', this.checked);
+  }
+
+  // Dropbox
+  if (firetext.settings.get('dropbox.enabled') == 'true') {
+    dropboxEnabled.setAttribute('checked', '');
+  } else {  
+    dropboxEnabled.removeAttribute('checked');
+  }
+  dropboxEnabled.onchange = function () {
+    firetext.settings.save('dropbox.enabled', this.checked);
+    cloud.init();
+  }
+
+  // Google Drive
+  if (firetext.settings.get('gdrive.enabled') == 'true') {
+    gdriveEnabled.setAttribute('checked', '');
+  } else {  
+    gdriveEnabled.removeAttribute('checked');
+  }
+  gdriveEnabled.onchange = function () {
+    firetext.settings.save('gdrive.enabled', this.checked);
+    cloud.init();
+  }
+
+  // Logging
+  if (firetext.settings.get('logging.enabled') != 'false') {
+    loggingEnabled.setAttribute('checked', '');
+  } else {  
+    loggingEnabled.removeAttribute('checked');
+  }
+  loggingEnabled.onchange = function () {
+    firetext.settings.save('logging.enabled', this.checked);
   }
 
   // Night Mode
@@ -84,28 +117,6 @@ firetext.settings.init = function () {
     // Update
     night();
   });
-
-  // Dropbox
-  if (firetext.settings.get('dropbox.enabled') == 'true') {
-    dropboxEnabled.setAttribute('checked', '');
-  } else {  
-    dropboxEnabled.removeAttribute('checked');
-  }
-  dropboxEnabled.onchange = function () {
-    firetext.settings.save('dropbox.enabled', this.checked);
-    cloud.init();
-  }
-
-  // Google Drive
-  if (firetext.settings.get('gdrive.enabled') == 'true') {
-    gdriveEnabled.setAttribute('checked', '');
-  } else {  
-    gdriveEnabled.removeAttribute('checked');
-  }
-  gdriveEnabled.onchange = function () {
-    firetext.settings.save('gdrive.enabled', this.checked);
-    cloud.init();
-  }
 };
 
 firetext.settings.get = function (name) {

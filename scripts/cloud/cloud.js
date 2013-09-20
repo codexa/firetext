@@ -81,8 +81,8 @@ cloud.init = function () {
     // Remove Dropbox recents
     var dropRecents = firetext.recents.get();
     for (var i = 0; i < dropRecents.length; i++) {
-      if (dropRecents[i][3] == 'dropbox') {
-        firetext.recents.remove([dropRecents[i][0], dropRecents[i][1], dropRecents[i][2]], dropRecents[i][3]);
+      if (dropRecents[i][4] == 'dropbox') {
+        firetext.recents.remove([dropRecents[i][0], dropRecents[i][1], dropRecents[i][2]], dropRecents[i][3], dropRecents[i][4]);
       }
     }  
   }
@@ -110,8 +110,8 @@ cloud.init = function () {
     // Remove Google recents
     var driveRecents = firetext.recents.get();
     for (var i = 0; i < driveRecents.length; i++) {
-      if (driveRecents[i][3] == 'gdrive') {
-        firetext.recents.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3]);
+      if (driveRecents[i][4] == 'gdrive') {
+        firetext.recents.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3], driveRecents[i][4]);
       }
     }
   }

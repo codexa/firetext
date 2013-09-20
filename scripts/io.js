@@ -108,19 +108,31 @@ function disableInternalStorage() {
 ------------------------*/
 firetext.io.enumerate = function (directory, callback) {
   if (directory) {
-    // List of documents
-    var docs = [];
+    // List of files
+    var FILES = [];
+    
+    // Put directory in proper form
+    if (directory.length > 1 && directory[0] == '/') {
+      directory = directory.slice(1);
+    }
+    if (directory[directory.length - 1] != '/') {
+      directory = (directory + '/');
+    }
   
     if (deviceAPI == 'deviceStorage') {
-      // Get all the docs in the specified directory
-      var cursor = storage.enumerate(directory.substring(0, -1));
+      // Get all the files in the specified directory
+      if (directory == '/') {
+        var cursor = storage.enumerate();
+      } else {
+        var cursor = storage.enumerate(directory.substring(0, -1));
+      }
     
       cursor.onerror = function() {
         if (cursor.error.name == 'TypeMismatchError') {
-          firetext.io.save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="https://github.com/codexa/firetext/issues/" target="_blank">us</a>.', false, function() {
+          firetext.io.save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="mailto:support@codexa.org" target="_blank">us</a>.', false, function() {
             firetext.io.delete('firetext.temp');
           });
-          updateDocLists();
+          updateFileLists();
           return;
         } else if (cursor.error.name == 'SecurityError') {
           alert('Please allow Firetext to access your SD card.');
@@ -133,40 +145,35 @@ firetext.io.enumerate = function (directory, callback) {
         var file = cursor.result;
       
         // Base case
-        if (!cursor.result) {
-          // Finished
-          callback(docs);
-          return;
+        if (!cursor.result) {            
+          // Finish
+          callback(FILES);
+          return FILES;
         }
-      
-        // Only get documents
-        if (file.type !== "text/plain" && file.type !== "text/html" && file.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        
+        // Split name into parts
+        var thisFile = firetext.io.split(file.name);
+        thisFile[3] = file.type;
+        
+        // Don't get any files but docs
+        if (!thisFile[1] |
+             thisFile[3] != 'text/html' &&
+             thisFile[3] != 'text/plain' &&
+             thisFile[3] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
           cursor.continue();
-          return;
-        }      
-      
-        // At this point, the file should be vaild!    
-        // Get file properties
-        var directoryReplace = new RegExp((directory), 'i');
-        var filename = "";
-        var filetype = "";
-        switch(file.type) {
-          case "text\/plain":
-            filename = file.name.substring(0, file.name.length-4).replace(directoryReplace, '');
-            filetype = ".txt";
-            break;
-          case "text\/html":
-            filename = file.name.substring(0, file.name.length-5).replace(directoryReplace, '');
-            filetype = ".html";
-            break;
-          case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            filename = file.name.substring(0, file.name.length-5).replace(directoryReplace, '');
-            filetype = ".docx";
-            break;
+          return;        
         }
-      
-        // Add to list of docs
-        docs.push([directory, filename, filetype]);
+        
+        // Remove duplicates
+        for (var i = 0; i < FILES.length; i++) {
+          if (FILES[i][0] == thisFile[0] && FILES[i][1] == thisFile[1] && FILES[i][2] == thisFile[2]) {
+	        FILES.splice(i, 1);
+	        break;
+	      }
+        }
+        
+        // Add to list of files
+        FILES.push(thisFile);
       
         // Check next file
         cursor.continue();
@@ -176,7 +183,7 @@ firetext.io.enumerate = function (directory, callback) {
         var dirReader = dirEntry.createReader()
         var readDirContents = function(results) {
           if(!results.length) {
-            callback(docs);
+            callback(FILES);
             return;
           } else {
             var fileparts;
@@ -192,7 +199,7 @@ firetext.io.enumerate = function (directory, callback) {
               if (filetype !== ".text" && filetype !== ".html" && filetype !== ".docx") {
                 continue;
               }
-              docs.push([directory, filename, filetype]);
+              FILES.push([directory, filename, filetype]);
             }
             dirReader.readEntries(readDirContents);
           }
@@ -206,7 +213,7 @@ firetext.io.enumerate = function (directory, callback) {
         }
       });
     }
-    return docs;
+    return FILES;
   }
 };
 
@@ -319,7 +326,7 @@ function saveFromEditor(banner, spinner) {
       content = rawEditor.textContent;
       break;
     case ".txt":
-      content = txt.encode(doc.innerHTML, "HTML");
+      content = firetext.parsers.plain.encode(doc.innerHTML, "HTML");
       break;
     case ".docx":
       content = doc;

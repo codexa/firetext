@@ -39,6 +39,11 @@ firetext.user.log = {};
   */
 
   window.firetext.user.log.add = function (act) {
+    // Cancel if logging is disabled
+    if (firetext.settings.get('logging.enabled') == 'false') {
+      return;
+    }
+  
     var ln = "logged ",
       dn = "document ",
       en = "enabled ",
@@ -89,10 +94,10 @@ firetext.user.log = {};
 
     if (arg.length > 1) {
       var acts = arg[1].split(".");
-      var action = log.m[acts[0]][acts[1]];
+      var action = log.m[acts[0], acts[1]];
     } else {
       var acts = act.split(".");
-      var action = log.m[acts[0]][acts[1]];
+      var action = log.m[acts[0], acts[1]];
     }
     
     logm = [datime, clid, action];
@@ -100,25 +105,25 @@ firetext.user.log = {};
     if (arg.length > 1) {
       for (var i = 0; i < arg.length; i++) {
         if (arg[i].slice(0, 2) === "d:") {
-          doc = arg[i].slice(2, arg[i].length);
+          var doc = arg[i].slice(2, arg[i].length);
           logm.splice(2, 0, doc);
         }
         if (arg[i].slice(0, 2) === "l:") {
-          loc = arg[i].slice(2, arg[i].length);
+          var loc = arg[i].slice(2, arg[i].length);
           logm.push(loc);
         }
         if (arg[i].slice(0, 2) === "e:") {
-          er = arg[i].slice(2, arg[i].length);
+          var er = arg[i].slice(2, arg[i].length);
           logm.push(er);
         }
       }
     }
 
-    logm = logm.join(" ");
+    logm = logm.join("\n");
 
     // write to file
     log = new Blob([logm], {type: "text/plain;charset=utf-8"});
-    window.saveAs(log, fname);
+    /* window.saveAs(log, fname); */
     
     return log;
   };

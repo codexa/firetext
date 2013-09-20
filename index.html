@@ -410,7 +410,7 @@
   <div class="background"></div>
   
   <section role="dialog" id="hyperlink">
-      <header>
+    <header>
       <button data-click="navBack"><span class="icon icon-close">Cancel</span></button>
       <menu type="toolbar">
         <button data-click="hyperlink" data-click-dialog="true">Okay</button>
@@ -481,6 +481,29 @@
     <div role="main" class="header-only">
       <article data-type="list">
         <div>
+          <h2>Cloud</h2>
+          <ul>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <aside class="icon icon-dropbox"></aside>
+              <p>Use <b>Dropbox</b></p>
+            </li>
+            <li class="noLink">
+                <aside class="pack-end">
+                  <label>
+                    <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />
+                    <span></span>
+                  </label>
+                </aside>
+                <aside class="icon icon-gDrive"></aside>
+                <p>Use <b>Google Drive</b></p>
+              </li>
+          </ul>
           <h2>Editing</h2>
           <ul>
             <li class="noLink">
@@ -500,6 +523,18 @@
                 </label>
               </aside>
               <p class="label"><b>Load last file</b> on startup</p>
+            </li>
+          </ul>
+          <h2>Privacy</h2>
+          <ul>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="logging-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label">Enable <b>logging</b></p>
             </li>
           </ul>
           <h2>Visual</h2>
@@ -526,31 +561,6 @@
 			  </aside>
 			  <p class="label">Enable <b>Night Mode</b></p>
             </li>
-          </ul>
-        </div>
-        <div>
-          <h2>Cloud Storage</h2>
-          <ul>
-            <li class="noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
-                  <span></span>
-                </label>
-              </aside>
-              <aside class="icon icon-dropbox"></aside>
-              <p>Use <b>Dropbox</b></p>
-            </li>
-            <li class="noLink">
-                <aside class="pack-end">
-                  <label>
-                    <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />
-                    <span></span>
-                  </label>
-                </aside>
-                <aside class="icon icon-gDrive"></aside>
-                <p>Use <b>Google Drive</b></p>
-              </li>
           </ul>
         </div>
       </article>

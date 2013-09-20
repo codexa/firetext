@@ -47,7 +47,11 @@ firetext.recents.add = function (file, location) {
   
     // Remove duplicates
     for (var i = 0; i < docsTMP.length; i++) {
-      if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == file[3]) {
+      if (docsTMP[i][0] == file[0] &&
+          docsTMP[i][1] == file[1] &&
+          docsTMP[i][2] == file[2] &&
+          docsTMP[i][3] == file[3] &&
+          docsTMP[i][4] == file[4]) {
 	    docsTMP.splice(i, 1);
 	    break;
 	  }
@@ -57,8 +61,8 @@ firetext.recents.add = function (file, location) {
     docsTMP.splice(0, 0, file);
   
     // Remove extra items
-    if (docsTMP.length > 4) {
-	  docsTMP.splice(4, docsTMP.length);
+    if (docsTMP.length > 5) {
+	  docsTMP.splice(5, docsTMP.length);
     }
   
     // Save array
@@ -84,12 +88,16 @@ firetext.recents.remove = function (file, location, merged) {
     // Remove item
     for (var i = 0; i < docsTMP.length; i++) {
 	  if (merged != true) {
-	    if (docsTMP[i][0] == file[0] && docsTMP[i][1] == file[1] && docsTMP[i][2] == file[2] && docsTMP[i][3] == file[3]) {
+	    if (docsTMP[i][0] == file[0] &&
+	        docsTMP[i][1] == file[1] &&
+	        docsTMP[i][2] == file[2] &&
+	        docsTMP[i][3] == file[3] &&
+	        docsTMP[i][4] == file[4]) {
 	  	  docsTMP.splice(i, 1);
 		  break;
 	    }
 	  } else {
-	    if (file == docsTMP[i][0] + docsTMP[i][1] + docsTMP[i][2] + docsTMP[i][3]) {
+	    if (file == docsTMP[i][0] + docsTMP[i][1] + docsTMP[i][2] + docsTMP[i][3] + docsTMP[i][4]) {
 		  docsTMP.splice(i, 1);
 		  break;
 	    }

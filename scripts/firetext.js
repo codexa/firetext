@@ -265,12 +265,12 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   }
   
   // Per doc locations
-  if (DOCS[1][3] && DOCS[1][3] != location) {
-    location = DOCS[1][3];
+  if (DOCS[1][4] && DOCS[1][4] != location) {
+    location = DOCS[1][4];
   }
   
   // build next item
-  firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function(result) {
+  firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result) {
     buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location);
   }, location);
 }
@@ -284,10 +284,10 @@ function buildDocList(DOCS, listElms, display, location) {
     
     if (DOCS.length > 0) {
       // Per doc locations
-      if (DOCS[0][3] && DOCS[0][3] != location) {
-        location = DOCS[0][3];
+      if (DOCS[0][4] && DOCS[0][4] != location) {
+        location = DOCS[0][4];
       }
-      firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function(result) {
+      firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result) {
         buildDocListItems(DOCS, listElms, result, "", location);
       }, location);
     } else {
@@ -774,7 +774,13 @@ function processActions(eventAttribute, target) {
           }
         }
       } else {
-        regions.nav('image-location');
+        if (navigator.mozSetMessageHandler) {
+          // Web Activities are supported, allow user to choose them or web URI
+          regions.nav('image-location');
+        } else {
+          // Just allow web URIs
+          regions.nav('image-web');          
+        }
       }
     }
   }
