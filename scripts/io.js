@@ -384,7 +384,7 @@ function loadToEditor(directory, filename, filetype, location) {
           regions.tab(document.querySelector('#editTabs'), 'design');
           break;
         case ".docx":
-          docxeditor = result;
+          result = new DocxEditor(result);
           content = result.HTMLout();
           doc.appendChild(content);
           tabRaw.classList.add('hidden');
@@ -511,7 +511,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
         var file = req.result;
         var reader = new FileReader();
 
-        if( filetype ===".docx" ) {
+        if (filetype == ".docx") {
           reader.readAsArrayBuffer(file);
         } else {
           reader.readAsText(file);
@@ -523,7 +523,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
         reader.onload = function () {
           var file;
           if( filetype === ".docx" ) {
-            file = new docx(this.result);
+            file = new DocxEditor(this.result);
           } else {
             file = this.result;
           }
@@ -550,8 +550,8 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           };
           reader.onload = function () {
             var file;
-            if( filetype === ".docx" ) {
-              file = new docx(this.result);
+            if (filetype == ".docx") {
+              file = new DocxEditor(this.result);
             } else {
               file = this.result;
             }

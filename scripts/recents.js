@@ -42,7 +42,9 @@ firetext.recents.reset = function () {
 firetext.recents.add = function (file, location) {
   if (localStorage["firetext.recents"] != undefined) {
     var docsTMP = this.get();
-  
+    
+    // Push mimetype and location
+    file.push('');
     file.push(location);
   
     // Remove duplicates
@@ -56,7 +58,7 @@ firetext.recents.add = function (file, location) {
 	    break;
 	  }
     }
-  
+    
     // Add item
     docsTMP.splice(0, 0, file);
   

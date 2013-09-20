@@ -287,6 +287,8 @@ function buildDocList(DOCS, listElms, display, location) {
       if (DOCS[0][4] && DOCS[0][4] != location) {
         location = DOCS[0][4];
       }
+      
+      // build next item
       firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result) {
         buildDocListItems(DOCS, listElms, result, "", location);
       }, location);
@@ -528,19 +530,26 @@ function deleteSelected(confirmed) {
   if (editState == true) {
     // Get selected files
     var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
-    var selected = Array.prototype.filter.call( checkboxes, function(elm) {
+    var selected = Array.prototype.filter.call(checkboxes, function(elm) {
       return elm.checked;
     });
     
     if (confirmed != true && confirmed != 'true') {
-      var confirmDeletion = confirm('Do you want to delete these files?');
+      if (selected.length == 1) {
+        var confirmDeletion = confirm('Do you want to delete this file?');      
+      } else if (selected.length > 1) {
+        var confirmDeletion = confirm('Do you want to delete these files?');      
+      } else {
+        alert('No files selected.');
+        return;
+      }
       if (confirmDeletion != true) {
         return;
       }
     }
     
     // Delete selected files
-    for (var i = 0; i < selected.length; i++ ) {
+    for (var i = 0; i < selected.length; i++) {
       // Get filename
       var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
       var location = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].getAttribute('data-location');
@@ -782,6 +791,9 @@ function processActions(eventAttribute, target) {
           regions.nav('image-web');          
         }
       }
+    } else if (calledFunction == 'clearRecents') {
+      firetext.recents.reset();
+      alert('Your recent documents list has been successfully eliminated!');
     }
   }
 }
