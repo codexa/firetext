@@ -90,7 +90,7 @@ label input[data-type="switch"] + span:before {
 
 label input[data-type="switch"] + span:before {
   right: 100%;
-  background: #00c3ea url(switches/images/switch/icon.png) no-repeat 0.5rem center;
+  background: #6f6f6f url(switches/images/switch/icon.png) no-repeat 0.5rem center;
   background-size: auto calc(100% - 2px);
 }
 
@@ -119,7 +119,7 @@ label input[data-type="switch"]:checked:disabled + span {
 /* 'ON' state */
 
 label input[data-type="switch"]:checked + span {
-  border-color: #00acce;
+  border-color: #6f6f6f;
   background-position: 3.2rem center;
 }
 
