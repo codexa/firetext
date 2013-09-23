@@ -24,7 +24,7 @@ cloud.dropbox.auth = new Dropbox.Client({
 
 cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
   rememberUser: true,
-  receiverUrl: "http://firetext.codexa.org/dropbox-success/"
+  receiverUrl: "http://firetext.codexa.org/api/success/dropbox/"
 }));
 
 cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');
