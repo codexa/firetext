@@ -16,9 +16,15 @@ if (navigator.mozSetMessageHandler) {
     window.addEventListener('firetext.initialized', function () {
       // Handle activities
       if (activity.name === "open") {
+        // Define edibility
+        var editable
+        if (activity.data.path && activity.data.path != '') {
+          editable = activity.data.editable;
+        }
+      
         // Open file
         var file = firetext.io.split(activity.data.path);
-        loadToEditor(file[0], file[1], file[2], 'internal');
+        loadToEditor(file[0], file[1], file[2], 'internal', editable);
       }
     });
     if (firetext.isInitialized == true) {

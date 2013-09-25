@@ -784,7 +784,7 @@ function processActions(eventAttribute, target) {
           var pick = new MozActivity({
             name: "pick",
             data: {
-              type: ["image/png", "image/jpg", "image/jpeg"]
+              type: ["image/*"]
             }
           });
 

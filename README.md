@@ -16,6 +16,7 @@ Current Features:
   - align
   - bold
   - italic
+  - removal
   - strikethrough
   - underline
 - Elements

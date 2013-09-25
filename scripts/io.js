@@ -340,7 +340,7 @@ function saveFromEditor(banner, spinner) {
   firetext.io.save(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
 }
 
-function loadToEditor(directory, filename, filetype, location) {
+function loadToEditor(directory, filename, filetype, location, editable) {
   // Clear editor
   doc.innerHTML = '';
   rawEditor.textContent = '';
@@ -398,6 +398,13 @@ function loadToEditor(directory, filename, filetype, location) {
           tabRaw.classList.remove('hidden');  
           break;
       }             
+    
+      // Handle read-only files
+      if (editable == false) {
+        formatDoc('contentReadOnly', true);
+      } else {
+        formatDoc('contentReadOnly', false);      
+      }
     
       // Add listener to update views
       watchDocument(filetype);
@@ -503,6 +510,18 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
 };
 
 firetext.io.load = function (directory, filename, filetype, callback, location) {
+  if (!directory | !filename | !filetype | !callback) {
+    return;
+  }
+
+  // Put directory in proper form
+  if (directory.length > 1 && directory[0] == '/') {
+    directory = directory.slice(1);
+  }
+  if (directory[directory.length - 1] != '/') {
+    directory = (directory + '/');
+  }
+    
   var filePath = (directory + filename + filetype);
   if (location == '' | location == 'internal' | !location) {
     if (deviceAPI == 'deviceStorage') {
