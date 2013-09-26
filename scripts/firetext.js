@@ -811,6 +811,9 @@ function processActions(eventAttribute, target) {
             regions.nav('image-web');
           }
         }
+        
+        // Clear inputs
+        document.getElementById('image-address').value = null;
       } else {
         if (navigator.mozSetMessageHandler) {
           // Web Activities are supported, allow user to choose them or web URI
@@ -820,6 +823,44 @@ function processActions(eventAttribute, target) {
           regions.nav('image-web');          
         }
       }
+    } else if (calledFunction == 'table') {
+      if (target.getAttribute(eventAttribute + '-dialog')) {
+        if (parseInt(document.getElementById('table-rows').value) &&
+            parseInt(document.getElementById('table-columns').value)) {
+          var rows = parseInt(document.getElementById('table-rows').value);
+          var cols = parseInt(document.getElementById('table-columns').value);            
+        } else {
+          alert('Please enter a valid value (e.g. 2 or 5)');
+          return;
+        }
+      
+        // Make sure # is above 0
+        if ((rows > 0) && (cols > 0)) {
+          // Generate HTML
+          var output = '<table style="border: 1px solid #000; width: 100%;">';
+          for (var r = 0; r < rows; r++) {
+            output += '<tr>';
+            for (var c = 0; c < cols; c++) {
+              output += '<td style="border: 1px solid #000;"></td>';
+            }
+            output += '</tr>';
+          }
+          
+          // Output HTML
+          output += '</table>';
+          formatDoc('insertHTML', output);
+          
+          // Nav Back
+          regions.navBack();
+          regions.navBack();          
+        }
+      } else {
+        regions.nav('table');
+      }
+      
+      // Clear inputs
+      document.getElementById('table-rows').value = null;
+      document.getElementById('table-columns').value = null;
     } else if (calledFunction == 'clearRecents') {
       firetext.recents.reset();
       alert('Your recent documents list has been successfully eliminated!');

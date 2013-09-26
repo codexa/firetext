@@ -24,6 +24,7 @@ Current Features:
   - images
   - links
   - ordered list
+  - tables
   - unordered list
 - Zen Mode
 - Night Mode
@@ -42,7 +43,8 @@ Cooming soon:
   - background color
   - and more =)
 - Elements
-  - tables
+  - Equations
+  - Drawings
 - File IO
   - Filesystem API
 - Cloud services

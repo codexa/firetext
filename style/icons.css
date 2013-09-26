@@ -50,6 +50,10 @@
   background-image: url(icons/editor/numbered-list.svg) !important;
 }
 
+[data-type="list"] aside.icon.icon-table {
+  background-image: url(icons/editor/table.svg) !important;
+}
+
 [data-type="list"] aside.icon.icon-unlist {
   background-image: url(icons/editor/list.svg) !important;
 }

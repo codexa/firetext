@@ -354,6 +354,15 @@
           <li class="noLink">
             <aside class="pack-end">
               <label>
+                <button data-click="table">Insert</button>
+              </label>
+            </aside>
+            <aside class="icon icon-table"></aside>
+            <p class="label">Table</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
                 <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
@@ -385,14 +394,6 @@
               </label>
             </aside>
             <p class="label">Bold</p>
-          </li>
-          <li class="noLink">
-            <aside class="pack-end">
-              <label>
-                <button data-click="formatDoc" data-click-action="removeFormat">Clear</button>
-              </label>
-            </aside>
-            <p class="label">Clear Formatting</p>
           </li>
           <li class="noLink">
             <aside class="pack-end">
@@ -476,6 +477,36 @@
           <section>
             <p>
               <input placeholder="http://mysite.com/myimage.jpeg" required type="url" id="image-address" data-enter="image" data-enter-location="web" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="dialog" id="table">
+      <header>
+      <button data-click="navBack"><span class="icon icon-close">Cancel</span></button>
+      <menu type="toolbar">
+        <button data-click="table" data-click-dialog="true">Okay</button>
+      </menu>
+      <h1>Insert Table</h1>
+    </header>
+    <div role="main">
+      <div class="form">
+        <br>
+        <fieldset class="button-block">
+          <section>
+            <p>
+              <input placeholder="# of rows" required type="text" id="table-rows" data-enter="table" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+          <section>
+            <p>
+              <input placeholder="# of columns" required type="text" id="table-columns" data-enter="table" data-enter-dialog="true" />
               <button type="reset" data-mouse-down="clearForm">Clear</button>
             </p>
           </section>
