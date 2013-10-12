@@ -869,51 +869,6 @@ function processActions(eventAttribute, target) {
 }
 
 
-/* Night Mode
-------------------------*/
-var ncss, dcss = document.getElementsByTagName("link")[25];
-
-function night() {
-  if (firetext.settings.get('nightmode') == 'true') {
-    // Add nighticons.css to DOM
-    if (!ncss) {
-      ncss = document.createElement("link");
-      ncss.rel = "stylesheet";
-      ncss.type = "text/css";
-      ncss.href = "style/nighticons.css";
-      head.insertBefore(ncss, dcss);
-    }
-    
-    html.classList.add('night');
-    doc.style.color = '#fff';
-  } else if (firetext.settings.get('nightmode') == 'false') {
-    if (ncss) {
-      head.removeChild(ncss);
-      ncss = null;
-    }
-    html.classList.remove('night');
-    doc.style.color = '#000';
-  } else {
-    if (ncss) {
-      head.removeChild(ncss);
-      ncss = null;
-    }
-    html.classList.remove('night');
-    doc.style.color = '#000';
-    window.addEventListener('devicelight', function(event) {
-      if (firetext.settings.get('nightmode') == 'auto') {
-        console.log(event.value);
-        if (event.value < 50) {
-          html.classList.add('night');
-        } else {
-          html.classList.remove('night');
-        }
-      }
-    });    
-  }
-}
-
-
 /* Miscellaneous
 ------------------------*/
 function checkDevice() {

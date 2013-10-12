@@ -108,6 +108,7 @@
 
 .night [data-type="list"] li.fileListItem .fileItemDescription {
   background: #161616;
+  color: #a0a0a0;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemName {
