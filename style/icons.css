@@ -94,6 +94,7 @@
 
 .icon-close {
   background-image: url(icons/misc/close.svg) !important;
+  background-size: 2rem !important;
 }
 
 section > header:first-child :first-child .icon-close {
@@ -102,11 +103,12 @@ section > header:first-child :first-child .icon-close {
 
 .icon-efs {
   background-image: url(icons/editor/efs.svg) !important;
+  background-size: 2.5rem !important;
 }
 
 .icon-fs {
   background-image: url(icons/editor/fs.svg) !important;
-  background-size: 3rem !important;
+  background-size: 2.5rem !important;
 }
 
 .icon-menu {
@@ -120,7 +122,7 @@ section > header:first-child :first-child .icon-menu {
 
 .icon-save {
   background-image: url(icons/editor/save.svg) !important;
-  background-size: 4rem !important;
+  background-size: 3rem !important;
 }
 
 [role="toolbar"] .pack-icon-setting {
