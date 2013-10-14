@@ -35,6 +35,12 @@ function night() {
   } else {
     html.classList.remove('night');
     doc.style.color = '#000';
+    
+    // Remove nighticons.css from DOM
+    if (ncss) {
+      head.removeChild(ncss);
+      ncss = null;
+    }
     window.addEventListener('devicelight', function(event) {
       if (firetext.settings.get('nightmode') == 'auto') {
         console.log(event.value);

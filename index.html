@@ -268,9 +268,6 @@
                 <li><button class="icon-more" data-click="nav" data-click-location="format">Format</button></li>
               </ul>
               <ul>
-                <!-- Version 0.3
-                <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
-                -->
               </ul>
             </div>
           </div>
@@ -293,19 +290,6 @@
 	  <p>Successfully saved <strong><span id="save-banner-name"></span><span id="save-banner-type"></span></strong>!</p>
     </section>
   </section>
-
-  <!-- Version 0.4
-  <form role="dialog" data-type="action" id="share">
-    <header>Share</header>
-    <menu>
-      <button>Google Drive</button>
-      <button>Dropbox</button>
-      <button>Email</button>
-      <button data-click="navBack">Cancel</button>
-    </menu>
-  </form>
-  <div class="background"></div>
-  -->
 
   <section role="dialog" id="format">
     <header>
@@ -533,6 +517,15 @@
         <div>
           <h2>Cloud</h2>
           <ul>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p>Only <b>sync with unmetered connections</b></p>
+            </li>
             <li class="noLink">
               <aside class="pack-end">
                 <label>

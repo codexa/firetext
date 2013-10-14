@@ -383,7 +383,6 @@ function initEditor() {
   doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px); word-wrap: break-word;');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
-  editor.contentWindow.document.execCommand('styleWithCSS', false, 'true');
   editor.contentWindow.document.execCommand('enableObjectResizing', false, 'true');
   
   // Hide and show toolbar.
