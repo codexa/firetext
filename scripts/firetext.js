@@ -204,7 +204,7 @@ function updateAddDialog() {
 ------------------------*/
 function updateDocLists() {
   // Recents
-  buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal');
+  buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal', true);
   
   // Internal
   firetext.io.enumerate('/', function(DOCS) {
@@ -215,7 +215,7 @@ function updateDocLists() {
   cloud.updateDocLists();
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location) {
+function buildDocListItems(DOCS, listElms, description, output, location, preview) {
   // Handle description
   if (!description) {
     description = '';
@@ -250,9 +250,11 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   // Generate item
   output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
-  output += '<div class="fileItemDescription">'+description+'</div>';
+  if (description != '') {
+    output += '<div class="fileItemDescription">'+description+'</div>';
+  }
   output += '<div class="fileItemInfo">';
-  output += '<aside class="icon icon-arrow pack-end"></aside>';  
+  output += '<aside data-icon="arrow" class="pack-end"></aside>';  
   output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
   output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
   output += '</div>'; 
@@ -274,12 +276,16 @@ function buildDocListItems(DOCS, listElms, description, output, location) {
   }
   
   // build next item
-  firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result) {
-    buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location);
-  }, location);
+  if (preview == true) {
+    firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result) {
+      buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview);
+    }, location);
+  } else {
+    buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location);  
+  }
 }
 
-function buildDocList(DOCS, listElms, display, location) {
+function buildDocList(DOCS, listElms, display, location, preview) {
   if (listElms && DOCS) {
     // Make sure list is not an edit list
     for (var i = 0; i < listElms.length; i++) {
@@ -293,9 +299,13 @@ function buildDocList(DOCS, listElms, display, location) {
       }
       
       // build next item
-      firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result) {
-        buildDocListItems(DOCS, listElms, result, "", location);
-      }, location);
+      if (preview == true) {
+        firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result) {
+          buildDocListItems(DOCS, listElms, result, "", location, preview);
+        }, location);
+      } else {
+        buildDocListItems(DOCS, listElms, null, "", location, preview);      
+      }
     } else {
       // No docs message
       var output = '<li style="margin-top: -5px" class="noLink">';

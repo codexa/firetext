@@ -147,7 +147,7 @@ form[role=dialog].current {
   color: #2c2c2c;
   font-weight: bold;
   margin: 0;
-  padding: .4rem 0 0;
+  padding: 1rem 0 0;
 }
 
 [data-type="list"] li.fileListItem .fileItemPath {

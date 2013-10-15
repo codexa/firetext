@@ -45,25 +45,29 @@ function night() {
       if (firetext.settings.get('nightmode') == 'auto') {
         console.log(event.value);
         if (event.value < 5) {
-          html.classList.add('night');
-          doc.style.color = '#fff';
+          if (html.classList.contains('night') != true) {
+            html.classList.add('night');
+            doc.style.color = '#fff';
     
-          // Add nighticons.css to DOM
-          if (!ncss) {
-            ncss = document.createElement("link");
-            ncss.rel = "stylesheet";
-            ncss.type = "text/css";
-            ncss.href = "style/nighticons.css";
-            head.insertBefore(ncss, dcss);
+            // Add nighticons.css to DOM
+            if (!ncss) {
+              ncss = document.createElement("link");
+              ncss.rel = "stylesheet";
+              ncss.type = "text/css";
+              ncss.href = "style/nighticons.css";
+              head.insertBefore(ncss, dcss);
+            }
           }
-        } else {
-          html.classList.remove('night');
-          doc.style.color = '#000';
+        } else if (event.value > 10) {
+          if (html.classList.contains('night')) {
+            html.classList.remove('night');
+            doc.style.color = '#000';
     
-          // Remove nighticons.css from DOM
-          if (ncss) {
-            head.removeChild(ncss);
-            ncss = null;
+            // Remove nighticons.css from DOM
+            if (ncss) {
+              head.removeChild(ncss);
+              ncss = null;
+            }
           }
         }
       }

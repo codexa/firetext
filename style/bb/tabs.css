@@ -209,7 +209,7 @@
   right: 0;
   top: 100%;
   height: 0.2rem;
-  background: url(tabs/images/ui/shadow.png) repeat-x left bottom;
+  background: transparent;
 }
 
 [role="tablist"][data-type="filter"] > [role="tab"] {
@@ -257,7 +257,7 @@
 [role="tablist"][data-type="filter"].bottom:before {
   bottom: 100%;
   top: auto;
-  background-image: url(tabs/images/ui/shadow-revert.png);
+  background-image: transparent;
 }
 
 [role="tablist"][data-type="filter"].bottom > [role="tab"] {

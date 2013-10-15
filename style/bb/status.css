@@ -2,7 +2,7 @@
  * Status
  * ---------------------------------- */
 section[role="status"] {
-  background: url(status/images/ui/pattern.png) repeat left top, url(status/images/ui/gradient.png) no-repeat left top;
+  background: #1f1f1f;
   background-size: auto auto, 100% 100%;
   overflow: hidden;
   position: absolute;
