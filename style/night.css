@@ -23,9 +23,12 @@
 .night section > header:first-child button:not(:disabled):active .icon:after,
 .night section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
 .night section > header:first-child menu[type="toolbar"] button:not(:disabled):active {
-    background-color: #222 !important;
+  background-color: #222 !important;
 }
 
+.tabToolbar button:active {
+  background-color: #111;
+}
 
 .night section > header:first-child {
   background: #111;

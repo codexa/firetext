@@ -35,7 +35,7 @@
   height: 4rem;
   border: none;
   font-size: 0;
-  background: transparent no-repeat 50% 50%;
+  background-color: transparent;
   padding: 0;
   border-radius: 0;
   text-indent: -100%;

@@ -258,15 +258,13 @@ aside select.dummy {
 .tabToolbar .button,
 .tabToolbar input[type="button"] {
   float: right;
-  padding: 0;
   width: 4rem;
   height: 100%;
-  background: none;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: transparent;
   border: none;
   font-size: 0;
   border-radius: 0;
+  width: 4rem;
 }
 
 .tabToolbar button:active,

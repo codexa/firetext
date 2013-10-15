@@ -119,11 +119,10 @@
   text-align: right;
 }
 
-[data-type="list"] aside.icon {
+[data-type="list"] aside[data-icon] {
   width: 3rem;
   height: 6rem;
-  background: transparent no-repeat left center;
-  background-size: 3rem;
+  background-color: transparent;
   font: 0/0 a;
   display: block;
   overflow: hidden;
