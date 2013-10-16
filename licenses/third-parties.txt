@@ -1,6 +1,6 @@
 			External Software Licenses
 Firetext v0.3 was is Copyright © Codexa 2013, and is licensed 
-under the GPL v0.3 license.  That license can be found in "gpl.txt."
+under the GPL v3 license.  That license can be found in "gpl.txt."
 
 Copyright notices and links to licenses for third party libraries or any other 
 third party code can be found in this file.
