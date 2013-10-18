@@ -96,6 +96,10 @@
   background-image: url(icons/editor/white/underline.svg);
 }
 
+[data-icon].active {
+  border: 4px inset white;
+}
+
 
 /* Misc */
 [data-icon="back"] {
