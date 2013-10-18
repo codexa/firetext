@@ -1,4 +1,8 @@
-firetext.gAuth = (function() {
+/*------------------------*/
+// Namespaces
+cloud.gdrive = {};
+
+cloud.gdrive.Auth = (function() {
   var QueryString = {};
   // Creates a oAuth dialog given a set of parameters.
   var oauth = new OAuthWindow(
