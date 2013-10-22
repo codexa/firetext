@@ -107,8 +107,11 @@ form[role=dialog].current {
 [data-type="list"] li.fileListItem {
   height: auto;
   background: #eee;
-  border-bottom: 2px solid #aeaeae;
   cursor: pointer;
+}
+
+[data-type="list"] li.fileListItem:not(li.fileListItem + h2) {
+  border-bottom: 2px solid #aeaeae;
 }
 
 [data-type="list"] li.fileListItem a {

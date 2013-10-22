@@ -19,6 +19,10 @@
 
 
 /* Headers */
+.night header:first-child {
+  opacity: .8;
+}
+
 .night section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
 .night section > header:first-child button:not(:disabled):active .icon:after,
 .night section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
@@ -26,7 +30,7 @@
   background-color: #222 !important;
 }
 
-.tabToolbar button:active {
+.night .tabToolbar button:active {
   background-color: #111;
 }
 
@@ -106,7 +110,7 @@
 .night [data-type="list"] li.fileListItem {
   background: #111;
   color: #a0a0a0;
-  border: #0c0c0c;
+  border-color: #5b5b5b;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemDescription {

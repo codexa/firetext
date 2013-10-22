@@ -100,7 +100,7 @@
 /* Misc */
 [data-icon="back"] {
   background-image: url(icons/misc/back.svg);
-  background-size: 1rem;
+  background-size: 1.5rem !important;
 }
 
 [data-icon="close"] {
