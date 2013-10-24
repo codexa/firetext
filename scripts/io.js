@@ -228,6 +228,9 @@ function createFromDialog() {
   if (filename == null | filename == undefined | filename == '')  {
     alert('Please enter a name for the new file.');
     return;
+  } else if (!isValidFileName(filename)) {
+    alert('Filename contains special characters please revise.');
+    return;
   }
   
   // Convert location to lower case
@@ -313,6 +316,10 @@ function createFromDialog() {
   document.getElementById('createDialogFileName').value = '';
   document.getElementById('createDialogFileType').value = '.html';
   extIcon();
+}
+
+function isValidFileName(filename) {
+  return (/^[a-zA-Z0-9-\._ ]+$/.test(filename) && !(/\.\./.test(filename)) && !(/\.$/.test(filename)));
 }
 
 function saveFromEditor(banner, spinner) {
