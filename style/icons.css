@@ -100,11 +100,12 @@
 /* Misc */
 [data-icon="back"] {
   background-image: url(icons/misc/back.svg);
-  background-size: 1.5rem !important;
+  background-size: 1rem !important;
 }
 
 [data-icon="close"] {
   background-image: url(icons/misc/close.svg);
+  background-size: 1.5rem !important;
 }
 
 section > header:first-child :first-child [data-icon="close"] {
@@ -117,6 +118,7 @@ section > header:first-child :first-child [data-icon="close"] {
 
 [data-icon="exit-zen"] {
   background-image: url(icons/editor/efs.svg);
+  background-size: 2.5rem !important;
 }
 
 [data-icon="mark"] {
@@ -138,11 +140,12 @@ section > header:first-child :first-child [data-icon="menu"] {
 
 [data-icon="save"] {
   background-image: url(icons/editor/save.svg);
-  background-size: 4rem;
+  background-size: 3rem !important;
 }
 
 [data-icon="setting"] {
   background-image: url(icons/misc/setting.svg);
+  background-size: 2.5rem !important;
 }
 
 [data-icon="share"] {
@@ -151,4 +154,5 @@ section > header:first-child :first-child [data-icon="menu"] {
 
 [data-icon="zen"] {
   background-image: url(icons/editor/fs.svg);
+  background-size: 2.5rem !important;
 }
