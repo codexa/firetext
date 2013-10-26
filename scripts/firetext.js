@@ -215,14 +215,66 @@ function updateDocLists() {
   cloud.updateDocLists();
 }
 
+function cleanForPreview(text, documentType) {
+  /*
+    Test cases:
+    console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf 6sdf 7sdf", ".txt") );
+    console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf-6sdf 7sdf", ".txt") );
+    console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf 5sdf-6sdf 7sdf", ".txt") );
+    console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
+    console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-", ".txt") );
+    console.log( cleanForPreview("1sdf-2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
+    //                            01234567890123456789012345678901234567890
+    //                            0         1         2         3         4
+  */
+  var approxPreviewWidthInCharacters = 20;
+  var additionalCharactersTillWhitespace = 5;
+  var regWhiteSpace
+  switch(documentType) {
+    default:
+    case ".txt":
+      text = text.replace(/\n/g," ");
+      if(text.length <= approxPreviewWidthInCharacters) {
+        return text;
+      } else {
+        var nextWhitespace = text.substr(approxPreviewWidthInCharacters).search(/\s/);
+        var reverseText = text.substr(0,approxPreviewWidthInCharacters).split("").reverse().join("");
+        var prevWhitespace = reverseText.search(/\s/);
+        //console.log("Previous Space at: %d", prevWhitespace);
+        //console.log("Next Space at: %d", nextWhitespace);
+        if( nextWhitespace == -1 ) {
+            nextWhitespace = text.length - approxPreviewWidthInCharacters;
+        }
+        if( (prevWhitespace > additionalCharactersTillWhitespace) && (nextWhitespace > additionalCharactersTillWhitespace)) {
+            //Next whitespace too far
+            return text.substr(0, approxPreviewWidthInCharacters) + "...";
+        } else if( nextWhitespace <= prevWhitespace  ) {
+            //Closest whitespace in less than additionalCharactersTillWhitespace more characters
+            return text.substr(0, approxPreviewWidthInCharacters + nextWhitespace);
+        } else {
+            //Closest whitespace is before our truncation point
+            return text.substr(0, approxPreviewWidthInCharacters - prevWhitespace) + (prevWhitespace == -1 ? "..." : "" );
+        }
+      }
+      return text.replace(/\n/g," ").substr(0, approxPreviewWidthInCharacters);
+    case ".html":
+      return text;
+    case ".docx":
+      console.log("cleanForPreview text = %s.", text);
+      return text;
+  }
+}
+
+
 function buildDocListItems(DOCS, listElms, description, output, location, preview) {
   // Handle description
   if (!description) {
     description = '';
   }
+  console.log("description: %s.", description);
   switch (DOCS[0][2]) {
     case ".txt":
-      description = firetext.parsers.plain.parse(description, "HTML");
+      description = firetext.parsers.plain.parse( cleanForPreview(description, DOCS[0][2]), "HTML");
       break;
     case ".docx":
       var tmp = document.createElement("DIV");
