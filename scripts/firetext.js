@@ -218,16 +218,22 @@ function updateDocLists() {
 function cleanForPreview(text, documentType) {
   /*
     Test cases:
-    console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf 6sdf 7sdf", ".txt") );
-    console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf-6sdf 7sdf", ".txt") );
-    console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf 5sdf-6sdf 7sdf", ".txt") );
-    console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
-    console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-", ".txt") );
-    console.log( cleanForPreview("1sdf-2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
-    //                            01234567890123456789012345678901234567890
-    //                            0         1         2         3         4
+        console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf 6sdf 7sdf", ".txt") );
+        console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf-6sdf 7sdf", ".txt") );
+        console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf 5sdf-6sdf 7sdf", ".txt") );
+        console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
+        console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-", ".txt") );
+        console.log( cleanForPreview("1sdf-2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
+        console.log( cleanForPreview("wwww1 wwww2 wwww3 wwww4 wwww5 wwww6", ".txt") );
+        //                            01234567890123456789012345678901234567890
+        //                            0         1         2         3         4
+        
+        var html1 = "<b>1sdf</b> <u>2sdf</u> <i>3sdf</i> 4sdf-5sdf 6sdf 7sdf";
+        var html7 = "<b>1sdf</b>-<u>2sdf</u>-<i>3sfd</i>-4sdf-5sdf-6sdf-7sdf";
+        console.log( cleanForPreview(html1, ".html") );
+        console.log( cleanForPreview(html7, ".html") );
   */
-  var approxPreviewWidthInCharacters = 20;
+  var approxPreviewWidthInCharacters = 21;
   var additionalCharactersTillWhitespace = 5;
   var regWhiteSpace
   switch(documentType) {
@@ -258,7 +264,32 @@ function cleanForPreview(text, documentType) {
       }
       return text.replace(/\n/g," ").substr(0, approxPreviewWidthInCharacters);
     case ".html":
-      return text;
+        var htmlNode = document.createElement("div");
+        htmlNode.innerHTML = text;
+        var textStripped = htmlNode.textContent;
+        //console.log("textStripped: %s.", textStripped);
+        var textTruncated = cleanForPreview(textStripped, ".txt");
+        //console.log("textTruncated: %s.", textTruncated);
+        textTruncated = textTruncated.replace(/\.\.\.$/, "");
+        //console.log("textTruncated: %s.", textTruncated);
+        var r = "^(<[a-zA-Z]+.*?>)*" + textTruncated.split("").join(".*?(<[a-zA-Z]+.*?>)*");
+        //console.log("regex: %s", r);
+        var rDynamic = new RegExp(r);
+        if(! rDynamic.test(text) ) {
+          //console.warn("cleanForPreview failed");
+          return textTruncated;
+        } else {
+          var htmlOfTextWanted = rDynamic.exec(text)[0];
+          var remainingHTML = text.sub(htmlOfTextWanted.length);
+          var firstNewTagAfterHTMLOfTextWanted = remainingHTML.search(/<[a-zA-Z]/);
+          if(firstNewTagAfterHTMLOfTextWanted != -1) {
+              remainingHTML = remainingHTML.substr(0, firstNewTagAfterHTMLOfTextWanted);
+              return (htmlOfTextWanted + remainingHTML).replace("<br>", " ");
+          } else {
+              return htmlOfTextWanted.replace("<br>", " ");
+          }
+        }
+        return text;
     case ".docx":
       console.log("cleanForPreview text = %s.", text);
       return text;
@@ -281,6 +312,8 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
       tmp.appendChild(description.HTMLout());
       description = tmp.innerHTML;
     case ".html":
+      description = cleanForPreview(description, DOCS[0][2]);
+      break;
     default:
       break;
   }
