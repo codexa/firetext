@@ -23,14 +23,16 @@ var html = document.getElementsByTagName('html')[0], head = document.getElements
 var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
-var locationLegend, locationSelect, locationDevice, locationDropbox, locationGoogle;
+var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
 var welcomeRecentsArea, welcomeRecentsList;
 
+/* 0.4
 // Google Drive
 var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogleList;
+*/
 
 // Cache
 var appCache = window.applicationCache;
@@ -70,10 +72,13 @@ firetext.init = function () {
   welcomeDropboxList = document.getElementById('welcome-dropbox-list');
   openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
   openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
+  
+  /* 0.4
   welcomeGoogleArea  = document.getElementById('welcome-google-area');
   welcomeGoogleList = document.getElementById('welcome-google-list');
   openDialogGoogleArea = document.getElementById('open-dialog-google-area');
   openDialogGoogleList = document.getElementById('open-dialog-google-list');
+  */
   
   // Formatting
   bold = document.getElementById('bold');
@@ -98,8 +103,10 @@ firetext.init = function () {
   // Initiate user id
   firetext.user.id.init();
 
+  /* 0.4
   // Init user log
   firetext.user.log.init();
+  */
   
   // Add event listeners
   toolbar.addEventListener(
@@ -379,11 +386,6 @@ function extIcon() {
 /* Editor
 ------------------------*/ 
 function initEditor() {
-  /* Disabled until bug 811177 is fixed
-  editor.contentWindow.document.designMode = "on";
-  doc = editor.contentDocument.body;
-  */
-
   // Initialize Designer
   editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
   editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');

@@ -130,7 +130,7 @@ firetext.io.enumerate = function (directory, callback) {
       cursor.onerror = function() {
         if (cursor.error.name == 'TypeMismatchError') {
           firetext.io.save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="mailto:support@codexa.org" target="_blank">us</a>.', false, function() {
-            firetext.io.delete('firetext.temp');
+            firetext.io.delete((directory+'firetext.temp'));
           });
           updateFileLists();
           return;
@@ -158,8 +158,8 @@ firetext.io.enumerate = function (directory, callback) {
         // Don't get any files but docs
         if (!thisFile[1] |
              thisFile[3] != 'text/html' &&
-             thisFile[3] != 'text/plain' &&
-             thisFile[3] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+             thisFile[3] != 'text/plain') { /* 0.4 &&
+             thisFile[3] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {*/
           cursor.continue();
           return;        
         }
@@ -196,7 +196,7 @@ firetext.io.enumerate = function (directory, callback) {
               fileparts = results[i].name.split(".");
               filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
               filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-              if (filetype !== ".text" && filetype !== ".html" && filetype !== ".docx") {
+              if (filetype !== ".text" && filetype !== ".html") { // 0.4 && filetype !== ".docx") {
                 continue;
               }
               FILES.push([directory, filename, filetype]);
@@ -246,9 +246,11 @@ function createFromDialog() {
       case ".txt":
         type = "text\/plain";
         break;
+      /* 0.4
       case ".docx":
         type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         break;
+      */
       default:
         break;
     }
@@ -335,9 +337,11 @@ function saveFromEditor(banner, spinner) {
     case ".txt":
       content = firetext.parsers.plain.encode(doc.innerHTML, "HTML");
       break;
+    /* 0.4
     case ".docx":
       content = doc;
       break;
+    */
     default:
       content = doc.textContent;
       break;
@@ -364,7 +368,9 @@ function loadToEditor(directory, filename, filetype, location, editable) {
   
   // Show/hide toolbar
   switch (filetype) {
+    /* 0.4
     case ".docx":
+    */
     case ".html":
       document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
       editor.classList.remove('no-toolbar'); // 0.2 only
@@ -390,6 +396,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
           tabRaw.classList.add('hidden');
           regions.tab(document.querySelector('#editTabs'), 'design');
           break;
+        /* 0.4
         case ".docx":
           result = new DocxEditor(result);
           content = result.HTMLout();
@@ -397,6 +404,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
           tabRaw.classList.add('hidden');
           regions.tab(document.querySelector('#editTabs'), 'design');
           break;
+        */
         case ".html":
         default:
           content = result;
@@ -442,15 +450,19 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
     case ".html":
       type = "text\/html";
       break;
+    /* 0.4
     case ".docx":
       type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
       break;
+    */
     case ".txt":
     default:
       type = "text\/plain";
       break;
   }
   var contentBlob;
+  
+  /* 0.4
   // Special handling for .docx
   if (filetype == '.docx') {
     docx.HTMLin(content);
@@ -458,6 +470,10 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
   } else {
     contentBlob = new Blob([content], { "type" : type });
   }
+  */
+
+  // 0.3 only
+  contentBlob = new Blob([content], { "type" : type });
 
   var filePath = (directory + filename + filetype);
   
@@ -536,23 +552,35 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
       req.onsuccess = function () {
         var file = req.result;
         var reader = new FileReader();
-
+        
+        /* 0.4
         if (filetype == ".docx") {
           reader.readAsArrayBuffer(file);
         } else {
           reader.readAsText(file);
         }
+        */
+        
+        // 0.3 only
+        reader.readAsText(file);
+        
         reader.onerror = function () {
           alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
           callback(this.error.name, true);
         };
         reader.onload = function () {
           var file;
+          
+          /* 0.4
           if( filetype === ".docx" ) {
             file = new DocxEditor(this.result);
           } else {
             file = this.result;
           }
+          */
+        
+          // 0.3 only
+          file = this.result;
           
           callback(file);
         };
@@ -574,22 +602,31 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
             alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
             callback(this.error.name, true);
           };
-          reader.onload = function () {
-            var file;
-            if (filetype == ".docx") {
+          reader.onload = function () {          
+            /* 0.4
+            if( filetype === ".docx" ) {
               file = new DocxEditor(this.result);
             } else {
               file = this.result;
             }
+            */
+        
+            // 0.3 only
+            file = this.result;
             
             callback(file);
           };
           
+          /* 0.4
           if (filetype === ".docx") {
             reader.readAsArrayBuffer(file);
           } else {
             reader.readAsText(file);
           }
+          */
+          
+          // 0.3 only
+          reader.readAsText(file);
         }, function(err) {
           alert("Error opening file\n\ncode: " + err.code);
         });

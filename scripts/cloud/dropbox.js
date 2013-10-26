@@ -48,7 +48,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
           entries[i].push('');
           
           // Only get documents
-          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.docx') {
+          if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm') { // 0.4 && entries[i][2] != '.docx') {
             entries.splice(i, 1);
             i = (i - 1);
           }

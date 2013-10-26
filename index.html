@@ -27,8 +27,10 @@
   <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
+  <!-- 0.4
   <script type="text/javascript" src="scripts/cloud/google.min.js"></script>
   <script type="text/javascript" src="scripts/cloud/google.js"></script>
+  -->
 
   <!-- Lib -->
   <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
@@ -45,12 +47,16 @@
 
   <!-- Parsers -->
   <script type="text/javascript" src="scripts/parsers/base64.js"></script>
+  <!-- 0.4  
   <script type="text/javascript" src="scripts/parsers/docx.js"></script>
+  -->
   <script type="text/javascript" src="scripts/parsers/plain-text.js"></script>
 
   <!-- User -->
   <script type="text/javascript" src="scripts/user/id.js"></script>
+  <!-- 0.4
   <script type="text/javascript" src="scripts/user/log.js" defer></script>
+  -->
 
   <!-- Building Blocks -->
   <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
@@ -145,10 +151,12 @@
           <h2>Dropbox</h2>
           <ul id="welcome-dropbox-list"></ul>
         </div>
+        <!-- 0.4
         <div id="welcome-google-area">
           <h2>Google Drive</h2>
           <ul id="welcome-google-list"></ul>
         </div>
+        -->
       </article>
     </div>
   </section>
@@ -169,7 +177,9 @@
           <legend id="fileTypeLegend" class="action">
             <select name="File type" id="createDialogFileType" data-change="extIcon">
               <option>.html</option>
+              <!-- 0.4
               <option>.docx</option>
+              -->
               <option>.txt</option>
             </select>
             <select id="dummy" class="dummy"></select>
@@ -517,6 +527,7 @@
         <div>
           <h2>Cloud</h2>
           <ul>
+            <!-- 0.4
             <li class="noLink">
               <aside class="pack-end">
                 <label>
@@ -526,6 +537,7 @@
               </aside>
               <p><b>Don't sync</b> with data</p>
             </li>
+            -->
             <li class="noLink">
               <aside class="pack-end">
                 <label>
@@ -537,15 +549,20 @@
               <p>Use <b>Dropbox</b></p>
             </li>
             <li class="noLink">
-                <aside class="pack-end">
-                  <label>
-                    <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />
-                    <span></span>
-                  </label>
-                </aside>
-                <aside class="icon" data-icon="google-drive"></aside>
-                <p>Use <b>Google Drive</b></p>
-              </li>
+              <p>More storage providers coming!</p>
+            </li>            
+            <!-- 0.4
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <aside class="icon" data-icon="google-drive"></aside>
+              <p>Use <b>Google Drive</b></p>
+            </li>
+            -->
           </ul>
           <h2>Editing</h2>
           <ul>
@@ -578,6 +595,7 @@
               </aside>
               <p class="label">Clear <b>recents</b> list</p>
             </li>
+            <!-- 0.4
             <li class="noLink">
               <aside class="pack-end">
                 <label>
@@ -586,7 +604,8 @@
                 </label>
               </aside>
               <p class="label">Enable <b>logging</b></p>
-            </li>
+            </li>            
+            -->
           </ul>
           <h2>Visual</h2>
           <ul>

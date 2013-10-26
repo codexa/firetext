@@ -87,6 +87,7 @@ cloud.init = function () {
     }  
   }
   
+  /* 0.4
   // Google Drive
   if (firetext.settings.get('gdrive.enabled') == 'true') {
     // Code to get Google Drive files
@@ -115,6 +116,7 @@ cloud.init = function () {
       }
     }
   }
+  */
   
   updateAddDialog();
 };

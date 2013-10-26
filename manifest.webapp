@@ -16,52 +16,52 @@
   "default_locale": "en-US",
   "locales": {
     "ar": {
-  	  "name": "Firetext",
-  	  "description": "محرر نصوص لفايرفوكس OS"
+      "name": "Firetext",
+      "description": "محرر نصوص لفايرفوكس OS"
     },
     "de": {
-  	  "name": "Firetext",
-  	  "description": "Ein Text-Editor für Firefox OS"
+      "name": "Firetext",
+      "description": "Ein Text-Editor für Firefox OS"
     },
     "el": {
-  	  "name": "Firetext",
-  	  "description": "Ένα κείμενο-editor για τον Firefox OS"
+      "name": "Firetext",
+      "description": "Ένα κείμενο-editor για τον Firefox OS"
     },
     "en-US": {
-  	  "name": "Firetext",
-  	  "description": "A word processor for Firefox OS"
+      "name": "Firetext",
+      "description": "A word processor for Firefox OS"
     },
     "es": {
-  	  "name": "Firetext",
-  	  "description": "Un editor de texto para Firefox OS"
+      "name": "Firetext",
+      "description": "Un editor de texto para Firefox OS"
     },
     "fr": {
-  	  "name": "Firetext",
-  	  "description": "Un éditeur de texte pour Firefox OS"
+      "name": "Firetext",
+      "description": "Un éditeur de texte pour Firefox OS"
     },
     "it": {
-  	  "name": "Firetext",
-  	  "description": "Un editor di testo per Firefox OS"
+      "name": "Firetext",
+      "description": "Un editor di testo per Firefox OS"
     },
     "pt-BR": {
-  	  "name": "Firetext",
-  	  "description": "Um editor de texto para Firefox OS"
+      "name": "Firetext",
+      "description": "Um editor de texto para Firefox OS"
     },
     "ru": {
-  	  "name": "Firetext",
-  	  "description": "Текстовый редактор для Firefox OS"
+      "name": "Firetext",
+      "description": "Текстовый редактор для Firefox OS"
     },
     "tr": {
-  	  "name": "Firetext",
-  	  "description": "Firefox OS için bir metin editörü"
+      "name": "Firetext",
+      "description": "Firefox OS için bir metin editörü"
     },
     "zh-TW": {
-  	  "name": "Firetext",
-  	  "description": "文本编辑器，火狐OS"
+      "name": "Firetext",
+      "description": "文本编辑器，火狐OS"
     }
   },
   "permissions": {
-    "device-storage:sdcard":{ 
+    "device-storage:sdcard": {
       "description": "Required for document storage.",
       "access": "readwrite"
     }

@@ -19,8 +19,12 @@ firetext.settings.init = function () {
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
+  
+  /* 0.4
   var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
   var loggingEnabled = document.querySelector('#logging-enabled-switch');
+  */
+  
   var nightmodeSelect = document.querySelector('#nightmode-select');
 
   // Autoload
@@ -71,6 +75,7 @@ firetext.settings.init = function () {
     cloud.init();
   }
 
+  /* 0.4
   // Google Drive
   if (firetext.settings.get('gdrive.enabled') == 'true') {
     gdriveEnabled.setAttribute('checked', '');
@@ -91,6 +96,7 @@ firetext.settings.init = function () {
   loggingEnabled.onchange = function () {
     firetext.settings.save('logging.enabled', this.checked);
   }
+  */
 
   // Night Mode
   if (firetext.settings.get('nightmode') == 'true') {
