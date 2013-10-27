@@ -2,7 +2,6 @@
 * Firetext v0.3
 * Copyright (C) Codexa Organization 2013.
 -->
-
 <!DOCTYPE html>
 <html manifest="ftcache.appcache">
 <head>
@@ -27,11 +26,6 @@
   <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
-  <!-- 0.4
-  <script type="text/javascript" src="scripts/cloud/google.min.js"></script>
-  <script type="text/javascript" src="scripts/cloud/google.js"></script>
-  -->
-
   <!-- Lib -->
   <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
   <script type="text/javascript" src="scripts/lib/FileSaver.js"></script>
@@ -47,16 +41,10 @@
 
   <!-- Parsers -->
   <script type="text/javascript" src="scripts/parsers/base64.js"></script>
-  <!-- 0.4  
-  <script type="text/javascript" src="scripts/parsers/docx.js"></script>
-  -->
   <script type="text/javascript" src="scripts/parsers/plain-text.js"></script>
 
   <!-- User -->
   <script type="text/javascript" src="scripts/user/id.js"></script>
-  <!-- 0.4
-  <script type="text/javascript" src="scripts/user/log.js" defer></script>
-  -->
 
   <!-- Building Blocks -->
   <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
@@ -85,8 +73,8 @@
   <link rel="stylesheet" type="text/css" href="style/desktop.css"/>
   <link rel="stylesheet" type="text/css" href="style/prettify.css"/>
   <link rel="stylesheet" type="text/css" href="style/night.css" />
-
 </head>
+
 <body role="application">
   <div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
 
@@ -114,7 +102,6 @@
       </ul>
     </nav>
   </section>
-
   <section role="region" id="welcome">
     <header>
       <button data-click="sidebar" data-click-id="welcome"><span class="icon" data-icon="menu">Menu</span></button>
@@ -151,16 +138,9 @@
           <h2>Dropbox</h2>
           <ul id="welcome-dropbox-list"></ul>
         </div>
-        <!-- 0.4
-        <div id="welcome-google-area">
-          <h2>Google Drive</h2>
-          <ul id="welcome-google-list"></ul>
-        </div>
-        -->
       </article>
     </div>
   </section>
-
   <section role="dialog" id="add">
     <header>
       <button data-click="navBack"><span class="icon" data-icon="back">back</span></button>
@@ -177,9 +157,6 @@
           <legend id="fileTypeLegend" class="action">
             <select name="File type" id="createDialogFileType" data-change="extIcon">
               <option>.html</option>
-              <!-- 0.4
-              <option>.docx</option>
-              -->
               <option>.txt</option>
             </select>
             <select id="dummy" class="dummy"></select>
@@ -198,7 +175,6 @@
     </div>
   </section>
   <div class="background"></div>
-
   <section role="dialog" id="open">
     <header>
       <button data-click="navBack"><span class="icon" data-icon="close">Close</span></button>
@@ -222,7 +198,6 @@
     </div>
   </section>
   <div class="background"></div>
-
   <section data-type="sidebar" id="sidebar_main" data-position="right">
     <header>
       <menu type="toolbar">
@@ -252,7 +227,6 @@
       </ul>
     </nav>
   </section>
-
   <section role="region" id="edit">
     <header>
       <button data-click="nav" data-click-location="welcome"><span class="icon" data-icon="close">close</span></button>
@@ -300,7 +274,6 @@
 	  <p>Successfully saved <strong><span id="save-banner-name"></span><span id="save-banner-type"></span></strong>!</p>
     </section>
   </section>
-
   <section role="dialog" id="format">
     <header>
       <button data-click="navBack"><span class="icon" data-icon="close">close</span></button>
@@ -527,17 +500,6 @@
         <div>
           <h2>Cloud</h2>
           <ul>
-            <!-- 0.4
-            <li class="noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
-                  <span></span>
-                </label>
-              </aside>
-              <p><b>Don't sync</b> with data</p>
-            </li>
-            -->
             <li class="noLink">
               <aside class="pack-end">
                 <label>
@@ -550,19 +512,7 @@
             </li>
             <li class="noLink">
               <p>More storage providers coming!</p>
-            </li>            
-            <!-- 0.4
-            <li class="noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />
-                  <span></span>
-                </label>
-              </aside>
-              <aside class="icon" data-icon="google-drive"></aside>
-              <p>Use <b>Google Drive</b></p>
             </li>
-            -->
           </ul>
           <h2>Editing</h2>
           <ul>
@@ -595,17 +545,6 @@
               </aside>
               <p class="label">Clear <b>recents</b> list</p>
             </li>
-            <!-- 0.4
-            <li class="noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="logging-enabled-switch" />
-                  <span></span>
-                </label>
-              </aside>
-              <p class="label">Enable <b>logging</b></p>
-            </li>            
-            -->
           </ul>
           <h2>Visual</h2>
           <ul>

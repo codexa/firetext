@@ -17,14 +17,6 @@
   background-size: 1rem !important;
 }
 
-[data-icon="document"] {
-  background-image: url(icons/extensions/firetext.svg);
-}
-
-[data-icon="document-dropbox"] {
-  background-image: url(icons/extensions/dropbox.svg);
-}
-
 [data-icon="night"] {
   background-image: url(icons/misc/night.svg);
 }
@@ -35,11 +27,6 @@
   background-image: url(icons/cloud/dropbox.svg);
   background-size: 3rem;
 }
-
-[data-icon="google-drive"] {
-  background-image: url(icons/cloud/google-drive.svg);
-}
-
 
 /* Formatting/Elements */
 [data-icon="code"] {
