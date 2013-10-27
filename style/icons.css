@@ -33,7 +33,7 @@
 /* Settings */
 [data-icon="dropbox"] {
   background-image: url(icons/cloud/dropbox.svg);
-  background-size: 5rem;
+  background-size: 3rem;
 }
 
 [data-icon="google-drive"] {
@@ -73,7 +73,7 @@
 
 /* Editor */
 [data-icon="bold"] {
-  background-image: url(icons/editor/white/bold.svg);
+  background-image: url(icons/editor/format/bold.svg);
 }
 
 [data-icon="compose"] {
@@ -81,19 +81,19 @@
 }
 
 [data-icon="italic"] {
-  background-image: url(icons/editor/white/italic.svg);
+  background-image: url(icons/editor/format/italic.svg);
 }
 
 [data-icon="more"] {
-  background-image: url(icons/editor/white/more.svg);
+  background-image: url(icons/editor/format/more.svg);
 }
 
 [data-icon="strikethrough"] {
-  background-image: url(icons/editor/white/strikethrough.svg);
+  background-image: url(icons/editor/format/strikethrough.svg);
 }
 
 [data-icon="underline"] {
-  background-image: url(icons/editor/white/underline.svg);
+  background-image: url(icons/editor/format/underline.svg);
 }
 
 
