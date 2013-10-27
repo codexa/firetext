@@ -1,17 +1,17 @@
-Firetext
-========
-
+# Firetext
+## About
 Firetext is a word processor for Firefox OS.  Firetext currently supports html, and plain text files (more will be added later).
 The latest stable nightly is available on <a href="http://firetext.codexa.org/app/">our site</a>.
 You can run Firetext on a Firefox OS device, or on the <a href="https://addons.mozilla.org/en-US/firefox/addon/firefox-os-simulator/">Firefox OS Simulator</a>.
 
 
-===Donate===
+## Donate
 Firetext is kept alive by contributions from the community.  Please donate skills, time, or money to make this project better.  
 Contact <a href="mailto:contact@codexa.org">us</a> to learn how you can help!
 
 
-===Current Features:===
+## Features
+### Current:
 - Formats
   - .html
   - .txt
@@ -40,7 +40,7 @@ Contact <a href="mailto:contact@codexa.org">us</a> to learn how you can help!
 - Autoload
 - Autosave
 
-===Cooming soon:===
+### Future:
 - Formatting
   - superscript/subscript
   - font color
