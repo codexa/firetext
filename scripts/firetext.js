@@ -284,10 +284,25 @@ function cleanForPreview(text, documentType) {
           var firstNewTagAfterHTMLOfTextWanted = remainingHTML.search(/<[a-zA-Z]/);
           if(firstNewTagAfterHTMLOfTextWanted != -1) {
               remainingHTML = remainingHTML.substr(0, firstNewTagAfterHTMLOfTextWanted);
-              return (htmlOfTextWanted + remainingHTML).replace("<br>", " ");
-          } else {
-              return htmlOfTextWanted.replace("<br>", " ");
+              htmlOfTextWanted = htmlOfTextWanted + remainingHTML;
           }
+          //htmlOfTextWanted has the html we want, however it may also contain line breaks
+          htmlNode.innerHTML = htmlOfTextWanted;
+          var nodesToRemove = htmlNode.getElementsByTagName("br");
+          while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
+              //div.removeChild( nodesToRemove[i] );
+              nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
+              nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
+              nodesToRemove = htmlNode.getElementsByTagName("br");
+          }
+          nodesToRemove = htmlNode.getElementsByTagName("img");
+          while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
+              //div.removeChild( nodesToRemove[i] );
+              nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
+              nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
+              nodesToRemove = htmlNode.getElementsByTagName("img");
+          }
+          return htmlNode.innerHTML;
         }
         return text;
     case ".docx":
