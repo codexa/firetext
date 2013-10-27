@@ -215,6 +215,67 @@ function updateDocLists() {
   cloud.updateDocLists();
 }
 
+function completeHTML(tableHTML) {
+/*
+    Purpose: given a incomplete HTML string <a><b><c>text</c> should complete string <a><b><c>text</c></b></a>
+    Test cases:
+        var tableHTML = "<table><tbody><tr><td><b>1</b></td><th>2</th><td>3</td></tr>";
+        //               012345678901234567890123456789012345678901234567890123456789
+        //               0         1         2         3         4         5 
+        console.log( completeHTML(tableHTML) );
+        //Should produce <table><tbody><tr><td><b>1</b></td><th>2</th><td>3</td></tr></tbody></table>
+*/
+    var r = /(<[a-zA-Z]+[ >]+|<\/[a-zA-Z]+>)/;
+    var i=0;
+    var tooManyIterations=50;
+    var bail = false;
+    var tagSense = new Array();
+    //
+    i += tableHTML.substr(i).search(r);
+    var rResult = r.exec(tableHTML.substr(i));
+    if( (rResult != null) && (rResult.length > 0) ) {
+        if( rResult[0].indexOf("</") >= 0 ) {
+            var tag = rResult[0].substr(2,rResult[0].length - 3 )
+            console.log("pop %s", tag );
+            tagSense.pop();
+        } else {
+            var tag = rResult[0].substr(1,rResult[0].length - 2 );
+            console.log("push %s", tag );
+            tagSense.push(tag);
+        }
+    }
+    //
+    while(r.test( tableHTML.substr(i) ) && !bail) {
+        //console.log("search: %d", tableHTML.substr(i).search(r));
+        i += tableHTML.substr(i).search(r) + 1;
+        var rResult = r.exec(tableHTML.substr(i));
+        if( (rResult != null) && (rResult.length > 0) ) {
+            if( rResult[0].indexOf("</") >= 0 ) {
+                var tag = rResult[0].substr(2,rResult[0].length - 3 )
+                console.log("pop %s", tag );
+                var t = tagSense.pop();
+                if(t != tag) {
+                    console.warn("Broken HTML");
+                }
+            } else {
+                var tag = rResult[0].substr(1,rResult[0].length - 2 );
+                console.log("push %s", tag );
+                tagSense.push(tag);
+            }
+        }
+        if(tooManyIterations-- <= 0) {
+            bail = true;
+            console.log("inf loop avoided");
+        }
+    }
+    while(tagSense.length > 0) {
+        var t = tagSense.pop();
+        tableHTML += "</" + t + ">";   
+    }
+    //console.log( tableHTML );
+    return tableHTML;
+}
+
 function cleanForPreview(text, documentType) {
   /*
     Test cases:
@@ -302,6 +363,40 @@ function cleanForPreview(text, documentType) {
               nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
               nodesToRemove = htmlNode.getElementsByTagName("img");
           }
+          nodesToRemove = htmlNode.getElementsByTagName("hr");
+          while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
+              //div.removeChild( nodesToRemove[i] );
+              nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
+              nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
+              nodesToRemove = htmlNode.getElementsByTagName("hr");
+          }
+          htmlNode.innerHTML = completeHTML(htmlNode.innerHTML);
+          //the following will take a table of n rows and make it a table of 1 row
+          var nodesToChange = htmlNode.getElementsByTagName("table");
+          for(var t=0; t<nodesToChange.length; t++) {
+            var table = nodesToChange[t];
+            var trs = table.getElementsByTagName("tr");
+            for(var i=1; i<trs.length; i++) {
+                var tds = trs[i].getElementsByTagName("td");
+                var ths = trs[i].getElementsByTagName("th");
+                var cells = new Array();
+                for(var j=0; j<tds.length; j++) {
+                    cells.push(tds[j]);
+                }
+                for(var j=0; j<ths.length; j++) {
+                    cells.push(ths[j]);
+                }
+                cells.sort(sortByCellIndex);
+                //console.log(cells);
+                for(var j=0; j<cells.length; j++) {
+                    trs[0].appendChild(cells[j]);
+                }
+            }
+            while( (trs != undefined) && (trs.length > 1) ) {
+                trs[1].parentElement.removeChild( trs[1] );
+                trs = table.getElementsByTagName("tr");
+            }
+          }
           return htmlNode.innerHTML;
         }
         return text;
@@ -311,6 +406,9 @@ function cleanForPreview(text, documentType) {
   }
 }
 
+function sortByCellIndex(a,b) {
+    return a.cellIndex - b.cellIndex;
+}
 
 function buildDocListItems(DOCS, listElms, description, output, location, preview) {
   // Handle description
