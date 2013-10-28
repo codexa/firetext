@@ -248,7 +248,7 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
     icon = 'document';
     location = 'internal';
   }
-  if (DOCS[0][0].charAt(0) == '/') {
+  if (DOCS[0][0].charAt(0) == '/' && DOCS[0][0].length > 1) {
     directory = DOCS[0][0].slice(1);
   } else {
     directory = DOCS[0][0];

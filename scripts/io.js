@@ -172,6 +172,11 @@ firetext.io.enumerate = function (directory, callback) {
 	      }
         }
         
+        // Put file directory in proper form
+        if (!thisFile[0] | thisFile[0] == '') {
+          thisFile[0] = '/';
+        }
+        
         // Add to list of files
         FILES.push(thisFile);
       
@@ -544,8 +549,12 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
   if (directory[directory.length - 1] != '/') {
     directory = (directory + '/');
   }
+  if (directory == '/' && directory.length == 1) {
+    directory = '';
+  }
     
   var filePath = (directory + filename + filetype);
+  
   if (location == '' | location == 'internal' | !location) {
     if (deviceAPI == 'deviceStorage') {
       var req = storage.get(filePath);
