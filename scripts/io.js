@@ -36,10 +36,13 @@ firetext.io.init = function (api, callback) {
       if (this.result != "available") {
         deviceAPI = null;
         storage = null;
-        alert("The SDCard on your device is shared, and thus not available.");
+        alert("The SDCard on your device is shared, and thus not available.  Try disabling USB Mass Storage in your settings.");
         init('file', callback);
         return;
       } else {
+        storage.onchange = function (change) {
+          updateDocLists(['internal', 'recents']);
+        }
         callback();
       }
     };

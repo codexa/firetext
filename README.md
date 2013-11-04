@@ -6,7 +6,8 @@ You can run Firetext on a Firefox OS device, or on the <a href="https://addons.m
 
 
 ## Donate
-Firetext is kept alive by contributions from the community.  Please donate skills, time, or money to make this project better.  
+Firetext is kept alive by contributions from the community.  Please donate skills, time, or money to make this project better.
+  
 Contact <a href="mailto:contact@codexa.org">us</a> to learn how you can help!
 
 
@@ -69,5 +70,6 @@ Contact <a href="mailto:contact@codexa.org">us</a> to learn how you can help!
   - .odt
   - .fodt
   - .pdf.
+- Better performance!
 
 Go to <a href="http://firetext.codexa.org">firetext.codexa.org</a> for more info.

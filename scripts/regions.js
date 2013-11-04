@@ -81,8 +81,10 @@ function nav2() {
     }
   
     // Update docs lists
-    if (tempLoc == 'open' | tempLoc == 'welcome') {
-      updateDocLists();
+    if (tempLoc == 'welcome') {
+      updateDocLists(['recents', 'cloud']);
+    } else if (tempLoc == 'open') {
+      updateDocLists(['cloud']);    
     }
     /* End of customized section */
   }

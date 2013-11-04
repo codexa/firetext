@@ -121,7 +121,7 @@ cloud.init = function () {
   updateAddDialog();
 };
 
-cloud.updateDocLists = function () {
+cloud.updateDocLists = function (lists) {
   if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
     cloud.dropbox.enumerate('/Documents/', function(DOCS) {
       buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');

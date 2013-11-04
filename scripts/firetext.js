@@ -209,17 +209,28 @@ function updateAddDialog() {
 
 /* Doc lists
 ------------------------*/
-function updateDocLists() {
-  // Recents
-  buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal', true);
+function updateDocLists(lists) {
+  if (!lists) {
+    lists = [];
+    lists.push('all');
+  }
   
-  // Internal
-  firetext.io.enumerate('/', function(DOCS) {
-    buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
-  });
-  
-  // Cloud
-  cloud.updateDocLists();
+  if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
+    // Recents
+    buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal', true);
+  }
+    
+  if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
+    // Internal
+    firetext.io.enumerate('/', function(DOCS) {
+      buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
+    });
+  }
+    
+  if (lists.indexOf('all') != '-1' | lists.indexOf('cloud') != '-1') {
+    // Cloud
+    cloud.updateDocLists(lists);
+  }
 }
 
 function buildDocListItems(DOCS, listElms, description, output, location, preview) {
@@ -687,8 +698,10 @@ function processActions(eventAttribute, target) {
       loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
-      if (navLocation == 'welcome' | navLocation == 'open') {
-        updateDocLists();     
+      if (navLocation == 'welcome') {
+        updateDocLists(['recents', 'cloud']);
+      } else if (navLocation == 'open') {
+        updateDocLists(['cloud']);
       } else if (navLocation == 'settings') {
         firetext.settings.init();
       }
