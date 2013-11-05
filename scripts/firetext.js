@@ -469,7 +469,7 @@ function updateViews(destView, source, contentType) {
 ------------------------*/ 
 function editDocs() {
   if (editState == true) {
-    updateDocLists();
+    updateDocLists(['all']);
     editState = false;
     welcomeRecentsArea.style.display = 'block';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
@@ -480,7 +480,7 @@ function editDocs() {
     editState = true;
     
     // Code to build list
-    firetext.io.enumerate('Documents/', function(result) {
+    firetext.io.enumerate('/', function(result) {
       buildEditDocList(result, welcomeDeviceList, 'Documents found', 'internal');
     });
     if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {

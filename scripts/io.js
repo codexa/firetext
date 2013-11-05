@@ -282,6 +282,9 @@ function createFromDialog() {
       req.onsuccess = function () {  
         // Load to editor
         loadToEditor(directory, filename, filetype, 'internal');
+        
+        // Update list
+        updateDocLists(['internal']);
       };
     } else if (deviceAPI == 'file') {
       storage.root.getFile(directory + filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
@@ -317,6 +320,9 @@ function createFromDialog() {
     firetext.io.save(directory, filename, filetype, ' ', false, function () {  
       // Load to editor
       loadToEditor(directory, filename, filetype, location);      
+        
+      // Update list
+      updateDocLists(['cloud']);
     }, location);
   } else {
     alert('Could not create file.  Please choose a valid location.');
@@ -492,6 +498,7 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
         if (showBanner) {
           showSaveBanner();
         }
+        updateDocLists(['recents']);
         callback();
       };
       req.onerror = function () {
@@ -546,9 +553,6 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
   }
 
   // Put directory in proper form
-  if (directory.length > 1 && directory[0] == '/') {
-    directory = directory.slice(1);
-  }
   if (directory[directory.length - 1] != '/') {
     directory = (directory + '/');
   }
