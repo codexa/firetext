@@ -217,7 +217,7 @@ function updateDocLists() {
 
 function completeHTML(tableHTML) {
 /*
-    Purpose: given a incomplete HTML string <a><b><c>text</c> should complete string <a><b><c>text</c></b></a>
+    Purpose: given a incomplete HTML string <a><b><c>text</c> should complete html <a><b><c>text</c></b></a>
     Test cases:
         var tableHTML = "<table><tbody><tr><td><b>1</b></td><th>2</th><td>3</td></tr>";
         //               012345678901234567890123456789012345678901234567890123456789
@@ -236,43 +236,37 @@ function completeHTML(tableHTML) {
     if( (rResult != null) && (rResult.length > 0) ) {
         if( rResult[0].indexOf("</") >= 0 ) {
             var tag = rResult[0].substr(2,rResult[0].length - 3 )
-            console.log("pop %s", tag );
             tagSense.pop();
         } else {
             var tag = rResult[0].substr(1,rResult[0].length - 2 );
-            console.log("push %s", tag );
             tagSense.push(tag);
         }
     }
     //
     while(r.test( tableHTML.substr(i) ) && !bail) {
-        //console.log("search: %d", tableHTML.substr(i).search(r));
         i += tableHTML.substr(i).search(r) + 1;
         var rResult = r.exec(tableHTML.substr(i));
         if( (rResult != null) && (rResult.length > 0) ) {
             if( rResult[0].indexOf("</") >= 0 ) {
                 var tag = rResult[0].substr(2,rResult[0].length - 3 )
-                console.log("pop %s", tag );
                 var t = tagSense.pop();
                 if(t != tag) {
-                    console.warn("Broken HTML");
+                    console.warn("completeHTML() argument contains broken HTML");
                 }
             } else {
                 var tag = rResult[0].substr(1,rResult[0].length - 2 );
-                console.log("push %s", tag );
                 tagSense.push(tag);
             }
         }
         if(tooManyIterations-- <= 0) {
             bail = true;
-            console.log("inf loop avoided");
+            console.warn("infinate loop avoided");
         }
     }
     while(tagSense.length > 0) {
         var t = tagSense.pop();
         tableHTML += "</" + t + ">";   
     }
-    //console.log( tableHTML );
     return tableHTML;
 }
 
@@ -307,8 +301,6 @@ function cleanForPreview(text, documentType) {
         var nextWhitespace = text.substr(approxPreviewWidthInCharacters).search(/\s/);
         var reverseText = text.substr(0,approxPreviewWidthInCharacters).split("").reverse().join("");
         var prevWhitespace = reverseText.search(/\s/);
-        //console.log("Previous Space at: %d", prevWhitespace);
-        //console.log("Next Space at: %d", nextWhitespace);
         if( nextWhitespace == -1 ) {
             nextWhitespace = text.length - approxPreviewWidthInCharacters;
         }
@@ -328,16 +320,11 @@ function cleanForPreview(text, documentType) {
         var htmlNode = document.createElement("div");
         htmlNode.innerHTML = text;
         var textStripped = htmlNode.textContent;
-        //console.log("textStripped: %s.", textStripped);
         var textTruncated = cleanForPreview(textStripped, ".txt");
-        //console.log("textTruncated: %s.", textTruncated);
         textTruncated = textTruncated.replace(/\.\.\.$/, "");
-        //console.log("textTruncated: %s.", textTruncated);
         var r = "^(<[a-zA-Z]+.*?>)*" + textTruncated.split("").join(".*?(<[a-zA-Z]+.*?>)*");
-        //console.log("regex: %s", r);
         var rDynamic = new RegExp(r);
         if(! rDynamic.test(text) ) {
-          //console.warn("cleanForPreview failed");
           return textTruncated;
         } else {
           var htmlOfTextWanted = rDynamic.exec(text)[0];
@@ -351,21 +338,18 @@ function cleanForPreview(text, documentType) {
           htmlNode.innerHTML = htmlOfTextWanted;
           var nodesToRemove = htmlNode.getElementsByTagName("br");
           while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
-              //div.removeChild( nodesToRemove[i] );
               nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
               nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
               nodesToRemove = htmlNode.getElementsByTagName("br");
           }
           nodesToRemove = htmlNode.getElementsByTagName("img");
           while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
-              //div.removeChild( nodesToRemove[i] );
               nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
               nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
               nodesToRemove = htmlNode.getElementsByTagName("img");
           }
           nodesToRemove = htmlNode.getElementsByTagName("hr");
           while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
-              //div.removeChild( nodesToRemove[i] );
               nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
               nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
               nodesToRemove = htmlNode.getElementsByTagName("hr");
@@ -387,7 +371,6 @@ function cleanForPreview(text, documentType) {
                     cells.push(ths[j]);
                 }
                 cells.sort(sortByCellIndex);
-                //console.log(cells);
                 for(var j=0; j<cells.length; j++) {
                     trs[0].appendChild(cells[j]);
                 }
@@ -401,7 +384,7 @@ function cleanForPreview(text, documentType) {
         }
         return text;
     case ".docx":
-      console.log("cleanForPreview text = %s.", text);
+      console.warn("cleanForPreview docx not implemented text = %s.", text);
       return text;
   }
 }
