@@ -468,7 +468,11 @@ function updateViews(destView, source, contentType) {
 /* Edit Mode
 ------------------------*/ 
 function editDocs() {
-  if (editState == true) {
+  if (editState == true) {    
+    // Clear lists
+    welcomeDeviceList.innerHTML = '';
+    welcomeDropboxList.innerHTML = '';
+    
     updateDocLists(['all']);
     editState = false;
     welcomeRecentsArea.style.display = 'block';
@@ -478,6 +482,10 @@ function editDocs() {
     welcomeRecentsArea.style.display = 'none';
     document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
     editState = true;
+    
+    // Clear lists
+    welcomeDeviceList.innerHTML = '';
+    welcomeDropboxList.innerHTML = '';
     
     // Code to build list
     firetext.io.enumerate('/', function(result) {
