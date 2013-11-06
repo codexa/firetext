@@ -306,13 +306,12 @@ function cleanForPreview(text, documentType) {
         console.log( cleanForPreview(html1, ".html") );
         console.log( cleanForPreview(html7, ".html") );
   */
-  var approxPreviewWidthInCharacters = 21;
+  var approxPreviewWidthInCharacters = 100;
   var additionalCharactersTillWhitespace = 5;
   var regWhiteSpace
   switch(documentType) {
     default:
     case ".txt":
-      text = text.replace(/\n/g," ");
       if(text.length <= approxPreviewWidthInCharacters) {
         return text;
       } else {
@@ -416,10 +415,10 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
   if (!description) {
     description = '';
   }
-  console.log("description: %s.", description);
+  
   switch (DOCS[0][2]) {
     case ".txt":
-      description = firetext.parsers.plain.parse( cleanForPreview(description, DOCS[0][2]), "HTML");
+      description = firetext.parsers.plain.parse(cleanForPreview(description, DOCS[0][2]), "HTML");
       break;
     case ".docx":
       var tmp = document.createElement("DIV");
