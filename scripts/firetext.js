@@ -938,9 +938,11 @@ function processActions(eventAttribute, target) {
       var browseLocation = '';
       var browserFrame = document.getElementById('browserFrame');
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
-        browseLocation = 'about.html'
+        browseLocation = 'about.html';
       } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
-        browseLocation = 'http://firetext.codexa.org/support'
+        browseLocation = 'http://firetext.codexa.org/support';
+      } else if (target.getAttribute(eventAttribute + '-location') == 'rate') {
+        browseLocation = 'https://marketplace.firefox.com/app/firetext/ratings/add';
       } else {
         browseLocation = target.getAttribute(eventAttribute + '-location');
       }
