@@ -9,8 +9,10 @@
     "url": "http://www.codexa.org"
   },
   "icons": {
-    "64": "/style/icons/app/64.png",
-    "128": "/style/icons/app/128.png",
+    "32": "/style/icons/app/32.png",
+    "60": "/style/icons/app/60.png",
+    "90": "/style/icons/app/90.png",
+    "120": "/style/icons/app/120.png",
     "256": "/style/icons/app/256.png"
   },
   "default_locale": "en-US",
