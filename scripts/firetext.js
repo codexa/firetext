@@ -372,6 +372,10 @@ function cleanForPreview(text, documentType) {
               nodesToRemove = htmlNode.getElementsByTagName("hr");
           }
           htmlNode.innerHTML = completeHTML(htmlNode.innerHTML);
+          var bodyTag = htmlNode.getElementsByTagName("body");
+          if( bodyTag != undefined ) {
+            htmlNode.innerHTML = bodyTag[0].innerHTML;
+          }
           //the following will take a table of n rows and make it a table of 1 row
           var nodesToChange = htmlNode.getElementsByTagName("table");
           for(var t=0; t<nodesToChange.length; t++) {
