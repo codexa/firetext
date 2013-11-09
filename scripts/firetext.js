@@ -373,7 +373,7 @@ function cleanForPreview(text, documentType) {
           }
           htmlNode.innerHTML = completeHTML(htmlNode.innerHTML);
           var bodyTag = htmlNode.getElementsByTagName("body");
-          if( bodyTag != undefined ) {
+          if (bodyTag[0]) {
             htmlNode.innerHTML = bodyTag[0].innerHTML;
           }
           //the following will take a table of n rows and make it a table of 1 row
