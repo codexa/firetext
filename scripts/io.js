@@ -241,6 +241,9 @@ function createFromDialog() {
     return;
   }
   
+  // Navigate back to the previous screen
+  regions.navBack();
+  
   // Convert location to lower case
   location = location.toLowerCase();
   
@@ -543,7 +546,7 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
       });
     }
   } else if (location == 'dropbox') {
-    callback(cloud.dropbox.save(filePath, contentBlob, showSpinner));
+    cloud.dropbox.save(filePath, contentBlob, showSpinner, function () { callback(); });
   }
 };
 

@@ -97,7 +97,7 @@ cloud.dropbox.load = function (path, callback) {
   }
 }
 
-cloud.dropbox.save = function (path, content, showSpinner) {
+cloud.dropbox.save = function (path, content, showSpinner, callback) {
   if (cloud.dropbox.client && path && content) {
     if (showSpinner != false) {
       spinner();
@@ -105,18 +105,18 @@ cloud.dropbox.save = function (path, content, showSpinner) {
     cloud.dropbox.client.writeFile(path, content, function() { 
       if (showSpinner != false) {
         spinner('hide');
-        return;
+        callback();
       }
     });    
   } else {
     if (!cloud.dropbox.client) {
-      return "You are not signed in to Dropbox";
+      callback("You are not signed in to Dropbox");
     } else if (!path) {
-      return "Path not defined";
+      callback("Path not defined");
     } else if (!content) {
-      return "Content not defined";
+      callback("Content not defined");
     } else {
-      return "Unknown error";
+      callback("Unknown error");
     }
   }
 }
