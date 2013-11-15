@@ -941,6 +941,11 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'browser') {
       var browseLocation = '';
       var browserFrame = document.getElementById('browserFrame');
+      
+      // Set browser frame's src to blank
+      browserFrame.src = 'about:blank';
+      
+      // Get location
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
         browseLocation = 'about.html';
       } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
