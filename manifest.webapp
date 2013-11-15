@@ -73,14 +73,32 @@
       "href": "./index.html",
       "disposition": "window",
       "filters": {
-        "path": {
-          "required": true
-        },
         "type": [
           "text/plain",
           "text/html",
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ],
+        "url": {
+          "required": true
+        },
+        "editable": {
+          "required": false
+        }
+      },
+      "returnValue": false
+    },
+    "view": {
+      "href": "./index.html",
+      "disposition": "window",
+      "filters": {
+        "type": [
+          "text/plain",
+          "text/html",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ],
+        "url": {
+          "required": true
+        },
         "editable": {
           "required": false
         }
