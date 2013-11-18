@@ -26,6 +26,7 @@
   <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
+  
   <!-- Lib -->
   <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
   <script type="text/javascript" src="scripts/lib/FileSaver.js"></script>
@@ -38,6 +39,7 @@
   <script type="text/javascript" src="scripts/lib/lang-css.js"></script>
   <script type="text/javascript" src="scripts/lib/lang-wiki.js"></script>
   <script type="text/javascript" src="scripts/lib/stringview.js"></script>
+  <script type="text/javascript" src="scripts/lib/bugsense.js"></script>
 
   <!-- Parsers -->
   <script type="text/javascript" src="scripts/parsers/base64.js"></script>
@@ -550,7 +552,16 @@
                   <button data-click="clearRecents">Clear</button>
                 </label>
               </aside>
-              <p class="label">Clear <b>recents</b> list</p>
+              <p class="label"><b>Clear recents</b> list</p>
+            </li>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="stats-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label"><b>Send error</b> stats</p>
             </li>
           </ul>
           <h2>Visual</h2>

@@ -24,6 +24,7 @@ var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw,
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
+var bugsense;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -44,6 +45,9 @@ window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
 window.setInterval(updateToolbar, 100);
 
 firetext.init = function () {
+  // Initialize Bugsense
+  bugsenseInit();
+
   // Find device type
   checkDevice();
 
@@ -97,16 +101,14 @@ firetext.init = function () {
   // Initialize the editor
   initEditor();
   
+  // Initialize Settings
+  firetext.settings.init();
+  
   // Init extIcon
   extIcon();
 
   // Initiate user id
   firetext.user.id.init();
-
-  /* 0.4
-  // Init user log
-  firetext.user.log.init();
-  */
   
   // Add event listeners
   toolbar.addEventListener(
@@ -203,6 +205,14 @@ function updateAddDialog() {
     if (document.getElementById('no-storage-notice')) {
       document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
     }
+  }
+}
+
+function bugsenseInit() {
+  if (firetext.settings.get('stats.enabled') != 'false') {
+    bugsense = new Bugsense({ appversion: '0.3', apiKey: '' });
+  } else {
+    bugsense = null;
   }
 }
 

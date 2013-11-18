@@ -19,10 +19,10 @@ firetext.settings.init = function () {
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
+  var statsEnabled = document.querySelector('#stats-enabled-switch');
   
   /* 0.4
   var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
-  var loggingEnabled = document.querySelector('#logging-enabled-switch');
   */
   
   var nightmodeSelect = document.querySelector('#nightmode-select');
@@ -40,6 +40,9 @@ firetext.settings.init = function () {
   // Autosave
   if (firetext.settings.get('autosave') != 'false') {
     autosaveEnabled.setAttribute('checked', '');
+    if (firetext.settings.get('autosave') != 'true') {
+      firetext.settings.save('autosave', 'true');
+    }
   } else {  
     autosaveEnabled.removeAttribute('checked');
   }
@@ -86,16 +89,6 @@ firetext.settings.init = function () {
     firetext.settings.save('gdrive.enabled', this.checked);
     cloud.init();
   }
-
-  // Logging
-  if (firetext.settings.get('logging.enabled') != 'false') {
-    loggingEnabled.setAttribute('checked', '');
-  } else {  
-    loggingEnabled.removeAttribute('checked');
-  }
-  loggingEnabled.onchange = function () {
-    firetext.settings.save('logging.enabled', this.checked);
-  }
   */
 
   // Night Mode
@@ -104,7 +97,11 @@ firetext.settings.init = function () {
   } else if (firetext.settings.get('nightmode') == 'false') { 
     nightmodeSelect.value = 'Always Off';
   } else {
-    nightmodeSelect.value = 'Auto';  
+    nightmodeSelect.value = 'Auto';
+    if (firetext.settings.get('nightmode') != 'auto') {
+      firetext.settings.save('nightmode', 'auto');
+      night();
+    } 
   }
   nightmodeSelect.addEventListener('change', function () {
     // Convert
@@ -123,6 +120,19 @@ firetext.settings.init = function () {
     // Update
     night();
   });
+
+  // Stats
+  if (firetext.settings.get('stats.enabled') != 'false') {
+    statsEnabled.setAttribute('checked', '');
+    if (firetext.settings.get('stats.enabled') != 'true') {
+      firetext.settings.save('stats.enabled', 'true');
+    }
+  } else {  
+    statsEnabled.removeAttribute('checked');
+  }
+  statsEnabled.onchange = function () {
+    firetext.settings.save('stats.enabled', this.checked);
+  }
 };
 
 firetext.settings.get = function (name) {
