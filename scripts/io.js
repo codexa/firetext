@@ -365,7 +365,7 @@ function saveFromEditor(banner, spinner) {
   }
   banner = !!banner;
   spinner = !!spinner;
-  firetext.io.save(directory, filename, filetype, content, banner, function(){}, location, spinner, docxeditor);
+  firetext.io.save(directory, filename, filetype, content, banner, function(){ fileChanged = false; }, location, spinner, docxeditor);
 }
 
 function loadToEditor(directory, filename, filetype, location, editable) {

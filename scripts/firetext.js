@@ -20,7 +20,7 @@ firetext.parsers = {};
 firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType;
+var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType, fileChanged;
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
@@ -626,11 +626,13 @@ function watchDocument(filetype) {
     prettyPrint();
       
     doc.addEventListener('input', function() {
+      fileChanged = true;
       updateViews(rawEditor, doc.innerHTML, 'text');
     });
         
     // Add listener to update design
     rawEditor.addEventListener('input', function() {
+      fileChanged = true;
       updateViews(doc, rawEditor.textContent, 'html');
     });
     rawEditor.addEventListener('blur', function() {
@@ -638,6 +640,7 @@ function watchDocument(filetype) {
     });
   } else {
     doc.addEventListener('input', function() {
+      fileChanged = true;
       if (firetext.settings.get('autosave') != 'false') {
         saveFromEditor(false, false);
       }    
@@ -917,6 +920,30 @@ function processActions(eventAttribute, target) {
       regions.sidebar(target.getAttribute(eventAttribute + '-id'));
     } else if (calledFunction == 'saveFromEditor') {
       saveFromEditor();
+    } else if (calledFunction == 'closeFile') {
+      // Check if file is changed.  If so, prompt the user to save it.
+      if (firetext.settings.get('autosave') == 'false' && fileChanged == true) {
+        if (target.getAttribute(eventAttribute + '-action')) {
+          var action = target.getAttribute(eventAttribute + '-action');          
+          if (action == 'yes') {
+            regions.navBack();
+            saveFromEditor();
+            regions.nav('welcome');          
+          } else if (action == 'no') {
+            fileChanged = false;
+            regions.navBack();
+            regions.nav('welcome');          
+          } else {
+            regions.navBack();
+          }
+        } else {
+          regions.nav('save-file');
+          return;
+        }
+      }
+      
+      // Navigate to the welcome screen
+      regions.nav('welcome');
     } else if (calledFunction == 'formatDoc') {
       formatDoc(target.getAttribute(eventAttribute + '-action'), target.getAttribute(eventAttribute + '-value'));
       if (target.getAttribute(eventAttribute + '-back') == 'true') {

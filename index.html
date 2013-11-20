@@ -223,7 +223,7 @@
         <li><a href="#" data-click="nav" data-click-location="add">Create document</a></li>
         <li><a href="#" data-click="nav" data-click-location="open">Open document</a></li>
         <li><a href="#" data-click="saveFromEditor">Save document</a></li>
-        <li><a href="#" data-click="nav" data-click-location="welcome">Close document</a></li>
+        <li><a href="#" data-click="closeFile">Close document</a></li>
       </ul>
       <h2>Help</h2>
       <ul>
@@ -238,7 +238,7 @@
   </section>
   <section role="region" id="edit">
     <header>
-      <button data-click="nav" data-click-location="welcome"><span class="icon" data-icon="close">close</span></button>
+      <button data-click="closeFile"><span class="icon" data-icon="close">close</span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon" data-icon="save">Save</span></button>
         <button data-click="fullscreen"><span class="icon" data-icon="zen">Zen Mode</span></button>
@@ -273,7 +273,7 @@
         </li>
         <div class="tabToolbar">
           <button data-click="sidebar" data-click-id="main" data-icon="menu">Menu</button>
-          <button data-click="nav" data-click-location="welcome" data-icon="close">Close</button>
+          <button data-click="closeFile" data-icon="close">Close</button>
           <button data-click="fullscreen" data-icon="exit-zen">Exit Zen Mode</button>
           <button data-click="saveFromEditor" id="zenSaveButton" data-icon="save">Save</button>
         </div>
@@ -490,6 +490,16 @@
         </fieldset>
       </div>
     </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="action" id="save-file">
+    <header>Would you like to save your changes?</header>
+    <menu>
+      <button data-click="closeFile" data-click-action="yes">Yes</button> 
+      <button data-click="closeFile" data-click-action="no" class="danger">No</button>
+      <button data-click="navBack">Cancel</button>
+    </menu>
   </section>
   <div class="background"></div>
 
