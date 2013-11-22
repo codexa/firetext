@@ -342,6 +342,10 @@ function isValidFileName(filename) {
 }
 
 function saveFromEditor(banner, spinner) {
+  // Clear save timeout
+  saveTimeout = null;
+
+  // Select elements
   var location = document.getElementById('currentFileLocation').textContent;
   var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
@@ -363,8 +367,6 @@ function saveFromEditor(banner, spinner) {
       content = doc.textContent;
       break;
   }
-  banner = !!banner;
-  spinner = !!spinner;
   firetext.io.save(directory, filename, filetype, content, banner, function(){ fileChanged = false; }, location, spinner, docxeditor);
 }
 
@@ -440,6 +442,9 @@ function loadToEditor(directory, filename, filetype, location, editable) {
     
       // Add listener to update views
       watchDocument(filetype);
+      
+      // Start toolbar update interval      
+      toolbarInterval = window.setInterval(updateToolbar, 100);
   
       // Add file to recent docs
       firetext.recents.add([directory, filename, filetype], location);
@@ -462,6 +467,10 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 }
 
 firetext.io.save = function (directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
+  // Set saving to true
+  saving = true;
+
+  // Get filetype
   var type = "text";
   switch (filetype) {
     case ".html":
@@ -494,14 +503,27 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
 
   var filePath = (directory + filename + filetype);
   
-  if (location == '' | location == 'internal' | !location) {
+  if (location == '' | location == 'internal' | !location) {  
+    // Start spinner  
+    if (showSpinner == true) {
+      spinner();
+    }
+    
+    // Save file
     if (deviceAPI == 'deviceStorage') {
       var req = storage.addNamed(contentBlob, filePath);
       req.onsuccess = function () {
+        // Show banner or hide spinner
         if (showBanner) {
           showSaveBanner();
         }
+        if (showSpinner == true) {
+          spinner('hide');
+        }
+        
+        // Finish
         updateDocLists(['recents']);
+        saving = false;
         callback();
       };
       req.onerror = function () {
@@ -513,40 +535,51 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
           req2.onerror = function () {
             alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
           }
-        }
-        else {
+        } else {
           alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
         }
+        saving = false;
       };
     } else if (deviceAPI == 'file') {
       storage.root.getFile(directory + filename + filetype, {create: true}, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter){
           fileWriter.onwriteend = function(e) {
             e.target.onwriteend = function(e) {
+              // Show banner or hide spinner
               if (showBanner) {
                 showSaveBanner();
               }
+              if (showSpinner == true) {
+                spinner('hide');
+              }
+              
+              // Finish
+              saving = false;
               callback();
             }
             e.target.onerror = function(e) {
+              saving = false;
               alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
             }
             e.target.write(contentBlob);
           };
           
           fileWriter.onerror = function(e) {
+            saving = false;
             alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
           };
           fileWriter.truncate(0);
         }, function(err) {
+          saving = false;
           alert("Error writing to file :(\n\ncode: " + err.code);
         });
       }, function(err) {
+        saving = false;
         alert("Error opening file :(\n\ncode: " + err.code);
       });
     }
   } else if (location == 'dropbox') {
-    cloud.dropbox.save(filePath, contentBlob, showSpinner, function () { callback(); });
+    cloud.dropbox.save(filePath, contentBlob, showSpinner, function () { saving = false; callback(); });
   }
 };
 

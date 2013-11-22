@@ -20,7 +20,8 @@ firetext.parsers = {};
 firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var loadSpinner, editor, toolbar, editWindow, doc, editState, rawEditor, tabRaw, tabDesign, deviceType, fileChanged;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
+var deviceType, fileChanged, saveTimeout, saving;
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
@@ -42,7 +43,6 @@ var appCache = window.applicationCache;
 /* Start
 ------------------------*/
 window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
-window.setInterval(updateToolbar, 100);
 
 firetext.init = function () {
   // Initialize Bugsense
@@ -181,6 +181,9 @@ firetext.init = function () {
   night();
 };
 
+
+/* Add dialog
+------------------------*/
 function updateAddDialog() {
   if (locationSelect.length < 1) {
     // Disable elements
@@ -208,9 +211,12 @@ function updateAddDialog() {
   }
 }
 
+
+/* Bugsense
+------------------------*/
 function bugsenseInit() {
   if (firetext.settings.get('stats.enabled') != 'false') {
-    bugsense = new Bugsense({ appversion: '0.3', apiKey: '' });
+    bugsense = new Bugsense({ appversion: '0.3', apiKey: 'c2497751' });
   } else {
     bugsense = null;
   }
@@ -641,10 +647,25 @@ function watchDocument(filetype) {
   } else {
     doc.addEventListener('input', function() {
       fileChanged = true;
-      if (firetext.settings.get('autosave') != 'false') {
-        saveFromEditor(false, false);
-      }    
-    });    
+      autosave();
+    });
+  }  
+}
+
+function forceAutosave() {
+  autosave(true);
+}
+
+function autosave(force) {
+  if (firetext.settings.get('autosave') != 'false') {
+    if (!saveTimeout | force == true) {
+      if (saving != true) {
+        // Add timeout for saving
+        saveTimeout = window.setTimeout(saveFromEditor, 1000);
+      } else {
+        saveTimeout = window.setTimeout(forceAutosave, 1000);        
+      }
+    }
   }
 }
 
@@ -655,9 +676,7 @@ function updateViews(destView, source, contentType) {
     } else {
       destView.textContent = source;
     }
-    if (firetext.settings.get('autosave') != 'false') {
-      saveFromEditor(false, false);
-    }
+    autosave();
   }
 }
 
@@ -919,7 +938,7 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'sidebar') {
       regions.sidebar(target.getAttribute(eventAttribute + '-id'));
     } else if (calledFunction == 'saveFromEditor') {
-      saveFromEditor();
+      saveFromEditor(true, true);
     } else if (calledFunction == 'closeFile') {
       // Check if file is changed.  If so, prompt the user to save it.
       if (firetext.settings.get('autosave') == 'false' && fileChanged == true) {
@@ -941,6 +960,9 @@ function processActions(eventAttribute, target) {
           return;
         }
       }
+      
+      // Clear toolbar update interval
+      window.clearInterval(toolbarInterval);
       
       // Navigate to the welcome screen
       regions.nav('welcome');

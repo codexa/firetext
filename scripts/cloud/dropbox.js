@@ -99,14 +99,14 @@ cloud.dropbox.load = function (path, callback) {
 
 cloud.dropbox.save = function (path, content, showSpinner, callback) {
   if (cloud.dropbox.client && path && content) {
-    if (showSpinner != false) {
+    if (showSpinner == true) {
       spinner();
     }
     cloud.dropbox.client.writeFile(path, content, function() { 
-      if (showSpinner != false) {
+      if (showSpinner == true) {
         spinner('hide');
-        callback();
       }
+      callback();
     });    
   } else {
     if (!cloud.dropbox.client) {
