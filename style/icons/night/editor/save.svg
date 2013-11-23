@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Rectangle_1_copy_2_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 x="0px" y="0px" width="60px" height="60px" viewBox="0 0 60 60" enable-background="new 0 0 60 60" xml:space="preserve">
+<g>
+	<defs>
+		<path id="SVGID_1_" d="M46.24,8h-0.451h-2.555H16.767h-2.556H13.76C11.684,8,10,9.877,10,12.191v33.523v2.094
+			C10,50.123,11.684,52,13.76,52h0.451h2.556H20V36h0.526H22h16h1.473H40v16h3.234h2.555h0.451c2.076,0,3.76-1.877,3.76-4.191
+			v-2.094V12.191C50,9.877,48.316,8,46.24,8z M42,28H18V10.096h2.005h0.521h18.946h0.523H42V28z"/>
+	</defs>
+	<use xlink:href="#SVGID_1_"  overflow="visible" fill="#DFDFDF"/>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	<g display="none" clip-path="url(#SVGID_2_)" enable-background="new    ">
+		
+			<image display="inline" overflow="visible" width="30" height="30" id="Rectangle_1_copy_xA0_Image" xlink:href="9B39905B.png"  transform="matrix(2 0 0 2 0 0)">
+		</image>
+	</g>
+</g>
+</svg>

@@ -1,18 +1,52 @@
+<!--
+* Firetext v0.3
+* Copyright (C) Codexa Organization 2013.
+-->
 <!DOCTYPE html>
-<html>
+<html manifest="ftcache.appcache">
 <head>
-
   <meta charset="utf-8">
-  <meta http-equiv="pragma" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <link href="style/icons/app_icon.png" rel="icon" type="image/x-icon" />
-  <link href="style/icons/app_icon.png" rel="shortcut icon" type="image/x-icon" />
+  <link href="style/icons/app/60.png" rel="icon" type="image/x-icon" />
+  <link href="style/icons/app/60.png" rel="shortcut icon" type="image/x-icon" />
 
-  <title>FireText</title>
+  <title>Firetext</title>
 
   <!-- Scripts -->
-  <script type="application/javascript" src="js/firetext.js"></script>
-  <script type="application/javascript" src="js/regions.js"></script>
+  <script type="text/javascript" src="scripts/firetext.js"></script>
+  <script type="text/javascript" src="scripts/activities.js"></script>
+  <script type="text/javascript" src="scripts/io.js"></script>
+  <script type="text/javascript" src="scripts/night.js"></script>
+  <script type="text/javascript" src="scripts/recents.js"></script>
+  <script type="text/javascript" src="scripts/regions.js"></script>
+  <script type="text/javascript" src="scripts/settings.js"></script>
+
+  <!-- Cloud -->
+  <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
+  <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
+  <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
+  
+  <!-- Lib -->
+  <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
+  <script type="text/javascript" src="scripts/lib/FileSaver.js"></script>
+  <script type="text/javascript" src="scripts/lib/gesture-detector.js"></script>
+  <script type="text/javascript" src="scripts/lib/jszip.js"></script>
+  <script type="text/javascript" src="scripts/lib/jszip-deflate.js"></script>
+  <script type="text/javascript" src="scripts/lib/jszip-inflate.js"></script>
+  <script type="text/javascript" src="scripts/lib/jszip-load.js"></script>
+  <script type="text/javascript" src="scripts/lib/prettify.js"></script>
+  <script type="text/javascript" src="scripts/lib/lang-css.js"></script>
+  <script type="text/javascript" src="scripts/lib/lang-wiki.js"></script>
+  <script type="text/javascript" src="scripts/lib/stringview.js"></script>
+  <script type="text/javascript" src="scripts/lib/bugsense.js"></script>
+
+  <!-- Parsers -->
+  <script type="text/javascript" src="scripts/parsers/base64.js"></script>
+  <script type="text/javascript" src="scripts/parsers/plain-text.js"></script>
+
+  <!-- User -->
+  <script type="text/javascript" src="scripts/user/id.js"></script>
 
   <!-- Building Blocks -->
   <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
@@ -20,7 +54,6 @@
   <link rel="stylesheet" type="text/css" href="style/bb/confirm.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/drawer.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/edit_mode.css"/>
-  <link rel="stylesheet" type="text/css" href="style/bb/headers.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/input_areas.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/lists.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/progress_activity.css"/>
@@ -37,51 +70,54 @@
   <link rel="stylesheet" type="text/css" href="style/main.css" />
   <link rel="stylesheet" type="text/css" href="style/editor.css" />
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
-
-  <!-- Shared code -->
-  <script type="application/javascript" defer src="js/gesture_detector.js"></script>
-
-  <!-- Format parsers -->
-  <script type="application/javascript" src="resources/txt/parse.js"></script>
-  <script type="application/javascript" src="resources/docx/docx.js"></script>
-
-  <!-- Resources -->
-  <script type="application/javascript" src="resources/dropbox/dropbox.min.js"></script>
-  <script type="application/javascript" src="resources/dropbox/dropbox.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="style/headers.css"/>
+  <link rel="stylesheet" type="text/css" href="style/icons.css"/>
+  <link rel="stylesheet" type="text/css" href="style/desktop.css"/>
+  <link rel="stylesheet" type="text/css" href="style/prettify.css"/>
+  <link rel="stylesheet" type="text/css" href="style/night.css" />
 </head>
-<body role="application">
 
-  <section data-type="sidebar" id="sidebar_welcome" class="skin-organic">
+<body role="application">
+  <div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
+
+  <section data-type="sidebar" id="sidebar_welcome">
     <header>
       <menu type="toolbar">
-       <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-back">back</span></button>
-    </menu>
+        <button data-click="sidebar" data-click-id="welcome"><span class="icon" data-icon="back">back</span></button>
+      </menu>
       <h1>Menu</h1>
     </header>
-    <nav>
+    <div role="toolbar">
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="add">New Document</a></li>
-        <li><a href="#" data-click="nav" data-click-location="open">Open Document</a></li>
+       <li><button data-icon="setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
       </ul>
-      <div role="toolbar">
-        <ul>
-          <li><button class="pack-icon-setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
-        </ul>
-        <ul>
-        </ul>
-      </div>
+      <ul>
+      </ul>
+    </div>
+    <nav>
+      <h2>Document actions</h2>
+      <ul>
+        <li><a href="#" data-click="nav" data-click-location="add">Create document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="open">Open document</a></li>
+      </ul>
+      <h2>Help</h2>
+      <ul>
+        <li><a href="#" data-click="browser" data-click-location="about">About Firetext</a></li>
+        <li><a href="http://firetext.codexa.org/support" target="_blank">Firetext support</a></li>
+      </ul>
+      <h2>Other</h2>
+      <ul>
+        <li><a href="#" data-click="browser" data-click-location="rate">Rate Firetext</a></li>
+      </ul>
     </nav>
   </section>
-
   <section role="region" id="welcome">
     <header>
-      <button data-click="sidebar" data-click-id="welcome" data-click-hidden="welcome-sidebar-button" id="welcome-sidebar-button"><span class="icon icon-menu">Menu</span></button>
+      <button data-click="sidebar" data-click-id="welcome"><span class="icon" data-icon="menu">Menu</span></button>
       <menu type="toolbar">
-        <button data-click="nav" data-click-location="add"><span class="icon icon-compose">New</span></button>
-        <button data-click="editDocs"><span class="icon icon-edit">Edit</span></button>
+        <button data-click="nav" data-click-location="add"><span class="icon" data-icon="compose">New</span></button>
       </menu>
-      <h1 style="font-family: 'Philosopher';">Firetext</h1>
+      <h1 class="firetext">Firetext</h1>
     </header>
     <div role="edit" data-type="edit" id="welcome-edit-mode">
       <section>
@@ -98,43 +134,41 @@
       </menu>
     </div>
     <div role="main" class="header-only">
-      <article data-type="list" class="docsList">
-        <div id="recent-docs-list">
-          <h2>Recents</h2>
-          <ul id="docs"></ul>
+      <article data-type="list" class="docsList" id="welcome-docs-list">
+        <div id="welcome-recents-area">
+          <h2>Recent Documents</h2>
+          <ul id="welcome-recents-list"></ul>
         </div>
-        <div id="device-docs-list">
-          <h2>Device</h2>
-          <ul id="docBrowserDirList"></ul>
+        <div id="welcome-device-area">
+          <h2>Documents on Device</h2>
+          <ul id="welcome-device-list"></ul>
         </div>
-        <div id="dropbox-docs-list">
-          <h2>Dropbox</h2>
-          <ul id="dropboxDocsList"></ul>
-        </div>
-        <div id="gDrive-docs-list">
-          <h2>Google Drive</h2>
-          <ul id="gDriveDocsList"></ul>
+        <div id="welcome-dropbox-area">
+          <h2>Documents on Dropbox</h2>
+          <ul id="welcome-dropbox-list"></ul>
         </div>
       </article>
     </div>
   </section>
-
   <section role="dialog" id="add">
     <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
-      <h1>New document</h1>
+      <button data-click="navBack"><span class="icon" data-icon="back">back</span></button>
+      <menu type="toolbar">
+       <button data-click="createFromDialog" id="add-dialog-create-button">create</button>
+      </menu>
+      <h1>Create document</h1>
     </header>
     <div role="main" class="header-only">
       <div class="form">
         <br>
-        <img src="style/icons/FiretextExtic.png" id="extIconFile" height="200px" style="display:block; margin: 10px auto;"/>
+        <img alt="" src="style/icons/extensions/default.png" id="extIconFile" height="150px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
           <legend id="fileTypeLegend" class="action">
-            <select name="File type" id="createDialogFileType">
+            <select name="File type" id="createDialogFileType" data-change="extIcon">
               <option>.html</option>
               <option>.txt</option>
             </select>
-            <select id="dummy" style="visibility:hidden; width: 80%;"></select>
+            <select id="dummy" class="dummy"></select>
           </legend>
           <section id="fileNameInput">
             <p>
@@ -142,73 +176,91 @@
               <button type="reset" data-mouse-down="clearCreateForm">Clear</button>
             </p>
           </section>
+          <legend class="action" id="locationLegend">
+            <select name="Location" id="createDialogFileLocation"></select>
+          </legend>
         </fieldset>
-        <br>
-        <button class="button-block" data-click="createFromDialog">Create</button>
       </div>
     </div>
   </section>
-
+  <div class="background"></div>
   <section role="dialog" id="open">
     <header>
-      <button data-click="navBack"><span class="icon icon-close">Close</span></button>
+      <button data-click="navBack"><span class="icon" data-icon="close">Close</span></button>
       <h1>Open document</h1>
     </header>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
-        <ul id="openDialogDirList"></ul>
+        <div id="open-dialog-device-area">
+          <h2>Documents on Device</h2>
+          <ul id="open-dialog-device-list"></ul>
+        </div>
+        <div id="open-dialog-dropbox-area">
+          <h2>Documents on Dropbox</h2>
+          <ul id="open-dialog-dropbox-list"></ul>
+        </div>
       </article>
     </div>
   </section>
-
-  <section data-type="sidebar" id="sidebar_main" class="skin-organic" data-position="right">
+  <div class="background"></div>
+  <section data-type="sidebar" id="sidebar_main" data-position="right">
     <header>
       <menu type="toolbar">
-       <button data-click="sidebar" data-click-id="main"><span class="icon icon-back">back</span></button>
-    </menu>
+        <button data-click="sidebar" data-click-id="main"><span class="icon" data-icon="back">back</span></button>
+      </menu>
       <h1>Menu</h1>
     </header>
-    <nav>
-      <ul>
-        <li><a href="#" data-click="nav" data-click-location="add">New Document</a></li>
-        <li><a href="#" data-click="nav" data-click-location="open">Open Document</a></li>
-        <li><a href="#" data-click="saveFromEditor">Save Document</a></li>
-        <li><a href="#" data-click="nav" data-click-location="welcome">Close Document</a></li>
+    <div role="toolbar">
+     <ul>
+       <li><button data-icon="setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
       </ul>
-      <div role="toolbar">
-        <ul>
-          <li><button class="pack-icon-setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
-        </ul>
-        <ul>
-        </ul>
-      </div>
+      <ul>
+      </ul>
+    </div>
+    <nav>
+      <h2>Document actions</h2>
+      <ul>
+        <li><a href="#" data-click="nav" data-click-location="add">Create document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="open">Open document</a></li>
+        <li><a href="#" data-click="saveFromEditor">Save document</a></li>
+        <li><a href="#" data-click="closeFile">Close document</a></li>
+      </ul>
+      <h2>Help</h2>
+      <ul>
+        <li><a href="#" data-click="browser" data-click-location="about">About Firetext</a></li>
+        <li><a href="http://firetext.codexa.org/support" target="_blank">Firetext support</a></li>
+      </ul>
+      <h2>Other</h2>
+      <ul>
+        <li><a href="#" data-click="browser" data-click-location="rate">Rate Firetext</a></li>
+      </ul>
     </nav>
   </section>
-
   <section role="region" id="edit">
     <header>
-      <button data-click="nav" data-click-location="welcome" id="edit-sidebar-button"><span class="icon icon-close">close</span></button>
+      <button data-click="closeFile"><span class="icon" data-icon="close">close</span></button>
       <menu type="toolbar">
-        <button data-click="saveFromEditor"><span class="icon" style="background-image: url(style/icons/toolbar/save.png);">Save</span></button>
-        <button data-click="sidebar" data-click-id="main" data-click-hidden='edit-sidebar-button'><span class="icon icon-menu">Menu</span></button>
+        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon" data-icon="save">Save</span></button>
+        <button data-click="fullscreen"><span class="icon" data-icon="zen">Zen Mode</span></button>
+        <button data-click="sidebar" data-click-id="main"><span class="icon" data-icon="menu">Menu</span></button>
       </menu>
-      <h1><span id="currentFileName"></span><span id="currentFileType"></span></h1>
+      <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
     </header>
     <div role="main" class="editor-container">
       <ul role="tablist" data-items="2" id="editTabs">
         <li id="tab-design" role="tab">
           <a href="#" data-click="tab" data-click-name="design">Design</a>
           <div role="tabpanel">
-            <iframe class="editor" id="editor" sandbox="allow-same-origin"></iframe>
+            <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
-                <li><button class="sticky" id="bold" style="background-image: url(style/icons/toolbar/bold.png);" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-                <li><button class="sticky" id="italic" style="background-image: url(style/icons/toolbar/italic.png);" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-                <li><button class="sticky" id="underline" style="background-image: url(style/icons/toolbar/underline.png);" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-                <li><button style="background-image: url(style/icons/toolbar/more.png);" data-click="nav" data-click-location="format">Format</button></li>
+                <li><button class="sticky" data-icon="bold" id="bold" data-click="formatDoc" data-click-action="bold">Bold</button></li>
+                <li><button class="sticky" data-icon="italic" id="italic" data-click="formatDoc" data-click-action="italic">Italic</button></li>
+                <li><button class="sticky" data-icon="underline" id="underline" data-click="formatDoc" data-click-action="underline">Underline</button></li>
+                <li><button class="sticky" data-icon="strikethrough" id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough">Strikethrough</button></li>
+                <li><button data-icon="more" data-click="nav" data-click-location="format">Format</button></li>
               </ul>
               <ul>
-                <li><button class="pack-icon-share" data-click="nav" data-click-location="share">Share</button></li>
               </ul>
             </div>
           </div>
@@ -216,56 +268,132 @@
         <li id="tab-raw" role="tab">
           <a href="#" data-click="tab" data-click-name="raw">Raw</a>
           <div role="tabpanel">
-            <div id="rawEditor"></div>
+            <code class="prettyprint lang-html" id="rawEditor"></code>
           </div>
         </li>
+        <div class="tabToolbar">
+          <button data-click="sidebar" data-click-id="main" data-icon="menu">Menu</button>
+          <button data-click="closeFile" data-icon="close">Close</button>
+          <button data-click="fullscreen" data-icon="exit-zen">Exit Zen Mode</button>
+          <button data-click="saveFromEditor" id="zenSaveButton" data-icon="save">Save</button>
+        </div>
       </ul>
     </div>
     <section role="status" id="save-banner" hidden>
 	  <p>Successfully saved <strong><span id="save-banner-name"></span><span id="save-banner-type"></span></strong>!</p>
     </section>
   </section>
-
-  <form role="dialog" data-type="action" id="share">
-    <header>Share</header>
-    <menu>
-      <button>Google Drive</button>
-      <button>Dropbox</button>
-      <button>Email</button>
-      <button data-click="navBack">Cancel</button>
-    </menu>
-  </form>
-
-  <section role="dialog" id="format" class="skin-organic">
+  <section role="dialog" id="format">
     <header>
-      <button data-click="navBack"><span class="icon icon-close">close</span></button>
-      <h1>Format</h1>
+      <button data-click="navBack"><span class="icon" data-icon="close">close</span></button>
+      <h1>Tools</h1>
     </header>
     <div role="main" class="header-only">
-      <article data-type="list" style="padding: 20px;">
+      <article data-type="list">
+        <h2>Elements</h2>
         <ul>
-          <li class="listItem">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <button data-click="formatDoc" data-click-action="insertHorizontalRule" data-click-back="true">Insert</button>
+              </label>
+            </aside>
+            <aside data-icon="hr"></aside>
+            <p class="label">Horizontal Rule</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="image">Insert</button>
+              </label>
+            </aside>
+            <aside data-icon="image"></aside>
+            <p class="label">Image</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="hyperlink">Insert</button>
+              </label>
+            </aside>
+            <aside data-icon="link"></aside>
+            <p class="label">Link</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true">Insert</button>
+              </label>
+            </aside>
+            <aside data-icon="numbered-list"></aside>
+            <p class="label">Numbered list</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="table">Insert</button>
+              </label>
+            </aside>
+            <aside data-icon="table"></aside>
+            <p class="label">Table</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
+              </label>
+            </aside>
+            <aside data-icon="list"></aside>
+            <p class="label">List</p>
+          </li>
+        </ul>
+        <h2>Formatting</h2>
+        <ul>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <select data-change="justify" id="justify-select">
+                  <option selected>Left</option>
+                  <option>Right</option>
+                  <option>Center</option>
+                  <option>Justified</option>
+                </select>
+                <select class="dummy"></select>
+              </label>
+            </aside>
+            <p class="label">Alignment</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
                 <span></span>
               </label>
             </aside>
             <p class="label">Bold</p>
           </li>
-          <li class="listItem">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <input type="checkbox" data-type="switch" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
                 <span></span>
               </label>
             </aside>
             <p class="label">Italic</p>
           </li>
-          <li class="listItem">
+          <li class="noLink">
             <aside class="pack-end">
               <label>
-                <input type="checkbox" data-type="switch" checked>
+                <input type="checkbox" data-type="switch" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
+                <span></span>
+              </label>
+            </aside>
+            <p class="label">Strikethrough</p>
+          </li>
+          <li class="noLink">
+            <aside class="pack-end">
+              <label>
+                <input type="checkbox" data-type="switch" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
                 <span></span>
               </label>
             </aside>
@@ -275,118 +403,205 @@
       </article>
     </div>
   </section>
-
-  <section role="region" id="settings" class="skin-dark">
+  <div class="background"></div>
+  
+  <section role="dialog" id="hyperlink">
     <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
+      <button data-click="navBack"><span class="icon" data-icon="close">Cancel</span></button>
+      <menu type="toolbar">
+        <button data-click="hyperlink" data-click-dialog="true">Okay</button>
+      </menu>
+      <h1>Hyperlink</h1>
+    </header>
+    <div role="main">
+      <div class="form">
+        <br>
+        <fieldset class="button-block">
+          <section>
+            <p>
+              <input placeholder="http://mysite.com/" required type="url" id="web-address" data-enter="hyperlink" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="action" id="image-location">
+    <header>Image location</header>
+    <menu>
+      <button data-click="image" data-click-location="web">The web</button> 
+      <button data-click="image" data-click-location="internal">Internal storage (beta)</button>
+      <button data-click="navBack">Cancel</button>
+    </menu>
+  </section>
+  <div class="background"></div>
+  
+  <section role="dialog" id="image-web">
+      <header>
+      <button data-click="navBack"><span class="icon" data-icon="close">Cancel</span></button>
+      <menu type="toolbar">
+        <button data-click="image" data-click-location="web" data-click-dialog="true">Okay</button>
+      </menu>
+      <h1>Insert Image</h1>
+    </header>
+    <div role="main">
+      <div class="form">
+        <br>
+        <fieldset class="button-block">
+          <section>
+            <p>
+              <input placeholder="http://mysite.com/myimage.jpeg" required type="url" id="image-address" data-enter="image" data-enter-location="web" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="dialog" id="table">
+      <header>
+      <button data-click="navBack"><span class="icon" data-icon="close">Cancel</span></button>
+      <menu type="toolbar">
+        <button data-click="table" data-click-dialog="true">Okay</button>
+      </menu>
+      <h1>Insert Table</h1>
+    </header>
+    <div role="main">
+      <div class="form">
+        <br>
+        <fieldset class="button-block">
+          <section>
+            <p>
+              <input placeholder="# of rows" required type="text" id="table-rows" data-enter="table" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+          <section>
+            <p>
+              <input placeholder="# of columns" required type="text" id="table-columns" data-enter="table" data-enter-dialog="true" />
+              <button type="reset" data-mouse-down="clearForm">Clear</button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+  <div class="background"></div>
+  
+  <section role="action" id="save-file">
+    <header>Would you like to save your changes?</header>
+    <menu>
+      <button data-click="closeFile" data-click-action="yes">Yes</button> 
+      <button data-click="closeFile" data-click-action="no" class="danger">No</button>
+      <button data-click="navBack">Cancel</button>
+    </menu>
+  </section>
+  <div class="background"></div>
+
+  <section role="dialog" id="browser">
+    <button data-click="navBack" class="top-button">Back</button>
+    <iframe src="" role="main" id="browserFrame" remote></iframe>
+  </section>
+  <div class="background"></div>
+
+  <section role="region" id="settings">
+    <header>
+      <button data-click="navBack"><span class="icon" data-icon="back">back</span></button>
       <h1>Settings</h1>
     </header>
     <div role="main" class="header-only">
       <article data-type="list">
         <div>
-          <h2>General</h2>
+          <h2>Cloud</h2>
           <ul>
-            <li class="listItem noLink" id="autosave-enabled">
+            <li class="noLink">
               <aside class="pack-end">
                 <label>
-                  <input type="checkbox" data-type="switch" />
+                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
                   <span></span>
                 </label>
               </aside>
-              <p class="label">Enable autosave</p>
+              <aside class="icon" data-icon="dropbox"></aside>
+              <p>Use <b>Dropbox</b></p>
             </li>
-            <li class="listItem noLink" id="autoload-enabled">
+            <li class="noLink">
+              <p>More storage providers coming!</p>
+            </li>
+          </ul>
+          <h2>Editing</h2>
+          <ul>
+            <li class="noLink">
               <aside class="pack-end">
                 <label>
-                  <input type="checkbox" data-type="switch" />
+                  <input type="checkbox" data-type="switch" id="autosave-enabled-switch" />
                   <span></span>
                 </label>
               </aside>
-              <p class="label">Load last file on startup</p>
+              <p class="label">Enable <b>autosave</b></p>
+            </li>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="autoload-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label"><b>Load last file</b> on startup</p>
             </li>
           </ul>
-        </div>
-        <div>
-          <h2>Cloud Backup</h2>
+          <h2>Privacy</h2>
           <ul>
-            <li data-click="nav" data-click-location="settings-dropbox" class="listItem">
-              <a href="#">
-                <aside class="icon icon-dropbox"></aside>
-                <p>Dropbox</p>
-              </a>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <button data-click="clearRecents">Clear</button>
+                </label>
+              </aside>
+              <p class="label"><b>Clear recents</b> list</p>
             </li>
-            <li data-click="nav" data-click-location="settings-gDrive" class="listItem">
-              <a href="#">
-                  <aside class="icon icon-gDrive"></aside>
-                  <p>Google Drive</p>
-              </a>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="stats-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label"><b>Send error</b> stats</p>
+            </li>
+          </ul>
+          <h2>Visual</h2>
+          <ul>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="autozen-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label">Edit with <b>Zen Mode</b></p>
+            </li>
+            <li class="noLink">
+			  <aside class="pack-end">
+                <label>
+                  <select id="nightmode-select">
+                    <option selected>Auto</option>
+                    <option>Always On</option>
+                    <option>Always Off</option>
+                  </select>
+                  <select class="dummy"></select>
+                </label>
+			  </aside>
+			  <p class="label">Enable <b>Night Mode</b></p>
             </li>
           </ul>
         </div>
       </article>
     </div>
   </section>
-
-  <section role="region" id="settings-dropbox" class="skin-dark">
-    <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
-      <h1>Dropbox Settings</h1>
-    </header>
-    <div role="main" class="header-only">
-      <article data-type="list" style="padding: 20px;">
-        <ul>
-          <li class="listItem" id="dropbox-enabled">
-            <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" />
-                <span></span>
-              </label>
-            </aside>
-            <p class="label">Use Dropbox</p>
-          </li>
-          <br>
-          <div id="dropbox-settings-list">
-            <li class="listItem" id="dropbox-username">
-              <input type="text" placeholder="Username" />
-            </li>
-            <li class="listItem" id="dropbox-password">
-              <input type="password" placeholder="Password" />
-            </li>
-          </div>
-        </ul>
-      </article>
-    </div>
-  </section>
-  <section role="region" id="settings-gDrive" class="skin-dark">
-    <header>
-      <button data-click="navBack"><span class="icon icon-back">back</span></button>
-      <h1>Google Drive Settings</h1>
-    </header>
-    <div role="main" class="header-only">
-      <article data-type="list" style="padding: 20px;">
-        <ul>
-          <li class="listItem" id="gDrive-enabled">
-            <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" />
-                <span></span>
-              </label>
-            </aside>
-            <p class="label">Use Google drive</p>
-          </li>
-          <br>
-          <div id="gDrive-settings-list">
-            <li class="listItem" id="gDrive-username">
-              <input type="text" placeholder="Username" />
-            </li>
-            <li class="listItem" id="gDrive-password">
-              <input type="password" placeholder="Password" />
-            </li>
-          </div>
-        </ul>
-      </article>
-    </div>
-  </section>
-
 </body>
 </html>

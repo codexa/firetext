@@ -36,16 +36,6 @@ textarea:invalid {
   color: #b90000;
 }
 
-input[type="text"]::-moz-placeholder,
-input[type="password"]::-moz-placeholder,
-input[type="email"]::-moz-placeholder,
-input[type="tel"]::-moz-placeholder,
-input[type="search"]::-moz-placeholder,
-input[type="url"]::-moz-placeholder,
-textarea::-moz-placeholder {
-  color: #666;
-}
-
 form p,
 .form p {
   position: relative;
@@ -166,7 +156,6 @@ fieldset section textarea {
 
 fieldset section {
   display: block;
-  border-left: 0.1rem solid #ddd;
   border-radius: 0 0.3rem 0.3rem 0;
   overflow: hidden;
 }

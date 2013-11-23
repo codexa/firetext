@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="50px" height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
+<g id="BNackground" display="none">
+</g>
+<g id="Layer_1_1_">
+	<g>
+		<polygon fill="#DFDFDF" points="15.445,3.529 1.596,12.572 11.172,20.241 25.137,11.617 		"/>
+		<polygon fill="#DFDFDF" points="1.596,27.91 15.445,36.953 25.137,28.863 11.172,20.241 		"/>
+		<polygon fill="#DFDFDF" points="25.137,28.863 34.828,36.953 48.678,27.91 39.102,20.241 		"/>
+		<polygon fill="#DFDFDF" points="48.678,12.572 34.828,3.529 25.137,11.617 39.102,20.241 		"/>
+		<polygon fill="#DFDFDF" points="25.166,30.604 15.445,38.668 11.286,35.953 11.286,38.998 25.166,47.321 39.044,38.998 
+			39.044,35.953 34.885,38.668 		"/>
+	</g>
+</g>
+<g id="Layer_2">
+</g>
+</svg>

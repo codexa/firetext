@@ -9,7 +9,10 @@
   bottom: 0;
   left: 0;
   z-index: 100;
-  background: rgba(0,0,0, 0.85);
+  background-color: #1d1d1d;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 [role="toolbar"] ul {
@@ -32,11 +35,12 @@
   height: 4rem;
   border: none;
   font-size: 0;
-  background: transparent no-repeat 50% 50%;
+  background-color: transparent;
   padding: 0;
   border-radius: 0;
+  text-indent: -100%;
 }
 
 [role="toolbar"] button:active, [role="toolbar"] button.active {
-  background-color: #008aaa;
+  background-color: #444;
 }

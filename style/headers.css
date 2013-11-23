@@ -1,0 +1,265 @@
+section > header:first-child {
+  position: relative;
+  z-index: 10;
+  padding: 0;
+  height: 5rem;
+  color: #1f1f1f;
+  background: #eee;
+  background-size: auto 100%;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  border-bottom: .2rem solid #aeaeae;
+}
+
+section > header:first-child h1 {
+  font: 2.5rem/4.8rem "MozTT", Sans-serif;
+  text-align: left;
+  color: inherit;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  margin: 0 0 0 4rem;
+  height: 100%
+}
+
+section > header:first-child h1 em {
+  font: 400 1.5rem/1em "MozTT", Sans-serif;
+}
+
+section > header:first-child form {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  padding: 1rem 1rem 0 0.5rem ;
+  margin-left: 2.5rem;
+}
+
+section > header:first-child input[type="text"] {
+  width: 100%;
+  height: 3rem;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  padding: 0 0.8rem;
+  border: solid 0.1rem #9d4123;
+  border-top-color: #a6501e;
+  border-radius: 0.3rem;
+  background: #fff repeat-x left -0.1rem;
+  font: 1.5rem/3em "MozTT", Sans-serif;
+  box-shadow: none;
+}
+
+section > header:first-child form button[type="reset"] {
+  font-size: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  bottom: 0;
+  width: 3rem;
+  height: auto;
+  margin: 0;
+  display: none;
+  border: none;
+}
+
+section > header:first-child input[type="text"]:valid + button[type="reset"] {
+  display: block;
+}
+
+/* Generic set of actions in toolbar */
+section > header:first-child menu[type="toolbar"] {
+  height: 100%;
+  float: right;
+}
+
+section > header:first-child menu[type="toolbar"] a,
+section > header:first-child menu[type="toolbar"] button {
+  height: 5rem;
+  min-width: 5rem;
+  width: auto;
+  margin-bottom: 0;
+  border-radius: 0;
+  line-height: 5rem;
+  float: left;
+  background: none;
+  padding: 0 1.75rem;
+  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  text-align: center;
+  text-shadow: none;
+  position: relative;
+  z-index: 5;
+}
+
+section > header:first-child menu[type="toolbar"] a:last-child,
+section > header:first-child menu[type="toolbar"] button:last-child {
+  margin-left: -0.2rem;
+  z-index: 1;
+}
+
+section > header:first-child menu[type="toolbar"] {
+  padding: 0;
+  margin: 0;
+}
+
+section > header:first-child a,
+section > header:first-child button {
+  border: none;
+  background: none;
+  padding: 0;
+  overflow: hidden;
+  font: 400 1.5rem/1.1em "MozTT", Sans-serif;
+  color: inherit;
+  border-radius: 0;
+  text-decoration: none;
+}
+
+
+/* Pressed state */
+section > header:first-child a::-moz-focus-inner,
+section > header:first-child button::-moz-focus-inner,
+section > header:first-child a:active,
+section > header:first-child button:active,
+section > header:first-child a:focus,
+section > header:first-child button:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
+section > header:first-child button:not(:disabled):active .icon:after,
+section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
+section > header:first-child menu[type="toolbar"] button:not(:disabled):active  {
+  background: #dfdfdf !important;
+  transition: background 0.2s ease;
+    -moz-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
+}
+
+/* Disabled state */
+section > header:first-child menu[type="toolbar"] a[aria-disabled="true"],
+section > header:first-child menu[type="toolbar"] button[disabled]  {
+  opacity: 0.5;
+}
+
+section > header:first-child a:first-letter,
+section > header:first-child button:first-letter {
+  text-transform: uppercase;
+}
+
+/* Icon definitions */
+section > header:first-child .icon {
+  display: inline-block;
+  vertical-align: top;
+  float: none;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 -1rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  font-size: 0;
+  overflow: hidden;
+  position: relative;
+  height: 4.9rem;
+  text-indent: -100%;
+}
+
+/* Navigation links (back, cancel, etc) */
+section > header:first-child > button,
+section > header:first-child > a {
+  position: absolute;
+  left: 0;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+}
+
+section > header:first-child > button::-moz-focus-inner { 
+  border: 0;
+  padding: 0;
+}
+
+section > header:first-child > button .icon,
+section > header:first-child > a .icon {
+  display: block;
+  overflow: visible;
+  font-size: 0;
+  position: static;
+  height: 4.9rem;
+  margin: 0;
+  width: 3rem;
+}
+
+section > header:first-child > button .icon:after,
+section > header:first-child > a .icon:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  width: 3rem;
+  height: 4.9rem;
+  background: none;
+}
+
+section > header > a .icon.icon-menu,
+section > header > button .icon.icon-menu {
+  background-position: -1.1rem center;
+}
+
+/* ----------------------------------
+ * HEADERS: subheader
+ * ---------------------------------- */
+
+section > header {
+  border-bottom: solid 0.1rem #e6e6e6;
+  z-index: 0;
+  padding: 0.4rem 0;
+  height: auto;
+  color: #424242;
+}
+
+section > header:after {
+  display: none;
+}
+
+section > header h2 {
+  font-family: "MozTT", Sans-serif;
+  font-weight: 400;
+  margin: 0 3rem;
+  font-size: 1.5rem;
+  line-height: 1.8rem;
+}
+
+
+/* ----------------------------------
+ * HEADERS: right-to-left tweaks
+ * ---------------------------------- */
+
+html[dir="rtl"] section > header:first-child h1 {
+  text-align: right;
+  margin: 0 3rem 0 0;
+}
+
+html[dir="rtl"] section > header:first-child button,
+html[dir="rtl"] section > header:first-child a {
+  left: inherit;
+  right: 0;
+}
+
+html[dir="rtl"] section > header:first-child > button .icon,
+html[dir="rtl"] section > header:first-child > a .icon {
+  margin-left: 0;
+  margin-right: -2rem;
+}
+
+html[dir="rtl"] section > header:first-child > button .icon:after,
+html[dir="rtl"] section > header:first-child > a .icon:after {
+  left: inherit;
+  right: 0;
+}

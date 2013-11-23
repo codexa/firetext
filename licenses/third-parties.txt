@@ -1,0 +1,21 @@
+			External Software Licenses
+Firetext v0.3 was is Copyright © Codexa 2013, and is licensed 
+under the GPL v3 license.  That license can be found in "gpl.txt."
+
+Copyright notices and links to licenses for third party libraries or any other 
+third party code can be found in this file.
+
+
+CryptoJS v3.1.2
+=====================================================
+code.google.com/p/crypto-js
+(c) 2009-2013 by Jeff Mott. All rights reserved.
+Full license: code.google.com/p/crypto-js/wiki/License
+
+
+FileSaver.js
+=====================================================
+A saveAs() FileSaver implementation.
+By Eli Grey, http://eligrey.com
+License: X11/MIT. See https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+@source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */

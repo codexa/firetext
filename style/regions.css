@@ -1,3 +1,8 @@
+/*
+* Regions
+* Copyright (C) Codexa Organization 2013.
+*/
+
 section[role="region"], section[role="dialog"] {
   width: 100%;
   height: 100%;  
@@ -8,59 +13,100 @@ section[role="region"], section[role="dialog"] {
   left: 0px;
   right: 0px;  
   background-color: #eee;  
-  transition: all .5s ease;
+  transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -o-transition: all .4s ease;
 }
 
 section[role="region"] {
   visibility: hidden;
   opacity: .99;  
-  transform: translateX(-100%); 
+  transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    -o-transform: translateX(-100%); 
+    -ms-transform: translateX(-100%); 
 }
 
-section[role="region"].current, [role="region"].parent, [role="dialog"].parent {
+section[role="region"].current,
+[role="region"].parent,
+[role="dialog"].parent {
   visibility: visible;
   opacity: 1;
   z-index: 100;  
   transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
 }
 
 section[role="region"].current ~ section[role="region"] {  
   opacity: .99;  
   transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    -o-transform: translateX(100%);
+    -ms-transform: translateX(100%);
 }
 
 section[role="dialog"] {
   visibility: hidden;
-  opacity: .99;  
+  opacity: .99;
   transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+}
+
+section[role="dialog"] + .background {
+  display: none;
 }
 
 section[role="dialog"].current {
+  z-index: 101;
   visibility: visible;
-  opacity: 1;  
-  transform: none; 
+  opacity: 1;
+  transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
 }
 
 /* Handle sidebars */
 [data-type="sidebar"] {
   opacity: 0;
-  transition: 0s opacity .5s;
+  visibility: collapse;
+  transition: opacity .4s, .4s visibility 0s;
+    -moz-transition: opacity .4s, .4s visibility 0s;
+    -webkit-transition: opacity .4s, .4s visibility 0s;
+    -o-transition: opacity .4s, .4s visibility 0s;
 }
 
 [data-type="sidebar"].active {
   opacity: 1;
-  transition: 0s opacity;
+  visibility: visible;
+  transition: opacity .4s, 0s visibility 0s;
+    -moz-transition: opacity .4s, 0s visibility 0s;
+    -webkit-transition: opacity .4s, 0s visibility 0s;
+    -o-transition: opacity .4s, 0s visibility 0s;
 }
 
 [data-state="drawer"].current {
-  transform: translateX(80%) !important;  
+  transform: translateX(80%) !important;
+    -moz-transform: translateX(80%) !important;
+    -webkit-transform: translateX(80%) !important;
+    -o-transform: translateX(80%) !important;
+    -ms-transform: translateX(80%) !important;
 }
 
 [data-state="drawer"][data-position="right"].current {
   transform: translateX(-80%) !important;
-}
-
-.sidebar-faded-button {
-  opacity: 0 !important;
-  transition: opacity .5s;
+    -moz-transform: translateX(-80%) !important;
+    -webkit-transform: translateX(-80%) !important;
+    -o-transform: translateX(-80%) !important;
+    -ms-transform: translateX(-80%) !important;
 }

@@ -21,7 +21,7 @@
 
 /* Title divisors */
 [data-type="list"] header {
-  border-bottom: 0.1rem solid #ff4E00;
+  border-bottom: 0.1rem solid #aeaeae;
   padding: 0.5rem 1rem;
   margin: 0;
   font-size: 1.6rem;
@@ -35,10 +35,13 @@
 [data-type="list"] li {
   width: 100%;
   height: 6rem;
+  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  transition: -webkit-transform 0.3s ease, padding 0.3s ease;
   transition: transform 0.3s ease, padding 0.3s ease;
-  border-bottom: solid 0.1rem #dbd9d9;
-  color: #000;
+  border-bottom: solid 0.1rem #aeaeae;
+  color: #2c2c2c;
   margin: 0;
   display: block;
   position: relative;
@@ -62,7 +65,7 @@
 
 [data-type="list"] li > a:after {
   content: "";
-  background-color: #b1f1ff;
+  background-color: #dfdfdf;
   opacity: 0;
   pointer-events: none;
   position: absolute;
@@ -116,10 +119,10 @@
   text-align: right;
 }
 
-[data-type="list"] aside.icon {
+[data-type="list"] aside[data-icon] {
   width: 3rem;
   height: 6rem;
-  background: #fff no-repeat left center;
+  background-color: transparent;
   font: 0/0 a;
   display: block;
   overflow: hidden;

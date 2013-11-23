@@ -36,8 +36,8 @@ button:active,
 a[role="button"]:active,
 button.recommend:active,
 a.recommend[role="button"]:active  {
-  border-color: #008aaa;
-  background: #008aaa;
+  border-color: #eee;
+  background-color: #eee;
   color: #333;
 }
 
@@ -122,7 +122,7 @@ li a[role="button"]:after {
   left: 0;
   right: 0;
   height: 0.2rem;
-  background: url( buttons/images/ui/shadow.png) repeat-x left bottom;
+  background: url(buttons/images/ui/shadow.png) repeat-x left bottom;
 }
 
 /* Press */
@@ -218,8 +218,8 @@ ol.compact {
 /* Pressed */
 .compact > li button:active,
 .compact > li a[role="button"]:active {
-  border-color: #008aaa;
-  background: #008aaa;
+  border-color: #eee;
+  background: #eee;
 }
 
 /* Disabled */
