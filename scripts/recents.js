@@ -24,10 +24,9 @@ firetext.recents.init = function () {
 firetext.recents.get = function () {
   if (localStorage["firetext.recents"] != undefined) {
     return JSON.parse(localStorage["firetext.recents"]);
-  }
-  else {
+  } else {
     init();
-    return get();
+    return firetext.recents.get();
   }
 };
 
@@ -41,7 +40,7 @@ firetext.recents.reset = function () {
 // Add to recent docs
 firetext.recents.add = function (file, location) {
   if (localStorage["firetext.recents"] != undefined) {
-    var docsTMP = this.get();
+    var docsTMP = firetext.recents.get();
     
     // Push mimetype and location
     file.push('');
@@ -70,15 +69,15 @@ firetext.recents.add = function (file, location) {
     // Save array
     localStorage["firetext.recents"] = JSON.stringify(docsTMP);
   } else {
-    this.init();
-    this.add(file, location);
+    firetext.recents.init();
+    firetext.recents.add(file, location);
   }
 };
 
 // Remove from recent docs
 firetext.recents.remove = function (file, location, merged) {
   if (localStorage["firetext.recents"] != undefined) {
-    var docsTMP = this.get();
+    var docsTMP = firetext.recents.get();
   
     if (!merged) {
       merged = location;

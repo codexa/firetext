@@ -216,7 +216,7 @@ function updateAddDialog() {
 ------------------------*/
 function bugsenseInit() {
   if (firetext.settings.get('stats.enabled') != 'false') {
-    bugsense = new Bugsense({ appversion: '0.3', apiKey: 'c2497751' });
+    bugsense = new Bugsense({ appversion: '0.3', apiKey: '' });
   } else {
     bugsense = null;
   }

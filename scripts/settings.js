@@ -132,6 +132,7 @@ firetext.settings.init = function () {
   }
   statsEnabled.onchange = function () {
     firetext.settings.save('stats.enabled', this.checked);
+    bugsenseInit();
   }
 };
 

@@ -131,13 +131,7 @@ firetext.io.enumerate = function (directory, callback) {
       }
     
       cursor.onerror = function() {
-        if (cursor.error.name == 'TypeMismatchError') {
-          firetext.io.save(directory, 'firetext','.temp','A temp file!  You should not be seeing this.  If you see it, please report it to <a href="mailto:support@codexa.org" target="_blank">us</a>.', false, function() {
-            firetext.io.delete((directory+'firetext.temp'));
-          });
-          updateFileLists();
-          return;
-        } else if (cursor.error.name == 'SecurityError') {
+        if (cursor.error.name == 'SecurityError') {
           alert('Please allow Firetext to access your SD card.');
         } else {
           alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
@@ -237,7 +231,7 @@ function createFromDialog() {
     alert('Please enter a name for the new file.');
     return;
   } else if (!isValidFileName(filename)) {
-    alert('Filename contains special characters please revise.');
+    alert('Filename contains special characters!  Please revise.');
     return;
   }
   
@@ -249,6 +243,10 @@ function createFromDialog() {
   
   // Save the file
   if (!location | location == '' | location == 'internal') {
+    // Make directory accurate
+    directory = ('/sdcard/'+directory);
+  
+    // Get mime
     var type = "text";
     switch (filetype) {
       case ".html":
@@ -445,7 +443,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
       
       // Start toolbar update interval      
       toolbarInterval = window.setInterval(updateToolbar, 100);
-  
+      
       // Add file to recent docs
       firetext.recents.add([directory, filename, filetype], location);
   
