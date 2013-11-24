@@ -14,7 +14,7 @@
 .night section[role="dialog"],
 .night form[role="region"],
 .night form[role="dialog"] {
-  background: #161616;
+  background: #111;
 }
 
 
@@ -142,24 +142,24 @@
 /* Tabs */
 .night [role="tablist"] {
   color: #0a0a0a;
-  background: #222;
+  background-color: #222;
 }
 
 .night [role="tablist"] > [role="tab"] > a {
-  background: #222;
+  background-color: #222;
 }
 
 .night [role="tablist"] > [role="tab"] > a:active {
-  background: #222;
+  background-color: #2c2c2c;
 }
 
 .night [role="tablist"] > [role="tab"].selected > a {
-  background-color: #2c2c2c;
+  background-color: #111;
   color: #dfdfdf;
 }
 
 .night [role="tablist"] [role="tabpanel"] {
-  background: #111;
+  background-color: #111;
   color: #0a0a0a;
 }
 

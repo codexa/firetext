@@ -1119,11 +1119,13 @@ function processActions(eventAttribute, target) {
         // Make sure # is above 0
         if ((rows > 0) && (cols > 0)) {
           // Generate HTML
-          var output = '<table style="border: 1px solid #000; width: 100%;">';
+          var output = '<style>table.default { border: 1px solid #000; width: 100%; }';
+          output += ' table.default td { border: 1px solid #000; }</style>';
+          output += '<table class="default">';
           for (var r = 0; r < rows; r++) {
             output += '<tr>';
             for (var c = 0; c < cols; c++) {
-              output += '<td style="border: 1px solid #000;"></td>';
+              output += '<td></td>';
             }
             output += '</tr>';
           }
