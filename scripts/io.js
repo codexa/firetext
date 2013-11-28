@@ -24,7 +24,7 @@ firetext.io.init = function (api, callback) {
     deviceAPI = 'deviceStorage';
     storage = navigator.getDeviceStorage('sdcard');
     if (!storage) {
-      init('file', callback);
+      firetext.io.init('file', callback);
       return;
     }
     
@@ -37,7 +37,7 @@ firetext.io.init = function (api, callback) {
         deviceAPI = null;
         storage = null;
         alert("The SDCard on your device is shared, and thus not available.  Try disabling USB Mass Storage in your settings.");
-        init('file', callback);
+        firetext.io.init('file', callback);
         return;
       } else {
         storage.onchange = function (change) {
@@ -51,7 +51,7 @@ firetext.io.init = function (api, callback) {
       deviceAPI = null;
       storage = null;
       alert("Unable to get the space used by the SDCard: " + this.error);
-      init('file', callback);
+      firetext.io.init('file', callback);
       return;
     };
   } else {
