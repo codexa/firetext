@@ -46,6 +46,10 @@ html, body {
   margin: 1rem;
 }
 
+[role="toolbar"] button.ftanylitics {
+  background-color: #444;
+}
+
 
 /* action_menu.css */
 form[role=dialog] {

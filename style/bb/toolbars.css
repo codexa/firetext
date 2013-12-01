@@ -21,17 +21,12 @@
 
 [role="toolbar"] ul:last-child {
   float: right;
+  text-align: right;
 }
 
 [role="toolbar"] li {
   float: left;
-  width: 5rem;
-}
-
-[role="toolbar"] li:last-child {
-  float: right;
-  width: 5rem;
-  background-color: #eee;
+  width: 5.3rem;
 }
 
 [role="toolbar"] button {
@@ -45,6 +40,7 @@
   text-indent: -100%;
 }
 
-[role="toolbar"] button:active, [role="toolbar"] button.active {
+[role="toolbar"] button:active, 
+[role="toolbar"] button.active {
   background-color: #444;
 }
