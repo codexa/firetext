@@ -83,6 +83,10 @@
   background-image: url(icons/editor/format/underline.svg);
 }
 
+[data-icon="analytics"] {
+  background-image: url(icons/editor/fireanalytics.svg);
+
+}
 
 /* Misc */
 [data-icon="back"] {

@@ -15,6 +15,7 @@
 var firetext = {};
 firetext.user = {};
 firetext.parsers = {};
+firetext.analytics = {};
 
 // Misc
 firetext.initialized = new CustomEvent('firetext.initialized');
