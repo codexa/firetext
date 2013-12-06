@@ -139,6 +139,10 @@ firetext.init = function () {
   
   // Initialize IO
   firetext.io.init(null, function() {
+
+    // Update Doc Lists
+    updateDocLists();
+    
     // Initialize sharing
     cloud.init();
     
@@ -174,9 +178,6 @@ firetext.init = function () {
     window.dispatchEvent(firetext.initialized);
     firetext.isInitialized = true;
   });
-  
-  // Update Doc Lists
-  updateDocLists();
 
   // Initialize Night Mode
   night();

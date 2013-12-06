@@ -243,8 +243,6 @@ function createFromDialog() {
   
   // Save the file
   if (!location | location == '' | location == 'internal') {
-    // Make directory accurate
-    directory = ('/sdcard/'+directory);
   
     // Get mime
     var type = "text";
@@ -270,6 +268,9 @@ function createFromDialog() {
       contentBlob = new Blob([' '], { "type" : type });
     }
     if (deviceAPI == 'deviceStorage') {
+      // Make directory accurate
+      directory = ('/sdcard/'+directory);
+
       var filePath = (directory + filename + filetype);
       var req = storage.addNamed(contentBlob, filePath);
       req.onerror = function () {
