@@ -38,6 +38,7 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+
 .icon-remove:before {
 	content: "\e600";
 }
@@ -104,11 +105,9 @@
 .icon-google-drive:before {
 	content: "\e616";
 }
-
 .icon-dropbox:before {
 	content: "\e617";
 }
-
 .icon-cloud:before {
 	content: "\e618";
 }
@@ -158,20 +157,23 @@
 	content: "\e62e";
 }
 .icon-strikethrough:before {
-	content: "\e62f";
+  content: "\e62f";
 }
 .icon-image:before {
-	content: "\e630";
+  content: "\e630";
 }
 .icon-cloud-upload:before {
-	content: "\e633";
+  content: "\e633";
 }
 .icon-paragraph-right:before {
-	content: "\e635";
+  content: "\e635";
 }
 .icon-arrow:before {
-	content: "\e61e";
+  content: "\e61e";
 }
 .icon-setting:before {
-	content: "\e60a";
+  content: "\e60a";
+}
+.icon-save:before {
+  content: "\e619";
 }
