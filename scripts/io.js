@@ -182,17 +182,32 @@ firetext.io.enumerate = function (directory, callback) {
       };
     } else if (deviceAPI == 'file') {
       storage.root.getDirectory(directory, {}, function(dirEntry) {
-        var dirReader = dirEntry.createReader()
+        var dirReader = dirEntry.createReader();
+        var SUBDIRS = [];
         var readDirContents = function(results) {
           if(!results.length) {
-            callback(FILES);
+            if (SUBDIRS.length) {
+              for (var i = 0; i < SUBDIRS.length; i++) {
+                (function(last) {
+                  firetext.io.enumerate(SUBDIRS[i].fullPath, function(subFiles) {
+                    FILES = FILES.concat(subFiles);
+                    if(last) {
+                      callback(FILES);
+                    }
+                  });
+                })(i === SUBDIRS.length-1);
+              }
+            } else {
+              callback(FILES);
+            }
             return;
           } else {
             var fileparts;
             var filetype;
             var filename;
             for(var i = 0; i < results.length; i++) {
-              if (!results[i].isFile) {
+              if (results[i].isDirectory) {
+                SUBDIRS.push(results[i]);
                 continue;
               }
               fileparts = results[i].name.split(".");
