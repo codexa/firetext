@@ -99,6 +99,7 @@
 
 .night [data-type="list"] li {
   border-color: #2c2c2c;
+  color: #a0a0a0;
 }
 
 .night [data-type="list"] li p:first-of-type {
@@ -170,9 +171,13 @@
   color: #a0a0a0;
 }
 
-.night #rawEditor {
-  background: #111;
-  color: #0a0a0a;
+
+/* Toolbar */
+
+.night .tabToolbar button,
+.night .tabToolbar .button,
+.night .tabToolbar input[type="button"] {
+  color: #dfdfdf;
 }
 
 

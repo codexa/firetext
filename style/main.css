@@ -22,20 +22,16 @@ html, body {
   src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 }
 
-.firetext {
-  text-indent: -9999px;
-  background-image: url(icons/app/firetext.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: auto 40%;
-  vertical-align: middle;
-}
-
 [role="main"].header-only {
   height: calc(100% - 5rem);
     height: -moz-calc(100% - 5rem);
     height: -webkit-calc(100% - 5rem);
   overflow: scroll;
+}
+
+.firetext {
+  text-align: center !important;
+  padding-top: 0 !important;
 }
 
 .redAlert {
@@ -162,6 +158,11 @@ form[role=dialog].current {
   top: -.4rem;
 }
 
+[data-type="list"] li.fileListItem .icon-arrow {
+  font-size: 2rem;
+  color: #aaa;
+}
+
 
 /* Buttons */
 .button-block {
@@ -263,7 +264,7 @@ aside select.dummy {
   float: right;
   width: 4rem;
   height: 100%;
-  background-color: transparent;
+  background: transparent;
   border: none;
   font-size: 0;
   border-radius: 0;
@@ -278,6 +279,16 @@ aside select.dummy {
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
     -o-transition: background 0.2s ease;
+}
+
+.tabToolbar button[class*=" icon-"],
+.tabToolbar button[class^="icon-"],
+.tabToolbar .button[class*=" icon-"],
+.tabToolbar .button[class^="icon-"],
+.tabToolbar input[type="button"][class*=" icon-"],
+.tabToolbar input[type="button"][class^="icon-"] {
+  font-size: 2.5rem;
+  text-shadow: none;
 }
 
 

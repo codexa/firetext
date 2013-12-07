@@ -48,3 +48,14 @@
 [role="toolbar"] button:active, [role="toolbar"] button.active {
   background-color: #444;
 }
+
+[role="toolbar"] button[class^="icon-"], 
+[role="toolbar"] [class*=" icon-"] {
+  font-size: 3rem;
+  color: #fff;
+  text-shadow: none;
+  padding: 0 1rem;
+    -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: right;
+}

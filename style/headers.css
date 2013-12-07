@@ -118,6 +118,16 @@ section > header:first-child button {
   text-decoration: none;
 }
 
+section > header:first-child > button:first-child .icon,
+section > header:first-child > a:first-child .icon {
+  padding-right: .7rem;
+}
+
+section > header:first-child > button:first-child .icon-menu,
+section > header:first-child > a:first-child .icon-menu {
+  padding-right: 1.3rem;
+}
+
 
 /* Pressed state */
 section > header:first-child a::-moz-focus-inner,
@@ -167,6 +177,25 @@ section > header:first-child .icon {
   position: relative;
   height: 4.9rem;
   text-indent: -100%;
+}
+
+section > header:first-child .icon.icon-close {
+  font-size: 1.5rem !important;
+  padding-top: 1.6rem;
+}
+
+section > header:first-child [class^="icon-"], 
+section > header:first-child [class*=" icon-"] {
+  font-size: 2.5rem !important;
+  text-align: right;
+  padding-top: 1.2rem;
+  padding-right: .2rem;
+    -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+section > header:first-child .icon-back {
+  padding-right: .8rem;
 }
 
 /* Navigation links (back, cancel, etc) */

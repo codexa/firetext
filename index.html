@@ -83,13 +83,13 @@
   <section data-type="sidebar" id="sidebar_welcome">
     <header>
       <menu type="toolbar">
-        <button data-click="sidebar" data-click-id="welcome"><span class="icon" data-icon="back">back</span></button>
+        <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-back"></span></button>
       </menu>
       <h1>Menu</h1>
     </header>
     <div role="toolbar">
       <ul>
-       <li><button data-icon="setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
+       <li><button href="#" data-click="nav" data-click-location="settings" class="icon-setting"></button></li>
       </ul>
       <ul>
       </ul>
@@ -111,13 +111,14 @@
       </ul>
     </nav>
   </section>
+  
   <section role="region" id="welcome">
     <header>
-      <button data-click="sidebar" data-click-id="welcome"><span class="icon" data-icon="menu">Menu</span></button>
+      <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-menu"></span></button>
       <menu type="toolbar">
-        <button data-click="nav" data-click-location="add"><span class="icon" data-icon="compose">New</span></button>
+        <button data-click="nav" data-click-location="add"><span class="icon icon-create"></span></button>
       </menu>
-      <h1 class="firetext">Firetext</h1>
+      <h1 class="firetext icon-">firetext</h1>
     </header>
     <div role="edit" data-type="edit" id="welcome-edit-mode">
       <section>
@@ -150,11 +151,12 @@
       </article>
     </div>
   </section>
+  
   <section role="dialog" id="add">
     <header>
-      <button data-click="navBack"><span class="icon" data-icon="back">back</span></button>
+      <button data-click="navBack"><span class="icon icon-back"></span></button>
       <menu type="toolbar">
-       <button data-click="createFromDialog" id="add-dialog-create-button">create</button>
+        <button data-click="createFromDialog" id="add-dialog-create-button">create</button>
       </menu>
       <h1>Create document</h1>
     </header>
@@ -184,9 +186,10 @@
     </div>
   </section>
   <div class="background"></div>
+  
   <section role="dialog" id="open">
     <header>
-      <button data-click="navBack"><span class="icon" data-icon="close">Close</span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <h1>Open document</h1>
     </header>
     <div role="main" class="header-only">
@@ -203,16 +206,17 @@
     </div>
   </section>
   <div class="background"></div>
+  
   <section data-type="sidebar" id="sidebar_main" data-position="right">
     <header>
       <menu type="toolbar">
-        <button data-click="sidebar" data-click-id="main"><span class="icon" data-icon="back">back</span></button>
+        <button data-click="sidebar" data-click-id="main"><span class="icon icon-back"></span></button>
       </menu>
       <h1>Menu</h1>
     </header>
     <div role="toolbar">
      <ul>
-       <li><button data-icon="setting" href="#" data-click="nav" data-click-location="settings">Settings</button></li>
+       <li><button class="icon-setting" href="#" data-click="nav" data-click-location="settings"></button></li>
       </ul>
       <ul>
       </ul>
@@ -236,13 +240,14 @@
       </ul>
     </nav>
   </section>
+  
   <section role="region" id="edit">
     <header>
-      <button data-click="closeFile"><span class="icon" data-icon="close">close</span></button>
+      <button data-click="closeFile"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
-        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon" data-icon="save">Save</span></button>
-        <button data-click="fullscreen"><span class="icon" data-icon="zen">Zen Mode</span></button>
-        <button data-click="sidebar" data-click-id="main"><span class="icon" data-icon="menu">Menu</span></button>
+        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon icon-save"></span></button>
+        <button data-click="fullscreen"><span class="icon icon-fs"></span></button>
+        <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu"></span></button>
       </menu>
       <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
     </header>
@@ -254,12 +259,11 @@
             <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
-                <li><button class="sticky" data-icon="bold" id="bold" data-click="formatDoc" data-click-action="bold">Bold</button></li>
-                <li><button class="sticky" data-icon="italic" id="italic" data-click="formatDoc" data-click-action="italic">Italic</button></li>
-                <li><button class="sticky" data-icon="underline" id="underline" data-click="formatDoc" data-click-action="underline">Underline</button></li>
-                <li><button class="sticky" data-icon="strikethrough" id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough">Strikethrough</button></li>
-                <li><button data-icon="more" data-click="nav" data-click-location="format">Format</button></li>
-                <li><button class="sticky" data-icon="analytics" data-click="ftanalytics" data-click-location="ftanalytics">FireAnalytics</button></li>
+                <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>
+                <li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic"></button></li>
+                <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline"></button></li>
+                <li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough"></button></li>
+                <li><button class="icon-more" data-click="nav" data-click-location="format"></button></li>
               </ul>
               <ul>
               </ul>
@@ -273,10 +277,10 @@
           </div>
         </li>
         <div class="tabToolbar">
-          <button data-click="sidebar" data-click-id="main" data-icon="menu">Menu</button>
-          <button data-click="closeFile" data-icon="close">Close</button>
-          <button data-click="fullscreen" data-icon="exit-zen">Exit Zen Mode</button>
-          <button data-click="saveFromEditor" id="zenSaveButton" data-icon="save">Save</button>
+          <button data-click="sidebar" data-click-id="main" class="icon-menu"></button>
+          <button data-click="closeFile" class="icon-close"></button>
+          <button data-click="fullscreen" class="icon-efs"></button>
+          <button data-click="saveFromEditor" id="zenSaveButton" class="icon-save"></button>
         </div>
       </ul>
     </div>
@@ -284,9 +288,10 @@
 	  <p>Successfully saved <strong><span id="save-banner-name"></span><span id="save-banner-type"></span></strong>!</p>
     </section>
   </section>
+  
   <section role="dialog" id="format">
     <header>
-      <button data-click="navBack"><span class="icon" data-icon="close">close</span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <h1>Tools</h1>
     </header>
     <div role="main" class="header-only">
@@ -299,7 +304,7 @@
                 <button data-click="formatDoc" data-click-action="insertHorizontalRule" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside data-icon="hr"></aside>
+            <aside class="icon-hr"></aside>
             <p class="label">Horizontal Rule</p>
           </li>
           <li class="noLink">
@@ -308,7 +313,7 @@
                 <button data-click="image">Insert</button>
               </label>
             </aside>
-            <aside data-icon="image"></aside>
+            <aside class="icon-image"></aside>
             <p class="label">Image</p>
           </li>
           <li class="noLink">
@@ -317,7 +322,7 @@
                 <button data-click="hyperlink">Insert</button>
               </label>
             </aside>
-            <aside data-icon="link"></aside>
+            <aside class="icon-link"></aside>
             <p class="label">Link</p>
           </li>
           <li class="noLink">
@@ -326,7 +331,7 @@
                 <button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside data-icon="numbered-list"></aside>
+            <aside class="icon-numbered-list"></aside>
             <p class="label">Numbered list</p>
           </li>
           <li class="noLink">
@@ -335,7 +340,7 @@
                 <button data-click="table">Insert</button>
               </label>
             </aside>
-            <aside data-icon="table"></aside>
+            <aside class="icon-table"></aside>
             <p class="label">Table</p>
           </li>
           <li class="noLink">
@@ -344,7 +349,7 @@
                 <button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true">Insert</button>
               </label>
             </aside>
-            <aside data-icon="list"></aside>
+            <aside class="icon-list"></aside>
             <p class="label">List</p>
           </li>
         </ul>
@@ -408,7 +413,7 @@
   
   <section role="dialog" id="hyperlink">
     <header>
-      <button data-click="navBack"><span class="icon" data-icon="close">Cancel</span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
         <button data-click="hyperlink" data-click-dialog="true">Okay</button>
       </menu>
@@ -442,7 +447,7 @@
   
   <section role="dialog" id="image-web">
       <header>
-      <button data-click="navBack"><span class="icon" data-icon="close">Cancel</span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
         <button data-click="image" data-click-location="web" data-click-dialog="true">Okay</button>
       </menu>
@@ -466,7 +471,7 @@
   
   <section role="dialog" id="table">
       <header>
-      <button data-click="navBack"><span class="icon" data-icon="close">Cancel</span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
         <button data-click="table" data-click-dialog="true">Okay</button>
       </menu>
@@ -512,7 +517,7 @@
 
   <section role="region" id="settings">
     <header>
-      <button data-click="navBack"><span class="icon" data-icon="back">back</span></button>
+      <button data-click="navBack"><span class="icon icon-back"></span></button>
       <h1>Settings</h1>
     </header>
     <div role="main" class="header-only">
@@ -527,8 +532,11 @@
                   <span></span>
                 </label>
               </aside>
-              <aside class="icon" data-icon="dropbox"></aside>
+              <aside class="icon-dropbox"></aside>
               <p>Use <b>Dropbox</b></p>
+            </li>
+            <li class="noLink">
+              <p>More storage providers coming!</p>
             </li>
           </ul>
           <h2>Editing</h2>
