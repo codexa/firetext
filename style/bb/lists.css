@@ -105,6 +105,14 @@
   height: 100%;
   position: relative;
   z-index: 2;
+  font-size: 3rem;
+}
+
+[data-type="list"] aside[class^="icon-"], 
+[data-type="list"] aside[class*=" icon-"] {
+  padding: 1.4rem .5rem;
+    -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 [data-type="list"] li > a aside,

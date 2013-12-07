@@ -474,7 +474,7 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
     output += '<div class="fileItemDescription">'+description+'</div>';
   }
   output += '<div class="fileItemInfo">';
-  output += '<aside data-icon="arrow" class="pack-end"></aside>';  
+  output += '<aside class="pack-end icon-arrow"></aside>';  
   output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
   output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
   output += '</div>'; 

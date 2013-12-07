@@ -127,6 +127,7 @@ section[data-type="sidebar"] > header menu[type="toolbar"] button {
     -webkit-box-sizing: border-box;
   min-width: 5rem;
   text-align: center;
+  color: #fff;
 }
 
 section[data-type="sidebar"] > header menu[type="toolbar"] {
@@ -142,6 +143,11 @@ section[data-type="sidebar"] > header button {
   overflow: hidden;
   font: 600 1.4rem/1.1em "MozTT", Sans-serif;
 }
+
+section[data-type="sidebar"] > header:first-child menu[type="toolbar"] :active:not(:disabled) {
+  background-color: #444 !important;
+}
+
 
 section[data-type="sidebar"] > header a:first-letter,
 section[data-type="sidebar"] > header button:first-letter {
