@@ -215,7 +215,6 @@ section[data-type="sidebar"] [role="toolbar"] {
   left: 0;
   width: 80%;
   right: auto;
-  z-index: 101;
 }
 
 section[data-type="sidebar"][data-position="right"] [role="toolbar"] {

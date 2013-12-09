@@ -22,33 +22,33 @@
 
 /* Items calcs */
 [role="tablist"][data-items="2"] > [role="tab"] {
-  width: calc(100% / 2);
     width: -moz-calc(100% / 2);
     width: -webkit-calc(100% / 2);
+  width: calc(100% / 2);
 }
 
 [role="tablist"][data-items="3"] > [role="tab"] {
-  width: calc(100% / 3);
     width: -moz-calc(100% / 3);
     width: -webkit-calc(100% / 3);
+  width: calc(100% / 3);
 }
 
 [role="tablist"][data-items="4"] > [role="tab"] {
-  width: calc(100% / 3);
     width: -moz-calc(100% / 3);
     width: -webkit-calc(100% / 3);
+  width: calc(100% / 3);
 }
 
 [role="tablist"][data-items="4.1"] > [role="tab"] {
-  width: calc(100% / 4.1);
     width: -moz-calc(100% / 4.1);
     width: -webkit-calc(100% / 4.1);
+  width: calc(100% / 4.1);
 }
 
 [role="tablist"][data-items="5"] > [role="tab"] {
-  width: calc(100% / 5);
     width: -moz-calc(100% / 5);
     width: -webkit-calc(100% / 5);
+  width: calc(100% / 5);
 }
 
 [role="tablist"] > [role="tab"] > a {
@@ -61,10 +61,10 @@
   background: #C7C7C7;
   position: relative;
   color: #737373;
-  transition: all .5s;
     -moz-transition: all .5s;
     -webkit-transition: all .5s;
     -o-transition: all .5s;
+  transition: all .5s;
   font-weight: bold;
 }
 
@@ -94,11 +94,10 @@
 /* Hidden */
 [role="tablist"] > [role="tab"].hidden {
   visibility: hidden;
-  opacity: 0;
-  transition: all .5s;
     -moz-transition: all .5s;
     -webkit-transition: all .5s;
     -o-transition: all .5s;
+  transition: all .5s;
 }
 
 /* Selected state */
@@ -126,49 +125,47 @@
   left: 0;
   visibility: hidden;
   width: 100%;
-  height: calc(100% - 4rem);
     height: -moz-calc(100% - 4rem);
     height: -webkit-calc(100% - 4rem);
+  height: calc(100% - 4rem);
   display: block;
   overflow: auto;
-  opacity: .4;
-  transform: translateX(-102%);
     -moz-transform: translateX(-102%);
     -webkit-transform: translateX(-102%);
     -o-transform: translateX(-102%);
     -ms-transform: translateX(-102%);
+  transform: translateX(-102%);
   background: #EEE;
-  transition: all .4s;
     -moz-transition: all .4s;
     -webkit-transition: all .4s;
     -o-transition: all .4s;
+  transition: all .4s;
 }
 
 .current [role="tablist"] .selected [role="tabpanel"], .parent [role="tablist"] .selected [role="tabpanel"], .active [role="tablist"] .selected [role="tabpanel"] {
   visibility: visible;
-  opacity: 1;
-  transform: none;
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
     -ms-transform: none;
+  transform: none;
 }
 
 [role="tablist"] .selected [role="tabpanel"] {
   opacity: 1;
-  transform: none;
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
     -ms-transform: none;
+  transform: none;
 }
 
 [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
-  transform: translateX(102%);
     -moz-transform: translateX(102%);
     -webkit-transform: translateX(102%);
     -o-transform: translateX(102%);
     -ms-transform: translateX(102%);
+  transform: translateX(102%);
 }
 
 /* Position bottom */
@@ -179,9 +176,9 @@
 [role="tablist"].bottom  > [role="tab"] > a {
   position: relative;
   height: 4rem;
-  top: calc(100% - 4rem);
     top: -moz-calc(100% - 4rem);
     top: -webkit-calc(100% - 4rem);
+  top: calc(100% - 4rem);
 }
 
 [role="tablist"].bottom [role="tabpanel"] {
@@ -215,9 +212,9 @@
 [role="tablist"][data-type="filter"] > [role="tab"] {
   float: left;
   text-align: center;
-  box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+  box-sizing: border-box;
   color: #737272;
   border-bottom: solid 1px #999;
 }
