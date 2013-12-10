@@ -924,13 +924,6 @@ function processActions(eventAttribute, target) {
       loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
     } else if (calledFunction == 'nav') {
       var navLocation = target.getAttribute(eventAttribute + '-location');
-      if (navLocation == 'welcome') {
-        updateDocLists(['recents', 'cloud']);
-      } else if (navLocation == 'open') {
-        updateDocLists(['cloud']);
-      } else if (navLocation == 'settings') {
-        firetext.settings.init();
-      }
       if (document.getElementById(navLocation).getAttribute('role') != 'dialog') {
         editFullScreen(false);      
       }
@@ -999,14 +992,9 @@ function processActions(eventAttribute, target) {
       } else {
         editFullScreen();
       }
-    } else if (calledFunction == 'browser') {
-      var browseLocation = '';
-      var browserFrame = document.getElementById('browserFrame');
-      
-      // Set browser frame's src to blank
-      browserFrame.src = 'about:blank';
-      
+    } else if (calledFunction == 'browser') {      
       // Get location
+      var browseLocation = '';
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
         browseLocation = 'about.html';
       } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
@@ -1017,15 +1005,8 @@ function processActions(eventAttribute, target) {
         browseLocation = target.getAttribute(eventAttribute + '-location');
       }
       
-      // Open a new tab on desktop browsers
-      if (deviceType == 'desktop') {
-        window.open(browseLocation);
-        return;
-      }
-      
-      // Open the internal browser on mobile
-      browserFrame.src = browseLocation;
-      regions.nav('browser');
+      // Open a new tab
+      window.open(browseLocation);
     } else if (calledFunction == 'justify') {
       var justifyDirection = justifySelect.value;
       if (justifyDirection == 'Justified') {

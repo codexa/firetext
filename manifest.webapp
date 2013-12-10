@@ -1,12 +1,12 @@
 {
   "name": "Firetext",
   "description": "A Word Processor for Firefox OS",
-  "version": "0.3",
+  "version": "0.3.1",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
     "name": "Codexa",
-    "url": "http://www.codexa.org"
+    "url": "http://firetext.codexa.org"
   },
   "icons": {
     "32": "/style/icons/app/32.png",
