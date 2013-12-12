@@ -218,7 +218,7 @@ function updateAddDialog() {
 ------------------------*/
 function bugsenseInit() {
   if (firetext.settings.get('stats.enabled') != 'false') {
-    bugsense = new Bugsense({ appversion: '0.3', apiKey: '' });
+    bugsense = new Bugsense({ appversion: '0.3.1', apiKey: '' });
   } else {
     bugsense = null;
   }
@@ -996,11 +996,13 @@ function processActions(eventAttribute, target) {
       // Get location
       var browseLocation = '';
       if (target.getAttribute(eventAttribute + '-location') == 'about') {
-        browseLocation = 'about.html';
-      } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
-        browseLocation = 'http://firetext.codexa.org/support';
+        browseLocation = 'http://firetext.codexa.org/new/?header=none&footer=none&version=0.3.1&app=1';
+      } else if (target.getAttribute(eventAttribute + '-location') == 'credits') {
+        browseLocation = 'http://firetext.codexa.org/community/credits?header=none';
       } else if (target.getAttribute(eventAttribute + '-location') == 'rate') {
         browseLocation = 'https://marketplace.firefox.com/app/firetext/ratings/add';
+      } else if (target.getAttribute(eventAttribute + '-location') == 'support') {
+        browseLocation = 'http://firetext.codexa.org/support?header=none';
       } else {
         browseLocation = target.getAttribute(eventAttribute + '-location');
       }
