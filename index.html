@@ -26,6 +26,7 @@
   <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
+  <script type="text/javascript" src="scripts/cloud/gdrive.js"></script>
   
   <!-- Lib -->
   <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
@@ -147,6 +148,10 @@
           <h2>Documents on Dropbox</h2>
           <ul id="welcome-dropbox-list"></ul>
         </div>
+        <div id="welcome-gdrive-area">
+          <h2>Documents on Google Drive</h2>
+          <ul id="welcome-gdrive-list"></ul>
+        </div>
       </article>
     </div>
   </section>
@@ -198,6 +203,10 @@
         <div id="open-dialog-dropbox-area">
           <h2>Documents on Dropbox</h2>
           <ul id="open-dialog-dropbox-list"></ul>
+        </div>
+        <div id="open-dialog-gdrive-area">
+          <h2>Documents on Google Drive</h2>
+          <ul id="open-dialog-gdrive-list"></ul>
         </div>
       </article>
     </div>
@@ -530,7 +539,14 @@
               <p>Use <b>Dropbox</b></p>
             </li>
             <li class="noLink">
-              <p>More storage providers coming!</p>
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="gdrive-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <aside class="icon" data-icon="gdrive"></aside>
+              <p>Use <b>Google Drive</b></p>
             </li>
           </ul>
           <h2>Editing</h2>
