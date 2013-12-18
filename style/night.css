@@ -40,6 +40,10 @@
   border-color: #1f1f1f;
 }
 
+.night #edit header:first-child {
+  border-color: #222;
+}
+
 
 /* Spinner */
 .night .spinner {
@@ -98,7 +102,7 @@
 }
 
 .night [data-type="list"] li {
-  border-color: #2c2c2c;
+  border-color: #1f1f1f;
   color: #a0a0a0;
 }
 
@@ -111,7 +115,6 @@
 .night [data-type="list"] li.fileListItem {
   background: #111;
   color: #a0a0a0;
-  border-color: #5b5b5b;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemDescription {

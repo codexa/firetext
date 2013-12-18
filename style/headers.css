@@ -148,10 +148,10 @@ section > header:first-child button:not(:disabled):active .icon:after,
 section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
 section > header:first-child menu[type="toolbar"] button:not(:disabled):active  {
   background: #dfdfdf !important;
-  transition: background 0.2s ease;
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
     -o-transition: background 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 /* Disabled state */
@@ -173,18 +173,10 @@ section > header:first-child .icon {
   width: 3rem;
   height: 3rem;
   margin: 0 -1rem;
-  background-repeat: no-repeat;
-  background-position: center;
-  font-size: 0;
   overflow: hidden;
   position: relative;
   height: 4.9rem;
   text-indent: -100%;
-}
-
-section > header:first-child .icon.icon-close {
-  font-size: 1.5rem !important;
-  padding-top: 1.6rem;
 }
 
 section > header:first-child [class^="icon-"], 
@@ -195,10 +187,6 @@ section > header:first-child [class*=" icon-"] {
   padding-right: .2rem;
     -moz-box-sizing: border-box;
   box-sizing: border-box;
-}
-
-section > header:first-child .icon-back {
-  padding-right: .8rem;
 }
 
 /* Navigation links (back, cancel, etc) */

@@ -65,6 +65,7 @@
     -o-transition: all .5s;
   transition: all .5s;
   font-weight: bold;
+  outline: none;
 }
 
 [role="tablist"] > [role="tab"] > a:active {

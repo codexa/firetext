@@ -42,8 +42,30 @@ html, body {
   margin: 1rem;
 }
 
+
+/* Style hacks */
+#edit header:first-child {
+  border-bottom: .2rem solid #dfdfdf;
+}
+
 [role="toolbar"] button.ftanylitics {
   background-color: #444;
+}
+
+section[data-type="sidebar"] [role="toolbar"] .icon-setting {
+  padding-top: .3rem;
+  font-size: 2.5rem;
+}
+
+section > header:first-child .icon.icon-back {
+  padding-right: .8rem;
+  padding-top: 1.4rem;
+  font-size: 2rem !important;
+}
+
+section > header:first-child .icon.icon-close {
+  font-size: 1.5rem !important;
+  padding-top: 1.6rem;
 }
 
 

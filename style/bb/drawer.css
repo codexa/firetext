@@ -231,10 +231,6 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   background-color: #111;
 }
 
-section[data-type="sidebar"] [role="toolbar"] .icon-setting {
-  padding-top: .3rem;
-}
-
 section[data-type="sidebar"] [role="toolbar"] + nav {
   max-height: calc(100% - 5rem - 4rem);
     max-height: -moz-calc(100% - 5rem - 4rem);
