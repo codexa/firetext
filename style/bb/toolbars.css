@@ -8,7 +8,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  background-color: #1d1d1d;
+  background-color: #dfdfdf;
 }
 
 [role="toolbar"] ul {
@@ -41,13 +41,13 @@
 
 [role="toolbar"] button:active, 
 [role="toolbar"] button.active {
-  background-color: #444;
+  background-color: #afafaf;
 }
 
 [role="toolbar"] button[class^="icon-"], 
 [role="toolbar"] [class*=" icon-"] {
   font-size: 3rem;
-  color: #fff;
+  color: #1f1f1f;
   text-shadow: none;
   padding: 0 1rem;
     -moz-box-sizing: border-box;

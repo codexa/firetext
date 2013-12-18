@@ -210,16 +210,29 @@ section[data-type="sidebar"] > nav > h2 {
 }
 
 section[data-type="sidebar"] [role="toolbar"] {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 80%;
   right: auto;
+  background-color: #1d1d1d;
+  color: #6f6f6f
 }
 
 section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
   left: auto;
   right: 0;
+}
+
+section[data-type="sidebar"] [role="toolbar"] button[class^="icon-"], 
+section[data-type="sidebar"] [role="toolbar"] [class*=" icon-"] {
+  color: #fff;
+}
+
+section[data-type="sidebar"] [role="toolbar"] button:active, 
+section[data-type="sidebar"] [role="toolbar"] button.active {
+  background-color: #111;
+}
+
+section[data-type="sidebar"] [role="toolbar"] .icon-setting {
+  padding-top: .3rem;
 }
 
 section[data-type="sidebar"] [role="toolbar"] + nav {

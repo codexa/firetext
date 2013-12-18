@@ -9,7 +9,7 @@
   width: 100%;
   height: 100%;
   font-family: "Open Sans", Sans-serif;
-  background: #C7C7C7;
+  background: #dfdfdf;
 }
 
 [role="tablist"] > [role="tab"] {
@@ -58,7 +58,6 @@
   text-align: center;
   float: left;
   width: 100%;
-  background: #C7C7C7;
   position: relative;
   color: #737373;
     -moz-transition: all .5s;
@@ -69,8 +68,8 @@
 }
 
 [role="tablist"] > [role="tab"] > a:active {
-  background-color: #6f6f6f;
-  color: #eee;
+  background-color: #afafaf;
+  color: #1f1f1f;
 }
 
 [role="tablist"] > [role="tab"][aria-disabled="true"] > a:active {

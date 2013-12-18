@@ -81,7 +81,7 @@ form[role=dialog].current {
 
 [data-type="list"] h2,
 [data-type="edit"] h2 {
-  background: #CACACA;
+  background: #dfdfdf;
   padding: 5px 20px;
   color: #2C2C2C;
   margin: 0 0;
@@ -126,7 +126,7 @@ form[role=dialog].current {
 }
 
 [data-type="list"] li.fileListItem .fileItemDescription {
-  background: #dfdfdf;
+  background: #bbb;
   font-size: 1.2rem;
   max-height: 5rem;
   overflow: hidden;

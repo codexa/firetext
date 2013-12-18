@@ -2,7 +2,7 @@
  * Status
  * ---------------------------------- */
 section[role="status"] {
-  background: #1f1f1f;
+  background: #dfdfdf;
   background-size: auto auto, 100% 100%;
   overflow: hidden;
   position: absolute;
@@ -14,7 +14,7 @@ section[role="status"] {
   min-height: 6.2rem;
   white-space: nowrap;
   font-family: "MozTT", Sans-serif;
-  color: #fff;
+  color: #1f1f1f;
   text-align: center;
 }
 
