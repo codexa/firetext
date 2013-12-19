@@ -39,7 +39,7 @@
   <script type="text/javascript" src="scripts/lib/lang-css.js"></script>
   <script type="text/javascript" src="scripts/lib/lang-wiki.js"></script>
   <script type="text/javascript" src="scripts/lib/stringview.js"></script>
-  <script type="text/javascript" src="scripts/lib/bugsense.js"></script>
+  <!--<script type="text/javascript" src="scripts/lib/bugsense.js"></script>-->
 
   <!-- Parsers -->
   <script type="text/javascript" src="scripts/parsers/base64.js"></script>
@@ -76,7 +76,7 @@
 <body role="application">
   <div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
 
-  <section data-type="sidebar" id="sidebar_welcome">
+  <section data-type="sidebar" id="sidebar_welcome" data-swipe-left="sidebar" data-swipe-left-id="welcome">
     <header>
       <h1>Menu</h1>
     </header>
@@ -106,9 +106,11 @@
     </nav>
   </section>
   
-  <section role="region" id="welcome">
+  <section role="region" id="welcome" 
+  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="open" 
+  	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="close">
     <header>
-      <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-menu"></span></button>
+      <button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-create"></span></button>
       </menu>
@@ -201,7 +203,7 @@
   </section>
   <div class="background"></div>
   
-  <section data-type="sidebar" id="sidebar_main" data-position="right">
+  <section data-type="sidebar" id="sidebar_main" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="main">
     <header>
       <h1>Menu</h1>
     </header>
@@ -233,13 +235,15 @@
     </nav>
   </section>
   
-  <section role="region" id="edit">
+  <section role="region" id="edit" 
+  	data-swipe-left="sidebar" data-swipe-left-id="main" data-swipe-left-state="open"
+  	data-swipe-right="sidebar" data-swipe-right-id="main" data-swipe-right-state="close">
     <header>
       <button data-click="closeFile"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon icon-save"></span></button>
         <button data-click="fullscreen"><span class="icon icon-fs"></span></button>
-        <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu"></span></button>
+        <button data-click="sidebar" data-click-id="main" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       </menu>
       <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
     </header>

@@ -3,7 +3,6 @@
  * ---------------------------------- */
 section[role="status"] {
   background: #dfdfdf;
-  background-size: auto auto, 100% 100%;
   overflow: hidden;
   position: absolute;
   z-index: 100;
@@ -25,7 +24,7 @@ section[role="status"] p {
   font-size: 1.6rem;
   line-height: 1.4em;
   max-width: 75%;
-  margin: 1rem 0;
+  margin: 0;
   text-align: left;
 }
 

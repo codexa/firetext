@@ -16,17 +16,16 @@ section[role="object"] {
   right: 0;
   bottom: 0;
   padding: 0 0 7rem;
-  transform: scale(2, 2);
-    -moz-transform: scale(2, 2);
-    -webkit-transform: scale(2, 2);
-    -o-transform: scale(2, 2);
-    -ms-transform: scale(2, 2);
-  opacity: 0;
+    -moz-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+  transform: translateY(100%);
+    -moz-transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    -o-transition: all .4s ease;
+  transition: all .4s ease;
   pointer-events: none;
-  transition: all .4s;
-    -moz-transition: all .4s;
-    -webkit-transition: all .4s;
-    -o-transition: all .4s;
   /**
    * Using "font-size: 0" to avoid the unwanted visual space (about 3px) created
    * by white spaces and line breaks in the code between inline-block elements.
@@ -40,11 +39,11 @@ section[role="object"].current,
 section[role="action"].parent,
 section[role="object"].parent {
   opacity: 1;
-  transform: none;
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
     -ms-transform: none;
+  transform: none;
   pointer-events: auto;
 }
 
