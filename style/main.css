@@ -45,7 +45,7 @@ html, body {
 
 /* Style hacks */
 #edit header:first-child {
-  border-bottom: .2rem solid #dfdfdf;
+  border-bottom: .2rem solid #ccc;
 }
 
 [role="toolbar"] button.ftanylitics {
