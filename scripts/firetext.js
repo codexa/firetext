@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
 
 firetext.init = function () {
   // Initialize Bugsense
-  //bugsenseInit();
+  bugsenseInit();
 
   // Find device type
   checkDevice();
@@ -218,14 +218,14 @@ function updateAddDialog() {
 
 
 /* Bugsense
-------------------------
+------------------------*/
 function bugsenseInit() {
   if (firetext.settings.get('stats.enabled') != 'false') {
     bugsense = new Bugsense({ appversion: '0.3.1', apiKey: '' });
   } else {
     bugsense = null;
   }
-}*/
+}
 
 
 /* Doc lists
