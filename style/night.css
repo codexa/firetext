@@ -40,6 +40,10 @@
   border-color: #1f1f1f;
 }
 
+.night #edit header:first-child {
+  border-color: #333;
+}
+
 
 /* Spinner */
 .night .spinner {
@@ -98,7 +102,7 @@
 }
 
 .night [data-type="list"] li {
-  border-color: #2c2c2c;
+  border-color: #1f1f1f;
   color: #a0a0a0;
 }
 
@@ -111,7 +115,6 @@
 .night [data-type="list"] li.fileListItem {
   background: #111;
   color: #a0a0a0;
-  border-color: #5b5b5b;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemDescription {
@@ -151,7 +154,8 @@
 }
 
 .night [role="tablist"] > [role="tab"] > a:active {
-  background-color: #2c2c2c;
+  background-color: #444;
+  color: #cacaca;
 }
 
 .night [role="tablist"] > [role="tab"].selected > a {
@@ -173,10 +177,32 @@
 
 
 /* Toolbar */
+.night [role="toolbar"] {
+  background-color: #222;
+}
 
+.night [role="toolbar"] button:active, 
+.night [role="toolbar"] button.active {
+  background-color: #444;
+}
+
+.night [role="toolbar"] button[class^="icon-"], 
+.night [role="toolbar"] [class*=" icon-"] {
+  color: #dfdfdf;   
+}
+
+
+/* Tab Toolbar */
 .night .tabToolbar button,
 .night .tabToolbar .button,
 .night .tabToolbar input[type="button"] {
+  color: #dfdfdf;
+}
+
+
+/* Status */
+.night section[role="status"] {
+  background: #222;
   color: #dfdfdf;
 }
 

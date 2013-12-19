@@ -96,6 +96,14 @@ section[role="dialog"].current {
   transform: translateX(80%) !important;
 }
 
+[data-state="drawer"].current > *:not(.drawerEnabled) {
+  pointer-events: none;   
+}
+
+[data-state="drawer"].current .drawerEnabled {
+  pointer-events: all;
+}
+
 [data-state="drawer"][data-position="right"].current {
     -moz-transform: translateX(-80%) !important;
     -webkit-transform: translateX(-80%) !important;

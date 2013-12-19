@@ -51,6 +51,9 @@ firetext.init = function () {
 
   // Find device type
   checkDevice();
+  
+  // Initialize gestures
+  initGestures();
 
   /* Select important elements for later */
   // Misc
@@ -909,6 +912,13 @@ document.addEventListener('blur', function(event) {
   processActions('data-blur', event.target);
 });
 
+function initGestures () {
+  new GestureDetector(document.body).startDetecting();
+  document.body.addEventListener('swipe', function (event) {
+    processActions(('data-swipe-'+event.detail.direction), event.target);  
+  });
+}
+
 function processActions(eventAttribute, target) {
   if (target && target.getAttribute) {
     if (target.hasAttribute(eventAttribute) != true) {
@@ -931,7 +941,7 @@ function processActions(eventAttribute, target) {
     } else if (calledFunction == 'navBack') {
       regions.navBack();
     } else if (calledFunction == 'sidebar') {
-      regions.sidebar(target.getAttribute(eventAttribute + '-id'));
+      regions.sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-state'));
     } else if (calledFunction == 'saveFromEditor') {
       saveFromEditor(true, true);
     } else if (calledFunction == 'closeFile') {
