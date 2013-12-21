@@ -929,6 +929,14 @@ function processActions(eventAttribute, target) {
         }
       }
     }
+    
+    // Check to see if it has the right class
+    if (target.getAttribute(eventAttribute+'-only')) {
+      if (!target.classList.contains(target.getAttribute(eventAttribute+'-only'))) {
+        return;
+      }
+    }
+    
     var calledFunction = target.getAttribute(eventAttribute);
     if (calledFunction == 'loadToEditor') {
       loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));

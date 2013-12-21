@@ -71,7 +71,7 @@
 
 /* Input areas */
 .night fieldset {
-  background: #2c2c2c;
+  background-color: #2c2c2c;
   color: #dfdfdf;
   border-color: transparent;
 }
@@ -79,6 +79,7 @@
 .night fieldset input,
 .night fieldset select {
   color: #dfdfdf;
+  background-color: #2c2c2c;
 }
 
 .night fieldset legend.action:after {

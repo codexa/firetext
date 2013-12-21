@@ -107,8 +107,8 @@
   </section>
   
   <section role="region" id="welcome" 
-  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="open" 
-  	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="close">
+  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="open" data-swipe-right-only="current" 
+  	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="close" data-swipe-left-only="current">
     <header>
       <button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       <menu type="toolbar">
@@ -116,20 +116,6 @@
       </menu>
       <h1 class="firetext icon-">firetext</h1>
     </header>
-    <div role="edit" data-type="edit" id="welcome-edit-mode">
-      <section>
-        <header>
-          <menu type="toolbar">
-            <button data-click="editDocs">Done</button>
-          </menu>
-          <h1>Edit docs</h1>
-        </header>
-      </section>
-      <menu id="selectButtons">
-        <button data-click="selectAll">Select all</button>
-        <button data-click="delete" class="danger">Delete selected</button>
-      </menu>
-    </div>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList" id="welcome-docs-list">
         <div id="welcome-recents-area">
@@ -147,6 +133,21 @@
       </article>
     </div>
   </section>
+  
+  <div role="edit" data-type="edit" id="welcome-edit-mode">
+    <section>
+      <header>
+        <menu type="toolbar">
+          <button data-click="editDocs">Done</button>
+        </menu>
+        <h1>Edit docs</h1>
+      </header>
+    </section>
+    <menu id="selectButtons">
+      <button data-click="selectAll">Select all</button>
+      <button data-click="delete" class="danger">Delete selected</button>
+    </menu>
+  </div>
   
   <section role="dialog" id="add">
     <header>
