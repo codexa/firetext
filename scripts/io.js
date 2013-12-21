@@ -536,7 +536,6 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
         }
         
         // Finish
-        updateDocLists(['recents']);
         saving = false;
         callback();
       };
@@ -593,7 +592,16 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
       });
     }
   } else if (location == 'dropbox') {
-    cloud.dropbox.save(filePath, contentBlob, showSpinner, function () { saving = false; callback(); });
+    cloud.dropbox.save(filePath, contentBlob, showSpinner, function () { 
+      // Show banner
+      if (showBanner) {
+        showSaveBanner();
+      }
+       
+      // Finish 
+      saving = false;
+      callback(); 
+    });
   }
 };
 
@@ -601,6 +609,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
   if (!directory | !filename | !filetype | !callback) {
     return;
   }
+  
+  // Show spinner
+  spinner();
 
   // Put directory in proper form
   if (directory[directory.length - 1] != '/') {
@@ -630,7 +641,10 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
         // 0.3 only
         reader.readAsText(file);
         
-        reader.onerror = function () {
+        reader.onerror = function () {  
+          // Hide spinner
+          spinner('hide');
+          
           alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
           callback(this.error.name, true);
         };
@@ -648,6 +662,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           // 0.3 only
           file = this.result;
           
+          // Hide spinner
+          spinner('hide');
+          
           callback(file);
         };
       };
@@ -658,6 +675,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
         else {
           alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
         }
+        
+        // Hide spinner
+        spinner('hide');
       };
     } else if (deviceAPI == 'file') {
       storage.root.getFile(directory + filename + filetype, {}, function(fileEntry) {
@@ -665,6 +685,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           var reader = new FileReader();
           
           reader.onerror = function () {
+            // Hide spinner
+            spinner('hide');
+            
             alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
             callback(this.error.name, true);
           };
@@ -679,6 +702,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
         
             // 0.3 only
             file = this.result;
+            
+            // Hide spinner
+            spinner('hide');
             
             callback(file);
           };
@@ -695,6 +721,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           reader.readAsText(file);
         }, function(err) {
           alert("Error opening file\n\ncode: " + err.code);
+          
+          // Hide spinner
+          spinner('hide');
         });
       }, function(err) {
         if (err.code === FileError.NOT_FOUND_ERR) {
@@ -702,10 +731,16 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
         } else {
           alert("Load unsuccessful :(\n\nError code: " + err.code);
         }
+        
+        // Hide spinner
+        spinner('hide');
       });
     }
   } else if (location = 'dropbox') {
     cloud.dropbox.load(filePath, function (result, error) {
+      // Hide spinner
+      spinner('hide');
+          
       callback(result, error);
     });
   }
