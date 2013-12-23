@@ -81,13 +81,6 @@ firetext.init = function () {
   openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
   openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
   
-  /* 0.4
-  welcomeGoogleArea  = document.getElementById('welcome-google-area');
-  welcomeGoogleList = document.getElementById('welcome-google-list');
-  openDialogGoogleArea = document.getElementById('open-dialog-google-area');
-  openDialogGoogleList = document.getElementById('open-dialog-google-list');
-  */
-  
   // Formatting
   bold = document.getElementById('bold');
   boldCheckbox = document.getElementById('boldCheckbox');
@@ -441,19 +434,21 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
     description = '';
   }
   
-  switch (DOCS[0][2]) {
-    case ".txt":
-      description = firetext.parsers.plain.parse(cleanForPreview(description, DOCS[0][2]), "HTML");
-      break;
-    case ".docx":
-      var tmp = document.createElement("DIV");
-      tmp.appendChild(description.HTMLout());
-      description = tmp.innerHTML;
-    case ".html":
-      description = cleanForPreview(description, DOCS[0][2]);
-      break;
-    default:
-      break;
+  if (firetext.settings.get('previews.enabled') != 'false') {  
+    switch (DOCS[0][2]) {
+      case ".txt":
+        description = firetext.parsers.plain.parse(cleanForPreview(description, DOCS[0][2]), "HTML");
+        break;
+      case ".docx":
+        var tmp = document.createElement("DIV");
+        tmp.appendChild(description.HTMLout());
+        description = tmp.innerHTML;
+      case ".html":
+        description = cleanForPreview(description, DOCS[0][2]);
+        break;
+      default:
+        break;
+    }
   }
   
   // UI refinements
@@ -473,7 +468,7 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
   // Generate item
   output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
   output += '<a href="#">';
-  if (description != '') {
+  if (description != '' && firetext.settings.get('previews.enabled') != 'false') {
     output += '<div class="fileItemDescription">'+description+'</div>';
   }
   output += '<div class="fileItemInfo">';
