@@ -18,6 +18,7 @@ firetext.settings.init = function () {
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
+  var previewsEnabled = document.querySelector('#previews-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
   var statsEnabled = document.querySelector('#stats-enabled-switch');
   
@@ -65,6 +66,20 @@ firetext.settings.init = function () {
   }
   autozenEnabled.onchange = function () {
     firetext.settings.save('autozen', this.checked);
+  }
+
+  // Previews
+  if (firetext.settings.get('previews.enabled') != 'false') {
+    previewsEnabled.setAttribute('checked', '');
+    if (firetext.settings.get('previews.enabled') != 'true') {
+      firetext.settings.save('previews.enabled', 'true');
+    }
+  } else {  
+    previewsEnabled.removeAttribute('checked');
+  }
+  previewsEnabled.onchange = function () {
+    firetext.settings.save('previews.enabled', this.checked);
+    updateDocLists(['recents']);
   }
 
   // Dropbox

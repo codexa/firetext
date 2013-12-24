@@ -3,7 +3,7 @@
 * Copyright (C) Codexa Organization 2013.
 -->
 <!DOCTYPE html>
-<html manifest="ftcache.appcache">
+<html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -51,18 +51,14 @@
   <!-- Building Blocks -->
   <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
-  <link rel="stylesheet" type="text/css" href="style/bb/confirm.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/drawer.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/edit_mode.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/input_areas.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/lists.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/progress_activity.css"/>
-  <link rel="stylesheet" type="text/css" href="style/bb/scrolling.css"/>
-  <link rel="stylesheet" type="text/css" href="style/bb/seekbars.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/status.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/switches.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/tabs.css"/>
-  <link rel="stylesheet" type="text/css" href="style/bb/time_selector.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/toolbars.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/value_selector.css"/>
 
@@ -80,11 +76,8 @@
 <body role="application">
   <div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
 
-  <section data-type="sidebar" id="sidebar_welcome">
+  <section data-type="sidebar" id="sidebar_welcome" data-swipe-left="sidebar" data-swipe-left-id="welcome">
     <header>
-      <menu type="toolbar">
-        <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-back"></span></button>
-      </menu>
       <h1>Menu</h1>
     </header>
     <div role="toolbar">
@@ -113,28 +106,16 @@
     </nav>
   </section>
   
-  <section role="region" id="welcome">
+  <section role="region" id="welcome" 
+  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="open" data-swipe-right-only="current" 
+  	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="close" data-swipe-left-only="current">
     <header>
-      <button data-click="sidebar" data-click-id="welcome"><span class="icon icon-menu"></span></button>
+      <button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-create"></span></button>
       </menu>
       <h1 class="firetext icon-">firetext</h1>
     </header>
-    <div role="edit" data-type="edit" id="welcome-edit-mode">
-      <section>
-        <header>
-          <menu type="toolbar">
-            <button data-click="editDocs">Done</button>
-          </menu>
-          <h1>Edit docs</h1>
-        </header>
-      </section>
-      <menu id="selectButtons">
-        <button data-click="selectAll">Select all</button>
-        <button data-click="delete" class="danger">Delete selected</button>
-      </menu>
-    </div>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList" id="welcome-docs-list">
         <div id="welcome-recents-area">
@@ -152,6 +133,21 @@
       </article>
     </div>
   </section>
+  
+  <div role="edit" data-type="edit" id="welcome-edit-mode">
+    <section>
+      <header>
+        <menu type="toolbar">
+          <button data-click="editDocs">Done</button>
+        </menu>
+        <h1>Edit docs</h1>
+      </header>
+    </section>
+    <menu id="selectButtons">
+      <button data-click="selectAll">Select all</button>
+      <button data-click="delete" class="danger">Delete selected</button>
+    </menu>
+  </div>
   
   <section role="dialog" id="add">
     <header>
@@ -208,11 +204,8 @@
   </section>
   <div class="background"></div>
   
-  <section data-type="sidebar" id="sidebar_main" data-position="right">
+  <section data-type="sidebar" id="sidebar_main" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="main">
     <header>
-      <menu type="toolbar">
-        <button data-click="sidebar" data-click-id="main"><span class="icon icon-back"></span></button>
-      </menu>
       <h1>Menu</h1>
     </header>
     <div role="toolbar">
@@ -243,13 +236,15 @@
     </nav>
   </section>
   
-  <section role="region" id="edit">
+  <section role="region" id="edit" 
+  	data-swipe-left="sidebar" data-swipe-left-id="main" data-swipe-left-state="open"
+  	data-swipe-right="sidebar" data-swipe-right-id="main" data-swipe-right-state="close">
     <header>
       <button data-click="closeFile"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
         <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon icon-save"></span></button>
         <button data-click="fullscreen"><span class="icon icon-fs"></span></button>
-        <button data-click="sidebar" data-click-id="main"><span class="icon icon-menu"></span></button>
+        <button data-click="sidebar" data-click-id="main" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       </menu>
       <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
     </header>
@@ -266,6 +261,8 @@
                 <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline"></button></li>
                 <li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough"></button></li>
                 <li><button class="icon-more" data-click="nav" data-click-location="format"></button></li>
+              </ul>
+              <ul>
               </ul>
             </div>
           </div>
@@ -529,9 +526,6 @@
               <aside class="icon-dropbox"></aside>
               <p>Use <b>Dropbox</b></p>
             </li>
-            <li class="noLink">
-              <p>More storage providers coming!</p>
-            </li>
           </ul>
           <h2>Editing</h2>
           <ul>
@@ -597,6 +591,15 @@
                 </label>
 			  </aside>
 			  <p class="label">Enable <b>Night Mode</b></p>
+            </li>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
+                  <input type="checkbox" data-type="switch" id="previews-enabled-switch" />
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label">Enable <b>file previews</b></p>
             </li>
           </ul>
         </div>

@@ -99,9 +99,10 @@ regions.navBack = function () {
   regions.nav(regions.history.pop());
 }
 
-regions.sidebar = function (name) {
+regions.sidebar = function (name, state) {
   if (document.getElementById('sidebar_' + name) && document.querySelector('.current')) {
-    if (document.querySelector('.current').getAttribute('data-state') == 'drawer') {
+    if ((state && (state != 'open' || state == 'close')) || 
+    	(!state && document.querySelector('.current').getAttribute('data-state') == 'drawer')) {
       document.getElementById('sidebar_' + name).classList.remove('active');
       document.querySelector('.current').setAttribute('data-state', 'none');
     } else {

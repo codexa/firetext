@@ -77,9 +77,11 @@ cloud.dropbox.enumerate = function (directory, callback) {
 
 cloud.dropbox.load = function (path, callback) {
   if (cloud.dropbox.client && path) {
-    spinner();
     cloud.dropbox.client.readFile(path, function(e, d) {
+      // Hide spinner
       spinner('hide');
+          
+      // Callback
       if (!e) {
         callback(d);
       } else {
@@ -87,6 +89,10 @@ cloud.dropbox.load = function (path, callback) {
       }
     });
   } else {
+    // Hide spinner
+    spinner('hide');
+          
+    // Callback error
     if (!cloud.dropbox.client) {
       callback("You are not signed in to Dropbox", true);
     } else if (!path) {
