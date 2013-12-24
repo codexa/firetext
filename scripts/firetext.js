@@ -352,8 +352,7 @@ function cleanForPreview(text, documentType) {
       }
       return text.replace(/\n/g," ").substr(0, approxPreviewWidthInCharacters);
     case ".html":
-        var htmlNode = document.createElement("div");
-        htmlNode.innerHTML = text;
+        var htmlNode = (new DOMParser()).parseFromString(text, "text/html").documentElement;
         var textStripped = htmlNode.textContent;
         var textTruncated = cleanForPreview(textStripped, ".txt");
         textTruncated = textTruncated.replace(/\.\.\.$/, "");
@@ -370,7 +369,7 @@ function cleanForPreview(text, documentType) {
               htmlOfTextWanted = htmlOfTextWanted + remainingHTML;
           }
           //htmlOfTextWanted has the html we want, however it may also contain line breaks
-          htmlNode.innerHTML = htmlOfTextWanted;
+          htmlNode = (new DOMParser()).parseFromString(htmlOfTextWanted, "text/html").documentElement;
           var nodesToRemove = htmlNode.getElementsByTagName("br");
           while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
               nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
@@ -392,7 +391,7 @@ function cleanForPreview(text, documentType) {
           htmlNode.innerHTML = completeHTML(htmlNode.innerHTML);
           var bodyTag = htmlNode.getElementsByTagName("body");
           if (bodyTag[0]) {
-            htmlNode.innerHTML = bodyTag[0].innerHTML;
+            htmlNode = bodyTag[0];
           }
           //the following will take a table of n rows and make it a table of 1 row
           var nodesToChange = htmlNode.getElementsByTagName("table");
