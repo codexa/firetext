@@ -352,7 +352,11 @@ function cleanForPreview(text, documentType) {
         var textStripped = htmlNode.textContent;
         var textTruncated = cleanForPreview(textStripped, ".txt");
         textTruncated = textTruncated.replace(/\.\.\.$/, "");
-        var r = "^(<[a-zA-Z]+.*?>)*" + textTruncated.split("").join(".*?(<[a-zA-Z]+.*?>)*");
+        var textTruncatedSplit = textTruncated.split("");
+        for (var i = 0; i < textTruncatedSplit.length; i++) {
+          textTruncatedSplit[i] = textTruncatedSplit[i].replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+        }
+        var r = "^(<[a-zA-Z]+.*?>)*" + textTruncatedSplit.join(".*?(<[a-zA-Z]+.*?>)*");
         var rDynamic = new RegExp(r);
         if(! rDynamic.test(text) ) {
           return textTruncated;
