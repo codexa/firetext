@@ -8,7 +8,6 @@
 
 'use strict';
 
-
 /* Variables
 ------------------------*/
 // Namespaces
@@ -21,12 +20,13 @@ firetext.analytics = {};
 firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
 var deviceType, fileChanged, saveTimeout, saving;
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
 var bugsense;
+var editorMessageProxy;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -43,7 +43,7 @@ var appCache = window.applicationCache;
 
 /* Start
 ------------------------*/
-window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
+window.addEventListener('DOMContentLoaded', function() {firetext.init()}, false);
 
 firetext.init = function () {
   // Initialize Bugsense
@@ -94,87 +94,85 @@ firetext.init = function () {
   
   // Initalize recent docs
   firetext.recents.init();
-  
   // Initialize the editor
-  initEditor();
+  initEditor(function() {
+    // Initialize Settings
+    firetext.settings.init();
+    
+    // Init extIcon
+    extIcon();
   
-  // Initialize Settings
-  firetext.settings.init();
-  
-  // Init extIcon
-  extIcon();
-
-  // Initiate user id
-  firetext.user.id.init();
-  
-  // Add event listeners
-  toolbar.addEventListener(
-    'mousedown', function mouseDown(event) {
-      event.preventDefault();
-      event.target.classList.toggle('active');
-    }
-  );
-  toolbar.addEventListener(
-    'mouseup', function mouseDown(event) {
-      if (event.target.classList.contains('sticky') != true) {
-        event.target.classList.remove('active');
+    // Initiate user id
+    firetext.user.id.init();
+    
+    // Add event listeners
+    toolbar.addEventListener(
+      'mousedown', function mouseDown(event) {
+        event.preventDefault();
+        event.target.classList.toggle('active');
       }
-    }
-  );
-  editWindow.addEventListener(
-    'mouseenter', function mouseDown(event) {
-      editor.focus();
-    }
-  );
+    );
+    toolbar.addEventListener(
+      'mouseup', function mouseDown(event) {
+        if (event.target.classList.contains('sticky') != true) {
+          event.target.classList.remove('active');
+        }
+      }
+    );
+    editWindow.addEventListener(
+      'mouseenter', function mouseDown(event) {
+        editor.focus();
+      }
+    );
   
-  welcomeDocsList.addEventListener(
-    'contextmenu', function contextmenu(event) {
-      editDocs();
-    }
-  );
+    welcomeDocsList.addEventListener(
+      'contextmenu', function contextmenu(event) {
+        editDocs();
+      }
+    );
   
-  // Initialize IO
-  firetext.io.init(null, function() {
-
-    // Update Doc Lists
-    updateDocLists();
-    
-    // Initialize sharing
-    cloud.init();
-    
-    // Check for recent file, and if found, load it.
-    if (firetext.settings.get('autoload') == 'true') {
-      var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
-      if (firetext.settings.get('autoload.wasEditing') == 'true') {
-        // Wait until Dropbox is authenticated
-        if (lastDoc[3] == 'dropbox') {
-          if (firetext.settings.get('dropbox.enabled') == 'true') {
-            window.addEventListener('cloud.dropbox.authed', function() {
-              loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+    // Initialize IO
+    firetext.io.init(null, function() {
+  
+      // Update Doc Lists
+      updateDocLists();
+      
+      // Initialize sharing
+      cloud.init();
+      
+      // Check for recent file, and if found, load it.
+      if (firetext.settings.get('autoload') == 'true') {
+        var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
+        if (firetext.settings.get('autoload.wasEditing') == 'true') {
+          // Wait until Dropbox is authenticated
+          if (lastDoc[3] == 'dropbox') {
+            if (firetext.settings.get('dropbox.enabled') == 'true') {
+              window.addEventListener('cloud.dropbox.authed', function() {
+                loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+                spinner('hide');
+              });
+            } else {
+              regions.nav('welcome');
               spinner('hide');
-            });
+            }
           } else {
-            regions.nav('welcome');
+            loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
             spinner('hide');
           }
         } else {
-          loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+          regions.nav('welcome');
           spinner('hide');
         }
       } else {
         regions.nav('welcome');
         spinner('hide');
       }
-    } else {
-      regions.nav('welcome');
-      spinner('hide');
-    }
   
-    // Dispatch init event
-    window.dispatchEvent(firetext.initialized);
-    firetext.isInitialized = true;
+      // Dispatch init event
+      window.dispatchEvent(firetext.initialized);
+      firetext.isInitialized = true;
+    });
   });
-
   // Initialize Night Mode
   night();
 };
@@ -595,34 +593,22 @@ function extIcon() {
 
 /* Editor
 ------------------------*/ 
-function initEditor() {
-  // Initialize Designer
-  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  doc = document.createElement('DIV');
-  doc.setAttribute('contentEditable', 'true');
-  doc.id = 'tempEditDiv';
-  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px); word-wrap: break-word;');
-  editor.contentWindow.document.body.appendChild(doc);
-  doc = editor.contentWindow.document.getElementById('tempEditDiv');
-  editor.contentWindow.document.execCommand('enableObjectResizing', false, 'true');
-  
-  // Hide and show toolbar.
-  // For reviewers, just in case this looks like a security problem:
-  // This frame is sandboxed, so I had to add the listeners to do this.
-  // The content CANNOT call any of the parents functions, so this is not a security issue.
-  doc.addEventListener('focus', function (event) {
-    processActions('data-focus', event.target);
-  });
-  doc.addEventListener('blur', function (event) {
-    processActions('data-blur', event.target);
-  });
-  
-  // Initialize Raw Editor
-  rawEditor.setAttribute('contentEditable', 'true');
-  
-  // Nav to the design tab
-  regions.tab(document.querySelector('#editTabs'), 'design');
+function initEditor(callback) {
+  editor.onload = function() {
+    var editorMessageChannel = new MessageChannel();
+    // See: scripts/messages.js
+    editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+    editorMessageProxy.registerMessageHandler(function() {
+      // Initialize Raw Editor
+      rawEditor.setAttribute('contentEditable', 'true');
+    
+      // Nav to the design tab
+      regions.tab(document.querySelector('#editTabs'), 'design');
+      callback();
+    }, "init-success", true);
+    editor.contentWindow.postMessage("init", "*", [editorMessageChannel.port2]);
+    editorMessageChannel.port1.start();
+  }
 }
 
 function watchDocument(filetype) {

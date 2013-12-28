@@ -14,6 +14,7 @@
   <title>Firetext</title>
 
   <!-- Scripts -->
+  <script type="text/javascript" src="scripts/messages.js"></script>
   <script type="text/javascript" src="scripts/firetext.js"></script>
   <script type="text/javascript" src="scripts/activities.js"></script>
   <script type="text/javascript" src="scripts/io.js"></script>
@@ -253,7 +254,7 @@
         <li id="tab-design" role="tab">
           <a href="#" data-click="tab" data-click-name="design">Design</a>
           <div role="tabpanel">
-            <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
+            <iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src="editor.html"></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
                 <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>
