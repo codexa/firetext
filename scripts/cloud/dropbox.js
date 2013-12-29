@@ -67,7 +67,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
         }
         callback(entries);
       } else {
-        client.mkdir(directory, function() {
+        cloud.dropbox.client.mkdir(directory, function() {
           callback(cloud.dropbox.enumerate(directory, function(l) { return l; }));
         });
       }
