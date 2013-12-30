@@ -3,7 +3,7 @@
 * Copyright (C) Codexa Organization 2013.
 */
 
-function MessageProxy(port, /*optional*/ origins) {
+function MessageProxy(port) {
   var messageHandlers = {};
   var pub = this;
 
@@ -38,19 +38,6 @@ function MessageProxy(port, /*optional*/ origins) {
     // check for command
     if(!messageHandlers[e.data.command]) {
       throw new Error('No command registered: "' + e.data.command + '"');
-    }
-    // check origin
-    if(origins && origins.length) {
-      var correctOrigin = false;
-      for(var i = 0; i < origins.length; i++) {
-        if(e.origin === origins[i]) {
-          correctOrigin = true;
-          break;
-        }
-      }
-      if(!correctOrigin) {
-        throw new Error("origin did not match")
-      }
     }
     // call correct callback
     messageHandlers[e.data.command].callback(e);

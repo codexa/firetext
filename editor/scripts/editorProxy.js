@@ -5,6 +5,9 @@
 
 'use strict'
 
+// document to be edited
+var doc;
+
 // Closure to isolate code from tampering by scripts in document
 var mainClosure = function() {
   // Overide popups
@@ -14,9 +17,6 @@ var mainClosure = function() {
   
   // Proxy for communication with parent page
   var parentMessageProxy;
-
-  // document to be edited
-  var doc;
 
   // change "http://localhost:81" to origin served from
   window.addEventListener("message", function(e){
@@ -41,15 +41,24 @@ var mainClosure = function() {
       // This frame is sandboxed, so I had to add the listeners to do this.
       // The content CANNOT call any of the parents functions, so this is not a security issue.
       doc.addEventListener('focus', function (event) {
-        processActions('data-focus', event.target);
+        parentMessageProxy.getPort().postMessage({
+          command: "focus",
+          focus: true
+        });
       });
       doc.addEventListener('blur', function (event) {
-        processActions('data-blur', event.target);
+        parentMessageProxy.getPort().postMessage({
+          command: "focus",
+          focus: false
+        });
       });
 
       // register port
-      parentMessageProxy = new MessageProxy(e.ports[0], ["http://localhost:81"]);
-      e.ports[0].start();
+      parentMessageProxy = new MessageProxy(e.ports[0]);
+      // register message handlers
+      parentMessageProxy.registerMessageHandler(nightEditor, "night");
+
+      parentMessageProxy.getPort().start();
       // success
       parentMessageProxy.getPort().postMessage({command: "init-success"})
     }

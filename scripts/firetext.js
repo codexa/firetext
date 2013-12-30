@@ -172,10 +172,10 @@ firetext.init = function () {
       window.dispatchEvent(firetext.initialized);
       firetext.isInitialized = true;
     });
+    // Initialize Night Mode
+    night();
   });
-  // Initialize Night Mode
-  night();
-};
+}
 
 
 /* Add dialog
@@ -598,7 +598,7 @@ function initEditor(callback) {
     var editorMessageChannel = new MessageChannel();
     // See: scripts/messages.js
     editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
-    editorMessageProxy.registerMessageHandler(function() {
+    editorMessageProxy.registerMessageHandler(function(e) {
       // Initialize Raw Editor
       rawEditor.setAttribute('contentEditable', 'true');
     
@@ -606,8 +606,17 @@ function initEditor(callback) {
       regions.tab(document.querySelector('#editTabs'), 'design');
       callback();
     }, "init-success", true);
+
+    // editor focus and blur
+    editorMessageProxy.registerMessageHandler(function(e) {
+      if(e.data.focus) {
+        processActions('data-focus', editor);
+      } else {
+        processActions('data-blur', editor);
+      }
+    }, "focus", false)
     editor.contentWindow.postMessage("init", "*", [editorMessageChannel.port2]);
-    editorMessageChannel.port1.start();
+    editorMessageProxy.getPort().start();
   }
 }
 
