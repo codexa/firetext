@@ -213,7 +213,7 @@ firetext.io.enumerate = function (directory, callback) {
               fileparts = results[i].name.split(".");
               filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
               filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-              if (filetype !== ".text" && filetype !== ".html") { // 0.4 && filetype !== ".docx") {
+              if (filetype !== ".txt" && filetype !== ".html") { // 0.4 && filetype !== ".docx") {
                 continue;
               }
               FILES.push([directory, filename, filetype]);
