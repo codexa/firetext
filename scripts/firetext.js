@@ -678,7 +678,7 @@ function updateViews(destView, source, contentType) {
 /* Edit Mode
 ------------------------*/ 
 function editDocs() {
-  if (editState == true) {    
+  if (editState == true) {
     // Clear lists
     welcomeDeviceList.innerHTML = '';
     welcomeDropboxList.innerHTML = '';

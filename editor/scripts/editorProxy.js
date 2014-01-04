@@ -5,11 +5,11 @@
 
 'use strict'
 
-// document to be edited
-var doc;
-
 // Closure to isolate code from tampering by scripts in document
 var mainClosure = function() {
+  // document to be edited
+  var doc;
+  
   // Overide popups
   window.alert = null;
   window.confirm = null;
@@ -55,8 +55,16 @@ var mainClosure = function() {
 
       // register port
       parentMessageProxy = new MessageProxy(e.ports[0]);
+
+      // initialize any modules
+      var night = initNight(doc);
+      var docIO = initDocIO(doc);
+
       // register message handlers
-      parentMessageProxy.registerMessageHandler(nightEditor, "night");
+      // night mode
+      parentMessageProxy.registerMessageHandler(function(e) { night(e.data.nightMode); }, "night");
+      // load to editor
+      parentMessageProxy.registerMessageHandler(function(e) { docIO.load(e.data.content, e.data.filetype); }, "load");
 
       parentMessageProxy.getPort().start();
       // success

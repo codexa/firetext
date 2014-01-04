@@ -9,6 +9,8 @@
 /* Variables
 ------------------------*/
 // Namespace
+window.firetext = window.firetext || {};
+firetext.parsers = firetext.parsers || {};
 firetext.parsers.plain = {};
 
 

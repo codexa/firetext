@@ -386,7 +386,6 @@ function saveFromEditor(banner, spinner) {
 
 function loadToEditor(directory, filename, filetype, location, editable) {
   // Clear editor
-  doc.innerHTML = '';
   rawEditor.textContent = '';
   
   // Set file name and type
@@ -421,32 +420,27 @@ function loadToEditor(directory, filename, filetype, location, editable) {
   firetext.io.load(directory, filename, filetype, function(result, error) {
     if (!error) {
       var content;
-  
+      
+      editorMessageProxy.getPort().postMessage({
+        command: "load",
+        content: result,
+        filetype: filetype
+      });
       switch (filetype) {
         case ".txt":
-          content = firetext.parsers.plain.parse(result, "HTML");
-          doc.innerHTML = content;
-          tabRaw.classList.add('hidden');
-          regions.tab(document.querySelector('#editTabs'), 'design');
-          break;
         /* 0.4
         case ".docx":
-          result = new DocxEditor(result);
-          content = result.HTMLout();
-          doc.appendChild(content);
+        */
           tabRaw.classList.add('hidden');
           regions.tab(document.querySelector('#editTabs'), 'design');
           break;
-        */
         case ".html":
         default:
-          content = result;
-          doc.innerHTML = content;
           rawEditor.textContent = content;
           tabRaw.classList.remove('hidden');  
           break;
-      }             
-    
+      }
+      
       // Handle read-only files
       if (editable == false) {
         formatDoc('contentReadOnly', true);
