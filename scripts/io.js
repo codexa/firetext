@@ -13,7 +13,7 @@ firetext.io = {};
 
 /* Variables
 ------------------------*/
-var storage, deviceAPI, locationDevice, docxeditor;
+var storage, deviceAPI, locationDevice
 
 
 /* Init
@@ -278,7 +278,7 @@ function createFromDialog() {
     }
     var contentBlob;
     if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-      contentBlob = new Blob([firetext.parsers.docx.blank], {type: type});
+      contentBlob = new Blob([firetext.parsers.DocxEditor.blank], {type: type});
     } else {
       contentBlob = new Blob([' '], { "type" : type });
     }
@@ -364,24 +364,14 @@ function saveFromEditor(banner, spinner) {
   var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
-  var content = "";
-  switch (filetype) {
-    case ".html":
-      content = rawEditor.textContent;
-      break;
-    case ".txt":
-      content = firetext.parsers.plain.encode(doc.innerHTML, "HTML");
-      break;
-    /* 0.4
-    case ".docx":
-      content = doc;
-      break;
-    */
-    default:
-      content = doc.textContent;
-      break;
-  }
-  firetext.io.save(directory, filename, filetype, content, banner, function(){ fileChanged = false; }, location, spinner, docxeditor);
+
+  var key = editorMessageProxy.registerMessageHandler(function(e){
+    firetext.io.save(directory, filename, filetype, e.data.content, banner, function(){ fileChanged = false; }, location, spinner);
+  }, null, true);
+  editorMessageProxy.getPort().postMessage({
+  	command: "get-content-blob",
+  	key: key
+  });
 }
 
 function loadToEditor(directory, filename, filetype, location, editable) {
@@ -419,7 +409,6 @@ function loadToEditor(directory, filename, filetype, location, editable) {
   // Fill editor
   firetext.io.load(directory, filename, filetype, function(result, error) {
     if (!error) {
-      var content;
       
       editorMessageProxy.getPort().postMessage({
         command: "load",
@@ -436,7 +425,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
           break;
         case ".html":
         default:
-          rawEditor.textContent = content;
+          rawEditor.textContent = result;
           tabRaw.classList.remove('hidden');  
           break;
       }
@@ -447,7 +436,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
       } else {
         formatDoc('contentReadOnly', false);      
       }
-    
+      
       // Add listener to update views
       watchDocument(filetype);
       
@@ -474,40 +463,9 @@ function loadToEditor(directory, filename, filetype, location, editable) {
   }, location); 
 }
 
-firetext.io.save = function (directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
+firetext.io.save = function (directory, filename, filetype, contentBlob, showBanner, callback, location, showSpinner) {
   // Set saving to true
   saving = true;
-
-  // Get filetype
-  var type = "text";
-  switch (filetype) {
-    case ".html":
-      type = "text\/html";
-      break;
-    /* 0.4
-    case ".docx":
-      type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-      break;
-    */
-    case ".txt":
-    default:
-      type = "text\/plain";
-      break;
-  }
-  var contentBlob;
-  
-  /* 0.4
-  // Special handling for .docx
-  if (filetype == '.docx') {
-    docx.HTMLin(content);
-    contentBlob = new Blob([docxeditor.generate("blob")], {type: type});
-  } else {
-    contentBlob = new Blob([content], { "type" : type });
-  }
-  */
-
-  // 0.3 only
-  contentBlob = new Blob([content], { "type" : type });
 
   var filePath = (directory + filename + filetype);
   
@@ -537,7 +495,7 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
         if (this.error.name == "NoModificationAllowedError") {
           var req2 = storage.delete(filePath);
           req2.onsuccess = function () {
-            firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx);
+            firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner);
           };
           req2.onerror = function () {
             alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
@@ -643,23 +601,10 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           callback(this.error.name, true);
         };
         reader.onload = function () {
-          var file;
-          
-          /* 0.4
-          if( filetype === ".docx" ) {
-            file = new DocxEditor(this.result);
-          } else {
-            file = this.result;
-          }
-          */
-        
-          // 0.3 only
-          file = this.result;
-          
           // Hide spinner
           spinner('hide');
           
-          callback(file);
+          callback(this.result);
         };
       };
       req.onerror = function () {
@@ -685,22 +630,11 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
             alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
             callback(this.error.name, true);
           };
-          reader.onload = function () {          
-            /* 0.4
-            if( filetype === ".docx" ) {
-              file = new DocxEditor(this.result);
-            } else {
-              file = this.result;
-            }
-            */
-        
-            // 0.3 only
-            file = this.result;
-            
+          reader.onload = function () {
             // Hide spinner
             spinner('hide');
             
-            callback(file);
+            callback(this.result);
           };
           
           /* 0.4

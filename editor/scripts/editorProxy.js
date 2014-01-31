@@ -56,15 +56,13 @@ var mainClosure = function() {
       // register port
       parentMessageProxy = new MessageProxy(e.ports[0]);
 
-      // initialize any modules
-      var night = initNight(doc);
-      var docIO = initDocIO(doc);
-
-      // register message handlers
+      // initialize modules/register handlers
       // night mode
-      parentMessageProxy.registerMessageHandler(function(e) { night(e.data.nightMode); }, "night");
-      // load to editor
-      parentMessageProxy.registerMessageHandler(function(e) { docIO.load(e.data.content, e.data.filetype); }, "load");
+      initNight(doc, parentMessageProxy);
+      // editor I/O
+      initDocIO(doc, parentMessageProxy);
+      // format document
+      parentMessageProxy.registerMessageHandler(function(e) { document.execCommand(e.data.sCmd, false, e.data.sValue); }, "format")
 
       parentMessageProxy.getPort().start();
       // success

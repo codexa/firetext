@@ -438,7 +438,8 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
         break;
       case ".docx":
         var tmp = document.createElement("DIV");
-        tmp.appendChild(description.HTMLout());
+        var docx = new DocxEditor(description);
+        tmp.appendChild(docx.HTMLout());
         description = tmp.innerHTML;
       case ".html":
         description = cleanForPreview(description, DOCS[0][2]);
@@ -598,6 +599,7 @@ function initEditor(callback) {
     var editorMessageChannel = new MessageChannel();
     // See: scripts/messages.js
     editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+    // Successful initialization
     editorMessageProxy.registerMessageHandler(function(e) {
       // Initialize Raw Editor
       rawEditor.setAttribute('contentEditable', 'true');
@@ -607,6 +609,14 @@ function initEditor(callback) {
       callback();
     }, "init-success", true);
 
+    editorMessageProxy.registerMessageHandler(function(e) {
+      fileChanged = true;
+      if(e.data.filetype === ".html") {
+        rawEditor.textContent = e.data.html;
+      }
+      autosave();
+    }, "doc-changed");
+
     // editor focus and blur
     editorMessageProxy.registerMessageHandler(function(e) {
       if(e.data.focus) {
@@ -614,36 +624,30 @@ function initEditor(callback) {
       } else {
         processActions('data-blur', editor);
       }
-    }, "focus", false)
+    }, "focus");
     editor.contentWindow.postMessage("init", "*", [editorMessageChannel.port2]);
     editorMessageProxy.getPort().start();
   }
 }
 
 function watchDocument(filetype) {
-  // Add listener to update raw
-  if (filetype == '.html') {
+  if(filetype === ".html") {
     prettyPrint();
-      
-    doc.addEventListener('input', function() {
-      fileChanged = true;
-      updateViews(rawEditor, doc.innerHTML, 'text');
-    });
-        
     // Add listener to update design
     rawEditor.addEventListener('input', function() {
       fileChanged = true;
-      updateViews(doc, rawEditor.textContent, 'html');
+      var callbackKey = editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, null, true);
+      editorMessageProxy.getPort().postMessage({
+        command: "load",
+        content: rawEditor.textContent,
+        filetype: ".html",
+        key: callbackKey
+      });
     });
     rawEditor.addEventListener('blur', function() {
       prettyPrint();
     });
-  } else {
-    doc.addEventListener('input', function() {
-      fileChanged = true;
-      autosave();
-    });
-  }  
+  }
 }
 
 function forceAutosave() {
@@ -660,17 +664,6 @@ function autosave(force) {
         saveTimeout = window.setTimeout(forceAutosave, 1000);        
       }
     }
-  }
-}
-
-function updateViews(destView, source, contentType) {
-  if (destView) {
-    if (contentType == 'html') {
-      destView.innerHTML = source;      
-    } else {
-      destView.textContent = source;
-    }
-    autosave();
   }
 }
 
@@ -815,57 +808,69 @@ function deleteSelected(confirmed) {
 /* Format
 ------------------------*/ 
 function formatDoc(sCmd, sValue) {
-  editor.contentWindow.document.execCommand(sCmd, false, sValue);
+  editorMessageProxy.getPort().postMessage({
+    command: "format",
+    sCmd: sCmd,
+    sValue: sValue
+  });
 }
 
 function updateToolbar() {
-  if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
-    // Bold
-    if (editor.contentDocument.queryCommandState("bold")) {
-      bold.classList.add('active');
-      boldCheckbox.checked = true;
-    } else {
-      bold.classList.remove('active');
-      boldCheckbox.checked = false;
-    }
-    
-    // Italic
-    if (editor.contentDocument.queryCommandState("italic")) {
-      italic.classList.add('active');
-      italicCheckbox.checked = true;
-    } else {
-      italic.classList.remove('active');
-      italicCheckbox.checked = false;
-    }
-    
-    // Justify
-    if (editor.contentDocument.queryCommandState("justifyCenter")) {
-      justifySelect.value = 'Center';
-    } else if (editor.contentDocument.queryCommandState("justifyFull")) {
-      justifySelect.value = 'Justified';
-    } else if (editor.contentDocument.queryCommandState("justifyRight")) {
-      justifySelect.value = 'Right';
-    } else {
-      justifySelect.value = 'Left';
-    }
-    
-    // Underline
-    if (editor.contentDocument.queryCommandState("underline")) {
-      underline.classList.add('active');
-      underlineCheckbox.checked = true;
-    } else {
-      underline.classList.remove('active');
-      underlineCheckbox.checked = false;
-    }
-    
-    // Strikethrough
-    if (editor.contentDocument.queryCommandState("strikeThrough")) {
-      strikethrough.classList.add('active');
-      strikethroughCheckbox.checked = true;
-    } else {
-      strikethrough.classList.remove('active');
-      strikethroughCheckbox.checked = false;
-    }
+  if (document.getElementById("edit").classList.contains('current')) {
+    var key = editorMessageProxy.registerMessageHandler(function(e){
+      var commandStates = e.data.commandStates;
+      // Bold
+      if (commandStates.bold) {
+        bold.classList.add('active');
+        boldCheckbox.checked = true;
+      } else {
+        bold.classList.remove('active');
+        boldCheckbox.checked = false;
+      }
+      
+      // Italic
+      if (commandStates.italic) {
+        italic.classList.add('active');
+        italicCheckbox.checked = true;
+      } else {
+        italic.classList.remove('active');
+        italicCheckbox.checked = false;
+      }
+      
+      // Justify
+      if (commandStates.justifyCenter) {
+        justifySelect.value = 'Center';
+      } else if (commandStates.justifyFull) {
+        justifySelect.value = 'Justified';
+      } else if (commandStates.justifyRight) {
+        justifySelect.value = 'Right';
+      } else {
+        justifySelect.value = 'Left';
+      }
+      
+      // Underline
+      if (commandStates.underline) {
+        underline.classList.add('active');
+        underlineCheckbox.checked = true;
+      } else {
+        underline.classList.remove('active');
+        underlineCheckbox.checked = false;
+      }
+      
+      // Strikethrough
+      if (commandStates.strikeThrough) {
+        strikethrough.classList.add('active');
+        strikethroughCheckbox.checked = true;
+      } else {
+        strikethrough.classList.remove('active');
+        strikethroughCheckbox.checked = false;
+      }
+    }, null, true);
+    editorMessageProxy.getPort().postMessage({
+      command: "query-command-states",
+      commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough"],
+      key: key
+    });
   }
 }
 

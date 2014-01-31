@@ -1,7 +1,30 @@
-function initDocIO(doc) {
-  var docIO = {};
-  docIO.load = function load(content, filetype) {
-  	doc.innerHTML = '';
+/*
+* Document I/O
+* Copyright (C) Codexa Organization 2013.
+*/
+
+'use strict'
+
+function initDocIO(doc, messageProxy) {
+  /* 0.4
+  var docxeditor;
+  */
+  var filetype;
+
+  function watchDocument(filetype) {
+    // Add listener to update raw
+    doc.addEventListener('input', function() {
+      messageProxy.getPort().postMessage({
+        command: "doc-changed",
+        html: doc.innerHTML,
+        filetype: filetype
+      });
+    });
+  }
+
+  function load(content, ft) {
+    filetype = ft;
+    doc.innerHTML = '';
     switch (filetype) {
       case ".txt":
         content = firetext.parsers.plain.parse(content, "HTML");
@@ -9,7 +32,7 @@ function initDocIO(doc) {
         break;
       /* 0.4
       case ".docx":
-        var result = new firetext.parsers.DocxEditor(content);
+        docxeditor = new firetext.parsers.DocxEditor(content);
         content = result.HTMLout();
         doc.appendChild(content);
         break;
@@ -18,8 +41,57 @@ function initDocIO(doc) {
       default:
         doc.innerHTML = content;
         break;
-    }             
+    }
+    watchDocument(filetype);
   }
 
-  return docIO;
+  messageProxy.registerMessageHandler(function(e) {
+    var content;
+    var type;
+    switch (filetype) {
+      case ".html":
+        content = doc.innerHTML;
+        type = "text\/html";
+        break;
+      case ".txt":
+        content = firetext.parsers.plain.encode(doc.innerHTML, "HTML");
+        type = "text\/plain";
+        break;
+      /* 0.4
+      case ".docx":
+        content = docxeditor.generate("blob");
+        application/vnd.openxmlformats-officedocument.wordprocessingml.document
+        break;
+      */
+      default:
+        content = doc.textContent;
+        break;
+    }
+    content = new Blob([content], {type: type});
+    messageProxy.getPort().postMessage({
+      command: e.data.key,
+      content: content
+    });
+  }, "get-content-blob");
+
+  messageProxy.registerMessageHandler(function(e) {
+    load(e.data.content, e.data.filetype);
+    if(e.data.key) {
+      messageProxy.getPort().postMessage({
+        command: e.data.key
+      });
+    }
+  }, "load");
+
+  messageProxy.registerMessageHandler(function(e) {
+    var commands = e.data.commands
+    var commandStates = {};
+    for(var i = 0; i < commands.length; i++) {
+      commandStates[commands[i]] = document.queryCommandState(commands[i]);
+    }
+    messageProxy.getPort().postMessage({
+      command: e.data.key,
+      commandStates: commandStates
+    })
+  }, "query-command-states")
 }
