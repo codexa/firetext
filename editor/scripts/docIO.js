@@ -87,7 +87,9 @@ function initDocIO(doc, messageProxy) {
     var commands = e.data.commands
     var commandStates = {};
     for(var i = 0; i < commands.length; i++) {
-      commandStates[commands[i]] = document.queryCommandState(commands[i]);
+      commandStates[commands[i]] = {};
+      commandStates[commands[i]].state = document.queryCommandState(commands[i]);
+      commandStates[commands[i]].value = document.queryCommandValue(commands[i]);
     }
     messageProxy.getPort().postMessage({
       command: e.data.key,

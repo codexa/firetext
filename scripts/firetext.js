@@ -820,7 +820,7 @@ function updateToolbar() {
     var key = editorMessageProxy.registerMessageHandler(function(e){
       var commandStates = e.data.commandStates;
       // Bold
-      if (commandStates.bold) {
+      if (commandStates.bold.state) {
         bold.classList.add('active');
         boldCheckbox.checked = true;
       } else {
@@ -829,7 +829,7 @@ function updateToolbar() {
       }
       
       // Italic
-      if (commandStates.italic) {
+      if (commandStates.italic.state) {
         italic.classList.add('active');
         italicCheckbox.checked = true;
       } else {
@@ -838,18 +838,18 @@ function updateToolbar() {
       }
       
       // Justify
-      if (commandStates.justifyCenter) {
+      if (commandStates.justifyCenter.state) {
         justifySelect.value = 'Center';
-      } else if (commandStates.justifyFull) {
+      } else if (commandStates.justifyFull.state) {
         justifySelect.value = 'Justified';
-      } else if (commandStates.justifyRight) {
+      } else if (commandStates.justifyRight.state) {
         justifySelect.value = 'Right';
       } else {
         justifySelect.value = 'Left';
       }
       
       // Underline
-      if (commandStates.underline) {
+      if (commandStates.underline.state) {
         underline.classList.add('active');
         underlineCheckbox.checked = true;
       } else {
@@ -858,7 +858,7 @@ function updateToolbar() {
       }
       
       // Strikethrough
-      if (commandStates.strikeThrough) {
+      if (commandStates.strikeThrough.state) {
         strikethrough.classList.add('active');
         strikethroughCheckbox.checked = true;
       } else {
@@ -1043,12 +1043,22 @@ function processActions(eventAttribute, target) {
         regions.navBack();
         regions.navBack();
       } else {
-        regions.nav('hyperlink');
-        if (editor.contentDocument.queryCommandState("createLink")) {
-          document.getElementById('web-address').value = editor.contentDocument.queryCommandValue("createLink");
-        } else {
-          document.getElementById('web-address').value = '';        
-        }
+        var key = editorMessageProxy.registerMessageHandler(function(e) {
+          var createLink = e.data.commandStates.createLink;
+          console.log(createLink);
+          if (createLink.state) {
+            document.getElementById('web-address').value = createLink.value;
+          } else {
+            document.getElementById('web-address').value = '';        
+          }
+          regions.nav('hyperlink');
+        }, null, true);
+        editorMessageProxy.getPort().postMessage({
+          command: "query-command-states",
+          commands: ["createLink"],
+          key: key
+        });
+        
       }
     } else if (calledFunction == 'image') {
       if (target.getAttribute(eventAttribute + '-location')) {
