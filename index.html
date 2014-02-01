@@ -8,10 +8,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+  <!-- links -->
   <link href="style/icons/app/60.png" rel="icon" type="image/x-icon" />
   <link href="style/icons/app/60.png" rel="shortcut icon" type="image/x-icon" />
+  <link rel="localization" href="locales/manifest.json">
 
   <title>Firetext</title>
+  
+  <!-- Localization -->
+  <link rel="resource" type="application/l10n" href="locales/locales.ini" />
+  <script type="application/javascript" src="scripts/lib/l10n.js"></script>
 
   <!-- Scripts -->
   <script type="text/javascript" src="scripts/firetext.js"></script>
@@ -78,7 +84,7 @@
 
   <section data-type="sidebar" id="sidebar_welcome" data-swipe-left="sidebar" data-swipe-left-id="welcome">
     <header>
-      <h1>Menu</h1>
+      <h1 data-l10n-id="menu">Menu</h1>
     </header>
     <div role="toolbar">
       <ul>
@@ -88,20 +94,20 @@
       </ul>
     </div>
     <nav>
-      <h2>Document actions</h2>
+      <h2 data-l10n-id="documentactions">Document actions</h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="add">Create document</a></li>
-        <li><a href="#" data-click="nav" data-click-location="open">Open document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="add" data-l10n-id="createdocument">Create document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="opendocument">Open document</a></li>
       </ul>
-      <h2>Help</h2>
+      <h2 data-l10n-id="help">Help</h2>
       <ul>
-        <li><a href="#" data-click="browser" data-click-location="about">About Firetext</a></li>
-        <li><a href="#" data-click="browser" data-click-location="support">Firetext support</a></li>
+        <li><a href="#" data-click="browser" data-click-location="about" data-l10n-id="aboutfiretext">About Firetext</a></li>
+        <li><a href="#" data-click="browser" data-click-location="support" data-l10n-id="firetextsupport">Firetext support</a></li>
       </ul>
-      <h2>Other</h2>
+      <h2 data-l10n-id="other">Other</h2>
       <ul>
-        <li><a href="#" data-click="browser" data-click-location="credits">Credits</a></li>
-        <li><a href="#" data-click="browser" data-click-location="rate">Rate Firetext</a></li>
+        <li><a href="#" data-click="browser" data-click-location="credits" data-l10n-id="credits">Credits</a></li>
+        <li><a href="#" data-click="browser" data-click-location="rate" data-l10n-id="ratefiretext">Rate Firetext</a></li>
       </ul>
     </nav>
   </section>
@@ -119,15 +125,15 @@
     <div role="main" class="header-only">
       <article data-type="list" class="docsList" id="welcome-docs-list">
         <div id="welcome-recents-area">
-          <h2>Recent Documents</h2>
+          <h2 data-l10n-id="recentdocuments">Recent Documents</h2>
           <ul id="welcome-recents-list"></ul>
         </div>
         <div id="welcome-device-area">
-          <h2>Documents on Device</h2>
+          <h2 data-l10n-id="documentsondevice">Documents on Device</h2>
           <ul id="welcome-device-list"></ul>
         </div>
         <div id="welcome-dropbox-area">
-          <h2>Documents on Dropbox</h2>
+          <h2 data-l10n-id="documentsondropbox">Documents on Dropbox</h2>
           <ul id="welcome-dropbox-list"></ul>
         </div>
       </article>
@@ -138,14 +144,14 @@
     <section>
       <header>
         <menu type="toolbar">
-          <button data-click="editDocs">Done</button>
+          <button data-click="editDocs" data-l10n-id="done">Done</button>
         </menu>
-        <h1>Edit docs</h1>
+        <h1 data-l10n-id="edit-docs">Edit docs</h1>
       </header>
     </section>
     <menu id="selectButtons">
-      <button data-click="selectAll">Select all</button>
-      <button data-click="delete" class="danger">Delete selected</button>
+      <button data-click="selectAll" data-l10n-id="select-all">Select all</button>
+      <button data-click="delete" class="danger" data-l10n-id="delete-selected">Delete selected</button>
     </menu>
   </div>
   
@@ -153,9 +159,9 @@
     <header>
       <button data-click="navBack"><span class="icon icon-back"></span></button>
       <menu type="toolbar">
-        <button data-click="createFromDialog" id="add-dialog-create-button">create</button>
+        <button data-click="createFromDialog" id="add-dialog-create-button" data-l10n-id="create">create</button>
       </menu>
-      <h1>Create document</h1>
+      <h1 data-l10n-id="createdocument">Create document</h1>
     </header>
     <div role="main" class="header-only">
       <div class="form">
@@ -172,7 +178,7 @@
           <section id="fileNameInput">
             <p>
               <input placeholder="untitled" required="" type="text" id="createDialogFileName" data-enter="createFromDialog" />
-              <button type="reset" data-mouse-down="clearCreateForm">Clear</button>
+              <button type="reset" data-mouse-down="clearCreateForm"></button>
             </p>
           </section>
           <legend class="action" id="locationLegend">
@@ -187,16 +193,16 @@
   <section role="dialog" id="open">
     <header>
       <button data-click="navBack"><span class="icon icon-close"></span></button>
-      <h1>Open document</h1>
+      <h1 data-l10n-id="open-document">Open document</h1>
     </header>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
         <div id="open-dialog-device-area">
-          <h2>Documents on Device</h2>
+          <h2 data-l10n-id="documentsondevice">Documents on Device</h2>
           <ul id="open-dialog-device-list"></ul>
         </div>
         <div id="open-dialog-dropbox-area">
-          <h2>Documents on Dropbox</h2>
+          <h2 data-l10n-id="documentsondropbox">Documents on Dropbox</h2>
           <ul id="open-dialog-dropbox-list"></ul>
         </div>
       </article>
@@ -206,7 +212,7 @@
   
   <section data-type="sidebar" id="sidebar_main" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="main">
     <header>
-      <h1>Menu</h1>
+      <h1 data-l10n-id="menu">Menu</h1>
     </header>
     <div role="toolbar">
      <ul>
