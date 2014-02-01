@@ -108,11 +108,11 @@ firetext.settings.init = function () {
 
   // Night Mode
   if (firetext.settings.get('nightmode') == 'true') {
-    nightmodeSelect.value = 'Always On';
+    nightmodeSelect.value = '1';
   } else if (firetext.settings.get('nightmode') == 'false') { 
-    nightmodeSelect.value = 'Always Off';
+    nightmodeSelect.value = '0';
   } else {
-    nightmodeSelect.value = 'Auto';
+    nightmodeSelect.value = '2';
     if (firetext.settings.get('nightmode') != 'auto') {
       firetext.settings.save('nightmode', 'auto');
       night();
@@ -121,9 +121,9 @@ firetext.settings.init = function () {
   nightmodeSelect.addEventListener('change', function () {
     // Convert
     var convertedNightValue;
-    if (nightmodeSelect.value == 'Always On') {
+    if (nightmodeSelect.value == '1') {
       convertedNightValue = 'true';
-    } else if (nightmodeSelect.value == 'Always Off') { 
+    } else if (nightmodeSelect.value == '0') { 
       convertedNightValue = 'false';
     } else {
       convertedNightValue = 'auto';
