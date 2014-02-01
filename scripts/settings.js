@@ -18,15 +18,11 @@ firetext.settings.init = function () {
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
-  var previewsEnabled = document.querySelector('#previews-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
-  var statsEnabled = document.querySelector('#stats-enabled-switch');
-  
-  /* 0.4
-  var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
-  */
-  
+  var languageSelect = document.querySelector('#language-select');
   var nightmodeSelect = document.querySelector('#nightmode-select');
+  var previewsEnabled = document.querySelector('#previews-enabled-switch');
+  var statsEnabled = document.querySelector('#stats-enabled-switch');
 
   // Autoload
   if (firetext.settings.get('autoload') == 'true') {
@@ -68,20 +64,6 @@ firetext.settings.init = function () {
     firetext.settings.save('autozen', this.checked);
   }
 
-  // Previews
-  if (firetext.settings.get('previews.enabled') != 'false') {
-    previewsEnabled.setAttribute('checked', '');
-    if (firetext.settings.get('previews.enabled') != 'true') {
-      firetext.settings.save('previews.enabled', 'true');
-    }
-  } else {  
-    previewsEnabled.removeAttribute('checked');
-  }
-  previewsEnabled.onchange = function () {
-    firetext.settings.save('previews.enabled', this.checked);
-    updateDocLists(['recents']);
-  }
-
   // Dropbox
   if (firetext.settings.get('dropbox.enabled') == 'true') {
     dropboxEnabled.setAttribute('checked', '');
@@ -92,6 +74,19 @@ firetext.settings.init = function () {
     firetext.settings.save('dropbox.enabled', this.checked);
     cloud.init();
   }
+
+  // Language
+  if (!firetext.settings.get('language')) {
+    firetext.settings.save('language', 'en-US');    
+  }
+  languageSelect.value = firetext.settings.get('language');
+  languageSelect.addEventListener('change', function () {
+    // Save
+    firetext.settings.save('language', languageSelect.value);
+
+    // Update
+    firetext.language.init();
+  });
 
   // Night Mode
   if (firetext.settings.get('nightmode') == 'true') {
@@ -122,6 +117,20 @@ firetext.settings.init = function () {
     // Update
     night();
   });
+
+  // Previews
+  if (firetext.settings.get('previews.enabled') != 'false') {
+    previewsEnabled.setAttribute('checked', '');
+    if (firetext.settings.get('previews.enabled') != 'true') {
+      firetext.settings.save('previews.enabled', 'true');
+    }
+  } else {  
+    previewsEnabled.removeAttribute('checked');
+  }
+  previewsEnabled.onchange = function () {
+    firetext.settings.save('previews.enabled', this.checked);
+    updateDocLists(['recents']);
+  }
 
   // Stats
   if (firetext.settings.get('stats.enabled') != 'false') {
