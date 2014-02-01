@@ -124,7 +124,7 @@ cloud.init = function () {
 cloud.updateDocLists = function (lists) {
   if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
     cloud.dropbox.enumerate('/Documents/', function(DOCS) {
-      buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "Dropbox Documents Found", 'dropbox');
+      buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "dropbox-documents-found", 'dropbox');
     });
   }
 }

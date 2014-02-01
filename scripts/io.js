@@ -36,7 +36,7 @@ firetext.io.init = function (api, callback) {
       if (this.result != "available") {
         deviceAPI = null;
         storage = null;
-        alert("The SDCard on your device is shared, and thus not available.  Try disabling USB Mass Storage in your settings.");
+        alert(_('shared-sdcard'));
         firetext.io.init('file', callback);
         return;
       } else {
@@ -50,7 +50,7 @@ firetext.io.init = function (api, callback) {
     request.onerror = function () {
       deviceAPI = null;
       storage = null;
-      alert("Unable to get the space used by the SDCard: " + this.error);
+      alert(_('unable-to-get-sdcard') + this.error);
       firetext.io.init('file', callback);
       return;
     };
@@ -59,7 +59,7 @@ firetext.io.init = function (api, callback) {
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     if (window.requestFileSystem) {
       var onFSError = function() {
-        alert("Error, could not initialize filesystem");
+        alert(_('could-not-initialize-filesystem'));
         deviceAPI = 'none';
         disableInternalStorage();
         callback();
@@ -97,7 +97,8 @@ firetext.io.init = function (api, callback) {
   
   // Create storage option
   locationDevice = document.createElement('option');
-  locationDevice.textContent = 'Internal';
+  locationDevice.value = 'internal';
+  locationDevice.textContent = _('internal-storage');
   locationSelect.appendChild(locationDevice);
 }
 
@@ -132,9 +133,9 @@ firetext.io.enumerate = function (directory, callback) {
     
       cursor.onerror = function() {
         if (cursor.error.name == 'SecurityError') {
-          alert('Please allow Firetext to access your SD card.');
+          alert(_('allow-sdcard'));
         } else {
-          alert('Load unsuccessful :\'( \n\nInfo for gurus:\n"' + cursor.error.name + '"');
+          alert(_('load-unsuccessful')+cursor.error.name);
         }
       };
       cursor.onsuccess = function() {
@@ -226,7 +227,7 @@ firetext.io.enumerate = function (directory, callback) {
         if(err.code == FileError.NOT_FOUND_ERR) {
           callback();
         } else {
-          alert("Error\ncode: " + err.code);
+          alert(_('load-unsuccessful')+err.code);
         }
       });
     }
@@ -243,10 +244,10 @@ function createFromDialog() {
   var filename = document.getElementById('createDialogFileName').value;
   var filetype = document.getElementById('createDialogFileType').value;
   if (filename == null | filename == undefined | filename == '')  {
-    alert('Please enter a name for the new file.');
+    alert(_('enter-name'));
     return;
   } else if (!isValidFileName(filename)) {
-    alert('Filename contains special characters!  Please revise.');
+    alert(_('contains-special-characters'));
     return;
   }
   
@@ -290,10 +291,10 @@ function createFromDialog() {
       var req = storage.addNamed(contentBlob, filePath);
       req.onerror = function () {
         if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
-          alert('This file already exists, please choose another name.');
+          alert(_('file-exists'));
         }
         else {
-          alert('File creation unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+          alert(_('file-creation-fail')+this.error.name);
         }
       };  
       req.onsuccess = function () {  
@@ -312,23 +313,23 @@ function createFromDialog() {
               loadToEditor(directory, filename, filetype, 'internal');
             }
             e.target.onerror = function(e) {
-              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
+              alert(_('file-creation-fail')+e.message);
             }
           };
           
           fileWriter.onerror = function(e) {
-            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
+            alert(_('file-creation-fail')+e.message);
           };
           
           fileWriter.truncate(0);
         }, function(err) {
-          alert("Error writing to new file :(\n\ncode: " + err.code);
+          alert(_('file-creation-fail')+err.code);
         });
       }, function(err) {
         if(err.code === FileError.INVALID_MODIFICATION_ERR) {
-          alert('This file already exists, please choose another name.');
+          alert(_('file-exists'));
         } else {
-          alert("File creation unsuccessful :(\n\ncode: " + err.code);
+          alert(_('file-creation-fail')+err.code);
         }
       });
     }
@@ -342,7 +343,7 @@ function createFromDialog() {
       updateDocLists(['cloud']);
     }, location);
   } else {
-    alert('Could not create file.  Please choose a valid location.');
+    alert(_('invalid-location'));
   }
   
   // Clear file fields
@@ -475,7 +476,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
         document.getElementById('zenSaveButton').style.display = 'inline-block';
       }
     } else {
-      alert('File could not be loaded. \n\nInfo for gurus:\n'+result);
+      alert(_('load-unsuccessful')+result);
     }
   }, location); 
 }
@@ -546,10 +547,10 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
             firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx);
           };
           req2.onerror = function () {
-            alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+            alert(_('save-unsuccessful')+this.error.name);
           }
         } else {
-          alert('Save unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+          alert(_('save-unsuccessful')+this.error.name);
         }
         saving = false;
       };
@@ -572,23 +573,23 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
             }
             e.target.onerror = function(e) {
               saving = false;
-              alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
+              alert(_('save-unsuccessful')+e.message);
             }
             e.target.write(contentBlob);
           };
           
           fileWriter.onerror = function(e) {
             saving = false;
-            alert("Error writing to new file :(\n\nInfo for gurus:\n\"" + e.message + '"');
+            alert(_('save-unsuccessful')+e.message);
           };
           fileWriter.truncate(0);
         }, function(err) {
           saving = false;
-          alert("Error writing to file :(\n\ncode: " + err.code);
+          alert(_('save-unsuccessful')+err.code);
         });
       }, function(err) {
         saving = false;
-        alert("Error opening file :(\n\ncode: " + err.code);
+        alert(_('load-unsuccessful')+err.code);
       });
     }
   } else if (location == 'dropbox') {
@@ -645,7 +646,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           // Hide spinner
           spinner('hide');
           
-          alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+          alert(_('load-unsuccessful')+this.error.name);
           callback(this.error.name, true);
         };
         reader.onload = function () {
@@ -673,7 +674,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           // New file, leave user to edit and save it
         }
         else {
-          alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+          alert(_('load-unsuccessful')+this.error.name);
         }
         
         // Hide spinner
@@ -688,7 +689,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
             // Hide spinner
             spinner('hide');
             
-            alert('Load unsuccessful :( \n\nInfo for gurus:\n"' + this.error.name + '"');
+            alert(_('load-unsuccessful')+this.error.name);
             callback(this.error.name, true);
           };
           reader.onload = function () {          
@@ -720,16 +721,16 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           // 0.3 only
           reader.readAsText(file);
         }, function(err) {
-          alert("Error opening file\n\ncode: " + err.code);
+          alert(_('load-unsuccessful')+err.code);
           
           // Hide spinner
           spinner('hide');
         });
       }, function(err) {
         if (err.code === FileError.NOT_FOUND_ERR) {
-          alert("Load unsuccessful :(\n\nError code: " + err.code);          
+          alert(_('load-unsuccessful')+err.code);          
         } else {
-          alert("Load unsuccessful :(\n\nError code: " + err.code);
+          alert(_('load-unsuccessful')+err.code);
         }
         
         // Hide spinner
@@ -756,16 +757,16 @@ firetext.io.delete = function (name, location) {
       }
       req.onerror = function () {
         // Code to show an error banner (the alert is temporary)
-        alert('Delete unsuccessful :(\n\nInfo for gurus:\n"' + this.error.name + '"');
+        alert(_('delete-unsuccessful')+this.error.name);
       }
     } else if (deviceAPI == 'file') {
       storage.root.getFile(path, {}, function(fileEntry) {
         fileEntry.remove(function() {
         }, function(err) {
-          alert('Delete unsuccessful :(\n\ncode: ' + err.code);
+          alert(_('delete-unsuccessful')+err.code);
         });
       }, function(err) {
-        alert('Delete unsuccessful :(\n\ncode: ' + err.code);
+        alert(_('delete-unsuccessful')+err.code);
       });
     }
   } else if (location == 'dropbox') {

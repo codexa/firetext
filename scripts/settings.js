@@ -93,19 +93,6 @@ firetext.settings.init = function () {
     cloud.init();
   }
 
-  /* 0.4
-  // Google Drive
-  if (firetext.settings.get('gdrive.enabled') == 'true') {
-    gdriveEnabled.setAttribute('checked', '');
-  } else {  
-    gdriveEnabled.removeAttribute('checked');
-  }
-  gdriveEnabled.onchange = function () {
-    firetext.settings.save('gdrive.enabled', this.checked);
-    cloud.init();
-  }
-  */
-
   // Night Mode
   if (firetext.settings.get('nightmode') == 'true') {
     nightmodeSelect.value = '1';
