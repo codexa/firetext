@@ -32,11 +32,6 @@ var bugsense;
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
 var welcomeRecentsArea, welcomeRecentsList;
 
-/* 0.4
-// Google Drive
-var welcomeGoogleArea, welcomeGoogleList, openDialogGoogleArea, openDialogGoogleList;
-*/
-
 // Cache
 var appCache = window.applicationCache;
 
@@ -48,6 +43,9 @@ window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
 firetext.init = function () {
   // Initialize Bugsense
   bugsenseInit();
+  
+  // Initialize l10n
+  document.webL10n.ready(function () {
 
   // Find device type
   checkDevice();
@@ -177,6 +175,8 @@ firetext.init = function () {
 
   // Initialize Night Mode
   night();
+  
+  });
 };
 
 
@@ -194,7 +194,7 @@ function updateAddDialog() {
       var noStorageNotice = document.createElement('div');
       noStorageNotice.id = 'no-storage-notice';
       noStorageNotice.classList.add('redAlert');
-      noStorageNotice.textContent = 'You have not set up a storage method!';
+      noStorageNotice.textContent = _('no-storage-method');
       document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
     }
   } else {
@@ -231,13 +231,13 @@ function updateDocLists(lists) {
   
   if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
     // Recents
-    buildDocList(firetext.recents.get(), [welcomeRecentsList], "Recent Documents", 'internal', true);
+    buildDocList(firetext.recents.get(), [welcomeRecentsList], "recent-documents", 'internal', true);
   }
     
   if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
     // Internal
     firetext.io.enumerate('/', function(DOCS) {
-      buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "Documents Found", 'internal');
+      buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "documents-found", 'internal');
     });
   }
     
@@ -530,8 +530,8 @@ function buildDocList(DOCS, listElms, display, location, preview) {
     } else {
       // No docs message
       var output = '<li style="margin-top: -5px" class="noLink">';
-      output += '<p>No ' + display + '</p>';
-      output += "<p>Click the compose icon to create one.</p>";
+      output += '<p>'+_('no-'+display)+'</p>';
+      output += '<p>'+_('click-compose-icon-to-create')+'</p>';
       output += '</li>';
       
       // Display output HTML
@@ -560,8 +560,8 @@ function buildEditDocList(DOCS, listElm, display, location) {
       listElm.setAttribute("data-type","edit");
     } else {
       output += '<li style="margin-top: -5px" class="noLink">';
-      output += '<p>No ' + display + '</p>';
-      output += "<p>Click the compose icon to create one.</p>";
+      output += '<p>'+_('no-'+display)+'</p>';
+      output += '<p>'+_('click-compose-icon-to-create')+'</p>';
       output += '</li>';
     }
     
@@ -712,7 +712,7 @@ function editDocs() {
     });
     if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
       cloud.dropbox.enumerate('/Documents', function(DOCS) {
-        buildEditDocList(DOCS, welcomeDropboxList, "Dropbox Documents Found", 'dropbox');
+        buildEditDocList(DOCS, welcomeDropboxList, "dropbox-documents-found", 'dropbox');
       });
     }
     watchCheckboxes();
@@ -734,11 +734,11 @@ function watchCheckboxes() {
 function updateSelectButton() {
   if (numSelected() == 0) {
     // Add select all button
-    document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">Select all</button><button data-click="delete" class="danger">Delete selected</button>';
+    document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">'+_('select-all')+'</button><button data-click="delete" class="danger">'+_('delete-selected')+'</button>';
   }
   else {
     // Add deselect all button
-    document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">Deselect all</button><button data-click="delete" class="danger">Delete selected</button>';
+    document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">'+_('deselect-all')+'</button><button data-click="delete" class="danger">'+_('delete-selected')+'</button>';
   }
 }
 
@@ -789,11 +789,11 @@ function deleteSelected(confirmed) {
     
     if (confirmed != true && confirmed != 'true') {
       if (selected.length == 1) {
-        var confirmDeletion = confirm('Do you want to delete this file?');      
+        var confirmDeletion = confirm(_('want-to-delete-singular'));      
       } else if (selected.length > 1) {
-        var confirmDeletion = confirm('Do you want to delete these files?');      
+        var confirmDeletion = confirm(_('want-to-delete-plural'));      
       } else {
-        alert('No files selected.');
+        alert(_('no-files-selected'));
         return;
       }
       if (confirmDeletion != true) {
@@ -1026,8 +1026,14 @@ function processActions(eventAttribute, target) {
       // Open a new tab
       window.open(browseLocation);
     } else if (calledFunction == 'justify') {
-      var justifyDirection = justifySelect.value;
-      if (justifyDirection == 'Justified') {
+      var justifyDirection = justifySelect.value;      
+      if (justifyDirection == 'l') {
+        justifyDirection = 'Left';      
+      } else if (justifyDirection == 'r') {
+        justifyDirection = 'Right';      
+      } else if (justifyDirection == 'c') {
+        justifyDirection = 'Center';      
+      } else if (justifyDirection == 'j') {
         justifyDirection = 'Full';
       }
       formatDoc('justify'+justifyDirection);
@@ -1113,7 +1119,7 @@ function processActions(eventAttribute, target) {
           var rows = parseInt(document.getElementById('table-rows').value);
           var cols = parseInt(document.getElementById('table-columns').value);            
         } else {
-          alert('Please enter a valid value (e.g. 2 or 5)');
+          alert(_('valid-integer-value'));
           return;
         }
       
@@ -1148,7 +1154,7 @@ function processActions(eventAttribute, target) {
       document.getElementById('table-columns').value = null;
     } else if (calledFunction == 'clearRecents') {
       firetext.recents.reset();
-      alert('Your recent documents list has been successfully eliminated!');
+      alert(_('recents-eliminated'));
     }
   }
 }
@@ -1175,7 +1181,7 @@ function checkDevice() {
   }
   
   if (window.opera) {
-    alert('Warning: Your browser does not support some vital Firetext technology.  Please download Firefox from https://mozilla.org/firefox');
+    alert(_('warning-unsupported-technology'));
   }
 };
 
