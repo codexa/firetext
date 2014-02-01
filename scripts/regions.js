@@ -1,7 +1,7 @@
 /*
 * Regions
 * Navigation handler
-* Copyright (C) Codexa Organization 2013.
+* Copyright (C) Codexa Organization.
 */
 
 'use strict';
