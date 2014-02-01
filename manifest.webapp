@@ -17,10 +17,6 @@
   },
   "default_locale": "en-US",
   "locales": {
-    "en-US": {
-      "name": "Firetext",
-      "description": "The word processor for Firefox OS"
-    }
   },
   "permissions": {
     "device-storage:sdcard": {
