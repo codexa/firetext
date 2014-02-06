@@ -60,20 +60,21 @@
   z-index: 10;
   padding: 0;
   height: 5rem;
-  color: #fff;
-  background: #2c2c2c repeat 0 0;
+  color: #1f1f1f;
+  background: #fff repeat 0 0;
   border: none;
+  border-bottom: solid 0.2rem #efefef;
 }
 
 [role="edit"][data-type="edit"] header h1 {
   font: 2.5rem/5rem "Moz", "Open Sans", Sans-serif;
   text-align: left;
-  color: #fff;
+  color: inherit;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
-  margin: 0 0 0 3rem;
+  margin: 0 0 0 2rem;
   height: 100%
 }
 
@@ -83,7 +84,7 @@
   padding: 0;
   overflow: hidden;
   font: normal 1.4rem/1.1em "MozTT", Sans-serif;
-  color: #fff;
+  color: inherit;
   border-radius: 0;
 }
 
@@ -115,7 +116,7 @@
 }
 
 [role="edit"][data-type="edit"] header menu button {
-  color: #fff;
+  color: inherit;
   border: none;
 }
 
@@ -127,12 +128,11 @@
 /* Press state */
 [role="edit"][data-type="edit"] header button:active .icon:after,
 [role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
-  background: #dfdfdf !important;
+  background: #dfdfdf;
   transition: background 0.2s ease;
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
     -o-transition: background 0.2s ease;
-  color: #fff;
 }
 
 [role="edit"][data-type="edit"] header button:first-letter {
@@ -174,8 +174,8 @@
   white-space: nowrap;
   margin: 0;
   padding: 1.5rem;
-  border-top: solid 0.1rem rgba(255, 255, 255, 0.1);
-  background: #2c2c2c repeat left top;
+  border-top: solid 0.2rem #efefef;
+  background: #fff;
   display: block;
   overflow: hidden;
   position: absolute;
@@ -197,7 +197,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  background: #eee repeat-x left bottom;
+  background: #efefef;
   border: none;
   border-radius: 0.3rem;
   font-size: 1.6rem;
@@ -214,7 +214,7 @@
 /* Press (default & recommend) */
 [role="edit"][data-type="edit"] menu button:active,
 [role="edit"][data-type="edit"] menu button.recommend:active {
-  background: #dfdfdf;
+  background: #ddd;
   color: #333;
 }
 
@@ -225,7 +225,7 @@
 
 /* Danger */
 [role="edit"][data-type="edit"] menu button.danger{
-  background-color: #890707;
+  background-color: #BE000A;
   color: #fff;
   text-shadow: none;
 }

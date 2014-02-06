@@ -12,7 +12,7 @@ section[role="region"], section[role="dialog"] {
   bottom: 0px;
   left: 0px;
   right: 0px;  
-  background-color: #eee;  
+  background-color: #fff;  
     -moz-transition: all .4s ease;
     -webkit-transition: all .4s ease;
     -o-transition: all .4s ease;

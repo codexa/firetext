@@ -104,7 +104,7 @@ fieldset {
   border-radius: 0.3rem;
   border: 0.1rem solid rgba(0,0,0,.2);
   font: 1.4rem/1em "MozTT", Sans-serif;
-  background: #fff url(input_areas/images/ui/shadow.png) repeat-x left top;
+  background: #eee;
 }
 
 fieldset  + fieldset {

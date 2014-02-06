@@ -12,7 +12,7 @@ html, body {
   padding: 0;  
   font-size: 10px;
   font-family: "Open Sans", sans-serif;  
-  background: #eee;
+  background: #fff;
   color: #6f6f6f;
 }
 
@@ -44,10 +44,6 @@ html, body {
 
 
 /* Style hacks */
-#edit header:first-child {
-  border-bottom: .2rem solid #ccc;
-}
-
 [role="toolbar"] button.ftanylitics {
   background-color: #444;
 }
@@ -103,7 +99,7 @@ form[role=dialog].current {
 
 [data-type="list"] h2,
 [data-type="edit"] h2 {
-  background: #dfdfdf;
+  background: #efefef;
   padding: 5px 20px;
   color: #2C2C2C;
   margin: 0 0;
@@ -128,7 +124,7 @@ form[role=dialog].current {
 /* File List */
 [data-type="list"] li.fileListItem {
   height: auto;
-  background: #eee;
+  background: #fff;
   cursor: pointer;
 }
 
@@ -148,7 +144,7 @@ form[role=dialog].current {
 }
 
 [data-type="list"] li.fileListItem .fileItemDescription {
-  background: #ccc;
+  background: #ddd;
   font-size: 1.2rem;
   max-height: 5rem;
   overflow: hidden;
@@ -339,7 +335,7 @@ aside select.dummy {
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 8px;
-  background-color: #eee;
+  background-color: #fff;
   padding: 10px;
   opacity: 0;
   display: inline-block;
