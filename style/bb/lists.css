@@ -40,7 +40,7 @@
   box-sizing: border-box;
   transition: -webkit-transform 0.3s ease, padding 0.3s ease;
   transition: transform 0.3s ease, padding 0.3s ease;
-  border-bottom: solid 0.1rem #ccc;
+  border-bottom: solid 0.1rem #ddd;
   color: #2c2c2c;
   margin: 0;
   display: block;
@@ -204,6 +204,7 @@
 [data-type="list"] [data-type="edit"] li {
   transform: translateX(4rem);
   padding-left: 0;
+  margin-left: 2rem;
 }
 
 [data-type="list"] [data-type="edit"] li > label {

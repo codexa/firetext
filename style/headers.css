@@ -4,12 +4,12 @@ section > header:first-child {
   padding: 0;
   height: 5rem;
   color: #1f1f1f;
-  background: #eee;
+  background: #fff;
   background-size: auto 100%;
   box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-  border-bottom: none;
+  border-bottom: solid 0.2rem #efefef;
 }
 
 section > header:first-child h1 {
@@ -147,7 +147,7 @@ section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
 section > header:first-child button:not(:disabled):active .icon:after,
 section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
 section > header:first-child menu[type="toolbar"] button:not(:disabled):active  {
-  background: #dfdfdf !important;
+  background: #efefef !important;
     -moz-transition: background 0.2s ease;
     -webkit-transition: background 0.2s ease;
     -o-transition: background 0.2s ease;
