@@ -77,7 +77,7 @@ firetext.settings.init = function () {
 
   // Language
   if (!firetext.settings.get('language')) {
-    firetext.settings.save('language', 'en-US');    
+    firetext.settings.save('language', document.webL10n.getLanguage());    
   }
   languageSelect.value = firetext.settings.get('language');
   languageSelect.addEventListener('change', function () {
