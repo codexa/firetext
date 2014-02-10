@@ -44,12 +44,12 @@ firetext.init = function () {
   // Initialize Bugsense
   bugsenseInit();
   
+  // Initialize l10n
+  document.webL10n.ready(function () {
+  
   // Initialize language handler
   firetext.language.init();
   
-  // Initialize l10n
-  document.webL10n.ready(function () {
-
   // Find device type
   checkDevice();
   
@@ -177,8 +177,7 @@ firetext.init = function () {
   });
 
   // Initialize Night Mode
-  night();
-  
+  night();  
   });
 };
 
