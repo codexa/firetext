@@ -409,54 +409,55 @@ function loadToEditor(directory, filename, filetype, location, editable) {
   // Fill editor
   firetext.io.load(directory, filename, filetype, function(result, error) {
     if (!error) {
-      
-      editorMessageProxy.getPort().postMessage({
-        command: "load",
-        content: result,
-        filetype: filetype
-      });
-      switch (filetype) {
-        case ".txt":
-        /* 0.4
-        case ".docx":
-        */
-          tabRaw.classList.add('hidden');
-          regions.tab(document.querySelector('#editTabs'), 'design');
-          break;
-        case ".html":
-        default:
-          rawEditor.textContent = result;
-          tabRaw.classList.remove('hidden');  
-          break;
-      }
-      
-      // Handle read-only files
-      if (editable == false) {
-        formatDoc('contentReadOnly', true);
-      } else {
-        formatDoc('contentReadOnly', false);      
-      }
-      
-      // Add listener to update views
-      watchDocument(filetype);
-      
-      // Start toolbar update interval      
-      toolbarInterval = window.setInterval(updateToolbar, 100);
-      
-      // Add file to recent docs
-      firetext.recents.add([directory, filename, filetype], location);
-  
-      // Show editor
-      regions.nav('edit');
-  
-      // Hide save button if autosave is enabled
-      if (firetext.settings.get('autosave') != 'false') {
-        document.getElementById('editorSaveButton').style.display = 'none';
-        document.getElementById('zenSaveButton').style.display = 'none';
-      } else {
-        document.getElementById('editorSaveButton').style.display = 'inline-block';
-        document.getElementById('zenSaveButton').style.display = 'inline-block';
-      }
+      initEditor(function() {
+        editorMessageProxy.getPort().postMessage({
+          command: "load",
+          content: result,
+          filetype: filetype
+        });
+        switch (filetype) {
+          case ".txt":
+          /* 0.4
+          case ".docx":
+          */
+            tabRaw.classList.add('hidden');
+            regions.tab(document.querySelector('#editTabs'), 'design');
+            break;
+          case ".html":
+          default:
+            rawEditor.textContent = result;
+            tabRaw.classList.remove('hidden');  
+            break;
+        }
+        
+        // Handle read-only files
+        if (editable == false) {
+          formatDoc('contentReadOnly', true);
+        } else {
+          formatDoc('contentReadOnly', false);      
+        }
+        
+        // Add listener to update views
+        watchDocument(filetype);
+        
+        // Start toolbar update interval      
+        toolbarInterval = window.setInterval(updateToolbar, 100);
+        
+        // Add file to recent docs
+        firetext.recents.add([directory, filename, filetype], location);
+    
+        // Show editor
+        regions.nav('edit');
+    
+        // Hide save button if autosave is enabled
+        if (firetext.settings.get('autosave') != 'false') {
+          document.getElementById('editorSaveButton').style.display = 'none';
+          document.getElementById('zenSaveButton').style.display = 'none';
+        } else {
+          document.getElementById('editorSaveButton').style.display = 'inline-block';
+          document.getElementById('zenSaveButton').style.display = 'inline-block';
+        }
+      })
     } else {
       alert('File could not be loaded. \n\nInfo for gurus:\n'+result);
     }

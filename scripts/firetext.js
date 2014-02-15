@@ -595,6 +595,8 @@ function extIcon() {
 /* Editor
 ------------------------*/ 
 function initEditor(callback) {
+  editor.onload = null;
+  editor.src = editor.src;
   editor.onload = function() {
     var editorMessageChannel = new MessageChannel();
     // See: scripts/messages.js
