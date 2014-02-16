@@ -21,27 +21,7 @@ var mainClosure = function() {
   window.addEventListener("message", function(e){
     // code taken from message_channel.js to fix polyfill problems
     if(typeof e.data === "string") {
-      var fakeEvent = {
-            data: null,
-            ports: []
-          },
-          data = Kamino.parse( e.data ),
-          event = data.event,
-          ports = event.ports;
-
-      if( event ) {
-        if( ports ) {
-          for(var i=0; i< ports.length ; i++) {
-            fakeEvent.ports.push( MessagePort.prototype._getPort( ports[i], e, true ) );
-          }
-        }
-        fakeEvent.data = event.data;
-        fakeEvent.source = e.source;
-        fakeEvent.origin = e.origin;
-        fakeEvent.messageChannel = event.messageChannel;
-      }
-
-      e = fakeEvent;
+      e = MessageChannel.decodeEvent(e, true);
     }
     // check origin, change "http://localhost:81" to origin served from
     if(e.origin !== "http://localhost:81") {
