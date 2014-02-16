@@ -595,41 +595,47 @@ function extIcon() {
 /* Editor
 ------------------------*/ 
 function initEditor(callback) {
-  editor.onload = null;
-  editor.src = editor.src;
-  editor.onload = function() {
-    var editorMessageChannel = new MessageChannel();
-    // See: scripts/messages.js
-    editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
-    // Successful initialization
-    editorMessageProxy.registerMessageHandler(function(e) {
-      // Initialize Raw Editor
-      rawEditor.setAttribute('contentEditable', 'true');
-    
-      // Nav to the design tab
-      regions.tab(document.querySelector('#editTabs'), 'design');
-      callback();
-    }, "init-success", true);
+  loadEditor(function(editorURL) {
+    editor.onload = null;
+    editor.src = editorURL;
+    editor.onload = function() {
+      var editorMessageChannel = new MessageChannel();
+      // See: scripts/messages.js
+      editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+      // Successful initialization
+      editorMessageProxy.registerMessageHandler(function(e) {
+        // Initialize Raw Editor
+        rawEditor.setAttribute('contentEditable', 'true');
+      
+        // Nav to the design tab
+        regions.tab(document.querySelector('#editTabs'), 'design');
+        callback();
+      }, "init-success", true);
 
-    editorMessageProxy.registerMessageHandler(function(e) {
-      fileChanged = true;
-      if(e.data.filetype === ".html") {
-        rawEditor.textContent = e.data.html;
-      }
-      autosave();
-    }, "doc-changed");
+      editorMessageProxy.registerMessageHandler(function(e) {
+        fileChanged = true;
+        if(e.data.filetype === ".html") {
+          rawEditor.textContent = e.data.html;
+        }
+        autosave();
+      }, "doc-changed");
 
-    // editor focus and blur
-    editorMessageProxy.registerMessageHandler(function(e) {
-      if(e.data.focus) {
-        processActions('data-focus', editor);
-      } else {
-        processActions('data-blur', editor);
+      // editor focus and blur
+      editorMessageProxy.registerMessageHandler(function(e) {
+        if(e.data.focus) {
+          processActions('data-focus', editor);
+        } else {
+          processActions('data-blur', editor);
+        }
+      }, "focus");
+      try {
+        editor.contentWindow.postMessage("init", "*", [editorMessageChannel.port2]);
+      } catch(e) {
+        Window.postMessage(editor.contentWindow, "init", "*", [editorMessageChannel.port2]);
       }
-    }, "focus");
-    editor.contentWindow.postMessage("init", "*", [editorMessageChannel.port2]);
-    editorMessageProxy.getPort().start();
-  }
+      editorMessageProxy.getPort().start();
+    }
+  })
 }
 
 function watchDocument(filetype) {

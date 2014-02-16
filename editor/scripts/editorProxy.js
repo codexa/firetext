@@ -18,9 +18,9 @@ var mainClosure = function() {
   // Proxy for communication with parent page
   var parentMessageProxy;
 
-  // change "http://localhost:81" to origin served from
-  window.addEventListener("message", function(e){
-    // check origin
+  var listener = window.polyAddEventListener || window.addEventListener;
+  listener("message", function(e){
+    // check origin change "http://localhost:81" to origin served from
     if(e.origin !== "http://localhost:81") {
         throw new Error("origin did not match");
     }
