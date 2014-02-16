@@ -313,7 +313,7 @@
           data = Kamino.parse( messageEvent.data ),
           event = data.event,
           ports = event.ports;
-      
+
       if( event ) {
         if( ports ) {
           for(var i=0; i< ports.length ; i++) {
@@ -325,6 +325,7 @@
         fakeEvent.origin = messageEvent.origin;
         fakeEvent.messageChannel = event.messageChannel;
       }
+
       return fakeEvent;
     };
 
@@ -355,6 +356,7 @@
 
     var propagationHandler = function( event ) {
       var messageEvent = decodeEvent( event, true );
+
       if( messageEvent.messageChannel ) {
         MessageChannel.propagateEvent( messageEvent );
       }
@@ -401,7 +403,8 @@
         removeEventListenerName = 'detachEvent';
         messageEventType = 'onmessage';
       }
-      window.polyAddEventListener = target[addEventListenerName] = function() {
+
+      target[addEventListenerName] = function() {
         var args = Array.prototype.slice.call( arguments ),
             originalHandler = args[1],
             self = this,
@@ -410,6 +413,7 @@
         if( args[0] === messageEventType ) {
           messageHandlerWrapper = function( event ) {
             var messageEvent = decodeEvent( event );
+
             if( ! messageEvent.messageChannel ) {
               originalHandler.call( self, messageEvent );
             }
@@ -421,8 +425,8 @@
 
         originalAddEventListener.apply( this, args );
       };
-      
-      window.polyRemoveEventListener = target[removeEventListenerName] = function() {
+
+      target[removeEventListenerName] = function() {
         var args = Array.prototype.slice.call( arguments ),
             originalHandler = args[1];
 
@@ -508,7 +512,7 @@
         MessageChannel.log(ports, "handshake window", otherWindow);
         otherWindow.postMessage(data, targetOrigin);
       };
-      
+
       _overrideMessageEventListener( Window.prototype );
     } else {
       //Worker

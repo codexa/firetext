@@ -629,9 +629,9 @@ function initEditor(callback) {
         }
       }, "focus");
       try {
-        editor.contentWindow.postMessage("init", "*", [editorMessageChannel.port2]);
+        editor.contentWindow.postMessage({command: "init"}, "*", [editorMessageChannel.port2]);
       } catch(e) {
-        Window.postMessage(editor.contentWindow, "init", "*", [editorMessageChannel.port2]);
+        Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
       }
       editorMessageProxy.getPort().start();
     }
