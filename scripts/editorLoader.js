@@ -7,7 +7,6 @@ var loadEditor = (function () {
       return;
     }
     var editorDoc;
-    var createObjectURL = URL.createObjectURL || URL.webkitCreateObjectURL;
 
     var editorReq = new XMLHttpRequest();
     editorReq.open("GET", "editor/editor.html", true);
@@ -22,7 +21,7 @@ var loadEditor = (function () {
         for (var i = 0; i < scriptTags.length; i++) {
           if(scriptTags[i].src) {
             (function() {
-              var scriptURL = new URL(scriptTags[i].src, new URL("editor", location.href)).href;
+              var scriptURL = new URI(scriptTags[i].src, new URI("editor", location.href)).toString();
               if(!scripts[scriptURL]) {
                 scripts[scriptURL] = [];
                 var scriptReq = new XMLHttpRequest();
@@ -33,7 +32,7 @@ var loadEditor = (function () {
                   if(this.status === 200) {
                     var inlineScript = editorDoc.createElement("script");
                     var scriptText = this.response;
-                    scriptText = scriptText.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin);
+                    scriptText = scriptText.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin ? window.location.origin : window.location.protocol + "//" + window.location.host);
                     inlineScript.type = "text/javascript";
                     inlineScript.src = "data:text/javascript;base64," + btoa(scriptText);
                     scripts[scriptURL][0].parentNode.replaceChild(inlineScript, scripts[scriptURL][0]);
@@ -46,7 +45,8 @@ var loadEditor = (function () {
                       break;
                     }
                     if (done) {
-                      editorURL = createObjectURL(new Blob([editorDoc.documentElement.outerHTML], {type: "text/html"}));
+                      var editorBlob = new Blob([editorDoc.documentElement.outerHTML], {type: "text/html"})
+                      editorURL = URL.createObjectURL ? URL.createObjectURL(editorBlob) : URL.webkitCreateObjectURL ? URL.webkitCreateObjectURL(editorBlob) : null;
                       callback(editorURL);
                     }
                   }

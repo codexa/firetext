@@ -628,11 +628,7 @@ function initEditor(callback) {
           processActions('data-blur', editor);
         }
       }, "focus");
-      try {
-        editor.contentWindow.postMessage({command: "init"}, "*", [editorMessageChannel.port2]);
-      } catch(e) {
-        Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
-      }
+      Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
       editorMessageProxy.getPort().start();
     }
   })
