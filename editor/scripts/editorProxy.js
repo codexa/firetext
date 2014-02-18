@@ -19,10 +19,6 @@ var mainClosure = function() {
   var parentMessageProxy;
 
   window.addEventListener("message", function(e){
-    // code taken from message_channel.js to fix polyfill problems
-    if(typeof e.data === "string") {
-      e = MessageChannel.decodeEvent(e, true);
-    }
     // check origin, change "http://localhost:81" to origin served from
     if(e.origin !== "http://localhost:81") {
       throw new Error("origin did not match");

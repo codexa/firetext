@@ -513,7 +513,7 @@
         otherWindow.postMessage(data, targetOrigin);
       };
 
-      _overrideMessageEventListener( Window.prototype );
+      _overrideMessageEventListener( window );
     } else {
       //Worker
       _overrideMessageEventListener( self );
