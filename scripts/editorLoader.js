@@ -32,8 +32,10 @@ var loadEditor = (function () {
                   var done = true;
                   if(this.status === 200) {
                     var inlineScript = editorDoc.createElement("script");
+                    var scriptText = this.response;
+                    scriptText = scriptText.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin);
                     inlineScript.type = "text/javascript";
-                    inlineScript.src = "data:text/javascript;base64," + btoa(this.response);
+                    inlineScript.src = "data:text/javascript;base64," + btoa(scriptText);
                     scripts[scriptURL][0].parentNode.replaceChild(inlineScript, scripts[scriptURL][0]);
                     for (var i = 1; i < scripts[scriptURL].length; i++) {
                       scripts[scriptURL][i].parentNode.removeChild(scripts[scriptURL][i]);

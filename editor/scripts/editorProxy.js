@@ -9,6 +9,8 @@
 var mainClosure = function() {
   // document to be edited
   var doc;
+  // replace with origin to verify against
+  var mainOrigin = "[ORIGIN_OF_MAIN_DOCUMENT]";
   
   // Overide popups
   window.alert = null;
@@ -20,7 +22,7 @@ var mainClosure = function() {
 
   window.addEventListener("message", function(e){
     // check origin, change "http://localhost:81" to origin served from
-    if(e.origin !== "http://localhost:81") {
+    if(e.origin !== mainOrigin) {
       throw new Error("origin did not match");
     }
     if(e.data.command === "init" && e.ports.length) {
