@@ -8,7 +8,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  background-color: #dfdfdf;
+  background-color: #efefef;
 }
 
 [role="toolbar"] ul {
@@ -41,7 +41,7 @@
 
 [role="toolbar"] button:active, 
 [role="toolbar"] button.active {
-  background-color: #afafaf;
+  background-color: #bfbfbf;
 }
 
 [role="toolbar"] button[class^="icon-"], 

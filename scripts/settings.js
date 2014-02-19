@@ -1,6 +1,6 @@
 /*
 * Settings
-* Copyright (C) Codexa Organization 2013.
+* Copyright (C) Codexa Organization.
 */
 
 'use strict';
@@ -18,15 +18,11 @@ firetext.settings.init = function () {
   var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
   var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
   var autozenEnabled = document.querySelector('#autozen-enabled-switch');
-  var previewsEnabled = document.querySelector('#previews-enabled-switch');
   var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
-  var statsEnabled = document.querySelector('#stats-enabled-switch');
-  
-  /* 0.4
-  var gdriveEnabled = document.querySelector('#gdrive-enabled-switch');
-  */
-  
+  var languageSelect = document.querySelector('#language-select');
   var nightmodeSelect = document.querySelector('#nightmode-select');
+  var previewsEnabled = document.querySelector('#previews-enabled-switch');
+  var statsEnabled = document.querySelector('#stats-enabled-switch');
 
   // Autoload
   if (firetext.settings.get('autoload') == 'true') {
@@ -68,6 +64,60 @@ firetext.settings.init = function () {
     firetext.settings.save('autozen', this.checked);
   }
 
+  // Dropbox
+  if (firetext.settings.get('dropbox.enabled') == 'true') {
+    dropboxEnabled.setAttribute('checked', '');
+  } else {  
+    dropboxEnabled.removeAttribute('checked');
+  }
+  dropboxEnabled.onchange = function () {
+    firetext.settings.save('dropbox.enabled', this.checked);
+    cloud.init();
+  }
+
+  // Language
+  if (!firetext.settings.get('language')) {
+    firetext.settings.save('language', document.webL10n.getLanguage());    
+  }
+  languageSelect.value = firetext.settings.get('language');
+  languageSelect.addEventListener('change', function () {
+    // Save
+    firetext.settings.save('language', languageSelect.value);
+
+    // Update
+    firetext.language.init();
+  });
+
+  // Night Mode
+  if (firetext.settings.get('nightmode') == 'true') {
+    nightmodeSelect.value = '1';
+  } else if (firetext.settings.get('nightmode') == 'false') { 
+    nightmodeSelect.value = '0';
+  } else {
+    nightmodeSelect.value = '2';
+    if (firetext.settings.get('nightmode') != 'auto') {
+      firetext.settings.save('nightmode', 'auto');
+      night();
+    } 
+  }
+  nightmodeSelect.addEventListener('change', function () {
+    // Convert
+    var convertedNightValue;
+    if (nightmodeSelect.value == '1') {
+      convertedNightValue = 'true';
+    } else if (nightmodeSelect.value == '0') { 
+      convertedNightValue = 'false';
+    } else {
+      convertedNightValue = 'auto';
+    }  
+
+    // Save
+    firetext.settings.save('nightmode', convertedNightValue);
+
+    // Update
+    night();
+  });
+
   // Previews
   if (firetext.settings.get('previews.enabled') != 'false') {
     previewsEnabled.setAttribute('checked', '');
@@ -81,60 +131,6 @@ firetext.settings.init = function () {
     firetext.settings.save('previews.enabled', this.checked);
     updateDocLists(['recents']);
   }
-
-  // Dropbox
-  if (firetext.settings.get('dropbox.enabled') == 'true') {
-    dropboxEnabled.setAttribute('checked', '');
-  } else {  
-    dropboxEnabled.removeAttribute('checked');
-  }
-  dropboxEnabled.onchange = function () {
-    firetext.settings.save('dropbox.enabled', this.checked);
-    cloud.init();
-  }
-
-  /* 0.4
-  // Google Drive
-  if (firetext.settings.get('gdrive.enabled') == 'true') {
-    gdriveEnabled.setAttribute('checked', '');
-  } else {  
-    gdriveEnabled.removeAttribute('checked');
-  }
-  gdriveEnabled.onchange = function () {
-    firetext.settings.save('gdrive.enabled', this.checked);
-    cloud.init();
-  }
-  */
-
-  // Night Mode
-  if (firetext.settings.get('nightmode') == 'true') {
-    nightmodeSelect.value = 'Always On';
-  } else if (firetext.settings.get('nightmode') == 'false') { 
-    nightmodeSelect.value = 'Always Off';
-  } else {
-    nightmodeSelect.value = 'Auto';
-    if (firetext.settings.get('nightmode') != 'auto') {
-      firetext.settings.save('nightmode', 'auto');
-      night();
-    } 
-  }
-  nightmodeSelect.addEventListener('change', function () {
-    // Convert
-    var convertedNightValue;
-    if (nightmodeSelect.value == 'Always On') {
-      convertedNightValue = 'true';
-    } else if (nightmodeSelect.value == 'Always Off') { 
-      convertedNightValue = 'false';
-    } else {
-      convertedNightValue = 'auto';
-    }  
-
-    // Save
-    firetext.settings.save('nightmode', convertedNightValue);
-
-    // Update
-    night();
-  });
 
   // Stats
   if (firetext.settings.get('stats.enabled') != 'false') {

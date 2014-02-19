@@ -1,6 +1,6 @@
 /*
 * Night Mode
-* Copyright (C) Codexa Organization 2013.
+* Copyright (C) Codexa Organization.
 */
 
 .night, .night body {
@@ -19,10 +19,6 @@
 
 
 /* Headers */
-.night header:first-child {
-  opacity: .8;
-}
-
 .night section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
 .night section > header:first-child button:not(:disabled):active .icon:after,
 .night section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
@@ -37,11 +33,7 @@
 .night section > header:first-child {
   background: #111;
   color: #eee;
-  border-color: #1f1f1f;
-}
-
-.night #edit header:first-child {
-  border-color: #333;
+  border-color: #2C2C2C;
 }
 
 
@@ -111,6 +103,10 @@
   color: #a0a0a0;
 }
 
+.night [data-type="list"] li > label {
+  border-color: #1f1f1f;
+}
+
 
 /* File lists */
 .night [data-type="list"] li.fileListItem {
@@ -167,6 +163,28 @@
 .night [role="tablist"] [role="tabpanel"] {
   background-color: #111;
   color: #0a0a0a;
+}
+
+
+/* Edit Mode */
+.night [role="edit"][data-type="edit"] > menu {
+    background-color: #222;
+    border-color: #333;
+}
+
+.night [role="edit"][data-type="edit"] menu button {
+    background-color: #333;
+    color: #fff;
+    text-shadow: none;
+}
+
+.night [role="edit"][data-type="edit"] menu button:active,
+.night [role="edit"][data-type="edit"] menu button.recommend:active {
+    background-color: #111;
+}
+
+.night [role="edit"][data-type="edit"] menu button.danger{
+    background-color: #BE000A;
 }
 
 

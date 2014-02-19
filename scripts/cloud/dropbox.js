@@ -1,6 +1,6 @@
 /*
 * Dropbox Integration
-* Copyright (C) Codexa Organization 2013.
+* Copyright (C) Codexa Organization.
 */
 
 'use strict';
@@ -67,7 +67,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
         }
         callback(entries);
       } else {
-        client.mkdir(directory, function() {
+        cloud.dropbox.client.mkdir(directory, function() {
           callback(cloud.dropbox.enumerate(directory, function(l) { return l; }));
         });
       }
@@ -94,11 +94,11 @@ cloud.dropbox.load = function (path, callback) {
           
     // Callback error
     if (!cloud.dropbox.client) {
-      callback("You are not signed in to Dropbox", true);
+      callback(_('not-signed-in'), true);
     } else if (!path) {
-      callback("Path not defined", true);
+      callback(_('path-not-defined'), true);
     } else {
-      callback("Unknown error", true);
+      callback(_('unknown-error'), true);
     }
   }
 }
@@ -116,13 +116,13 @@ cloud.dropbox.save = function (path, content, showSpinner, callback) {
     });    
   } else {
     if (!cloud.dropbox.client) {
-      callback("You are not signed in to Dropbox");
+      callback(_('not-signed-in'));
     } else if (!path) {
-      callback("Path not defined");
+      callback(_('path-not-defined'));
     } else if (!content) {
-      callback("Content not defined");
+      callback(_('content-not-defined'));
     } else {
-      callback("Unknown error");
+      callback(_('unknown-error'));
     }
   }
 }
@@ -132,11 +132,11 @@ cloud.dropbox.delete = function (path) {
     cloud.dropbox.client.remove(path, function(e) { });
   } else {
     if (!cloud.dropbox.client) {
-      return "You are not signed in to Dropbox";
+      return _('not-signed-in');
     } else if (!path) {
-      return "Path not defined";
+      return _('path-not-defined');
     } else {
-      return "Unknown error";
+      return _('unknown-error');
     }
   }
 }
@@ -149,12 +149,12 @@ cloud.dropbox.error = function (error) {
   case Dropbox.ApiError.OVER_QUOTA:
     // The user is over their Dropbox quota.
     // Tell them their Dropbox is full. Refreshing the page won't help.
-    alert('Your Dropbox is full :(');
+    alert(_('dropbox-full'));
     break;
 
 
   case Dropbox.ApiError.NETWORK_ERROR:
-    alert('Your network appears to be unavailable.\n\nPlease check your connection and try again.');
+    alert(_('network-error'));
     break;
 
   case Dropbox.ApiError.RATE_LIMITED:
