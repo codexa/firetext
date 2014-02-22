@@ -68,10 +68,15 @@ function initDocIO(doc, messageProxy) {
         break;
     }
     content = new Blob([content], {type: type});
-    messageProxy.getPort().postMessage({
-      command: e.data.key,
-      content: content
-    });
+    var reader = new FileReader();
+    reader.addEventListener("load", function() {
+      messageProxy.getPort().postMessage({
+        command: e.data.key,
+        content: reader.result,
+        type: content.type
+      });
+    }, false);
+    reader.readAsBinaryString(content);
   }, "get-content-blob");
 
   messageProxy.registerMessageHandler(function(e) {
