@@ -367,7 +367,7 @@ function saveFromEditor(banner, spinner) {
   var filetype = document.getElementById('currentFileType').textContent;
 
   var key = editorMessageProxy.registerMessageHandler(function(e){
-    firetext.io.save(directory, filename, filetype, new Blob([e.data.content], {type: e.data.type}), banner, function(){ fileChanged = false; }, location, spinner);
+    firetext.io.save(directory, filename, filetype, new Blob([StringView.base64ToBytes(e.data.content)], {type: e.data.type}), banner, function(){ fileChanged = false; }, location, spinner);
   }, null, true);
   editorMessageProxy.getPort().postMessage({
   	command: "get-content-blob",

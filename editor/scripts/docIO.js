@@ -59,7 +59,7 @@ function initDocIO(doc, messageProxy) {
         break;
       /* 0.4
       case ".docx":
-        content = docxeditor.generate("blob");
+        content = docxeditor.generate("uint8array");
         application/vnd.openxmlformats-officedocument.wordprocessingml.document
         break;
       */
@@ -67,16 +67,13 @@ function initDocIO(doc, messageProxy) {
         content = doc.textContent;
         break;
     }
-    content = new Blob([content], {type: type});
-    var reader = new FileReader();
-    reader.addEventListener("load", function() {
-      messageProxy.getPort().postMessage({
-        command: e.data.key,
-        content: reader.result,
-        type: content.type
-      });
-    }, false);
-    reader.readAsBinaryString(content);
+    
+    var contentView = new StringView(content);
+    messageProxy.getPort().postMessage({
+      command: e.data.key,
+      content: contentView.toBase64(),
+      type: type
+    });
   }, "get-content-blob");
 
   messageProxy.registerMessageHandler(function(e) {
