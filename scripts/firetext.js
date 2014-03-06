@@ -365,7 +365,7 @@ function cleanForPreview(text, documentType) {
           return textTruncated;
         } else {
           var htmlOfTextWanted = rDynamic.exec(text)[0];
-          var remainingHTML = text.sub(htmlOfTextWanted.length);
+          var remainingHTML = text.substr(htmlOfTextWanted.length);
           var firstNewTagAfterHTMLOfTextWanted = remainingHTML.search(/<[a-zA-Z]/);
           if(firstNewTagAfterHTMLOfTextWanted != -1) {
               remainingHTML = remainingHTML.substr(0, firstNewTagAfterHTMLOfTextWanted);

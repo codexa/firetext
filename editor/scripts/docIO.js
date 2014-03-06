@@ -59,7 +59,7 @@ function initDocIO(doc, messageProxy) {
         break;
       /* 0.4
       case ".docx":
-        content = docxeditor.generate("blob");
+        content = docxeditor.generate("uint8array");
         application/vnd.openxmlformats-officedocument.wordprocessingml.document
         break;
       */
@@ -67,10 +67,12 @@ function initDocIO(doc, messageProxy) {
         content = doc.textContent;
         break;
     }
-    content = new Blob([content], {type: type});
+    
+    var contentView = new StringView(content);
     messageProxy.getPort().postMessage({
       command: e.data.key,
-      content: content
+      content: contentView.toBase64(),
+      type: type
     });
   }, "get-content-blob");
 

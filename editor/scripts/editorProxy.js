@@ -36,6 +36,9 @@ var mainClosure = function() {
       document.body.appendChild(doc);
       //doc = document.getElementById('tempEditDiv');
       document.execCommand('enableObjectResizing', false, 'true');
+
+      // register port
+      parentMessageProxy = new MessageProxy(e.ports[0]);
       
       // Hide and show toolbar.
       // For reviewers, just in case this looks like a security problem:
@@ -53,9 +56,6 @@ var mainClosure = function() {
           focus: false
         });
       });
-
-      // register port
-      parentMessageProxy = new MessageProxy(e.ports[0]);
 
       // initialize modules/register handlers
       // night mode
