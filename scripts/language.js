@@ -20,22 +20,37 @@ firetext.language.init = function () {
 	} 
 	
 	// Localize interface
-	var language = firetext.settings.get('language');
+	var language = firetext.language.getCurrent();
 	document.webL10n.setLanguage(language);
 	document.body.setAttribute('data-language', language);
 	
 	// LTR / RTL
-	if (language == 'he' |
-			language == 'ar' |
-			language == 'tr') {
+	if (firetext.language.getDirection() == 'rtl') {
 		document.body.classList.remove('ltr');  
-		document.body.classList.add('rtl');  		
+		document.body.classList.add('rtl');   
+		if (doc) { 
+			doc.style.direction = 'rtl';  		
+		}		
 	} else {
 		document.body.classList.remove('rtl');  
-		document.body.classList.add('ltr');  
+		document.body.classList.add('ltr'); 
+		if (doc) {
+			doc.style.direction = 'ltr'; 
+		} 		 
 	}
 }
 
 firetext.language.getCurrent = function () {
 	return (firetext.settings.get('language'));
+}
+
+firetext.language.getDirection = function () {
+	var language = firetext.language.getCurrent();
+	if (language == 'he' |
+			language == 'ar' |
+			language == 'tr') {
+		return 'rtl';			
+	} else {
+		return 'ltr';
+	}
 }
