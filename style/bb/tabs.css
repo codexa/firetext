@@ -264,3 +264,25 @@
 [role="tablist"][data-type="filter"].bottom > [role="tab"] > a {
   height: auto;
 }
+
+
+/* RTL */
+.rtl [role="tablist"] > [role="tab"] {
+    float: right;   
+}
+
+.rtl [role="tablist"] [role="tabpanel"] {
+    -moz-transform: translateX(102%);
+    -webkit-transform: translateX(102%);
+    -o-transform: translateX(102%);
+    -ms-transform: translateX(102%);
+  transform: translateX(102%);
+}
+
+.rtl [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
+    -moz-transform: translateX(-102%);
+    -webkit-transform: translateX(-102%);
+    -o-transform: translateX(-102%);
+    -ms-transform: translateX(-102%);
+  transform: translateX(-102%);
+}

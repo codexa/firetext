@@ -13,14 +13,14 @@ section > header:first-child {
 }
 
 section > header:first-child h1 {
-  font: 2.5rem/4.8rem "MozTT", Sans-serif;
+  font: 2.4rem/4.6rem "MozTT", Sans-serif;
   text-align: left;
   color: inherit;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
-  margin: 0 0 0 4rem;
+  margin: 0 0 0 3.5rem;
   height: 100%;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -121,9 +121,9 @@ section > header:first-child button {
   text-decoration: none;
 }
 
-section > header:first-child > button:first-child .icon,
-section > header:first-child > a:first-child .icon {
-  padding-right: .7rem;
+section > header:first-child > button:first-child .icon-close,
+section > header:first-child > a:first-child .icon-close {
+  padding-right: 0.7rem;
 }
 
 section > header:first-child > button:first-child .icon-menu,
@@ -260,26 +260,66 @@ section > header h2 {
 /* ----------------------------------
  * HEADERS: right-to-left tweaks
  * ---------------------------------- */
-
-html[dir="rtl"] section > header:first-child h1 {
-  text-align: right;
-  margin: 0 3rem 0 0;
+.rtl section > header:first-child {
+    direction: ltr;
 }
 
-html[dir="rtl"] section > header:first-child button,
-html[dir="rtl"] section > header:first-child a {
-  left: inherit;
-  right: 0;
+.rtl section > header:first-child h1 {
+    direction: rtl;
+    text-align: right;
+    margin: 0 3.5rem 0 0 !important;
 }
 
-html[dir="rtl"] section > header:first-child > button .icon,
-html[dir="rtl"] section > header:first-child > a .icon {
-  margin-left: 0;
-  margin-right: -2rem;
+.rtl section > header:first-child > button,
+.rtl section > header:first-child > a {
+    right: 0;
+    left: auto;
+    direction: rtl;
 }
 
-html[dir="rtl"] section > header:first-child > button .icon:after,
-html[dir="rtl"] section > header:first-child > a .icon:after {
-  left: inherit;
-  right: 0;
+.rtl section > header:first-child menu[type="toolbar"] {
+    float: left;
+}
+
+.rtl section > header:first-child menu[type="toolbar"] a,
+.rtl section > header:first-child menu[type="toolbar"] button {
+    float: right;
+}
+
+.rtl section > header:first-child menu[type="toolbar"] .menu {
+    padding-left: 0;
+    text-align: left;
+    min-width: 2rem;
+}
+
+.rtl section > header:first-child > button:first-child .icon,
+.rtl section > header:first-child > a:first-child .icon {
+    padding-right: 0;
+    padding-left: 0.7rem;    
+}
+
+.rtl section > header:first-child > button .icon:after,
+.rtl section > header:first-child > a .icon:after {
+    left: auto;
+    right: 0;
+}
+    
+.rtl section > header:first-child > button:first-child .icon-menu,
+.rtl section > header:first-child > a:first-child .icon-menu {
+    padding-right: 0;
+    padding-left: 1.3rem;
+}
+    
+.rtl section > header:first-child > button:first-child .icon-close,
+.rtl section > header:first-child > a:first-child .icon-close {
+    padding-right: 0.7rem;
+}
+    
+.rtl section > header:first-child > button:first-child .icon-back,
+.rtl section > header:first-child > a:first-child .icon-back {
+       -moz-transform: scale(-1, 1);
+       -webkit-transform: scale(-1, 1);
+       -o-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+    padding-right: 1rem;
 }

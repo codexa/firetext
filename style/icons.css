@@ -17,6 +17,7 @@
 
 [class^="icon-"], 
 [class*=" icon-"] {
+  direction: ltr;
   font-family: 'Firetext' !important;
   speak: none;
   font-style: normal;

@@ -294,42 +294,44 @@ form p button[type="reset"]::-moz-focus-inner,
  * Right-to-Left layout
  */
 
-html[dir="rtl"] form p input:valid,
-html[dir="rtl"] form p input:valid:focus,
-html[dir="rtl"] .form p input:valid,
-html[dir="rtl"] .form p input:valid:focus {
+.rtl form p input:focus,
+.rtl .form p input:focus,
+.rtl form p input:valid,
+.rtl form p input:valid:focus,
+.rtl .form p input:valid,
+.rtl .form p input:valid:focus {
   padding: 0 0.8rem 0 3.5rem;
 }
 
-html[dir="rtl"] form p textarea:valid,
-html[dir="rtl"] form p textarea:valid:focus,
-html[dir="rtl"] .form p textarea:valid,
-html[dir="rtl"] .form p textarea:valid:focus {
+.rtl form p textarea:valid,
+.rtl form p textarea:valid:focus,
+.rtl .form p textarea:valid,
+.rtl .form p textarea:valid:focus {
   padding: 0.8rem 0.8rem 0.8rem 3.5rem;
 }
 
-html[dir="rtl"] form p input + button[type="reset"],
-html[dir="rtl"] form p textarea + button[type="reset"],
-html[dir="rtl"] .form p input + button[type="reset"],
-html[dir="rtl"] .form p textarea + button[type="reset"] {
+.rtl form p input + button[type="reset"],
+.rtl form p textarea + button[type="reset"],
+.rtl .form p input + button[type="reset"],
+.rtl .form p textarea + button[type="reset"] {
   right: auto;
   left: 0;
 }
 
-html[dir="rtl"] fieldset legend.action:after {
+.rtl fieldset legend.action:after {
   margin: 0 0.5rem 0 0;
 }
 
-html[dir="rtl"] fieldset legend {
+.rtl fieldset legend {
   padding: 0 1.8rem 0 0.5rem;
 }
 
-html[dir="rtl"] form[role="search"] button[type="submit"] + p > textarea,
-html[dir="rtl"] .form[role="search"] button[type="submit"] + p > textarea {
+.rtl form[role="search"] button[type="submit"] + p > textarea,
+.rtl .form[role="search"] button[type="submit"] + p > textarea {
   padding: 0.5rem 0.8rem 0.5rem 3rem;
 }
 
-html[dir="rtl"] form[role="search"] button[type="submit"] + p > button,
-html[dir="rtl"] .form[role="search"] button[type="submit"] + p > button {
+.rtl form[role="search"] button[type="submit"] + p > button,
+.rtl .form[role="search"] button[type="submit"] + p > button {
   left: 1rem;
 }

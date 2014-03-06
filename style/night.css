@@ -39,7 +39,7 @@
 
 /* Spinner */
 .night .spinner {
-  background: #2c2c2c;
+  background: rgba(44,44,44,0.5);
   border: none;
 }
 
