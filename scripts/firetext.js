@@ -922,7 +922,20 @@ document.addEventListener('blur', function(event) {
 function initGestures () {
   new GestureDetector(document.body).startDetecting();
   document.body.addEventListener('swipe', function (event) {
-    processActions(('data-swipe-'+event.detail.direction), event.target);  
+  	// Detect direction
+    var direction;
+    if (document.body.classList.contains('rtl')) {
+      if (event.detail.direction == 'right') {
+      	direction = 'left';
+      } else if (event.detail.direction == 'left') {
+      	direction = 'right';
+      }
+    } else {
+      direction = event.detail.direction;
+    } 
+    
+    // Process the action
+    processActions(('data-swipe-'+direction), event.target); 
   });
 }
 

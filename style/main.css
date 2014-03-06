@@ -16,12 +16,6 @@ html, body {
   color: #6f6f6f;
 }
 
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
-}
-
 [role="main"].header-only {
   height: calc(100% - 5rem);
     height: -moz-calc(100% - 5rem);
@@ -30,8 +24,9 @@ html, body {
 }
 
 .firetext {
-  text-align: center !important;
-  padding-top: 0 !important;
+    text-align: center !important;
+    padding-top: 0 !important;
+    margin: 0 0 0 4rem !important;
 }
 
 .redAlert {
@@ -41,6 +36,15 @@ html, body {
   display: block;
   margin: 1rem;
 }
+
+
+/* Fonts */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
+}
+
 
 
 /* Style hacks */
@@ -105,7 +109,7 @@ form[role=dialog].current {
   margin: 0 0;
   font-family: "Open Sans";
   font-weight: normal;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
 }
 
 [data-type="list"] li a,
@@ -164,11 +168,11 @@ form[role=dialog].current {
 }
 
 [data-type="list"] li.fileListItem .fileItemName {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: #2c2c2c;
   font-weight: bold;
   margin: 0;
-  padding: 1rem 0 0;
+  padding: 0.5rem 0 0;
 }
 
 [data-type="list"] li.fileListItem .fileItemPath {
@@ -189,7 +193,7 @@ form[role=dialog].current {
 /* Buttons */
 .button-block {
   width: 96%;
-  margin-left: 2%;
+  margin-left: 1.5%;
 }
 
 
@@ -234,27 +238,10 @@ legend.action select {
 }
 
 aside.pack-end select {
-  background: none;
-  outline: none;
-  border: none;
-  border-radius: 0px;
-  font-size: 1.5rem;
   position: absolute;
   right: 0;
-  padding-top: 1.3rem;
+  margin-top: 1.4rem;
   text-align: right;
-  text-indent: 1.5rem;
-}
-
-aside.pack-end select:after {
-  content: "";
-  position: absolute;
-  top: 1.8rem;
-  width: 0;
-  height: 0;
-  margin-left: 0.5rem;
-  border: 0.4rem solid transparent;
-  border-top-color: #333;
 }
 
 legend.action select.dummy,
@@ -326,39 +313,35 @@ aside select.dummy {
   width: 100%;
   border: none;
   outline: none;
-  height: calc(100% - 3.9rem);
     height: -moz-calc(100% - 3.9rem);
     height: -webkit-calc(100% - 3.9rem);
+  height: calc(100% - 3.9rem);
 }
 
 
 /* Spinner (Throbber) */
 .spinner {
-  border-radius: 8px;
-  background-color: #fff;
+  border-radius: 100%;
+  background-color: rgba(255,255,255,0.5);
   padding: 10px;
   opacity: 0;
   display: inline-block;
   visibility: hidden;
-  transition: opacity .3s, .3s visibility 0s;
     -moz-transition: opacity .3s, .3s visibility 0s;
     -webkit-transition: opacity .3s, .3s visibility 0s;
     -o-transition: opacity .3s, .3s visibility 0s;
+  transition: opacity .3s, .3s visibility 0s;
   pointer-events: none;
-}
-
-.spinner:hover, .spinner:active, .spinner:focus {
-  opacity: .3 !important;
 }
 
 .spinner.center {
   position: fixed;
-  left: calc(50% - 53px / 2);
     left: -moz-calc(50% - 53px / 2);
     left: -webkit-calc(50% - 53px / 2);
-  top: calc(50% - 53px / 2);
+  left: calc(50% - 53px / 2);
     top: -moz-calc(50% - 53px / 2);
     top: -webkit-calc(50% - 53px / 2);
+  top: calc(50% - 53px / 2);
 }
 
 .spinner.shown {
@@ -376,55 +359,149 @@ aside select.dummy {
   background-position: center;
   width: 33px;
   height: 33px;
-  animation: spin .5s steps(30) infinite;
-    -moz-animation: spin .5s steps(30) infinite;
-    -webkit-animation: spin .5s steps(30) infinite;
-    -o-animation: spin .5s steps(30) infinite;
+    -moz-animation: spin 1s linear infinite;
+    -webkit-animation: spin 1s linear infinite;
+    -o-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin{
   0%{
-    transform: rotate(0turn);
       -moz-transform: rotate(0turn);
       -webkit-transform: rotate(0turn);
       -o-transform: rotate(0turn);
       -ms-transform: rotate(0turn);
+    transform: rotate(0turn);
   }
   100%{
-    transform: rotate(1turn);
       -moz-transform: rotate(1turn);
       -webkit-transform: rotate(1turn);
       -o-transform: rotate(1turn);
       -ms-transform: rotate(1turn);
+    transform: rotate(1turn);
   }
 }
 @-moz-keyframes spin{
   0%{
-    transform: rotate(0turn);
       -moz-transform: rotate(0turn);
+    transform: rotate(0turn);
   }
   100%{
-    transform: rotate(1turn);
       -moz-transform: rotate(1turn);
+    transform: rotate(1turn);
   }
 }
 @-webkit-keyframes spin{
   0%{
-    transform: rotate(0turn);
       -webkit-transform: rotate(0turn);
+    transform: rotate(0turn);
   }
   100%{
-    transform: rotate(1turn);
       -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
   }
 }
 @-o-keyframes spin{
   0%{
-    transform: rotate(0turn);
       -o-transform: rotate(0turn);
+    transform: rotate(0turn);
   }
   100%{
-    transform: rotate(1turn);
       -o-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+
+
+/* RTL */
+.rtl {
+    direction: rtl;
+}
+
+.rtl aside.pack-end select {
+    left: 0;
+    right: auto;
+    direction: ltr;
+    text-indent: 0;
+    text-align: left;
+}
+
+.rtl .button-block {
+    margin-right: 1.5%;
+}
+
+.rtl #fileTypeLegend {
+    float: left;  
+}
+
+.rtl .tabToolbar button,
+.rtl .tabToolbar .button,
+.rtl .tabToolbar input[type="button"] {
+    float: left;
+}
+
+.rtl .tabToolbar .icon-menu {
+    padding-left: 0;
+    width: 3rem;
+}
+
+.rtl .spinner > div {
+    -moz-animation-name: rtlSpin;
+    -webkit-animation-name: rtlSpin;
+    -o-animation-name: rtlSpin;
+  animation-name: rtlSpin;
+}
+
+.rtl .icon-arrow {
+       -moz-transform: scale(-1, 1);
+       -webkit-transform: scale(-1, 1);
+       -o-transform: scale(-1, 1);
+    transform: scale(-1, 1);    
+}
+
+@keyframes rtlSpin{
+  0%{
+      -moz-transform: rotate(1turn);
+      -webkit-transform: rotate(1turn);
+      -o-transform: rotate(1turn);
+      -ms-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+  100%{
+      -moz-transform: rotate(0turn);
+      -webkit-transform: rotate(0turn);
+      -o-transform: rotate(0turn);
+      -ms-transform: rotate(0turn);
+    transform: rotate(0turn);
+  }
+}
+@-moz-keyframes rtlSpin{
+  0%{
+      -moz-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+  100%{
+      -moz-transform: rotate(0turn);
+    transform: rotate(0turn);
+  }
+}
+@-webkit-keyframes rtlSpin{
+  0%{
+      -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+  100%{
+      -webkit-transform: rotate(0turn);
+    transform: rotate(0turn);
+  }
+}
+@-o-keyframes rtlSpin{
+  0%{
+      -o-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+  100%{
+      -o-transform: rotate(0turn);
+    transform: rotate(0turn);
   }
 }

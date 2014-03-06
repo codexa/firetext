@@ -193,7 +193,6 @@ section[data-type="sidebar"] > nav {
   max-height: calc(100% - 5rem);
     max-height: -moz-calc(100% - 5rem);
     max-height: -webkit-calc(100% - 5rem);
-  margin-right: -0.8rem;
   width: 100%;
 }
 
@@ -270,4 +269,26 @@ section[data-type="sidebar"] > nav > ul > li > a {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+
+/* RTL */
+.rtl section[data-type="sidebar"] {
+    left: auto;
+    right: 0;
+}
+
+.rtl section[data-type="sidebar"][data-position="right"] {
+    right: auto;
+    left: 0;    
+}
+
+.rtl section[data-type="sidebar"] [role="toolbar"] {
+    left: auto;
+    right: 0;
+}
+
+.rtl section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
+    right: auto;
+    left: 0;    
 }
