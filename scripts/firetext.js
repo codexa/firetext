@@ -603,12 +603,16 @@ function extIcon() {
 ------------------------*/ 
 function initEditor() {
   // Initialize Designer
-  editor.contentWindow.document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
-  editor.contentWindow.document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+  var style = document.createElement('STYLE');
+  style.textContent = 'html, body {height: 100%; padding: 0; margin: 0;} \
+  		#tempEditDiv {border: none; padding: 10px; font-size: 20px; outline: none; \
+  		min-height: calc(100% - 20px); word-wrap: break-word; direction: '
+  		+firetext.language.getDirection()+';}';
+  editor.contentWindow.document.body.appendChild(style);
   doc = document.createElement('DIV');
   doc.setAttribute('contentEditable', 'true');
   doc.id = 'tempEditDiv';
-  doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px); word-wrap: break-word;');
+  doc.setAttribute('style','');
   editor.contentWindow.document.body.appendChild(doc);
   doc = editor.contentWindow.document.getElementById('tempEditDiv');
   editor.contentWindow.document.execCommand('enableObjectResizing', false, 'true');
@@ -851,13 +855,13 @@ function updateToolbar() {
     
     // Justify
     if (editor.contentDocument.queryCommandState("justifyCenter")) {
-      justifySelect.value = 'Center';
+      justifySelect.value = 'c';
     } else if (editor.contentDocument.queryCommandState("justifyFull")) {
-      justifySelect.value = 'Justified';
+      justifySelect.value = 'j';
     } else if (editor.contentDocument.queryCommandState("justifyRight")) {
-      justifySelect.value = 'Right';
+      justifySelect.value = 'r';
     } else {
-      justifySelect.value = 'Left';
+      justifySelect.value = 'l';
     }
     
     // Underline

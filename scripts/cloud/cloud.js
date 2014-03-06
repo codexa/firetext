@@ -39,6 +39,7 @@ cloud.init = function () {
           openDialogDropboxArea.style.display = 'block';
           locationDropbox = document.createElement('option');
           locationDropbox.textContent = 'Dropbox';
+          locationDropbox.value = 'dropbox';
           locationSelect.appendChild(locationDropbox);
           
           // Dispatch auth event
