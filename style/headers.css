@@ -109,6 +109,12 @@ section > header:first-child menu[type="toolbar"] {
   margin: 0;
 }
 
+section > header:first-child menu[type="toolbar"] .menu {
+    padding-right: 0.5rem;
+    padding-left: 1rem;
+    min-width: 2rem;
+}
+
 section > header:first-child a,
 section > header:first-child button {
   border: none;
@@ -286,33 +292,26 @@ section > header h2 {
     float: right;
 }
 
-.rtl section > header:first-child menu[type="toolbar"] .menu {
-    padding-left: 0;
-    text-align: left;
-    min-width: 2rem;
+.rtl section > header:first-child menu[type="toolbar"] a:last-child,
+.rtl section > header:first-child menu[type="toolbar"] button:last-child {
+    margin-left: 0;
+    margin-right: -0.2rem;
 }
 
-.rtl section > header:first-child > button:first-child .icon,
-.rtl section > header:first-child > a:first-child .icon {
-    padding-right: 0;
-    padding-left: 0.7rem;    
+.rtl section > header:first-child menu[type="toolbar"] .menu {
+    padding-left: 0;
+    padding-right: 1.5rem;
+}
+
+.rtl section > header:first-child > menu[type="toolbar"] .icon-menu,
+.rtl section > header:first-child > menu[type="toolbar"] .icon-menu {
+    padding-right: 0.5rem;
 }
 
 .rtl section > header:first-child > button .icon:after,
 .rtl section > header:first-child > a .icon:after {
     left: auto;
     right: 0;
-}
-    
-.rtl section > header:first-child > button:first-child .icon-menu,
-.rtl section > header:first-child > a:first-child .icon-menu {
-    padding-right: 0;
-    padding-left: 1.3rem;
-}
-    
-.rtl section > header:first-child > button:first-child .icon-close,
-.rtl section > header:first-child > a:first-child .icon-close {
-    padding-right: 0.7rem;
 }
     
 .rtl section > header:first-child > button:first-child .icon-back,
@@ -322,4 +321,15 @@ section > header h2 {
        -o-transform: scale(-1, 1);
     transform: scale(-1, 1);
     padding-right: 1rem;
+}
+    
+.rtl section > header:first-child > button:first-child .icon-close,
+.rtl section > header:first-child > a:first-child .icon-close {
+    padding-right: 0.7rem;
+}
+
+.rtl section > header:first-child > button:first-child .icon-menu,
+.rtl section > header:first-child > a:first-child .icon-menu {
+    padding-left: 1.3rem;
+    padding-right: 0;
 }
