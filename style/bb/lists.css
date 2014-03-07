@@ -234,7 +234,18 @@
     float: left;
 }
 
-.pack-end button {
+.rtl .pack-end button {
     left: 0;
     right: auto;
+}
+
+.rtl [data-type="list"] [data-type="edit"] li {
+    transform: translateX(-4rem);
+    padding-right: 0;
+    margin-right: 2rem;
+}
+
+[data-type="list"] li > label {
+    right: -4rem;
+    left: auto;
 }

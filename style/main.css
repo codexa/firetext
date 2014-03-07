@@ -65,7 +65,7 @@ section > header:first-child .icon.icon-back {
 
 section > header:first-child .icon.icon-close {
   font-size: 1.5rem !important;
-  padding-top: 1.6rem;
+  padding-top: 1.4rem;
 }
 
 
@@ -300,6 +300,12 @@ aside select.dummy {
   text-shadow: none;
 }
 
+.tabToolbar .icon-menu {
+    padding-right: 0;
+    padding-left: 1rem;
+    width: 3rem;
+}
+
 
 /* Browser */
 .top-button {
@@ -442,6 +448,7 @@ aside select.dummy {
 
 .rtl .tabToolbar .icon-menu {
     padding-left: 0;
+    padding-right: 1rem;
     width: 3rem;
 }
 
