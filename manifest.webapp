@@ -16,7 +16,28 @@
     "256": "/style/icons/app/256.png"
   },
   "default_locale": "en-US",
-  "locales": {
+  "locales": {  
+	"cs": {
+	  "description": "Textový procesor pro Firefox OS"
+	},
+	"es": {
+	  "description": "El procesador de textos para Firefox OS"
+	},
+	"fr": {
+	  "description": "L'éditeur de texte pour Firefox OS"
+	},
+	"he": {
+	  "description": "מעבד התמלילים ל- Firefox OS"
+	},
+	"it": {
+	  "description": "L'editor di testo per Firefox OS"
+	},
+	"pl": {
+	  "description": "Procesor tekstu dla Firefox OS"
+	},
+	"pt-BR": {
+	  "description": "O processador de texto para Firefox OS"
+	}
   },
   "permissions": {
     "device-storage:sdcard": {
@@ -31,8 +52,7 @@
       "filters": {
         "type": [
           "text/plain",
-          "text/html",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          "text/html"
         ],
         "url": {
           "required": true
@@ -49,8 +69,7 @@
       "filters": {
         "type": [
           "text/plain",
-          "text/html",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          "text/html"
         ],
         "url": {
           "required": true
