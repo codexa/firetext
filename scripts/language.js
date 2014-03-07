@@ -47,8 +47,7 @@ firetext.language.getCurrent = function () {
 firetext.language.getDirection = function () {
 	var language = firetext.language.getCurrent();
 	if (language == 'he' |
-			language == 'ar' |
-			language == 'tr') {
+			language == 'ar') {
 		return 'rtl';			
 	} else {
 		return 'ltr';
