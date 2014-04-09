@@ -20,22 +20,16 @@
   <link rel="resource" type="application/l10n" href="locales/locales.ini" />
   <script type="application/javascript" src="scripts/lib/l10n.js"></script>
 
-  <!-- Scripts -->
-  <script type="text/javascript" src="scripts/firetext.js"></script>
-  <script type="text/javascript" src="scripts/activities.js"></script>
-  <script type="text/javascript" src="scripts/io.js"></script>
-  <script type="text/javascript" src="scripts/language.js"></script>
-  <script type="text/javascript" src="scripts/night.js"></script>
-  <script type="text/javascript" src="scripts/recents.js"></script>
-  <script type="text/javascript" src="scripts/regions.js"></script>
-  <script type="text/javascript" src="scripts/settings.js"></script>
-
   <!-- Cloud -->
   <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
   
   <!-- Lib -->
+  <script type="text/javascript" src="scripts/lib/kamino.js"></script>
+  <script type="text/javascript" src="scripts/lib/URI.js"></script>
+  <script type="text/javascript" src="scripts/lib/uuid.core.js"></script>
+  <script type="text/javascript" src="scripts/lib/message_channel.js"></script>
   <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
   <script type="text/javascript" src="scripts/lib/FileSaver.js"></script>
   <script type="text/javascript" src="scripts/lib/gesture_detector.js"></script>
@@ -49,9 +43,22 @@
   <script type="text/javascript" src="scripts/lib/stringview.js"></script>
   <script type="text/javascript" src="scripts/lib/bugsense.js"></script>
 
+  <!-- Scripts -->
+  <script type="text/javascript" src="scripts/editorLoader.js"></script>
+  <script type="text/javascript" src="scripts/messages.js"></script>
+  <script type="text/javascript" src="scripts/firetext.js"></script>
+  <script type="text/javascript" src="scripts/activities.js"></script>
+  <script type="text/javascript" src="scripts/io.js"></script>
+  <script type="text/javascript" src="scripts/language.js"></script>
+  <script type="text/javascript" src="scripts/night.js"></script>
+  <script type="text/javascript" src="scripts/recents.js"></script>
+  <script type="text/javascript" src="scripts/regions.js"></script>
+  <script type="text/javascript" src="scripts/settings.js"></script>
+
   <!-- Parsers -->
   <script type="text/javascript" src="scripts/parsers/base64.js"></script>
   <script type="text/javascript" src="scripts/parsers/plain-text.js"></script>
+  <script type="text/javascript" src="scripts/parsers/docx.js"></script>
 
   <!-- User -->
   <script type="text/javascript" src="scripts/user/id.js"></script>
@@ -261,7 +268,7 @@
         <li id="tab-design" role="tab">
           <a href="#" data-click="tab" data-click-name="design" data-l10n-id="design">Design</a>
           <div role="tabpanel">
-            <iframe class="editor" id="editor" sandbox="allow-same-origin" data-focus="hideToolbar" data-blur="showToolbar"></iframe>
+            <iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
             <div role="toolbar" id="edit-bar">
               <ul id="edit-zone">
                 <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>

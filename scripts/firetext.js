@@ -8,7 +8,6 @@
 
 'use strict';
 
-
 /* Variables
 ------------------------*/
 // Namespaces
@@ -21,12 +20,13 @@ firetext.analytics = {};
 firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
 var deviceType, fileChanged, saveTimeout, saving;
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
 var bugsense;
+var editorMessageProxy;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -38,7 +38,7 @@ var appCache = window.applicationCache;
 
 /* Start
 ------------------------*/
-window.addEventListener('DOMContentLoaded', function () { firetext.init(); });
+window.addEventListener('DOMContentLoaded', function() {firetext.init()}, false);
 
 firetext.init = function () {
   // Initialize Bugsense
@@ -97,87 +97,88 @@ firetext.init = function () {
   firetext.recents.init();
   
   // Initialize the editor
-  initEditor();
+  initEditor(function() {
+    // Initialize Settings
+    firetext.settings.init();
+    
+    // Init extIcon
+    extIcon();
   
-  // Initialize Settings
-  firetext.settings.init();
-  
-  // Init extIcon
-  extIcon();
-
-  // Initiate user id
-  firetext.user.id.init();
-  
-  // Add event listeners
-  toolbar.addEventListener(
-    'mousedown', function mouseDown(event) {
-      event.preventDefault();
-      event.target.classList.toggle('active');
-    }
-  );
-  toolbar.addEventListener(
-    'mouseup', function mouseDown(event) {
-      if (event.target.classList.contains('sticky') != true) {
-        event.target.classList.remove('active');
+    // Initiate user id
+    firetext.user.id.init();
+    
+    // Add event listeners
+    toolbar.addEventListener(
+      'mousedown', function mouseDown(event) {
+        event.preventDefault();
+        event.target.classList.toggle('active');
       }
-    }
-  );
-  editWindow.addEventListener(
-    'mouseenter', function mouseDown(event) {
-      editor.focus();
-    }
-  );
+    );
+    toolbar.addEventListener(
+      'mouseup', function mouseDown(event) {
+        if (event.target.classList.contains('sticky') != true) {
+          event.target.classList.remove('active');
+        }
+      }
+    );
+    editWindow.addEventListener(
+      'mouseenter', function mouseDown(event) {
+        editor.focus();
+      }
+    );
   
-  welcomeDocsList.addEventListener(
-    'contextmenu', function contextmenu(event) {
-      editDocs();
-    }
-  );
+    welcomeDocsList.addEventListener(
+      'contextmenu', function contextmenu(event) {
+        editDocs();
+      }
+    );
   
-  // Initialize IO
-  firetext.io.init(null, function() {
-
-    // Update Doc Lists
-    updateDocLists();
-    
-    // Initialize sharing
-    cloud.init();
-    
-    // Check for recent file, and if found, load it.
-    if (firetext.settings.get('autoload') == 'true') {
-      var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
-      if (firetext.settings.get('autoload.wasEditing') == 'true') {
-        // Wait until Dropbox is authenticated
-        if (lastDoc[3] == 'dropbox') {
-          if (firetext.settings.get('dropbox.enabled') == 'true') {
-            window.addEventListener('cloud.dropbox.authed', function() {
-              loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+    // Initialize IO
+    firetext.io.init(null, function() {
+  
+      // Update Doc Lists
+      updateDocLists();
+      
+      // Initialize sharing
+      cloud.init();
+      
+      // Check for recent file, and if found, load it.
+      if (firetext.settings.get('autoload') == 'true') {
+        var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
+        if (firetext.settings.get('autoload.wasEditing') == 'true') {
+          // Wait until Dropbox is authenticated
+          if (lastDoc[3] == 'dropbox') {
+            if (firetext.settings.get('dropbox.enabled') == 'true') {
+              window.addEventListener('cloud.dropbox.authed', function() {
+                loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+                spinner('hide');
+              });
+            } else {
+              regions.nav('welcome');
               spinner('hide');
-            });
+            }
           } else {
-            regions.nav('welcome');
+            loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
             spinner('hide');
           }
         } else {
-          loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+          regions.nav('welcome');
           spinner('hide');
         }
       } else {
         regions.nav('welcome');
         spinner('hide');
       }
-    } else {
-      regions.nav('welcome');
-      spinner('hide');
-    }
   
-    // Dispatch init event
-    window.dispatchEvent(firetext.initialized);
-    firetext.isInitialized = true;
+      // Dispatch init event
+      window.dispatchEvent(firetext.initialized);
+      firetext.isInitialized = true;
+    });
+    
+    // Initialize Night Mode
+    night();
   });
-
-  // Initialize Night Mode
-  night();  
+  
   });
 };
 
@@ -446,7 +447,8 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
         break;
       case ".docx":
         var tmp = document.createElement("DIV");
-        tmp.appendChild(description.HTMLout());
+        var docx = new DocxEditor(description);
+        tmp.appendChild(docx.HTMLout());
         description = tmp.innerHTML;
       case ".html":
         description = cleanForPreview(description, DOCS[0][2]);
@@ -601,64 +603,64 @@ function extIcon() {
 
 /* Editor
 ------------------------*/ 
-function initEditor() {
-  // Initialize Designer
-  var style = document.createElement('STYLE');
-  style.textContent = 'html, body {height: 100%; padding: 0; margin: 0;} \
-  		#tempEditDiv {border: none; padding: 10px; font-size: 20px; outline: none; \
-  		min-height: calc(100% - 20px); word-wrap: break-word; direction: '
-  		+firetext.language.getDirection()+';}';
-  editor.contentWindow.document.body.appendChild(style);
-  doc = document.createElement('DIV');
-  doc.setAttribute('contentEditable', 'true');
-  doc.id = 'tempEditDiv';
-  doc.setAttribute('style','');
-  editor.contentWindow.document.body.appendChild(doc);
-  doc = editor.contentWindow.document.getElementById('tempEditDiv');
-  editor.contentWindow.document.execCommand('enableObjectResizing', false, 'true');
-  
-  // Hide and show toolbar.
-  // For reviewers, just in case this looks like a security problem:
-  // This frame is sandboxed, so I had to add the listeners to do this.
-  // The content CANNOT call any of the parents functions, so this is not a security issue.
-  doc.addEventListener('focus', function (event) {
-    processActions('data-focus', event.target);
-  });
-  doc.addEventListener('blur', function (event) {
-    processActions('data-blur', event.target);
-  });
-  
-  // Initialize Raw Editor
-  rawEditor.setAttribute('contentEditable', 'true');
-  
-  // Nav to the design tab
-  regions.tab(document.querySelector('#editTabs'), 'design');
+function initEditor(callback) {
+  loadEditor(function(editorURL) {
+    editor.onload = null;
+    editor.src = editorURL;
+    editor.onload = function() {
+      var editorMessageChannel = new MessageChannel();
+      // See: scripts/messages.js
+      editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+      // Successful initialization
+      editorMessageProxy.registerMessageHandler(function(e) {
+        // Initialize Raw Editor
+        rawEditor.setAttribute('contentEditable', 'true');
+      
+        // Nav to the design tab
+        regions.tab(document.querySelector('#editTabs'), 'design');
+        callback();
+      }, "init-success", true);
+
+      editorMessageProxy.registerMessageHandler(function(e) {
+        fileChanged = true;
+        if(e.data.filetype === ".html") {
+          rawEditor.textContent = e.data.html;
+        }
+        autosave();
+      }, "doc-changed");
+
+      // editor focus and blur
+      editorMessageProxy.registerMessageHandler(function(e) {
+        if(e.data.focus) {
+          processActions('data-focus', editor);
+        } else {
+          processActions('data-blur', editor);
+        }
+      }, "focus");
+      Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
+      editorMessageProxy.getPort().start();
+    }
+  })
 }
 
 function watchDocument(filetype) {
-  // Add listener to update raw
-  if (filetype == '.html') {
+  if(filetype === ".html") {
     prettyPrint();
-      
-    doc.addEventListener('input', function() {
-      fileChanged = true;
-      updateViews(rawEditor, doc.innerHTML, 'text');
-    });
-        
     // Add listener to update design
     rawEditor.addEventListener('input', function() {
       fileChanged = true;
-      updateViews(doc, rawEditor.textContent, 'html');
+      var callbackKey = editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, null, true);
+      editorMessageProxy.getPort().postMessage({
+        command: "load",
+        content: rawEditor.textContent,
+        filetype: ".html",
+        key: callbackKey
+      });
     });
     rawEditor.addEventListener('blur', function() {
       prettyPrint();
     });
-  } else {
-    doc.addEventListener('input', function() {
-      fileChanged = true;
-      autosave();
-    });
-  }  
+  }
 }
 
 function forceAutosave() {
@@ -678,22 +680,11 @@ function autosave(force) {
   }
 }
 
-function updateViews(destView, source, contentType) {
-  if (destView) {
-    if (contentType == 'html') {
-      destView.innerHTML = source;      
-    } else {
-      destView.textContent = source;
-    }
-    autosave();
-  }
-}
-
 
 /* Edit Mode
 ------------------------*/ 
 function editDocs() {
-  if (editState == true) {    
+  if (editState == true) {
     // Clear lists
     welcomeDeviceList.innerHTML = '';
     welcomeDropboxList.innerHTML = '';
@@ -830,57 +821,69 @@ function deleteSelected(confirmed) {
 /* Format
 ------------------------*/ 
 function formatDoc(sCmd, sValue) {
-  editor.contentWindow.document.execCommand(sCmd, false, sValue);
+  editorMessageProxy.getPort().postMessage({
+    command: "format",
+    sCmd: sCmd,
+    sValue: sValue
+  });
 }
 
 function updateToolbar() {
-  if (doc != undefined && document.getElementById("edit").classList.contains('current')) {
-    // Bold
-    if (editor.contentDocument.queryCommandState("bold")) {
-      bold.classList.add('active');
-      boldCheckbox.checked = true;
-    } else {
-      bold.classList.remove('active');
-      boldCheckbox.checked = false;
-    }
-    
-    // Italic
-    if (editor.contentDocument.queryCommandState("italic")) {
-      italic.classList.add('active');
-      italicCheckbox.checked = true;
-    } else {
-      italic.classList.remove('active');
-      italicCheckbox.checked = false;
-    }
-    
-    // Justify
-    if (editor.contentDocument.queryCommandState("justifyCenter")) {
-      justifySelect.value = 'c';
-    } else if (editor.contentDocument.queryCommandState("justifyFull")) {
-      justifySelect.value = 'j';
-    } else if (editor.contentDocument.queryCommandState("justifyRight")) {
-      justifySelect.value = 'r';
-    } else {
-      justifySelect.value = 'l';
-    }
-    
-    // Underline
-    if (editor.contentDocument.queryCommandState("underline")) {
-      underline.classList.add('active');
-      underlineCheckbox.checked = true;
-    } else {
-      underline.classList.remove('active');
-      underlineCheckbox.checked = false;
-    }
-    
-    // Strikethrough
-    if (editor.contentDocument.queryCommandState("strikeThrough")) {
-      strikethrough.classList.add('active');
-      strikethroughCheckbox.checked = true;
-    } else {
-      strikethrough.classList.remove('active');
-      strikethroughCheckbox.checked = false;
-    }
+  if (document.getElementById("edit").classList.contains('current')) {
+    var key = editorMessageProxy.registerMessageHandler(function(e){
+      var commandStates = e.data.commandStates;
+      // Bold
+      if (commandStates.bold.state) {
+        bold.classList.add('active');
+        boldCheckbox.checked = true;
+      } else {
+        bold.classList.remove('active');
+        boldCheckbox.checked = false;
+      }
+      
+      // Italic
+      if (commandStates.italic.state) {
+        italic.classList.add('active');
+        italicCheckbox.checked = true;
+      } else {
+        italic.classList.remove('active');
+        italicCheckbox.checked = false;
+      }
+      
+      // Justify
+      if (commandStates.justifyCenter.state) {
+        justifySelect.value = 'Center';
+      } else if (commandStates.justifyFull.state) {
+        justifySelect.value = 'Justified';
+      } else if (commandStates.justifyRight.state) {
+        justifySelect.value = 'Right';
+      } else {
+        justifySelect.value = 'Left';
+      }
+      
+      // Underline
+      if (commandStates.underline.state) {
+        underline.classList.add('active');
+        underlineCheckbox.checked = true;
+      } else {
+        underline.classList.remove('active');
+        underlineCheckbox.checked = false;
+      }
+      
+      // Strikethrough
+      if (commandStates.strikeThrough.state) {
+        strikethrough.classList.add('active');
+        strikethroughCheckbox.checked = true;
+      } else {
+        strikethrough.classList.remove('active');
+        strikethroughCheckbox.checked = false;
+      }
+    }, null, true);
+    editorMessageProxy.getPort().postMessage({
+      command: "query-command-states",
+      commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough"],
+      key: key
+    });
   }
 }
 
@@ -1072,12 +1075,22 @@ function processActions(eventAttribute, target) {
         regions.navBack();
         regions.navBack();
       } else {
-        regions.nav('hyperlink');
-        if (editor.contentDocument.queryCommandState("createLink")) {
-          document.getElementById('web-address').value = editor.contentDocument.queryCommandValue("createLink");
-        } else {
-          document.getElementById('web-address').value = '';        
-        }
+        var key = editorMessageProxy.registerMessageHandler(function(e) {
+          var createLink = e.data.commandStates.createLink;
+          console.log(createLink);
+          if (createLink.state) {
+            document.getElementById('web-address').value = createLink.value;
+          } else {
+            document.getElementById('web-address').value = '';        
+          }
+          regions.nav('hyperlink');
+        }, null, true);
+        editorMessageProxy.getPort().postMessage({
+          command: "query-command-states",
+          commands: ["createLink"],
+          key: key
+        });
+        
       }
     } else if (calledFunction == 'image') {
       if (target.getAttribute(eventAttribute + '-location')) {
