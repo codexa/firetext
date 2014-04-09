@@ -9,6 +9,8 @@
 /* Variables
 ------------------------*/
 // Namespace
+window.firetext = window.firetext || {};
+firetext.parsers = firetext.parsers || {};
 firetext.parsers.plain = {};
 
 
@@ -20,7 +22,7 @@ firetext.parsers.plain.parse = function (data, type) {
   if (type == "HTML") {
     output = data.replace(/</gi, '<pre><code>&lt;')
     			 .replace(/>/gi, '&gt;</code></pre>')
-    			 .replace(/&amp;/gi, '&amp;amp;')
+    			 .replace(/&/gi, '&amp;')
     			 .replace(/\n/gi, '<br>');
     return output;
   }

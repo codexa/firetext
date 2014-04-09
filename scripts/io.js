@@ -13,7 +13,7 @@ firetext.io = {};
 
 /* Variables
 ------------------------*/
-var storage, deviceAPI, locationDevice, docxeditor;
+var storage, deviceAPI, locationDevice
 
 
 /* Init
@@ -279,7 +279,7 @@ function createFromDialog() {
     }
     var contentBlob;
     if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-      contentBlob = new Blob([firetext.parsers.docx.blank], {type: type});
+      contentBlob = new Blob([firetext.parsers.DocxEditor.blank], {type: type});
     } else {
       contentBlob = new Blob([' '], { "type" : type });
     }
@@ -365,29 +365,18 @@ function saveFromEditor(banner, spinner) {
   var directory = document.getElementById('currentFileDirectory').textContent;
   var filename = document.getElementById('currentFileName').textContent;
   var filetype = document.getElementById('currentFileType').textContent;
-  var content = "";
-  switch (filetype) {
-    case ".html":
-      content = rawEditor.textContent;
-      break;
-    case ".txt":
-      content = firetext.parsers.plain.encode(doc.innerHTML, "HTML");
-      break;
-    /* 0.4
-    case ".docx":
-      content = doc;
-      break;
-    */
-    default:
-      content = doc.textContent;
-      break;
-  }
-  firetext.io.save(directory, filename, filetype, content, banner, function(){ fileChanged = false; }, location, spinner, docxeditor);
+
+  var key = editorMessageProxy.registerMessageHandler(function(e){
+    firetext.io.save(directory, filename, filetype, new Blob([StringView.base64ToBytes(e.data.content)], {type: e.data.type}), banner, function(){ fileChanged = false; }, location, spinner);
+  }, null, true);
+  editorMessageProxy.getPort().postMessage({
+  	command: "get-content-blob",
+  	key: key
+  });
 }
 
 function loadToEditor(directory, filename, filetype, location, editable) {
   // Clear editor
-  doc.innerHTML = '';
   rawEditor.textContent = '';
   
   // Set file name and type
@@ -421,100 +410,64 @@ function loadToEditor(directory, filename, filetype, location, editable) {
   // Fill editor
   firetext.io.load(directory, filename, filetype, function(result, error) {
     if (!error) {
-      var content;
-  
-      switch (filetype) {
-        case ".txt":
-          content = firetext.parsers.plain.parse(result, "HTML");
-          doc.innerHTML = content;
-          tabRaw.classList.add('hidden');
-          regions.tab(document.querySelector('#editTabs'), 'design');
-          break;
-        /* 0.4
-        case ".docx":
-          result = new DocxEditor(result);
-          content = result.HTMLout();
-          doc.appendChild(content);
-          tabRaw.classList.add('hidden');
-          regions.tab(document.querySelector('#editTabs'), 'design');
-          break;
-        */
-        case ".html":
-        default:
-          content = result;
-          doc.innerHTML = content;
-          rawEditor.textContent = content;
-          tabRaw.classList.remove('hidden');  
-          break;
-      }             
+      initEditor(function() {
+        editorMessageProxy.getPort().postMessage({
+          command: "load",
+          content: result,
+          filetype: filetype
+        });
+        switch (filetype) {
+          case ".txt":
+          /* 0.4
+          case ".docx":
+          */
+            tabRaw.classList.add('hidden');
+            regions.tab(document.querySelector('#editTabs'), 'design');
+            break;
+          case ".html":
+          default:
+            rawEditor.textContent = result;
+            tabRaw.classList.remove('hidden');  
+            break;
+        }
+        
+        // Handle read-only files
+        if (editable == false) {
+          formatDoc('contentReadOnly', true);
+        } else {
+          formatDoc('contentReadOnly', false);      
+        }
+        
+        // Add listener to update views
+        watchDocument(filetype);
+        
+        // Start toolbar update interval      
+        toolbarInterval = window.setInterval(updateToolbar, 100);
+        
+        // Add file to recent docs
+        firetext.recents.add([directory, filename, filetype], location);
     
-      // Handle read-only files
-      if (editable == false) {
-        formatDoc('contentReadOnly', true);
-      } else {
-        formatDoc('contentReadOnly', false);      
-      }
+        // Show editor
+        regions.nav('edit');
     
-      // Add listener to update views
-      watchDocument(filetype);
-      
-      // Start toolbar update interval      
-      toolbarInterval = window.setInterval(updateToolbar, 100);
-      
-      // Add file to recent docs
-      firetext.recents.add([directory, filename, filetype], location);
-  
-      // Show editor
-      regions.nav('edit');
-  
-      // Hide save button if autosave is enabled
-      if (firetext.settings.get('autosave') != 'false') {
-        document.getElementById('editorSaveButton').style.display = 'none';
-        document.getElementById('zenSaveButton').style.display = 'none';
-      } else {
-        document.getElementById('editorSaveButton').style.display = 'inline-block';
-        document.getElementById('zenSaveButton').style.display = 'inline-block';
-      }
+        // Hide save button if autosave is enabled
+        if (firetext.settings.get('autosave') != 'false') {
+          document.getElementById('editorSaveButton').style.display = 'none';
+          document.getElementById('zenSaveButton').style.display = 'none';
+        } else {
+          document.getElementById('editorSaveButton').style.display = 'inline-block';
+          document.getElementById('zenSaveButton').style.display = 'inline-block';
+        }
+      })
     } else {
       alert(_('load-unsuccessful')+result);
     }
   }, location); 
 }
 
-firetext.io.save = function (directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx) {
+firetext.io.save = function (directory, filename, filetype, contentBlob, showBanner, callback, location, showSpinner) {
   // Set saving to true
   saving = true;
-
-  // Get filetype
-  var type = "text";
-  switch (filetype) {
-    case ".html":
-      type = "text\/html";
-      break;
-    /* 0.4
-    case ".docx":
-      type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-      break;
-    */
-    case ".txt":
-    default:
-      type = "text\/plain";
-      break;
-  }
-  var contentBlob;
-  
-  /* 0.4
-  // Special handling for .docx
-  if (filetype == '.docx') {
-    docx.HTMLin(content);
-    contentBlob = new Blob([docxeditor.generate("blob")], {type: type});
-  } else {
-    contentBlob = new Blob([content], { "type" : type });
-  }
-  */
-
-  // 0.3 only
-  contentBlob = new Blob([content], { "type" : type });
 
   var filePath = (directory + filename + filetype);
   
@@ -544,7 +497,7 @@ firetext.io.save = function (directory, filename, filetype, content, showBanner,
         if (this.error.name == "NoModificationAllowedError") {
           var req2 = storage.delete(filePath);
           req2.onsuccess = function () {
-            firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner, docx);
+            firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner);
           };
           req2.onerror = function () {
             alert(_('save-unsuccessful')+this.error.name);
@@ -650,23 +603,10 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
           callback(this.error.name, true);
         };
         reader.onload = function () {
-          var file;
-          
-          /* 0.4
-          if( filetype === ".docx" ) {
-            file = new DocxEditor(this.result);
-          } else {
-            file = this.result;
-          }
-          */
-        
-          // 0.3 only
-          file = this.result;
-          
           // Hide spinner
           spinner('hide');
           
-          callback(file);
+          callback(this.result);
         };
       };
       req.onerror = function () {
@@ -692,22 +632,11 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
             alert(_('load-unsuccessful')+this.error.name);
             callback(this.error.name, true);
           };
-          reader.onload = function () {          
-            /* 0.4
-            if( filetype === ".docx" ) {
-              file = new DocxEditor(this.result);
-            } else {
-              file = this.result;
-            }
-            */
-        
-            // 0.3 only
-            file = this.result;
-            
+          reader.onload = function () {
             // Hide spinner
             spinner('hide');
             
-            callback(file);
+            callback(this.result);
           };
           
           /* 0.4
