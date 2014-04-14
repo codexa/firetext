@@ -32,11 +32,17 @@
 	"it": {
 	  "description": "L'editor di testo per Firefox OS"
 	},
+	"nl": {
+	  "description": "De tekstverwerker voor Firefox OS"
+	},
 	"pl": {
 	  "description": "Procesor tekstu dla Firefox OS"
 	},
 	"pt-BR": {
 	  "description": "O processador de texto para Firefox OS"
+	},
+	"zh-CN": {
+	  "description": "适用于 Firefox OS 的文字处理程序"
 	}
   },
   "permissions": {
