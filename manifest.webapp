@@ -17,6 +17,9 @@
   },
   "default_locale": "en-US",
   "locales": {  
+	"bn-BD": {
+	  "description": "ফায়ারফক্স ওএস এর জন্য ওয়ার্ড প্রসেসর"
+	},
 	"cs": {
 	  "description": "Textový procesor pro Firefox OS"
 	},
