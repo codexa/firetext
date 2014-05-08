@@ -44,6 +44,9 @@
 	"pt-BR": {
 	  "description": "O processador de texto para Firefox OS"
 	},
+	"ro": {
+	  "description": "Procesorul word pentru Firefox OS"
+	},
 	"zh-CN": {
 	  "description": "适用于 Firefox OS 的文字处理程序"
 	}

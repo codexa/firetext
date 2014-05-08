@@ -27,16 +27,10 @@ firetext.language.init = function () {
 	// LTR / RTL
 	if (firetext.language.getDirection() == 'rtl') {
 		document.body.classList.remove('ltr');  
-		document.body.classList.add('rtl');   
-		if (doc) { 
-			doc.style.direction = 'rtl';  		
-		}		
+		document.body.classList.add('rtl');
 	} else {
 		document.body.classList.remove('rtl');  
 		document.body.classList.add('ltr'); 
-		if (doc) {
-			doc.style.direction = 'ltr'; 
-		} 		 
 	}
 }
 

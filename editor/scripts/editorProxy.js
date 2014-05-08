@@ -10,7 +10,7 @@ var mainClosure = function() {
   // document to be edited
   var doc;
   // replace with origin to verify against
-  var mainOrigin = "[ORIGIN_OF_MAIN_DOCUMENT]";
+  var mainOrigin = document.location.origin;
   
   // Overide popups
   window.alert = null;
