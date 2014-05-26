@@ -45,7 +45,7 @@ firetext.init = function () {
   bugsenseInit();
   
   // Initialize l10n
-  navigator.mozL10n.ready(function () {
+  navigator.mozL10n.once(function () {
   
   // Initialize language handler
   firetext.language.init();
