@@ -9,7 +9,8 @@
 var mainClosure = function() {
   // document to be edited
   var doc;
-  // replace with origin to verify against
+  
+  // WARNING: DO NOT REPLACE, THIS STRING IS REPLACED WITH THE ORIGIN AUTOMATICALLY WHEN LOADED FROM editorProxy.js
   var mainOrigin = "[ORIGIN_OF_MAIN_DOCUMENT]";
   
   // Overide popups
@@ -21,7 +22,6 @@ var mainClosure = function() {
   var parentMessageProxy;
 
   window.addEventListener("message", function(e){
-    // check origin, change "http://localhost:81" to origin served from
     if(e.origin !== mainOrigin) {
       throw new Error("origin did not match");
     }
