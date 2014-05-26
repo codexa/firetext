@@ -45,7 +45,7 @@ firetext.init = function () {
   bugsenseInit();
   
   // Initialize l10n
-  document.webL10n.ready(function () {
+  navigator.mozL10n.ready(function () {
   
   // Initialize language handler
   firetext.language.init();
@@ -95,6 +95,9 @@ firetext.init = function () {
   
   // Initalize recent docs
   firetext.recents.init();
+  
+  // Navigate to welcome
+  regions.nav('welcome');
   
   // Initialize the editor
   initEditor(function() {
@@ -154,7 +157,6 @@ firetext.init = function () {
                 spinner('hide');
               });
             } else {
-              regions.nav('welcome');
               spinner('hide');
             }
           } else {
@@ -162,11 +164,9 @@ firetext.init = function () {
             spinner('hide');
           }
         } else {
-          regions.nav('welcome');
           spinner('hide');
         }
       } else {
-        regions.nav('welcome');
         spinner('hide');
       }
   
@@ -197,7 +197,7 @@ function updateAddDialog() {
       var noStorageNotice = document.createElement('div');
       noStorageNotice.id = 'no-storage-notice';
       noStorageNotice.classList.add('redAlert');
-      noStorageNotice.textContent = _('no-storage-method');
+      noStorageNotice.textContent = navigator.mozL10n.get('no-storage-method');
       document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
     }
   } else {
@@ -534,8 +534,8 @@ function buildDocList(DOCS, listElms, display, location, preview) {
     } else {
       // No docs message
       var output = '<li style="margin-top: -5px" class="noLink">';
-      output += '<p>'+_('no-'+display)+'</p>';
-      output += '<p>'+_('click-compose-icon-to-create')+'</p>';
+      output += '<p>'+navigator.mozL10n.get('no-'+display)+'</p>';
+      output += '<p>'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
       output += '</li>';
       
       // Display output HTML
@@ -564,8 +564,8 @@ function buildEditDocList(DOCS, listElm, display, location) {
       listElm.setAttribute("data-type","edit");
     } else {
       output += '<li style="margin-top: -5px" class="noLink">';
-      output += '<p>'+_('no-'+display)+'</p>';
-      output += '<p>'+_('click-compose-icon-to-create')+'</p>';
+      output += '<p>'+navigator.mozL10n.get('no-'+display)+'</p>';
+      output += '<p>'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
       output += '</li>';
     }
     
@@ -731,11 +731,11 @@ function watchCheckboxes() {
 function updateSelectButton() {
   if (numSelected() == 0) {
     // Add select all button
-    document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">'+_('select-all')+'</button><button data-click="delete" class="danger">'+_('delete-selected')+'</button>';
+    document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">'+navigator.mozL10n.get('select-all')+'</button><button data-click="delete" class="danger">'+navigator.mozL10n.get('delete-selected')+'</button>';
   }
   else {
     // Add deselect all button
-    document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">'+_('deselect-all')+'</button><button data-click="delete" class="danger">'+_('delete-selected')+'</button>';
+    document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">'+navigator.mozL10n.get('deselect-all')+'</button><button data-click="delete" class="danger">'+navigator.mozL10n.get('delete-selected')+'</button>';
   }
 }
 
@@ -786,11 +786,11 @@ function deleteSelected(confirmed) {
     
     if (confirmed != true && confirmed != 'true') {
       if (selected.length == 1) {
-        var confirmDeletion = confirm(_('want-to-delete-singular'));      
+        var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-singular'));      
       } else if (selected.length > 1) {
-        var confirmDeletion = confirm(_('want-to-delete-plural'));      
+        var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-plural'));      
       } else {
-        alert(_('no-files-selected'));
+        alert(navigator.mozL10n.get('no-files-selected'));
         return;
       }
       if (confirmDeletion != true) {
@@ -1151,7 +1151,7 @@ function processActions(eventAttribute, target) {
           var rows = parseInt(document.getElementById('table-rows').value);
           var cols = parseInt(document.getElementById('table-columns').value);            
         } else {
-          alert(_('valid-integer-value'));
+          alert(navigator.mozL10n.get('valid-integer-value'));
           return;
         }
       
@@ -1186,7 +1186,7 @@ function processActions(eventAttribute, target) {
       document.getElementById('table-columns').value = null;
     } else if (calledFunction == 'clearRecents') {
       firetext.recents.reset();
-      alert(_('recents-eliminated'));
+      alert(navigator.mozL10n.get('recents-eliminated'));
     }
   }
 }
@@ -1213,7 +1213,7 @@ function checkDevice() {
   }
   
   if (window.opera) {
-    alert(_('warning-unsupported-technology'));
+    alert(navigator.mozL10n.get('warning-unsupported-technology'));
   }
 };
 

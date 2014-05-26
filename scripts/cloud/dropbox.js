@@ -94,11 +94,11 @@ cloud.dropbox.load = function (path, callback) {
           
     // Callback error
     if (!cloud.dropbox.client) {
-      callback(_('not-signed-in'), true);
+      callback(navigator.mozL10n.get('not-signed-in'), true);
     } else if (!path) {
-      callback(_('path-not-defined'), true);
+      callback(navigator.mozL10n.get('path-not-defined'), true);
     } else {
-      callback(_('unknown-error'), true);
+      callback(navigator.mozL10n.get('unknown-error'), true);
     }
   }
 }
@@ -116,13 +116,13 @@ cloud.dropbox.save = function (path, content, showSpinner, callback) {
     });    
   } else {
     if (!cloud.dropbox.client) {
-      callback(_('not-signed-in'));
+      callback(navigator.mozL10n.get('not-signed-in'));
     } else if (!path) {
-      callback(_('path-not-defined'));
+      callback(navigator.mozL10n.get('path-not-defined'));
     } else if (!content) {
-      callback(_('content-not-defined'));
+      callback(navigator.mozL10n.get('content-not-defined'));
     } else {
-      callback(_('unknown-error'));
+      callback(navigator.mozL10n.get('unknown-error'));
     }
   }
 }
@@ -132,11 +132,11 @@ cloud.dropbox.delete = function (path) {
     cloud.dropbox.client.remove(path, function(e) { });
   } else {
     if (!cloud.dropbox.client) {
-      return _('not-signed-in');
+      return navigator.mozL10n.get('not-signed-in');
     } else if (!path) {
-      return _('path-not-defined');
+      return navigator.mozL10n.get('path-not-defined');
     } else {
-      return _('unknown-error');
+      return navigator.mozL10n.get('unknown-error');
     }
   }
 }
@@ -149,12 +149,12 @@ cloud.dropbox.error = function (error) {
   case Dropbox.ApiError.OVER_QUOTA:
     // The user is over their Dropbox quota.
     // Tell them their Dropbox is full. Refreshing the page won't help.
-    alert(_('dropbox-full'));
+    alert(navigator.mozL10n.get('dropbox-full'));
     break;
 
 
   case Dropbox.ApiError.NETWORK_ERROR:
-    alert(_('network-error'));
+    alert(navigator.mozL10n.get('network-error'));
     break;
 
   case Dropbox.ApiError.RATE_LIMITED:
