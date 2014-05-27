@@ -48,7 +48,7 @@ firetext.init = function () {
   navigator.mozL10n.once(function () {
   
   // Initialize language handler
-  firetext.language.init();
+  firetext.language(firetext.settings.get('language'));
   
   // Find device type
   checkDevice();

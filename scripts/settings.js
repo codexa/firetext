@@ -85,7 +85,7 @@ firetext.settings.init = function () {
     firetext.settings.save('language', languageSelect.value);
 
     // Update
-    firetext.language.init();
+    firetext.language(languageSelect.value);
   });
 
   // Night Mode

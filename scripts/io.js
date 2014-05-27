@@ -98,6 +98,7 @@ firetext.io.init = function (api, callback) {
   // Create storage option
   locationDevice = document.createElement('option');
   locationDevice.value = 'internal';
+  locationDevice.setAttribute('data-l10n-id','internal-storage');
   locationDevice.textContent = navigator.mozL10n.get('internal-storage');
   locationSelect.appendChild(locationDevice);
 }
