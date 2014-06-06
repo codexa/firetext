@@ -67,7 +67,7 @@ var mainClosure = function() {
 
 			parentMessageProxy.getPort().start();
 			// success
-			parentMessageProxy.getPort().postMessage({command: "init-success"})
+			parentMessageProxy.getPort().postMessage({command: "init-success"});
 		}
 	}, false);
 }
