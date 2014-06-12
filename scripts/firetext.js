@@ -174,9 +174,6 @@ firetext.init = function () {
 			window.dispatchEvent(firetext.initialized);
 			firetext.isInitialized = true;
 		});
-		
-		// Initialize Night Mode
-		night();
 	});
 	
 	});
@@ -619,6 +616,9 @@ function initEditor(callback) {
 				// Nav to the design tab
 				regions.tab(document.querySelector('#editTabs'), 'design');
 				callback();
+		
+				// Initialize Night Mode
+				night();
 			}, "init-success", true);
 
 			editorMessageProxy.registerMessageHandler(function(e) {

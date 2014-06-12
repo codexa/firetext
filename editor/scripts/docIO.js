@@ -97,5 +97,5 @@ function initDocIO(doc, messageProxy) {
 			command: e.data.key,
 			commandStates: commandStates
 		})
-	}, "query-command-states")
+	}, "query-command-states");
 }
