@@ -16,6 +16,7 @@ var cloud = {};
 ------------------------*/
 cloud.init = function () {
   // Dropbox
+  cloud.dropbox.init();
   if (firetext.settings.get('dropbox.enabled') == 'true') {
     // Error Handler
     cloud.dropbox.auth.onError.addListener(function (error) {
