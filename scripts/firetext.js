@@ -25,7 +25,7 @@ var deviceType, fileChanged, saveTimeout, saving, urls, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
-var bugsense;
+var bugsense, bugsenseKey = '';
 var editorMessageProxy;
 
 // Lists
@@ -235,7 +235,7 @@ function updateAddDialog() {
 ------------------------*/
 function bugsenseInit() {
 	if (firetext.settings.get('stats.enabled') != 'false') {
-		bugsense = new Bugsense({ appversion: '0.4', apiKey: '' });
+		bugsense = new Bugsense({ appversion: version, apiKey: bugsenseKey });
 	} else {
 		bugsense = null;
 	}
