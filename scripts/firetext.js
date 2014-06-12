@@ -22,7 +22,7 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, doc, editState, rawEditor, tabRaw, tabDesign;
-var deviceType, fileChanged, saveTimeout, saving, urls, version = '0.3.2.1';
+var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.3.2.1';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
@@ -1064,7 +1064,7 @@ function processActions(eventAttribute, target) {
       }
       
       // Fix for empty locations
-      if(browseLocation==''){
+      if(!browseLocation || browseLocation==''){
       	alert('This link is not functional...');
       	return;
       }
