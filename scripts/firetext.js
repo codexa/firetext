@@ -21,10 +21,10 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
-var deviceType, fileChanged, saveTimeout, saving;
+var deviceType, fileChanged, saveTimeout, saving, urls, version = '0.3.2';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
-var locationLegend, locationSelect, locationDevice, locationDropbox; // 0.4 , locationGoogle;
+var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsense;
 var editorMessageProxy;
 
@@ -46,6 +46,11 @@ firetext.init = function () {
 	
 	// Initialize l10n
 	navigator.mozL10n.once(function () {
+  
+	// Initialize urls
+	getURLs(function(){
+
+	});
 	
 	// Initialize language handler
 	firetext.language(firetext.settings.get('language'));
@@ -178,6 +183,22 @@ firetext.init = function () {
 	
 	});
 };
+
+function getURLs(callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('post','http://firetext.codexa.bugs3.com/',true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.setRequestHeader("Connection", "close");
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			urls = JSON.parse(xhr.responseText);
+		}
+	}
+	xhr.addEventListener("loadend", function(){
+		callback();
+	});
+	xhr.send('request=urls&version='+version);
+}
 
 
 /* Add dialog
@@ -1030,21 +1051,27 @@ function processActions(eventAttribute, target) {
 			} else {
 				editFullScreen();
 			}
-		} else if (calledFunction == 'browser') {			 
+		} else if (calledFunction == 'browser') {      
 			// Get location
 			var browseLocation = '';
 			if (target.getAttribute(eventAttribute + '-location') == 'about') {
-				browseLocation = 'http://firetext.codexa.org/new/?header=none&footer=none&version=0.4&app=1';
+				browseLocation = urls.about;
 			} else if (target.getAttribute(eventAttribute + '-location') == 'credits') {
-				browseLocation = 'http://firetext.codexa.org/community/credits?header=none';
+				browseLocation = urls.credits;
 			} else if (target.getAttribute(eventAttribute + '-location') == 'rate') {
-				browseLocation = 'https://marketplace.firefox.com/app/firetext/ratings/add';
+				browseLocation = urls.rate;
 			} else if (target.getAttribute(eventAttribute + '-location') == 'support') {
-				browseLocation = 'http://firetext.codexa.org/support?header=none';
+				browseLocation = urls.support;
 			} else {
 				browseLocation = target.getAttribute(eventAttribute + '-location');
 			}
-			
+
+			// Fix for empty locations
+			if(browseLocation==''){
+				alert('This link is not functional...');
+				return;
+			}
+
 			// Open a new tab
 			window.open(browseLocation);
 		} else if (calledFunction == 'justify') {
