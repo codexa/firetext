@@ -26,7 +26,7 @@ var deviceType, fileChanged, saveTimeout, saving, urls, version = '0.3.2.1';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
-var bugsense;
+var bugsense, bugsenseKey = '';
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -237,7 +237,7 @@ function updateAddDialog() {
 ------------------------*/
 function bugsenseInit() {
   if (firetext.settings.get('stats.enabled') != 'false') {
-    bugsense = new Bugsense({ appversion: '0.3.2.1', apiKey: '' });
+    bugsense = new Bugsense({ appversion: version, apiKey: bugsenseKey });
   } else {
     bugsense = null;
   }
