@@ -51,6 +51,9 @@ firetext.init = function () {
 	getURLs(function(){
 
 	});
+		
+	// Initialize Settings
+	firetext.settings.init();
 	
 	// Initialize language handler
 	firetext.language(firetext.settings.get('language'));
@@ -105,10 +108,7 @@ firetext.init = function () {
 	regions.nav('welcome');
 	
 	// Initialize the editor
-	initEditor(function() {
-		// Initialize Settings
-		firetext.settings.init();
-		
+	initEditor(function() {		
 		// Init extIcon
 		extIcon();
 	
