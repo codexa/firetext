@@ -11,3 +11,6 @@ Please donate skills, time, or money to make this project better.
   
 Take an <a href="https://github.com/Codexa/Firetext/issues">issue</a>,
 or contact <a href="mailto:codexa.contact@gmail.com">us</a> to learn how you can help!
+
+If you would like to help us localize firetext, please see our projet on 
+<a href="https://www.transifex.com/projects/p/firetext/">transifex</a>.
