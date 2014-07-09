@@ -23,6 +23,9 @@
 	"cs": {
 	  "description": "Textový procesor pro Firefox OS"
 	},
+	"eo": {
+	  "description": "La tekstredaktilo por Firefox OS"
+	},
 	"es": {
 	  "description": "El procesador de textos para Firefox OS"
 	},
