@@ -77,7 +77,7 @@ firetext.settings.init = function () {
 
 	// Language
 	if (!firetext.settings.get('language')) {
-		firetext.settings.save('language', navigator.mozL10n.language.code);		 
+		firetext.settings.save('language', 'auto');		 
 	}
 	languageSelect.value = firetext.settings.get('language');
 	languageSelect.addEventListener('change', function () {
