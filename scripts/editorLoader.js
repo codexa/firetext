@@ -1,4 +1,3 @@
-var temp;
 var loadEditor = (function () {
 	var editorURL;
 	var loadEditor = function loadEditor(callback) {
@@ -17,7 +16,6 @@ var loadEditor = (function () {
 				editorDoc = this.response;
 				var scriptTags = editorDoc.querySelectorAll("script");
 				var scripts = {};
-				temp = editorDoc;
 				for (var i = 0; i < scriptTags.length; i++) {
 					if(scriptTags[i].src) {
 						(function() {
