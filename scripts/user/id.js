@@ -44,7 +44,7 @@ firetext.user.id.generate = function () {
 			chi = function (l) {
 				var arg = arguments[1], a = 0, chp;
 				if (arg !== undefined){
-			  	a = arg;
+				a = arg;
 					chp = chnm[a].charAt(l);
 				} else {
 					chp = chnm[a].charAt(chnm[a].indexOf("D") + (l));

@@ -87,7 +87,7 @@ function nav2() {
 			updateDocLists(['cloud']);		
 		}
 		/* End of customized section */
-  }
+	}
 }
 
 regions.navBack = function () {

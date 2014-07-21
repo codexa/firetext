@@ -1136,7 +1136,7 @@ function processActions(eventAttribute, target) {
 						}
 					});
 
-					pick.onsuccess = function () { 
+					pick.onsuccess = function () {
 						var image = this.result.blob;
 						var reader = new FileReader();
 				
@@ -1149,7 +1149,7 @@ function processActions(eventAttribute, target) {
 						reader.readAsDataURL(image);
 					};
 
-					pick.onerror = function () { 
+					pick.onerror = function () {
 					};				
 				} else {
 					if (target.getAttribute(eventAttribute + '-dialog') == 'true') {
