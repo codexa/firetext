@@ -123,10 +123,7 @@ function initModules(callback) {
 	
 	// Initialize IO
 	firetext.io.init(null, function() {
-		// Initialize editor
-		initEditor(function() {	
-			callback();
-		});	
+		callback();
 	});
 }
 
