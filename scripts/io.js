@@ -105,8 +105,6 @@ firetext.io.init = function (api, callback) {
 }
 
 function disableInternalStorage() {
-	welcomeDeviceArea.style.display = 'none';
-	openDialogDeviceArea.style.display = 'none';
 };
 
 

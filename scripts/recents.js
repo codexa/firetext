@@ -25,7 +25,7 @@ firetext.recents.get = function () {
 	if (localStorage["firetext.recents"] != undefined) {
 		return JSON.parse(localStorage["firetext.recents"]);
 	} else {
-		init();
+		firetext.recents.init();
 		return firetext.recents.get();
 	}
 };

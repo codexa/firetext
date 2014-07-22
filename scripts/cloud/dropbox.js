@@ -12,7 +12,6 @@
 cloud.dropbox = {};
 
 // Dropbox
-var welcomeDropboxArea, welcomeDropboxList, openDialogDropboxArea, openDialogDropboxList;
 cloud.dropbox.client = undefined;
 
 

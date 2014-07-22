@@ -36,8 +36,6 @@ cloud.init = function () {
 					updateDocLists();
 					
 					// Show UI elements
-					welcomeDropboxArea.style.display = 'block';
-					openDialogDropboxArea.style.display = 'block';
 					locationDropbox = document.createElement('option');
 					locationDropbox.textContent = 'Dropbox';
 					locationDropbox.value = 'dropbox';
@@ -50,8 +48,6 @@ cloud.init = function () {
 					setTimeout(updateAddDialog, 1);
 				} else {
 					// Hide/Remove UI elements
-					welcomeDropboxArea.style.display = 'none';
-					openDialogDropboxArea.style.display = 'none';
 					if (locationDropbox) {
 						locationSelect.removeChild(locationDropbox);
 						locationDropbox = undefined;
@@ -61,8 +57,6 @@ cloud.init = function () {
 		} 
 	} else {
 		// Hide/Remove UI elements
-		welcomeDropboxArea.style.display = 'none';
-		openDialogDropboxArea.style.display = 'none';
 		if (locationDropbox) {
 			locationSelect.removeChild(locationDropbox);
 			locationDropbox = undefined;

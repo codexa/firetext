@@ -29,10 +29,6 @@ var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
 var editorMessageProxy, editorURL;
 
-// Lists
-var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
-var welcomeRecentsArea, welcomeRecentsList;
-
 // Cache
 var appCache = window.applicationCache;
 
@@ -122,8 +118,10 @@ function initModules(callback) {
 	cloud.init();
 	
 	// Initialize IO
-	firetext.io.init(null, function() {
-		callback();
+	firetext.io.init(null, function(){
+		initFileBrowser(function(){
+			callback();
+		});
 	});
 }
 
@@ -138,20 +136,7 @@ function initElements() {
 	toolbar = document.getElementById('edit-zone');
 	editWindow = document.getElementById('edit');
 	locationLegend = document.getElementById('locationLegend');
-	locationSelect = document.getElementById('createDialogFileLocation');	
-	
-	// Lists
-	welcomeDocsList = document.getElementById('welcome-docs-list');
-	welcomeDeviceArea = document.getElementById('welcome-device-area');
-	welcomeDeviceList = document.getElementById('welcome-device-list');
-	openDialogDeviceArea = document.getElementById('open-dialog-device-area');
-	openDialogDeviceList = document.getElementById('open-dialog-device-list');
-	welcomeRecentsArea = document.getElementById('welcome-recents-area');
-	welcomeRecentsList = document.getElementById('welcome-recents-list');
-	welcomeDropboxArea = document.getElementById('welcome-dropbox-area');
-	welcomeDropboxList = document.getElementById('welcome-dropbox-list');
-	openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
-	openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
+	locationSelect = document.getElementById('createDialogFileLocation');
 
 	// Formatting
 	bold = document.getElementById('bold');
@@ -291,14 +276,28 @@ function bugsenseInit() {
 }
 
 
-/* Doc lists
+/* File browser
 ------------------------*/
+function initFileBrowser(callback) {
+	// Select browser instances
+	var fileBrowserElements = document.getElementsByClassName('file-browser');
+	var fileBrowsers = [];
+	Array.prototype.filter.call(fileBrowserElements, function(e){
+    	fileBrowsers.push(e);
+	});
+	
+	// Load File Browser Module
+	app.modules.load('modules/file-browser/index.html', fileBrowsers, function() {
+		callback();
+	});
+}
+
 function updateDocLists(lists) {
 	if (!lists) {
 		lists = [];
 		lists.push('all');
 	}
-	
+	/*
 	if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
 		// Recents
 		buildDocList(firetext.recents.get(), [welcomeRecentsList], "recent-documents", 'internal', true);
@@ -314,7 +313,7 @@ function updateDocLists(lists) {
 	if (lists.indexOf('all') != '-1' | lists.indexOf('cloud') != '-1') {
 		// Cloud
 		cloud.updateDocLists(lists);
-	}
+	}*/
 }
 
 function completeHTML(tableHTML) {
