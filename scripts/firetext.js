@@ -641,6 +641,15 @@ function buildEditDocList(DOCS, listElm, display, location) {
 }
 
 
+/* IO
+------------------------*/
+firetext.io = {
+	init: function () {
+		// TBD
+	}
+};
+
+
 /* Display
 ------------------------*/
 // Make save banner hidden after 4 seconds

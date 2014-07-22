@@ -54,6 +54,10 @@ html, body {
   display: inline-block; 
 }
 
+.invisible {
+  display: none;
+}
+
 
 /* Fonts */
 @font-face {
@@ -61,7 +65,6 @@ html, body {
   font-style: normal;
   src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 }
-
 
 
 /* Style hacks */
