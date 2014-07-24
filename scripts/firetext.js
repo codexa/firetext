@@ -27,7 +27,7 @@ var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, st
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
-var editorMessageProxy;
+var editorMessageProxy, editorURL;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -670,51 +670,60 @@ function extIcon() {
 /* Editor
 ------------------------*/ 
 function initEditor(callback) {
-	app.modules.load('modules/editor/editor.html', editor, function() {
-		editor.onload = null;
-		editor.onload = function() {
-			var editorMessageChannel = new MessageChannel();
-			// See: scripts/messages.js
-			editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
-			// Successful initialization
-			editorMessageProxy.registerMessageHandler(function(e) {
-				// Initialize Raw Editor
-				rawEditor.setAttribute('contentEditable', 'true');
-				rawEditor.addEventListener('focus',function(){
-					processActions('data-focus', rawEditor);
-				});
-				rawEditor.addEventListener('blur',function(){
-					processActions('data-blur', rawEditor);
-				});
-			
-				// Nav to the design tab
-				regions.tab(document.querySelector('#editTabs'), 'design');
+	if (editorURL) {
+		app.modules.fill(editorURL, editor, function() {
+			editorCommunication(function(){
 				callback();
-		
-				// Initialize Night Mode
-				night();
-			}, "init-success", true);
+			});
+		});
+	} else {
+		app.modules.load('modules/editor/editor.html', editor, function(u) {
+			editorURL = u;
+			editorCommunication(function(){
+				callback();
+			});
+		}, true);
+	}
+}
 
-			editorMessageProxy.registerMessageHandler(function(e) {
-				fileChanged = true;
-				if(e.data.filetype === ".html") {
-					rawEditor.textContent = e.data.html;
-				}
-				autosave();
-			}, "doc-changed");
+function editorCommunication(callback) {
+	editor.onload = null;
+	editor.onload = function() {
+		var editorMessageChannel = new MessageChannel();
+		// See: scripts/messages.js
+		editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+		// Successful initialization
+		editorMessageProxy.registerMessageHandler(function(e) {
+			// Initialize Raw Editor
+			rawEditor.setAttribute('contentEditable', 'true');
+	
+			// Nav to the design tab
+			regions.tab(document.querySelector('#editTabs'), 'design');
+			callback();
 
-			// editor focus and blur
-			editorMessageProxy.registerMessageHandler(function(e) {
-				if(e.data.focus) {
-					processActions('data-focus', editor);
-				} else {
-					processActions('data-blur', editor);
-				}
-			}, "focus");
-			Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
-			editorMessageProxy.getPort().start();
-		}
-	}, true);
+			// Initialize Night Mode
+			night();
+		}, "init-success", true);
+
+		editorMessageProxy.registerMessageHandler(function(e) {
+			fileChanged = true;
+			if(e.data.filetype === ".html") {
+				rawEditor.textContent = e.data.html;
+			}
+			autosave();
+		}, "doc-changed");
+
+		// editor focus and blur
+		editorMessageProxy.registerMessageHandler(function(e) {
+			if(e.data.focus) {
+				processActions('data-focus', editor);
+			} else {
+				processActions('data-blur', editor);
+			}
+		}, "focus");
+		Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
+		editorMessageProxy.getPort().start();
+	}
 }
 
 function watchDocument(filetype) {
