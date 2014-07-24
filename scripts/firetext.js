@@ -1384,3 +1384,10 @@ document.addEventListener('webkitfullscreenchange', onFullScreenChange);
 firetext.alert = function(message) {
 	alert(message);
 };
+enChange);
+document.addEventListener('mozfullscreenchange', onFullScreenChange);
+document.addEventListener('webkitfullscreenchange', onFullScreenChange);
+
+firetext.alert = function(message) {
+	alert(message);
+};

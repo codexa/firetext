@@ -16,6 +16,7 @@ if (!io) {
 	window.addEventListener('DOMContentLoaded', function() {init(function(){})}, false);
 
 	function init(callback) {
+		console.log('IO: Initializing');
 		io.deviceStorage.init(function(storages){
 			console.log(storages.toString());
 		});

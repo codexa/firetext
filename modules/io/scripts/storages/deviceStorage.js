@@ -22,7 +22,6 @@ if (!io) {
 				callback();
 			}
 			
-			alert((sdcards).toSource());
 			var storageNames = [];
 		
 			// Check availability
@@ -45,7 +44,7 @@ if (!io) {
 					sdcards.remove(i);
 				};			
 			});
-			alert((storageNames).toSource());
+			
 			callback(storageNames);
 		} else {
 			callback();
