@@ -10,23 +10,56 @@ if (!io) {
 }
 
 (function(window, undefined) {
-	// Variables
-	var storage, deviceAPI, locationDevice;
+	// Public API
+	io = {
+		isInitialized: false,
+		initialized: new CustomEvent('io.initialized'),
+		systems: {
+			add: function(nameSpace, callback) {
+				addSystem(nameSpace, function(){
+					if (callback) {
+						callback();
+					}
+				});
+			},
+			get: function() {
+				return systems;
+			},
+			remove: function(nameSpace) {
+				
+			}
+		}
+	};
+	
+	// Private Variables
+	var storages = [], systems = [];
 	
 	window.addEventListener('DOMContentLoaded', function() {init(function(){})}, false);
 
 	function init(callback) {
-		console.log('IO: Initializing');
-		io.deviceStorage.init(function(storages){
-			console.log(storages.toString());
-		});
+		log('Initialized IO module');
+		window.dispatchEvent(io.initialized);
+		io.isInitialized = true;
+	}
 	
-		/*// Create storage option
-		locationDevice = document.createElement('option');
-		locationDevice.value = 'internal';
-		locationDevice.setAttribute('data-l10n-id','internal-storage');
-		locationDevice.textContent = navigator.mozL10n.get('internal-storage');
-		locationSelect.appendChild(locationDevice);*/
+	// Systems
+	function addSystem(nameSpace) {
+		if (nameSpace) {
+			log('Adding '+nameSpace.name+' as a storage system');
+			systems.push(nameSpace.name);
+			log('Getting storages for '+nameSpace.name);
+			nameSpace.getStorages(function(s){
+				log('Available storages via '+nameSpace.name+': '+s.toString());
+				s.forEach(function(v){
+					storages.push([v,nameSpace]);
+				});
+				log(nameSpace.name+' has been initialized');
+			});
+		}
+	}
+	
+	function log(message) {
+		console.log('IO: '+message);
 	}
 
 	// function disableInternalStorage() {
