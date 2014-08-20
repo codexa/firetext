@@ -23,6 +23,9 @@
 	"cs": {
 	  "description": "Textový procesor pro Firefox OS"
 	},
+	"de": {
+	  "description": "Die Textverarbeitung für Firefox OS"
+	},
 	"eo": {
 	  "description": "La tekstredaktilo por Firefox OS"
 	},
@@ -33,7 +36,10 @@
 	  "description": "L'éditeur de texte pour Firefox OS"
 	},
 	"he": {
-	  "description": "מעבד התמלילים ל- Firefox OS"
+	  "description": "מעבד התמלילים ל-Firefox OS"
+	},
+	"id": {
+	  "description": "Pengolah kata untuk Firefox OS"
 	},
 	"it": {
 	  "description": "L'editor di testo per Firefox OS"
@@ -49,6 +55,9 @@
 	},
 	"ro": {
 	  "description": "Procesorul word pentru Firefox OS"
+	},
+	"ru": {
+	  "description": "Текстовый процессор для Firefox OS"
 	},
 	"zh-CN": {
 	  "description": "适用于 Firefox OS 的文字处理程序"
