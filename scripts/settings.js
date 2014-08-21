@@ -55,10 +55,13 @@ firetext.settings.init = function () {
 	}
 
 	// Autozen
-	if (firetext.settings.get('autozen') == 'true') {
-		autozenEnabled.setAttribute('checked', '');
-	} else {	
+	if (firetext.settings.get('autozen') == 'false') {
 		autozenEnabled.removeAttribute('checked');
+	} else {
+		autozenEnabled.setAttribute('checked', '');
+		if (!firetext.settings.get('autozen')) {
+			firetext.settings.save('autozen', 'true');
+		}
 	}
 	autozenEnabled.onchange = function () {
 		firetext.settings.save('autozen', this.checked);
