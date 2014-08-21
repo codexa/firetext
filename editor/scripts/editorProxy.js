@@ -32,7 +32,7 @@ var mainClosure = function() {
 			doc = document.createElement('DIV');
 			doc.setAttribute('contentEditable', 'true');
 			doc.id = 'tempEditDiv';
-			doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; min-height: calc(100% - 20px); word-wrap: break-word;');
+			doc.setAttribute('style','border: none; padding: 10px 10px 55px; font-size: 20px; outline: none; min-height: calc(100% - 20px); word-wrap: break-word;');
 			document.body.appendChild(doc);
 			//doc = document.getElementById('tempEditDiv');
 			document.execCommand('enableObjectResizing', false, 'true');

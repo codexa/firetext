@@ -38,6 +38,26 @@ html, body {
   margin: 1rem;
 }
 
+#hide-keyboard-button {
+  position: fixed;
+  bottom: 0;
+  right: 1rem;
+  width: 5rem;
+  font-size: 2.5rem;
+    -moz-transform: rotate(0.5turn);
+    -webkit-transform: rotate(0.5turn);
+    -o-transform: rotate(0.5turn);
+    -ms-transform: rotate(0.5turn);
+  transform: rotate(0.5turn);
+  opacity: 0.4;
+  background: transparent;
+  display: none;
+}
+
+#hide-keyboard-button.shown {
+  display: inline-block; 
+}
+
 
 /* Fonts */
 @font-face {
@@ -308,24 +328,6 @@ aside select.dummy {
     padding-right: 0;
     padding-left: 1rem;
     width: 3rem;
-}
-
-
-/* Browser */
-.top-button {
-  border-radius: 0;
-  border: none;
-  outline: none;
-  margin: 0;
-}
-
-#browserFrame {
-  width: 100%;
-  border: none;
-  outline: none;
-    height: -moz-calc(100% - 3.9rem);
-    height: -webkit-calc(100% - 3.9rem);
-  height: calc(100% - 3.9rem);
 }
 
 

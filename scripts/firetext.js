@@ -1091,11 +1091,13 @@ function processActions(eventAttribute, target) {
 		} else if (calledFunction == 'hideToolbar') {
 			if (document.getElementById('currentFileType').textContent != '.txt') {
 				document.getElementById('edit-bar').style.display = 'none';
+				document.getElementById('hide-keyboard-button').classList.add('shown');
 				editor.classList.add('no-toolbar');
 			}
 		} else if (calledFunction == 'showToolbar') {
 			if (document.getElementById('currentFileType').textContent != '.txt') {
 				document.getElementById('edit-bar').style.display = 'block';
+				document.getElementById('hide-keyboard-button').classList.remove('shown');
 				editor.classList.remove('no-toolbar');
 			}
 		} else if (calledFunction == 'hyperlink') {
