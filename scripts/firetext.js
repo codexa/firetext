@@ -138,6 +138,7 @@ firetext.init = function () {
 	
 		welcomeDocsList.addEventListener(
 			'contextmenu', function contextmenu(event) {
+				event.preventDefault();
 				editDocs();
 			}
 		);
@@ -574,7 +575,7 @@ function buildEditDocList(DOCS, listElm, display, location) {
 			// generate each list item
 			for (var i = 0; i < DOCS.length; i++) {
 				output += '<li>';
-				output += '<label class="pack-checkbox danger"><input type="checkbox"><span></span></label>';
+				output += '<label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label>';
 				output += '<p data-location="'+location+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
 				output += '</li>';
 			}		
