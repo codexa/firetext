@@ -29,6 +29,9 @@ firetext.settings.init = function () {
 		autoloadEnabled.setAttribute('checked', '');
 	} else {	
 		autoloadEnabled.removeAttribute('checked');
+		if (!firetext.settings.get('autoload')) {
+			firetext.settings.save('autoload', 'false');
+		}
 	}
 	autoloadEnabled.onchange = function () {
 		firetext.settings.save('autoload', this.checked);

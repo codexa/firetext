@@ -105,9 +105,6 @@ firetext.init = function () {
 	// Initalize recent docs
 	firetext.recents.init();
 	
-	// Navigate to welcome
-	regions.nav('welcome');
-	
 	// Initialize the editor
 	initEditor(function() {		
 		// Init extIcon
@@ -159,21 +156,26 @@ firetext.init = function () {
 					if (lastDoc[3] == 'dropbox') {
 						if (firetext.settings.get('dropbox.enabled') == 'true') {
 							window.addEventListener('cloud.dropbox.authed', function() {
-								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 								spinner('hide');
+								regions.nav('welcome');
+								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 							});
 						} else {
 							spinner('hide');
+							regions.nav('welcome');
 						}
 					} else {
-						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 						spinner('hide');
+						regions.nav('welcome');
+						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 					}
 				} else {
 					spinner('hide');
+					regions.nav('welcome');
 				}
 			} else {
 				spinner('hide');
+				regions.nav('welcome');
 			}
 			
 			// Night
