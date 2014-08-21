@@ -141,8 +141,8 @@ label input[type="checkbox"][data-type="switch"].uninit + span:after {
 
 
 /* RTL */
-.rtl label:not([for]) input,
-.rtl [data-type="list"] li > label input + span {
+[dir="rtl"] label:not([for]) input,
+[dir="rtl"] [data-type="list"] li > label input + span {
     left: auto;
     right: 0;   
 }

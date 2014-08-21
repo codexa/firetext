@@ -225,27 +225,27 @@
 
 
 /* RTL */
-.rtl [data-type="list"] aside { 
+[dir="rtl"] [data-type="list"] aside { 
     float: right;   
     margin: 0 0 0 0.5rem;
 }
 
-.rtl [data-type="list"] .pack-end {
+[dir="rtl"] [data-type="list"] .pack-end {
     float: left;
 }
 
-.rtl .pack-end button {
+[dir="rtl"] .pack-end button {
     left: 0;
     right: auto;
 }
 
-.rtl [data-type="list"] [data-type="edit"] li {
+[dir="rtl"] [data-type="list"] [data-type="edit"] li {
     transform: translateX(-4rem);
     padding-right: 0;
     margin-right: 2rem;
 }
 
-[data-type="list"] li > label {
+[dir="rtl"] [data-type="list"] li > label {
     right: -4rem;
     left: auto;
 }

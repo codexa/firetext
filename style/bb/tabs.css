@@ -150,9 +150,9 @@
 .current [role="tablist"] .selected [role="tabpanel"],
 .parent [role="tablist"] .selected [role="tabpanel"],
 .active [role="tablist"] .selected [role="tabpanel"],
-.rtl .current [role="tablist"] .selected [role="tabpanel"],
-.rtl .parent [role="tablist"] .selected [role="tabpanel"],
-.rtl .active [role="tablist"] .selected [role="tabpanel"] {
+[dir="rtl"] .current [role="tablist"] .selected [role="tabpanel"],
+[dir="rtl"] .parent [role="tablist"] .selected [role="tabpanel"],
+[dir="rtl"] .active [role="tablist"] .selected [role="tabpanel"] {
   visibility: visible;
     -moz-transform: none;
     -webkit-transform: none;
@@ -268,13 +268,13 @@
 
 
 /* RTL */
-.rtl [role="tablist"] > [role="tab"] {
+[dir="rtl"] [role="tablist"] > [role="tab"] {
     float: right;   
 }
 
-.rtl .current [role="tablist"] [role="tabpanel"],
-.rtl .parent [role="tablist"] [role="tabpanel"],
-.rtl .active [role="tablist"] [role="tabpanel"] {
+[dir="rtl"] .current [role="tablist"] [role="tabpanel"],
+[dir="rtl"] .parent [role="tablist"] [role="tabpanel"],
+[dir="rtl"] .active [role="tablist"] [role="tabpanel"] {
     -moz-transform: translateX(102%);
     -webkit-transform: translateX(102%);
     -o-transform: translateX(102%);
@@ -282,7 +282,7 @@
   transform: translateX(102%);
 }
 
-.rtl [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
+[dir="rtl"] [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
     -moz-transform: translateX(-102%);
     -webkit-transform: translateX(-102%);
     -o-transform: translateX(-102%);

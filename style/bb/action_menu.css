@@ -210,13 +210,13 @@ section[role="object"] > menu > button[disabled] {
 
 
 /* RTL */
-.rtl [role="action"] > header:first-child,
-.rtl [role="object"] > header:first-child {
+[dir="rtl"] [role="action"] > header:first-child,
+[dir="rtl"] [role="object"] > header:first-child {
     direction: rtl;   
 }
 
-.rtl [role="action"] > menu > button,
-.rtl [role="object"] > menu > button {
+[dir="rtl"] [role="action"] > menu > button,
+[dir="rtl"] [role="object"] > menu > button {
     direction: rtl;
     text-align: right;
 }

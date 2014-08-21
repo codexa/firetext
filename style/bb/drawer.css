@@ -273,22 +273,22 @@ section[data-type="sidebar"] > nav > ul > li > a {
 
 
 /* RTL */
-.rtl section[data-type="sidebar"] {
+[dir="rtl"] section[data-type="sidebar"] {
     left: auto;
     right: 0;
 }
 
-.rtl section[data-type="sidebar"][data-position="right"] {
+[dir="rtl"] section[data-type="sidebar"][data-position="right"] {
     right: auto;
     left: 0;    
 }
 
-.rtl section[data-type="sidebar"] [role="toolbar"] {
+[dir="rtl"] section[data-type="sidebar"] [role="toolbar"] {
     left: auto;
     right: 0;
 }
 
-.rtl section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
+[dir="rtl"] section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
     right: auto;
     left: 0;    
 }

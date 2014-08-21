@@ -266,56 +266,56 @@ section > header h2 {
 /* ----------------------------------
  * HEADERS: right-to-left tweaks
  * ---------------------------------- */
-.rtl section > header:first-child {
+[dir="rtl"] section > header:first-child {
     direction: ltr;
 }
 
-.rtl section > header:first-child h1 {
+[dir="rtl"] section > header:first-child h1 {
     direction: rtl;
     text-align: right;
     margin: 0 3.5rem 0 0 !important;
 }
 
-.rtl section > header:first-child > button,
-.rtl section > header:first-child > a {
+[dir="rtl"] section > header:first-child > button,
+[dir="rtl"] section > header:first-child > a {
     right: 0;
     left: auto;
     direction: rtl;
 }
 
-.rtl section > header:first-child menu[type="toolbar"] {
+[dir="rtl"] section > header:first-child menu[type="toolbar"] {
     float: left;
 }
 
-.rtl section > header:first-child menu[type="toolbar"] a,
-.rtl section > header:first-child menu[type="toolbar"] button {
+[dir="rtl"] section > header:first-child menu[type="toolbar"] a,
+[dir="rtl"] section > header:first-child menu[type="toolbar"] button {
     float: right;
 }
 
-.rtl section > header:first-child menu[type="toolbar"] a:last-child,
-.rtl section > header:first-child menu[type="toolbar"] button:last-child {
+[dir="rtl"] section > header:first-child menu[type="toolbar"] a:last-child,
+[dir="rtl"] section > header:first-child menu[type="toolbar"] button:last-child {
     margin-left: 0;
     margin-right: -0.2rem;
 }
 
-.rtl section > header:first-child menu[type="toolbar"] .menu {
+[dir="rtl"] section > header:first-child menu[type="toolbar"] .menu {
     padding-left: 0;
     padding-right: 1.5rem;
 }
 
-.rtl section > header:first-child > menu[type="toolbar"] .icon-menu,
-.rtl section > header:first-child > menu[type="toolbar"] .icon-menu {
+[dir="rtl"] section > header:first-child > menu[type="toolbar"] .icon-menu,
+[dir="rtl"] section > header:first-child > menu[type="toolbar"] .icon-menu {
     padding-right: 0.5rem;
 }
 
-.rtl section > header:first-child > button .icon:after,
-.rtl section > header:first-child > a .icon:after {
+[dir="rtl"] section > header:first-child > button .icon:after,
+[dir="rtl"] section > header:first-child > a .icon:after {
     left: auto;
     right: 0;
 }
     
-.rtl section > header:first-child > button:first-child .icon-back,
-.rtl section > header:first-child > a:first-child .icon-back {
+[dir="rtl"] section > header:first-child > button:first-child .icon-back,
+[dir="rtl"] section > header:first-child > a:first-child .icon-back {
        -moz-transform: scale(-1, 1);
        -webkit-transform: scale(-1, 1);
        -o-transform: scale(-1, 1);
@@ -323,13 +323,13 @@ section > header h2 {
     padding-right: 1rem;
 }
     
-.rtl section > header:first-child > button:first-child .icon-close,
-.rtl section > header:first-child > a:first-child .icon-close {
+[dir="rtl"] section > header:first-child > button:first-child .icon-close,
+[dir="rtl"] section > header:first-child > a:first-child .icon-close {
     padding-right: 0.7rem;
 }
 
-.rtl section > header:first-child > button:first-child .icon-menu,
-.rtl section > header:first-child > a:first-child .icon-menu {
+[dir="rtl"] section > header:first-child > button:first-child .icon-menu,
+[dir="rtl"] section > header:first-child > a:first-child .icon-menu {
     padding-left: 1.3rem;
     padding-right: 0;
 }

@@ -946,7 +946,7 @@ function initGestures () {
 	document.body.addEventListener('swipe', function (event) {
 		// Detect direction
 		var direction;
-		if (document.body.classList.contains('rtl')) {
+		if (html.getAttribute('dir')==='rtl') {
 			if (event.detail.direction == 'right') {
 				direction = 'left';
 			} else if (event.detail.direction == 'left') {

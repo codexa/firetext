@@ -420,11 +420,11 @@ aside select.dummy {
 
 
 /* RTL */
-.rtl {
+[dir="rtl"] {
     direction: rtl;
 }
 
-.rtl aside.pack-end select {
+[dir="rtl"] aside.pack-end select {
     left: 0;
     right: auto;
     direction: ltr;
@@ -432,34 +432,34 @@ aside select.dummy {
     text-align: left;
 }
 
-.rtl .button-block {
+[dir="rtl"] .button-block {
     margin-right: 1.5%;
 }
 
-.rtl #fileTypeLegend {
+[dir="rtl"] #fileTypeLegend {
     float: left;  
 }
 
-.rtl .tabToolbar button,
-.rtl .tabToolbar .button,
-.rtl .tabToolbar input[type="button"] {
+[dir="rtl"] .tabToolbar button,
+[dir="rtl"] .tabToolbar .button,
+[dir="rtl"] .tabToolbar input[type="button"] {
     float: left;
 }
 
-.rtl .tabToolbar .icon-menu {
+[dir="rtl"] .tabToolbar .icon-menu {
     padding-left: 0;
     padding-right: 1rem;
     width: 3rem;
 }
 
-.rtl .spinner > div {
+[dir="rtl"] .spinner > div {
     -moz-animation-name: rtlSpin;
     -webkit-animation-name: rtlSpin;
     -o-animation-name: rtlSpin;
   animation-name: rtlSpin;
 }
 
-.rtl .icon-arrow {
+[dir="rtl"] .icon-arrow {
        -moz-transform: scale(-1, 1);
        -webkit-transform: scale(-1, 1);
        -o-transform: scale(-1, 1);
