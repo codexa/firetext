@@ -236,10 +236,16 @@ function updateAddDialog() {
 /* Bugsense
 ------------------------*/
 function bugsenseInit() {
-	if (firetext.settings.get('stats.enabled') != 'false') {
-		bugsense = new Bugsense({ appversion: version, apiKey: bugsenseKey });
+	if (bugsenseKey) {
+		if (firetext.settings.get('stats.enabled') != 'false') {
+			bugsense = new Bugsense({ appversion: version, apiKey: bugsenseKey });
+		} else {
+			bugsense = null;
+		}	
 	} else {
-		bugsense = null;
+		if (firetext.settings.get('stats.enabled') != 'false') {
+			firetext.settings.save('stats.enabled','false');
+		}
 	}
 }
 
