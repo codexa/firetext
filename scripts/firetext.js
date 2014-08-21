@@ -39,7 +39,7 @@ var appCache = window.applicationCache;
 
 /* Start
 ------------------------*/
-window.addEventListener('DOMContentLoaded', function() {firetext.init()}, false);
+window.addEventListener('DOMContentLoaded', function() {firetext.init();}, false);
 
 firetext.init = function () {
 	// Initialize Bugsense
@@ -144,8 +144,7 @@ firetext.init = function () {
 		);
 	
 		// Initialize IO
-		firetext.io.init(null, function() {
-	
+		firetext.io.init(null, function() {	
 			// Update Doc Lists
 			updateDocLists();
 			
@@ -176,6 +175,9 @@ firetext.init = function () {
 			} else {
 				spinner('hide');
 			}
+			
+			// Night
+			night();
 	
 			// Dispatch init event
 			window.dispatchEvent(firetext.initialized);
@@ -560,8 +562,8 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 		} else {
 			// No docs message
 			var output = '<li style="margin-top: -5px" class="noLink">';
-			output += '<p>'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p>'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
+			output += '<p style="padding: 1.5rem 0 0.5rem;">'+navigator.mozL10n.get('no-'+display)+'</p>';
+			output += '<p style="padding-bottom: 1rem;">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
 			output += '</li>';
 			
 			// Display output HTML
@@ -590,8 +592,8 @@ function buildEditDocList(DOCS, listElm, display, location) {
 			listElm.setAttribute("data-type","edit");
 		} else {
 			output += '<li style="margin-top: -5px" class="noLink">';
-			output += '<p>'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p>'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
+			output += '<p style="padding: 1.5rem 0 0.5rem;">'+navigator.mozL10n.get('no-'+display)+'</p>';
+			output += '<p style="padding-bottom: 1rem;">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
 			output += '</li>';
 		}
 		

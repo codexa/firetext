@@ -49,7 +49,7 @@ html, body {
     -o-transform: rotate(0.5turn);
     -ms-transform: rotate(0.5turn);
   transform: rotate(0.5turn);
-  opacity: 0.4;
+  opacity: 0.6;
   background: transparent;
   display: none;
 }
