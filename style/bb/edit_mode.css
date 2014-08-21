@@ -54,118 +54,12 @@
 }
 
 /* Header */
-[role="edit"][data-type="edit"] header {
-  pointer-events: auto;
-  position: relative;
-  z-index: 10;
-  padding: 0;
-  height: 5rem;
-  color: #1f1f1f;
-  background: #fff repeat 0 0;
-  border: none;
-  border-bottom: solid 0.2rem #efefef;
+[role="edit"][data-type="edit"] header:first-child {
+  pointer-events: auto;  
 }
 
-[role="edit"][data-type="edit"] header h1 {
-  font: 2.5rem/5rem "Moz", "Open Sans", Sans-serif;
-  text-align: left;
-  color: inherit;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  display: block;
-  overflow: hidden;
-  margin: 0 0 0 2rem;
-  height: 100%
-}
-
-[role="edit"][data-type="edit"] header button {
-  border: none;
-  background: none;
-  padding: 0;
-  overflow: hidden;
-  font: normal 1.4rem/1.1em "MozTT", Sans-serif;
-  color: inherit;
-  border-radius: 0;
-}
-
-[role="edit"][data-type="edit"] header menu[type="toolbar"] {
-  height: 100%;
-  float: right;
-  margin: 0;
-  padding: 0;
-}
-
-[role="edit"][data-type="edit"] header menu[type="toolbar"] button {
-  height: 5rem;
-  min-width: 5rem;
-  width: auto;
-  margin-bottom: 0;
-  border-radius: 0;
-  line-height: 5rem;
-  float: left;
-  font-weight: normal;
-  background: none;
-  padding: 0 1.75rem;
-  box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-  text-align: center;
-  text-shadow: none;
-  position: relative;
-  z-index: 5;
-}
-
-[role="edit"][data-type="edit"] header menu button {
-  color: inherit;
-  border: none;
-}
-
-[role="edit"][data-type="edit"] header menu[type="toolbar"] button:last-child {
-  margin-left: -0.2rem;
-  z-index: 1;
-}
-
-/* Press state */
-[role="edit"][data-type="edit"] header button:active .icon:after,
-[role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
-  background: #dfdfdf;
-  transition: background 0.2s ease;
-    -moz-transition: background 0.2s ease;
-    -webkit-transition: background 0.2s ease;
-    -o-transition: background 0.2s ease;
-}
-
-[role="edit"][data-type="edit"] header button:first-letter {
-  text-transform: uppercase;
-}
-
-[role="edit"][data-type="edit"] header > button {
-  position: absolute;
-  left: 0;
-  width: 4rem;
-  height: 5rem;
-  overflow: hidden;
-  text-align: center;
-}
-
-[role="edit"][data-type="edit"] header > button span {
-  background: url(edit_mode/images/icons/close.png) no-repeat center center;
-  overflow: visible;
-  font: 0/0 a;
-  position: static;
-  margin-left: -2rem;
-  height: 4.9rem;
-  display: block;
-}
-
-[role="edit"][data-type="edit"] header > button span:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  width: 2rem;
-  height: 4.9rem;
+[role="edit"][data-type="edit"] header:first-child h1 {
+  padding: 0 2rem;
 }
 
 /* Menu */

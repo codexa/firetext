@@ -86,6 +86,13 @@
   color: #dfdfdf;
 }
 
+.night button {
+  background-color: transparent;
+  color: #dfdfdf;
+  border-color: #dfdfdf;
+  text-shadow: none;
+}
+
 
 /* Lists */
 .night [data-type="list"] h2,

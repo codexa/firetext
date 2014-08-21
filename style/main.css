@@ -11,7 +11,7 @@ html, body {
   margin: 0;
   padding: 0;  
   font-size: 10px;
-  font-family: "Open Sans", sans-serif;  
+  font-family: sans-serif;  
   background: #fff;
   color: #6f6f6f;
 }
@@ -24,9 +24,10 @@ html, body {
 }
 
 .firetext {
-    text-align: center !important;
-    padding-top: 0 !important;
-    margin: 0 0 0 4rem !important;
+  padding: 0 !important;
+  margin: 0 4rem !important;
+  text-align: center !important;
+  font-style: normal !important;
 }
 
 .redAlert {
@@ -95,6 +96,14 @@ form[role=dialog].current {
 }
 
 
+/* Switches */
+label.pack-checkbox,
+label.pack-radio,
+label.pack-switch {
+    margin: 0.5rem 0 0 0.5rem;  
+}
+
+
 /* Lists */
 [data-type="list"], [data-type="edit"] {
   margin: 0;
@@ -119,15 +128,9 @@ form[role=dialog].current {
   padding-right: 20px;
 }
 
-[data-type="edit"] li {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 
 /* File List */
 [data-type="list"] li.fileListItem {
-  height: auto;
   background: #fff;
   cursor: pointer;
 }
@@ -238,10 +241,11 @@ legend.action select {
 }
 
 aside.pack-end select {
-  position: absolute;
-  right: 0;
-  margin-top: 1.4rem;
+  margin-top: 1.8rem;
   text-align: right;
+  font-size: 1.8rem;
+  background: transparent;
+  padding-right: 1rem;
 }
 
 legend.action select.dummy,
@@ -425,8 +429,6 @@ aside select.dummy {
 }
 
 [dir="rtl"] aside.pack-end select {
-    left: 0;
-    right: auto;
     direction: ltr;
     text-indent: 0;
     text-align: left;

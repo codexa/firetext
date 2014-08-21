@@ -381,15 +381,14 @@
                   <option value="c" data-l10n-id="center">Center</option>
                   <option value="j" data-l10n-id="justified">Justified</option>
                 </select>
-                <select class="dummy"></select>
               </label>
             </aside>
             <p class="label" data-l10n-id="alignment">Alignment</p>
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
+              <label class="pack-switch">
+                <input type="checkbox" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
                 <span></span>
               </label>
             </aside>
@@ -397,8 +396,8 @@
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
+              <label class="pack-switch">
+                <input type="checkbox" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
                 <span></span>
               </label>
             </aside>
@@ -406,8 +405,8 @@
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
+              <label class="pack-switch">
+                <input type="checkbox" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
                 <span></span>
               </label>
             </aside>
@@ -415,8 +414,8 @@
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
+              <label class="pack-switch">
+                <input type="checkbox" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
                 <span></span>
               </label>
             </aside>
@@ -538,8 +537,8 @@
           <ul>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="dropbox-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -551,8 +550,8 @@
           <ul>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autosave-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="autosave-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -560,8 +559,8 @@
             </li>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autoload-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="autoload-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -580,8 +579,8 @@
             </li>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="stats-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="stats-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -592,34 +591,33 @@
           <ul>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autozen-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="autozen-enabled-switch">
                   <span></span>
                 </label>
               </aside>
               <p class="label" data-l10n-id="edit-with-zen-mode">Edit with <b>Zen Mode</b></p>
             </li>
             <li class="noLink">
-			  <aside class="pack-end">
+              <aside class="pack-end">
+                <label class="pack-switch">
+                  <input type="checkbox" id="previews-enabled-switch">
+                  <span></span>
+                </label>
+              </aside>
+              <p class="label" data-l10n-id="enable-file-previews">Enable <b>file previews</b></p>
+            </li>
+            <li class="noLink">
+              <aside class="pack-end">
                 <label>
                   <select id="nightmode-select">
                     <option value="1" data-l10n-id="always-on">Always On</option>
                     <option value="0" data-l10n-id="always-off">Always Off</option>
                     <option selected value="2" data-l10n-id="auto">Auto</option>
                   </select>
-                  <select class="dummy"></select>
-                </label>
-			  </aside>
-			  <p class="label" data-l10n-id="enable-night-mode">Enable <b>Night Mode</b></p>
-            </li>
-            <li class="noLink">
-              <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="previews-enabled-switch" />
-                  <span></span>
                 </label>
               </aside>
-              <p class="label" data-l10n-id="enable-file-previews">Enable <b>file previews</b></p>
+              <p class="label" data-l10n-id="enable-night-mode">Enable <b>Night Mode</b></p>
             </li>
             <li class="noLink">
               <aside class="pack-end">
@@ -643,7 +641,6 @@
                     <option value="ru">Русский</option>
                     <option value="zh-CN">&#20013;&#25991; (CN)</option>
                   </select>
-                  <span></span>
                 </label>
               </aside>
               <p class="label" data-l10n-id="language">Interface <b>language</b></p>
