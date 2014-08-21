@@ -18,9 +18,6 @@ label.pack-radio input,
 label.pack-switch input {
   margin: 0;
   opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 label.pack-checkbox input ~ span:after,
