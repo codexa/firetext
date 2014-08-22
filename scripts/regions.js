@@ -33,27 +33,30 @@ regions.nav = function (location) {
 	}
 };
 
-function nav2() {		
-	if (document.getElementById(tempLoc)) { 
-		if (document.querySelector('.current')) {
-			if (document.getElementById(tempLoc).getAttribute('role') != 'region') {
-				document.querySelector('.current').classList.add('parent');
+function nav2() {
+	var tempElement = document.getElementById(tempLoc);
+	if (tempElement) {
+		var currentRegion = document.querySelector('.current');
+		if (currentRegion) {
+			if (tempElement.getAttribute('role') != 'region') {
+				currentRegion.classList.add('parent');
 			} else {				
-				document.querySelector('.current').classList.remove('parent');
+				currentRegion.classList.remove('parent');
 			}
-			document.querySelector('.current').classList.remove('current');
+			currentRegion.classList.remove('current');
 		}
-		if (document.querySelector('.parent') && document.getElementById(tempLoc).getAttribute('role') == 'region') {
-			document.querySelector('.parent').classList.remove('parent');
+		var parentRegion = document.querySelector('.parent');
+		if (parentRegion && tempElement.getAttribute('role') == 'region') {
+			parentRegion.classList.remove('parent');
 		}
 		regions.history.push(tempLoc);
-		document.getElementById(tempLoc).classList.add('current');
+		tempElement.classList.add('current');
 		
 		/* Remove this section when porting to other projects */	 
 		if (tempLoc == 'edit') {		
 			// Start Zen Mode if autozen == true
 			if (firetext.settings.get('autozen') == 'true') {
-				editFullScreen(true);		 
+				editFullScreen(true);
 			}
 			
 			// Lock screen in portrait
@@ -68,16 +71,24 @@ function nav2() {
 			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
 			firetext.settings.save('autoload.name', document.getElementById('currentFileName').textContent);
 			firetext.settings.save('autoload.ext', document.getElementById('currentFileType').textContent);
-			firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);	 
-			
+			firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);			
 		} else {
+			// No zen mode if region is not a dialog
+			if (tempElement.getAttribute('role') != 'dialog') {
+				editFullScreen(false);
+			}
+			
+			// Not editing if the region is not a dialog
+			if (tempElement.getAttribute('role') != 'dialog') {
+				firetext.settings.save('autoload.wasEditing', 'false');
+			}
+			
 			// Unlock screen
 			if (screen.unlockOrientation) {
 				screen.unlockOrientation();
 			} else if (screen.mozUnlockOrientation) {
 				screen.mozUnlockOrientation();
-			} 
-			firetext.settings.save('autoload.wasEditing', 'false');
+			}
 		}
 	
 		// Update docs lists

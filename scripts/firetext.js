@@ -151,30 +151,32 @@ firetext.init = function () {
 			// Check for recent file, and if found, load it.
 			if (firetext.settings.get('autoload') == 'true') {
 				var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
-				if (firetext.settings.get('autoload.wasEditing') == 'true') {
+				var wasEditing = firetext.settings.get('autoload.wasEditing');
+				
+				// Navigate to welcome region
+				regions.nav('welcome');
+				
+				// Load file
+				if (wasEditing == 'true') {
 					// Wait until Dropbox is authenticated
 					if (lastDoc[3] == 'dropbox') {
 						if (firetext.settings.get('dropbox.enabled') == 'true') {
 							window.addEventListener('cloud.dropbox.authed', function() {
 								spinner('hide');
-								regions.nav('welcome');
 								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 							});
 						} else {
 							spinner('hide');
-							regions.nav('welcome');
 						}
 					} else {
 						spinner('hide');
-						regions.nav('welcome');
 						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 					}
 				} else {
 					spinner('hide');
-					regions.nav('welcome');
 				}
 			} else {
-				spinner('hide');
+				spinner('hide');  
 				regions.nav('welcome');
 			}
 			
@@ -994,11 +996,7 @@ function processActions(eventAttribute, target) {
 		if (calledFunction == 'loadToEditor') {
 			loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'nav') {
-			var navLocation = target.getAttribute(eventAttribute + '-location');
-			if (document.getElementById(navLocation).getAttribute('role') != 'dialog') {
-				editFullScreen(false);			
-			}
-			regions.nav(navLocation);
+			regions.nav(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'navBack') {
 			regions.navBack();
 		} else if (calledFunction == 'sidebar') {
@@ -1273,8 +1271,7 @@ function spinner(state) {
 }
 
 function editFullScreen(enter) {
-	if (!document.fullscreenElement &&		// alternative standard method
-			!document.mozFullScreenElement && !document.webkitFullscreenElement && enter != false) {	// current working methods
+	if (enter != false) {	// current working methods
 		// Make app fullscreen
 		if (document.documentElement.requestFullscreen) {
 			document.documentElement.requestFullscreen();
