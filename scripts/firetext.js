@@ -133,7 +133,7 @@ firetext.init = function () {
 			}
 		);
 	
-		welcomeDocsList.addEventListener(
+		document.getElementById('welcome-main-area').addEventListener(
 			'contextmenu', function contextmenu(event) {
 				event.preventDefault();
 				editDocs();
