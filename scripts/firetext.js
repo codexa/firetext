@@ -566,8 +566,8 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 		} else {
 			// No docs message
 			var output = '<li style="margin-top: -5px" class="noLink">';
-			output += '<p style="padding: 1.5rem 0 0.5rem;">'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p style="padding-bottom: 1rem;">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
+			output += '<p style="padding: 1.5rem 0 0.5rem;" data-l10n-id="no-'+display+'">'+navigator.mozL10n.get('no-'+display)+'</p>';
+			output += '<p style="padding-bottom: 1rem;" data-l10n-id="click-compose-icon-to-create">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
 			output += '</li>';
 			
 			// Display output HTML
@@ -596,8 +596,8 @@ function buildEditDocList(DOCS, listElm, display, location) {
 			listElm.setAttribute("data-type","edit");
 		} else {
 			output += '<li style="margin-top: -5px" class="noLink">';
-			output += '<p style="padding: 1.5rem 0 0.5rem;">'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p style="padding-bottom: 1rem;">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
+			output += '<p style="padding: 1.5rem 0 0.5rem;" data-l10n-id="no-'+display+'">'+navigator.mozL10n.get('no-'+display)+'</p>';
+			output += '<p style="padding-bottom: 1rem;" data-l10n-id="click-compose-icon-to-create">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
 			output += '</li>';
 		}
 		
