@@ -9,7 +9,7 @@
 /* Night Mode
 ------------------------*/
 var ncss, dcss = document.getElementsByTagName("link")[25];
-var nightTheme = '#111', dayTheme='#fff';
+var nightTheme = '#111', dayTheme = '#fff';
 
 function night() {
 	if (firetext.settings.get('nightmode') == 'true') {

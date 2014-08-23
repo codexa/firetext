@@ -3,7 +3,8 @@
 * Copyright (C) Codexa Organization.
 */
 
-.night, .night body {
+.night,
+.night body {
   background: #111;
   color: #a0a0a0;
 }
@@ -19,21 +20,35 @@
 
 
 /* Headers */
-.night section > header:first-child a:not([aria-disabled="true"]):active .icon:after,
-.night section > header:first-child button:not(:disabled):active .icon:after,
-.night section > header:first-child menu[type="toolbar"] a:not([aria-disabled="true"]):active,
-.night section > header:first-child menu[type="toolbar"] button:not(:disabled):active {
-  background-color: #222 !important;
+.night section > header:first-child {
+  background-color: #111;
+  color: #eee;
+  border-color: #2C2C2C;
 }
 
 .night .tabToolbar button:active {
   background-color: #111;
 }
 
-.night section > header:first-child {
-  background: #111;
+.night section > header:first-child h1.firetext {
+  color: inherit; 
+}
+
+.night section > header:first-child a,
+.night section > header:first-child button {
+  color: inherit;
+}
+
+.night section > header:first-child a:active,
+.night section > header:first-child button:active,
+.night section > header:first-child a:hover,
+.night section > header:first-child button:hover {
+  background-color: #222;
+}
+
+.night section > header:first-child [class^="icon-"], 
+.night section > header:first-child [class*=" icon-"] {
   color: #eee;
-  border-color: #2C2C2C;
 }
 
 
@@ -174,23 +189,18 @@
 
 
 /* Edit Mode */
-.night [role="edit"][data-type="edit"] > menu {
+.night [role="dialog"][data-type="edit"] > menu {
     background-color: #222;
     border-color: #333;
 }
 
-.night [role="edit"][data-type="edit"] menu button {
+.night [role="dialog"][data-type="edit"] > menu button {
     background-color: #333;
     color: #fff;
     text-shadow: none;
 }
 
-.night [role="edit"][data-type="edit"] menu button:active,
-.night [role="edit"][data-type="edit"] menu button.recommend:active {
-    background-color: #111;
-}
-
-.night [role="edit"][data-type="edit"] menu button.danger{
+.night [role="dialog"][data-type="edit"] > menu button.danger{
     background-color: #BE000A;
 }
 

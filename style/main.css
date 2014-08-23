@@ -23,13 +23,6 @@ html, body {
   overflow: scroll;
 }
 
-.firetext {
-  padding: 0 !important;
-  margin: 0 4rem !important;
-  text-align: center !important;
-  font-style: normal !important;
-}
-
 .redAlert {
   color: red;
   font-size: 2rem;

@@ -103,6 +103,7 @@ section[data-type="sidebar"] > header:first-child h1 {
   overflow: hidden;
   padding: 0 2rem;
   height: 100%;
+  margin: 0;
 }
 
 section[data-type="sidebar"] > header h1 em {
@@ -285,6 +286,7 @@ section[data-type="sidebar"] > nav > ul > li > a {
 
 [dir="rtl"] section[data-type="sidebar"] > header:first-child h1 {
     padding: 0 2.7rem;
+    text-align: right;
 }
 
 [dir="rtl"] section[data-type="sidebar"] [role="toolbar"] {

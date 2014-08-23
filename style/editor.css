@@ -49,6 +49,7 @@
   font-family: monospace;
   display: block;
   max-width: 100%;
+  direction: ltr;
 }
 
 [role="toolbar"] .hidden {

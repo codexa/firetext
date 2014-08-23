@@ -1078,7 +1078,7 @@ function processActions(eventAttribute, target) {
 
 			// Fix for empty locations
 			if(!browseLocation || browseLocation==''){
-				alert('This link is not functional...');
+				alert(navigator.mozL10n.get('not-functional-link'));
 				return;
 			}
 
