@@ -18,6 +18,25 @@
   background: #111;
 }
 
+@media (min-width: 767px) {
+  .night [role="dialog"] > header:first-child {
+    background-color: transparent;
+  }
+  .night section[role="dialog"],
+  .night form[role="dialog"] {
+    border-color: #222;
+    box-shadow: none;
+    background-color: rgba(16,16,16,0.85);    
+  }
+  .night section[role="dialog"] + .background,
+  .night form[role="dialog"] + .background {
+    background-color: rgba(0,0,0,0.5); 
+  }
+  .night section[role="dialog"] [role="main"] {
+    background-color: #111;
+  }
+}
+
 
 /* Headers */
 .night section > header:first-child {
