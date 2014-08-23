@@ -16,7 +16,7 @@ html, body {
   color: #6f6f6f;
 }
 
-[role="main"].header-only {
+[role="main"] {
   height: calc(100% - 5rem);
     height: -moz-calc(100% - 5rem);
     height: -webkit-calc(100% - 5rem);

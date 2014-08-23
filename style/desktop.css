@@ -6,6 +6,7 @@
   
   /* Regions */
   section.parent:not(.current) {
+      -webkit-filter: blur(4px);
     filter: blur(4px);
     pointer-events: none;
   }
@@ -60,11 +61,11 @@
   }
   
   /* Main */
+  [role="main"] {
+    height: calc(100% - 5.2rem);
+  }
   section[role="dialog"] [role="main"] {
     background-color: #fff;
-  }
-  [role="main"].header-only {
-    height: calc(100% - 5.2rem);
   }
   
   /* Tabs */
