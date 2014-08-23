@@ -1,13 +1,24 @@
 @media (min-width: 767px) {
+  /* Headers */
+  section > header:first-child {
+    background-color: transparent;
+  }
+  
   /* Regions */
+  section.parent:not(.current) {
+    filter: blur(4px);
+    pointer-events: none;
+  }
   section[role="dialog"], form[role="dialog"] {
     width: auto;
     height: auto;
     top: 20%;
     left: 20%;
     right: 20%;
-    bottom: 20%;
-    box-shadow: 0 0 20px black;
+    bottom: 20%;    
+    border: 1px solid #dfdfdf;
+    box-shadow: 0 0 10px #efefef;
+    background-color: rgba(255,255,255,0.85);
       -webkit-transform: translateY(150%);
       -moz-transform: translateY(150%);
       -o-transform: translateY(150%);
@@ -25,7 +36,7 @@
     bottom: 0;
     display: block;
     position: fixed;
-    background: rgba(0,0,0,.5);
+    background: rgba(255,255,255,.5);
     content: "";
     opacity: 0;
     visibility: hidden;
@@ -47,8 +58,13 @@
       -ms-transition: opacity .4s, visibility 0s;
     transition: opacity .4s, visibility 0s;
   }
+  
+  /* Main */
+  section[role="dialog"] [role="main"] {
+    background-color: #fff;
+  }
   [role="main"].header-only {
-    overflow: auto;
+    height: calc(100% - 5.2rem);
   }
   
   /* Tabs */
