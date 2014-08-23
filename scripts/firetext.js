@@ -740,7 +740,7 @@ function editDocs() {
 		
 		// Code to build list
 		firetext.io.enumerate('/', function(result) {
-			buildEditDocList(result, welcomeDeviceList, 'Documents found', 'internal');
+			buildEditDocList(result, welcomeDeviceList, 'documents-found', 'internal');
 		});
 		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
 			cloud.dropbox.enumerate('/Documents', function(DOCS) {
