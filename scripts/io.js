@@ -498,7 +498,9 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 				if (this.error.name == "NoModificationAllowedError") {
 					var req2 = storage.delete(filePath);
 					req2.onsuccess = function () {
-						firetext.io.save(directory, filename, filetype, content, showBanner, callback, location, showSpinner);
+						firetext.io.save(directory, filename, filetype, contentBlob, showBanner, function(){
+							callback();
+						}, location, showSpinner);
 					};
 					req2.onerror = function () {
 						alert(navigator.mozL10n.get('save-unsuccessful')+this.error.name);
