@@ -22,7 +22,7 @@ firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
-var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
+var deviceType, fileChanged, saveTimeout, saving, tempAutozen, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
@@ -1057,8 +1057,10 @@ function processActions(eventAttribute, target) {
 			clearCreateForm();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
-				editFullScreen(false);			
+				tempAutozen = false;
+				editFullScreen(false);		
 			} else {
+				tempAutozen = undefined;
 				editFullScreen();
 			}
 		} else if (calledFunction == 'browser') {      

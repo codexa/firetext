@@ -53,10 +53,19 @@ function nav2() {
 		tempElement.classList.add('current');
 		
 		/* Remove this section when porting to other projects */	 
-		if (tempLoc == 'edit') {		
-			// Start Zen Mode if autozen == true
-			if (firetext.settings.get('autozen') == 'true') {
-				editFullScreen(true);
+		if (tempLoc == 'edit') {
+			if (tempAutozen !== false) {
+				// Start Zen Mode if autozen == true
+				if (firetext.settings.get('autozen') == 'true') {
+					editFullScreen(true);
+				}
+			
+				// Save edit status
+				firetext.settings.save('autoload.wasEditing', 'true');
+				firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
+				firetext.settings.save('autoload.name', document.getElementById('currentFileName').textContent);
+				firetext.settings.save('autoload.ext', document.getElementById('currentFileType').textContent);
+				firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);
 			}
 			
 			// Lock screen in portrait
@@ -64,22 +73,13 @@ function nav2() {
 				screen.lockOrientation('portrait');
 			} else if (screen.mozLockOrientation) {
 				screen.mozLockOrientation('portrait');
-			}
-			
-			// Save edit status
-			firetext.settings.save('autoload.wasEditing', 'true');
-			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
-			firetext.settings.save('autoload.name', document.getElementById('currentFileName').textContent);
-			firetext.settings.save('autoload.ext', document.getElementById('currentFileType').textContent);
-			firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);			
+			}			
 		} else {
-			// No zen mode if region is not a dialog
 			if (tempElement.getAttribute('role') != 'dialog') {
+				// No zen mode if region is not a dialog
 				editFullScreen(false);
-			}
-			
-			// Not editing if the region is not a dialog
-			if (tempElement.getAttribute('role') != 'dialog') {
+				
+				// Not editing if the region is not a dialog
 				firetext.settings.save('autoload.wasEditing', 'false');
 			}
 			
