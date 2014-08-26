@@ -56,17 +56,18 @@ function nav2() {
 		if (tempLoc == 'edit') {
 			if (tempAutozen !== false) {
 				// Start Zen Mode if autozen == true
-				if (firetext.settings.get('autozen') == 'true') {
+				if (firetext.settings.get('autozen') == 'true' ||
+						tempAutozen === true) {
 					editFullScreen(true);
 				}
-			
-				// Save edit status
-				firetext.settings.save('autoload.wasEditing', 'true');
-				firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
-				firetext.settings.save('autoload.name', document.getElementById('currentFileName').textContent);
-				firetext.settings.save('autoload.ext', document.getElementById('currentFileType').textContent);
-				firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);
 			}
+			
+			// Save edit status
+			firetext.settings.save('autoload.wasEditing', 'true');
+			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
+			firetext.settings.save('autoload.name', document.getElementById('currentFileName').textContent);
+			firetext.settings.save('autoload.ext', document.getElementById('currentFileType').textContent);
+			firetext.settings.save('autoload.loc', document.getElementById('currentFileLocation').textContent);
 			
 			// Lock screen in portrait
 			if (screen.lockOrientation) {

@@ -1060,7 +1060,7 @@ function processActions(eventAttribute, target) {
 				tempAutozen = false;
 				editFullScreen(false);		
 			} else {
-				tempAutozen = undefined;
+				tempAutozen = true;
 				editFullScreen();
 			}
 		} else if (calledFunction == 'browser') {      
