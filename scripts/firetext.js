@@ -647,6 +647,12 @@ function initEditor(callback) {
 			editorMessageProxy.registerMessageHandler(function(e) {
 				// Initialize Raw Editor
 				rawEditor.setAttribute('contentEditable', 'true');
+				rawEditor.addEventListener('focus',function(){
+					processActions('data-focus', rawEditor);
+				});
+				rawEditor.addEventListener('blur',function(){
+					processActions('data-blur', rawEditor);
+				});
 			
 				// Nav to the design tab
 				regions.tab(document.querySelector('#editTabs'), 'design');
@@ -1099,17 +1105,19 @@ function processActions(eventAttribute, target) {
 			}
 			formatDoc('justify'+justifyDirection);
 		} else if (calledFunction == 'hideToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt') {
+			if (document.getElementById('currentFileType').textContent != '.txt' &&
+					target.id === 'editor') {
 				document.getElementById('edit-bar').style.display = 'none';
-				document.getElementById('hide-keyboard-button').classList.add('shown');
 				editor.classList.add('no-toolbar');
 			}
+			document.getElementById('hide-keyboard-button').classList.add('shown');
 		} else if (calledFunction == 'showToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt') {
+			if (document.getElementById('currentFileType').textContent != '.txt' &&
+					target.id === 'editor') {
 				document.getElementById('edit-bar').style.display = 'block';
-				document.getElementById('hide-keyboard-button').classList.remove('shown');
 				editor.classList.remove('no-toolbar');
 			}
+			document.getElementById('hide-keyboard-button').classList.remove('shown');
 		} else if (calledFunction == 'hyperlink') {
 			if (target.getAttribute(eventAttribute + '-dialog')) {
 				formatDoc('createLink', document.getElementById('web-address').value);
