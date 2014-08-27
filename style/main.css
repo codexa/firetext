@@ -17,9 +17,9 @@ html, body {
 }
 
 [role="main"] {
-  height: calc(100% - 5rem);
-    height: -moz-calc(100% - 5rem);
-    height: -webkit-calc(100% - 5rem);
+    height: -moz-calc(100% - 5.2rem);
+    height: -webkit-calc(100% - 5.2rem);
+  height: calc(100% - 5.2rem);
   overflow: scroll;
 }
 
@@ -251,6 +251,7 @@ legend.action select {
   outline: none;
   border: none;
   border-radius: 0;
+  font-size: 1.5rem;
 }
 
 aside.pack-end select {
@@ -288,13 +289,13 @@ aside select.dummy {
 .tabToolbar .button,
 .tabToolbar input[type="button"] {
   float: right;
-  width: 4rem;
   height: 100%;
   background: transparent;
   border: none;
   font-size: 0;
   border-radius: 0;
-  width: 4rem;
+  width: 6.5rem;
+  padding: 0 1rem;
 }
 
 .tabToolbar button:active,
@@ -315,12 +316,6 @@ aside select.dummy {
 .tabToolbar input[type="button"][class^="icon-"] {
   font-size: 2.5rem;
   text-shadow: none;
-}
-
-.tabToolbar .icon-menu {
-    padding-right: 0;
-    padding-left: 1rem;
-    width: 3rem;
 }
 
 

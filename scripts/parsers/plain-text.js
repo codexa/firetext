@@ -39,7 +39,6 @@ firetext.parsers.plain.encode = function (data, type) {
 		var tmp = document.createElement("DIV");
 		tmp.innerHTML = output;
 		return tmp.textContent;
-		return tmp;
 	}
 	// Didn't convert to TXT, return false
 	return false;

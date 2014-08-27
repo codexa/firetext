@@ -63,9 +63,6 @@
   }
   
   /* Main */
-  [role="main"] {
-    height: calc(100% - 5.2rem);
-  }
   section[role="dialog"] [role="main"] {
     background-color: #fff;
   }
