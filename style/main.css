@@ -271,6 +271,7 @@ aside select.dummy {
 
 /* Tab Toolbar */
 .tabToolbar {
+  text-align: right;
   opacity: 0;
   visibility: hidden;
   height: 4rem;
@@ -288,13 +289,12 @@ aside select.dummy {
 .tabToolbar button,
 .tabToolbar .button,
 .tabToolbar input[type="button"] {
-  float: right;
   height: 100%;
   background: transparent;
   border: none;
   font-size: 0;
   border-radius: 0;
-  width: 6.5rem;
+  width: 4rem;
   padding: 0 1rem;
 }
 
@@ -432,16 +432,8 @@ aside select.dummy {
     float: left;  
 }
 
-[dir="rtl"] .tabToolbar button,
-[dir="rtl"] .tabToolbar .button,
-[dir="rtl"] .tabToolbar input[type="button"] {
-    float: left;
-}
-
-[dir="rtl"] .tabToolbar .icon-menu {
-    padding-left: 0;
-    padding-right: 1rem;
-    width: 3rem;
+[dir="rtl"] .tabToolbar {
+    text-align: left;
 }
 
 [dir="rtl"] .spinner > div {
