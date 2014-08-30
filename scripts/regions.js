@@ -76,11 +76,11 @@ function nav2() {
 				screen.mozLockOrientation('portrait');
 			}			
 		} else {
-			if (tempElement.getAttribute('role') != 'dialog') {
-				// No zen mode if region is not a dialog
+			if (tempElement.getAttribute('role') === 'region') {
+				// No zen mode if region
 				editFullScreen(false);
 				
-				// Not editing if the region is not a dialog
+				// Not editing if region
 				firetext.settings.save('autoload.wasEditing', 'false');
 			}
 			

@@ -18,22 +18,41 @@
   background: #111;
 }
 
+.night [role="action"] {  
+  background-color: #111;
+  border-top: 1px solid #222;
+}
+
+.night [role="action"] + .background {
+  background-color: rgba(0,0,0,0.7);
+}
+
+.night [role="action"] > menu > button {
+  background-color: #333;
+  color: #fff;
+}
+
+.night [role="action"] > menu > button:active {
+  background-color: #555;
+}
+
+.night [role="action"] > menu > button.danger {
+  background-color: #BE000A;
+}
+
+.night [role="action"] > menu > button.danger:active {
+  background-color: #DE000A;  
+}
+
 @media (min-width: 767px) {
-  .night [role="dialog"] > header:first-child {
-    background-color: transparent;
-  }
   .night section[role="dialog"],
   .night form[role="dialog"] {
     border-color: #222;
     box-shadow: none;
-    background-color: rgba(16,16,16,0.85);    
   }
   .night section[role="dialog"] + .background,
   .night form[role="dialog"] + .background {
-    background-color: rgba(0,0,0,0.5); 
-  }
-  .night section[role="dialog"] [role="main"] {
-    background-color: #111;
+    background-color: rgba(0,0,0,0.7); 
   }
 }
 
@@ -219,7 +238,7 @@
     text-shadow: none;
 }
 
-.night [role="dialog"][data-type="edit"] > menu button.danger{
+.night [role="dialog"][data-type="edit"] > menu button.danger {
     background-color: #BE000A;
 }
 

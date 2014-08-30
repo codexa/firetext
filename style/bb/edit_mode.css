@@ -140,7 +140,3 @@
   background-color: #e51e1e;
   color: #fff;
 }
-
-[role="dialog"][data-type="edit"] > menu button:first-child {
-  margin-left: 0;
-}

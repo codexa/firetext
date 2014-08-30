@@ -64,7 +64,6 @@
   <script type="text/javascript" src="scripts/user/id.js" defer></script>
 
   <!-- Building Blocks -->
-  <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/drawer.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/edit_mode.css"/>
@@ -84,6 +83,7 @@
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
   <link rel="stylesheet" type="text/css" href="style/headers.css"/>
   <link rel="stylesheet" type="text/css" href="style/icons.css"/>
+  <link rel="stylesheet" type="text/css" href="style/action_menu.css"/>
   <link rel="stylesheet" type="text/css" href="style/desktop.css"/>
   <link rel="stylesheet" type="text/css" href="style/prettify.css"/>
   <link rel="stylesheet" type="text/css" href="style/night.css" />
@@ -454,7 +454,9 @@
   <div class="background"></div>
   
   <section role="action" id="image-location">
-    <header data-l10n-id="image-location">Image location</header>
+    <header>
+    	<h1 data-l10n-id="image-location">Image location</h1>
+    </header>
     <menu>
       <button data-click="image" data-click-location="web" data-l10n-id="the-web">The web</button> 
       <button data-click="image" data-click-location="internal" data-l10n-id="internal-storage">Internal storage</button>
@@ -518,7 +520,9 @@
   <div class="background"></div>
   
   <section role="action" id="save-file">
-    <header data-l10n-id="save-changes-question">Would you like to save your changes?</header>
+    <header>
+    	<h1 data-l10n-id="save-changes-question">Would you like to save your changes?</h1>
+    </header>
     <menu>
       <button data-click="closeFile" data-click-action="yes" data-l10n-id="yes">Yes</button> 
       <button data-click="closeFile" data-click-action="no" class="danger" data-l10n-id="no">No</button>

@@ -1,7 +1,7 @@
 /*
  * Firetext
  * Copyright (C) Codexa Organization.
- * Licenced released under the GPLv3. 
+ * Licensed and released under the GPLv3. 
  * See LICENSE in "licenses/gpl.txt"
  * or at http://www.gnu.org/licenses/gpl-3.0.txt
  */
@@ -772,11 +772,11 @@ function watchCheckboxes() {
 function updateSelectButton() {
 	if (numSelected() == 0) {
 		// Add select all button
-		document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll">'+navigator.mozL10n.get('select-all')+'</button><button data-click="delete" class="danger">'+navigator.mozL10n.get('delete-selected')+'</button>';
+		document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll" data-l10n-id="select-all"></button><button data-click="delete" class="danger" data-l10n-id="delete-selected"></button>';
 	}
 	else {
 		// Add deselect all button
-		document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll">'+navigator.mozL10n.get('deselect-all')+'</button><button data-click="delete" class="danger">'+navigator.mozL10n.get('delete-selected')+'</button>';
+		document.getElementById("selectButtons").innerHTML = '<button data-click="deselectAll" data-l10n-id="deselect-all"></button><button data-click="delete" class="danger" data-l10n-id="delete-selected"></button>';
 	}
 }
 
