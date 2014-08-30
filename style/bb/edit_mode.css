@@ -38,16 +38,16 @@
     -o-transform: none;
     -ms-transform: none;
   transform: none;
+    -moz-transition: -moz-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+    -webkit-transition: -webkit-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+    -o-transition: -o-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+  transition: transform .4s,
               -moz-transform .4s,
               -webkit-transform .4s,
               -o-transform .4s,
               -ms-transform .4s,
               opacity .4s,
               0s visibility 0s;
-    -moz-transition: -moz-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
-    -webkit-transition: -webkit-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
-    -o-transition: -o-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
-  transition: transform .4s,
 }
 
 /* Header */

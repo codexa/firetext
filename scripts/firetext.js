@@ -50,7 +50,7 @@ firetext.init = function () {
   
 	// Initialize urls
 	getURLs(function(){
-
+		fixMenu();
 	});
 		
 	// Initialize Settings
@@ -206,6 +206,44 @@ function getURLs(callback) {
 		callback();
 	});
 	xhr.send('request=urls&version='+version);
+}
+
+function fixMenu() {
+	var tempElements = [];
+	var urlNames = ['about','support','credits','rate'];
+
+	// Find empty urls
+	urlNames.forEach(function(v){
+		if (!urls[v]) {
+			tempElements = addMenuElementsToArray(tempElements, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+		}
+	});
+
+	// Remove list items
+	for (var i = 0; i < tempElements.length; i++) {
+		var tempParent = tempElements[i].parentNode.parentNode;
+		if (tempParent) {
+			tempParent.removeChild(tempElements[i].parentNode);
+		}
+	}
+
+	// Remove empty lists
+	var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
+	for (var i = 0; i < tempLists.length; i++) {
+		if (tempLists[i].childElementCount == 0) {
+			if (tempLists[i].previousElementSibling) {
+				tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
+			}
+			tempLists[i].parentNode.removeChild(tempLists[i]);
+		}
+	}
+}
+
+function addMenuElementsToArray(array, elements) {
+	for (var i = 0; i < elements.length; i++) {
+		array.push(elements[i]);
+	}
+	return array;
 }
 
 
