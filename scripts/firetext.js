@@ -1333,7 +1333,7 @@ function editFullScreen(enter) {
 		document.querySelector('#edit header:first-child').style.display = 'none';
 		document.getElementById('editTabs').setAttribute('data-items', '4.1');
 		document.querySelector('#editTabs .tabToolbar').classList.add('visible');
-		editor.classList.add('fullscreen');
+		html.classList.add('fullscreen');
 	} else {
 		// Exit fullscreen
 		if (document.cancelFullScreen) {
@@ -1348,6 +1348,6 @@ function editFullScreen(enter) {
 		document.querySelector('#edit header:first-child').style.display = 'block';
 		document.getElementById('editTabs').setAttribute('data-items', '2');
 		document.querySelector('#editTabs .tabToolbar').classList.remove('visible');
-		editor.classList.remove('fullscreen');
+		html.classList.remove('fullscreen');
 	}
 }

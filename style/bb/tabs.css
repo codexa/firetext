@@ -123,11 +123,9 @@
   position: absolute;
   top: 4rem;
   left: 0;
+  bottom: 5.2rem;
   visibility: hidden;
   width: 100%;
-    height: -moz-calc(100% - 4rem);
-    height: -webkit-calc(100% - 4rem);
-  height: calc(100% - 4rem);
   display: block;
   overflow: auto;
   background: #fff;
@@ -135,6 +133,10 @@
     -webkit-transition: all .4s;
     -o-transition: all .4s;
   transition: all .4s;    
+}
+
+.fullscreen [role="tablist"] [role="tabpanel"] {
+  bottom: 0; 
 }
 
 .current [role="tablist"] [role="tabpanel"],

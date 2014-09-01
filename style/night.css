@@ -252,7 +252,7 @@
 
 /* Toolbar */
 .night [role="toolbar"] {
-  background-color: #222;
+  background-color: rgba(17,17,17,0.95);
 }
 
 .night [role="toolbar"] button:active, 
