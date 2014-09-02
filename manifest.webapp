@@ -1,7 +1,7 @@
 {
   "name": "Firetext",
   "description": "The word processor for Firefox OS",
-  "version": "0.4",
+  "version": "0.3.3",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
@@ -16,7 +16,52 @@
     "256": "/style/icons/app/256.png"
   },
   "default_locale": "en-US",
-  "locales": {
+  "locales": {  
+	"bn-BD": {
+	  "description": "ফায়ারফক্স ওএস এর জন্য ওয়ার্ড প্রসেসর"
+	},
+	"cs": {
+	  "description": "Textový procesor pro Firefox OS"
+	},
+	"de": {
+	  "description": "Die Textverarbeitung für Firefox OS"
+	},
+	"eo": {
+	  "description": "La tekstredaktilo por Firefox OS"
+	},
+	"es": {
+	  "description": "El procesador de textos para Firefox OS"
+	},
+	"fr": {
+	  "description": "L'éditeur de texte pour Firefox OS"
+	},
+	"he": {
+	  "description": "מעבד התמלילים ל-Firefox OS"
+	},
+	"id": {
+	  "description": "Pengolah kata untuk Firefox OS"
+	},
+	"it": {
+	  "description": "L'editor di testo per Firefox OS"
+	},
+	"nl": {
+	  "description": "De tekstverwerker voor Firefox OS"
+	},
+	"pl": {
+	  "description": "Procesor tekstu dla Firefox OS"
+	},
+	"pt-BR": {
+	  "description": "O processador de texto para Firefox OS"
+	},
+	"ro": {
+	  "description": "Procesorul word pentru Firefox OS"
+	},
+	"ru": {
+	  "description": "Текстовый процессор для Firefox OS"
+	},
+	"zh-CN": {
+	  "description": "适用于 Firefox OS 的文字处理程序"
+	}
   },
   "permissions": {
     "device-storage:sdcard": {
@@ -31,8 +76,7 @@
       "filters": {
         "type": [
           "text/plain",
-          "text/html",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          "text/html"
         ],
         "url": {
           "required": true
@@ -49,8 +93,7 @@
       "filters": {
         "type": [
           "text/plain",
-          "text/html",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          "text/html"
         ],
         "url": {
           "required": true

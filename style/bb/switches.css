@@ -2,7 +2,9 @@
  * CHECKBOXES / RADIOS
  * ---------------------------------- */
 
-label:not([for])  {
+label.pack-checkbox,
+label.pack-radio,
+label.pack-switch {
   display: inline-block;
   vertical-align: middle;
   width: 5rem;
@@ -11,15 +13,16 @@ label:not([for])  {
   background: none;
 }
 
-label:not([for]) input {
+label.pack-checkbox input,
+label.pack-radio input,
+label.pack-switch input {
   margin: 0;
   opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
-label:not([for]) input + span {
+label.pack-checkbox input ~ span:after,
+label.pack-radio input ~ span:after {
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -29,29 +32,27 @@ label:not([for]) input + span {
   pointer-events: none;
 }
 
-label:not([for]) input[type="checkbox"] + span {
-  background: url(switches/images/check/default.png) no-repeat center top;
+label.pack-checkbox input ~ span:after {
+  background: url(switches/images/check/default.png) no-repeat center top / 2.2rem auto;
 }
 
-label:not([for]) input[type="radio"] + span {
-  background: url(switches/images/radio/default.png) no-repeat center top;
+label.pack-radio input ~ span:after {
+  background: url(switches/images/radio/default.png) no-repeat center top / 2.2rem auto;
 }
 
-label:not([for]) input:checked + span {
+label.pack-checkbox input:checked ~ span:after,
+label.pack-radio input:checked ~ span:after,
+label.pack-switch input:checked ~ span:after {
   background-position: center bottom;
-}
-
-.pack-end label {
-  margin: 5px;
 }
 
 /* 'Dangerous' switches */
 
-label:not([for]).danger input[type="checkbox"] + span {
+label.pack-checkbox.danger input ~ span:after {
   background-image: url(switches/images/check/danger.png);
 }
 
-label:not([for]).danger input[type="radio"] + span {
+label.pack-radio.danger input ~ span:after {
   background-image: url(switches/images/radio/danger.png);
 }
 
@@ -60,81 +61,65 @@ label:not([for]).danger input[type="radio"] + span {
  * ON/OFF SWITCHES
  * ---------------------------------- */
 
-label input[type="checkbox"][data-type="switch"] + span {
+label.pack-switch input ~ span:after {
+  content: '';
   position: absolute;
-  left: 50%;
+  right: 0;
   top: 50%;
-  margin: -1.1rem 0 0 -2.7rem;
-  width: 5.4rem;
-  height: 2.2rem;
+  width: 6rem;
+  margin: -1.4rem 0 0;
+  height: 2.7rem;
   pointer-events: none;
-  border: solid 1px #c2c2c2;
-  border-radius: 5.4rem;
+  border-radius: 1.35rem;
   overflow: hidden;
-  background: url(switches/images/switch/handler.png) no-repeat -0.2rem center;
-  background-size: auto calc(100% + 2px);
-  transition: background 0.18s ease;
+  background: #e6e6e6 url(switches/images/switch/background_off.png) no-repeat -3.2rem 0 / 9.2rem 2.7rem;
+  transition: background 0.2s ease;
 }
 
-label input[data-type="switch"] + span:after,
-label input[data-type="switch"] + span:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 5.4rem;
-  z-index: -1;
-  transition: -webkit-transform 0.2s ease;
-  transition: transform 0.2s ease;
-}
-
-label input[data-type="switch"] + span:before {
-  right: 100%;
-  background: #6f6f6f url(switches/images/switch/icon.png) no-repeat 0.5rem center;
-  background-size: auto calc(100% - 2px);
-}
-
-label input[data-type="switch"] + span:after {
-  left: 100%;
-  background: #e6e6e6;
-  -webkit-transform: translateX(-5.4rem);
-  transform: translateX(-5.4rem);
+/* switch: 'ON' state */
+label.pack-switch input:checked ~ span:after {
+  background: #e6e6e6 url(switches/images/switch/background.png) no-repeat 0 0 / 9.2rem 2.7rem;
 }
 
 /* switch: disabled state */
-label input[data-type="switch"]:disabled + span:before,
-label input[data-type="switch"]:disabled + span:after {
-  opacity: 0.2;
+label.pack-switch input:disabled ~ span:after {
+  opacity: 0.4;
 }
 
-label input[data-type="switch"]:disabled + span {
-  opacity: 0.3;
-}
-
-label input[data-type="switch"]:checked:disabled + span {
-  opacity: 1;
-  border: solid 1px #A7DBE6;
-}
-
-/* 'ON' state */
-
-label input[data-type="switch"]:checked + span {
-  border-color: #6f6f6f;
-  background-position: 3.2rem center;
-}
-
-label input[data-type="switch"]:checked + span:before {
-  -webkit-transform: translateX(5.4rem);
-  transform: translateX(5.4rem);
-}
-
-label input[data-type="switch"]:checked + span:after {
-  -webkit-transform: translateX(0);
-  transform: translateX(0);
-}
-
-label input[type="checkbox"][data-type="switch"].uninit + span,
-label input[type="checkbox"][data-type="switch"].uninit + span:before,
-label input[type="checkbox"][data-type="switch"].uninit + span:after {
+label.pack-switch input.uninit ~ span:after {
   transition: none;
+}
+
+/******************************************************************************
+ * Right-To-Left tweaks
+ */
+
+html[dir="rtl"] label.pack-checkbox input,
+html[dir="rtl"] label.pack-radio input,
+html[dir="rtl"] label.pack-switch input {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] label.pack-checkbox input ~ span:after,
+html[dir="rtl"] label.pack-radio input ~ span:after {
+  left: auto;
+  right: 50%;
+  margin-left: auto;
+  margin-right: -1.1rem;
+}
+
+html[dir="rtl"] label.pack-switch input ~ span:after {
+  left: 0;
+  right: auto;
+}
+
+html[dir="rtl"] label.pack-switch input ~ span:after {
+  background-position: 0;
+}
+
+/* switch: 'ON' state */
+html[dir="rtl"] label.pack-switch input:checked ~ span:after {
+  background-image: url(switches/images/switch/background_rtl.png);
+  background-position: -3.2rem 0;
 }

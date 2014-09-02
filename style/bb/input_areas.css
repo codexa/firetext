@@ -294,44 +294,44 @@ form p button[type="reset"]::-moz-focus-inner,
  * Right-to-Left layout
  */
 
-.rtl form p input:focus,
-.rtl .form p input:focus,
-.rtl form p input:valid,
-.rtl form p input:valid:focus,
-.rtl .form p input:valid,
-.rtl .form p input:valid:focus {
+[dir="rtl"] form p input:focus,
+[dir="rtl"] .form p input:focus,
+[dir="rtl"] form p input:valid,
+[dir="rtl"] form p input:valid:focus,
+[dir="rtl"] .form p input:valid,
+[dir="rtl"] .form p input:valid:focus {
   padding: 0 0.8rem 0 3.5rem;
 }
 
-.rtl form p textarea:valid,
-.rtl form p textarea:valid:focus,
-.rtl .form p textarea:valid,
-.rtl .form p textarea:valid:focus {
+[dir="rtl"] form p textarea:valid,
+[dir="rtl"] form p textarea:valid:focus,
+[dir="rtl"] .form p textarea:valid,
+[dir="rtl"] .form p textarea:valid:focus {
   padding: 0.8rem 0.8rem 0.8rem 3.5rem;
 }
 
-.rtl form p input + button[type="reset"],
-.rtl form p textarea + button[type="reset"],
-.rtl .form p input + button[type="reset"],
-.rtl .form p textarea + button[type="reset"] {
+[dir="rtl"] form p input + button[type="reset"],
+[dir="rtl"] form p textarea + button[type="reset"],
+[dir="rtl"] .form p input + button[type="reset"],
+[dir="rtl"] .form p textarea + button[type="reset"] {
   right: auto;
   left: 0;
 }
 
-.rtl fieldset legend.action:after {
+[dir="rtl"] fieldset legend.action:after {
   margin: 0 0.5rem 0 0;
 }
 
-.rtl fieldset legend {
+[dir="rtl"] fieldset legend {
   padding: 0 1.8rem 0 0.5rem;
 }
 
-.rtl form[role="search"] button[type="submit"] + p > textarea,
-.rtl .form[role="search"] button[type="submit"] + p > textarea {
+[dir="rtl"] form[role="search"] button[type="submit"] + p > textarea,
+[dir="rtl"] .form[role="search"] button[type="submit"] + p > textarea {
   padding: 0.5rem 0.8rem 0.5rem 3rem;
 }
 
-.rtl form[role="search"] button[type="submit"] + p > button,
-.rtl .form[role="search"] button[type="submit"] + p > button {
+[dir="rtl"] form[role="search"] button[type="submit"] + p > button,
+[dir="rtl"] .form[role="search"] button[type="submit"] + p > button {
   left: 1rem;
 }

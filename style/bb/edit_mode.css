@@ -2,7 +2,7 @@
  * Edit mode
  * ---------------------------------- */
 
-[role="edit"][data-type="edit"] {
+[role="dialog"][data-type="edit"] {
   overflow: hidden;
   position: absolute;
   z-index: 100;
@@ -10,17 +10,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  white-space: nowrap;
-  font-family: "Moz", "Open Sans", Sans-serif;
-  color: #6f6f6f;
   pointer-events: none;
   opacity: .99;
   visibility: hidden;
-  transform: scale(1, 2);
     -moz-transform: scale(1, 2);
     -webkit-transform: scale(1, 2);
     -o-transform: scale(1, 2);
     -ms-transform: scale(1, 2);
+  transform: scale(1, 2);
+    -moz-transition: -moz-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
+    -webkit-transition: -webkit-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
+    -o-transition: -o-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
   transition: transform .6s,
               -moz-transform .6s,
               -webkit-transform .6s,
@@ -28,19 +28,19 @@
               -ms-transform .6s,
               opacity .4s,
               .4s visibility 0s;
-    -moz-transition: -moz-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
-    -webkit-transition: -webkit-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
-    -o-transition: -o-transform .6s, transform .6s, opacity .4s, .4s visibility 0s;
 }
 
-[role="edit"][data-type="edit"].current {
+[role="dialog"][data-type="edit"].current {
   opacity: 1;
   visibility: visible;
-  transform: none;
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
     -ms-transform: none;
+  transform: none;
+    -moz-transition: -moz-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+    -webkit-transition: -webkit-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
+    -o-transition: -o-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
   transition: transform .4s,
               -moz-transform .4s,
               -webkit-transform .4s,
@@ -48,133 +48,19 @@
               -ms-transform .4s,
               opacity .4s,
               0s visibility 0s;
-    -moz-transition: -moz-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
-    -webkit-transition: -webkit-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
-    -o-transition: -o-transform .4s, transform .4s, opacity .4s, 0s visibility 0s;
 }
 
 /* Header */
-[role="edit"][data-type="edit"] header {
+[role="dialog"][data-type="edit"] section > header:first-child {
   pointer-events: auto;
-  position: relative;
-  z-index: 10;
-  padding: 0;
-  height: 5rem;
-  color: #1f1f1f;
-  background: #fff repeat 0 0;
-  border: none;
-  border-bottom: solid 0.2rem #efefef;
-}
-
-[role="edit"][data-type="edit"] header h1 {
-  font: 2.5rem/5rem "Moz", "Open Sans", Sans-serif;
-  text-align: left;
-  color: inherit;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  display: block;
-  overflow: hidden;
-  margin: 0 0 0 2rem;
-  height: 100%
-}
-
-[role="edit"][data-type="edit"] header button {
-  border: none;
-  background: none;
-  padding: 0;
-  overflow: hidden;
-  font: normal 1.4rem/1.1em "MozTT", Sans-serif;
-  color: inherit;
-  border-radius: 0;
-}
-
-[role="edit"][data-type="edit"] header menu[type="toolbar"] {
-  height: 100%;
-  float: right;
-  margin: 0;
-  padding: 0;
-}
-
-[role="edit"][data-type="edit"] header menu[type="toolbar"] button {
-  height: 5rem;
-  min-width: 5rem;
-  width: auto;
-  margin-bottom: 0;
-  border-radius: 0;
-  line-height: 5rem;
-  float: left;
-  font-weight: normal;
-  background: none;
-  padding: 0 1.75rem;
-  box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-  text-align: center;
-  text-shadow: none;
-  position: relative;
-  z-index: 5;
-}
-
-[role="edit"][data-type="edit"] header menu button {
-  color: inherit;
-  border: none;
-}
-
-[role="edit"][data-type="edit"] header menu[type="toolbar"] button:last-child {
-  margin-left: -0.2rem;
-  z-index: 1;
-}
-
-/* Press state */
-[role="edit"][data-type="edit"] header button:active .icon:after,
-[role="edit"][data-type="edit"] header menu[type="toolbar"] button:active  {
-  background: #dfdfdf;
-  transition: background 0.2s ease;
-    -moz-transition: background 0.2s ease;
-    -webkit-transition: background 0.2s ease;
-    -o-transition: background 0.2s ease;
-}
-
-[role="edit"][data-type="edit"] header button:first-letter {
-  text-transform: uppercase;
-}
-
-[role="edit"][data-type="edit"] header > button {
-  position: absolute;
-  left: 0;
-  width: 4rem;
-  height: 5rem;
-  overflow: hidden;
-  text-align: center;
-}
-
-[role="edit"][data-type="edit"] header > button span {
-  background: url(edit_mode/images/icons/close.png) no-repeat center center;
-  overflow: visible;
-  font: 0/0 a;
-  position: static;
-  margin-left: -2rem;
-  height: 4.9rem;
-  display: block;
-}
-
-[role="edit"][data-type="edit"] header > button span:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  width: 2rem;
-  height: 4.9rem;
 }
 
 /* Menu */
-[role="edit"][data-type="edit"] > menu {
-  pointer-events: auto;
+[role="dialog"][data-type="edit"] > menu {
   white-space: nowrap;
   margin: 0;
   padding: 1.5rem;
-  border-top: solid 0.2rem #efefef;
+  border-top: solid 0.1rem rgba(189,189,189,0.2);
   background: #fff;
   display: block;
   overflow: hidden;
@@ -182,83 +68,75 @@
   left: 0;
   right: 0;
   bottom: 0;
+  display: flex;
+  transition: transform 0.4s ease;
+  pointer-events: auto;
 }
 
-[role="edit"][data-type="edit"] menu button {
-  width: 100%;
-  height: 3.8rem;
-  margin: 0 0 1rem;
-  padding: 0 1.5rem;
-  box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-  display: inline-block;
-  vertical-align: middle;
+[role="dialog"][data-type="edit"] > menu button {
+  font-family: sans-serif;
+  font-style: italic;
+  height: 4rem;
+  margin: 0 0 0 1rem;
+  padding: 0 1.2rem;
+  -moz-box-sizing: border-box;
+  display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  background: #efefef;
+  background: #e7e7e7;
   border: none;
-  border-radius: 0.3rem;
+  border-radius: 2rem;
+  font-weight: normal;
   font-size: 1.6rem;
-  font-family: 'MozTT', Sans-serif;
-  font-weight: 500;
-  line-height: 3.8rem;
+  line-height: 4rem;
   color: #333;
   text-align: center;
-  text-shadow: 0.1rem 0.1rem 0 rgba(255,255,255,0.3);
   text-decoration: none;
   outline: none;
+  flex: 1;
 }
 
 /* Press (default & recommend) */
-[role="edit"][data-type="edit"] menu button:active,
-[role="edit"][data-type="edit"] menu button.recommend:active {
-  background: #ddd;
-  color: #333;
+[role="dialog"][data-type="edit"] > menu button:not(:disabled):active {
+  background: #b2f2ff;
+  color: #fff;
 }
 
 /* Recommend */
-[role="edit"][data-type="edit"] menu button.recommend{
-  background-color: #eee;
+[role="dialog"][data-type="edit"] > menu button.recommend {
+  background-color: #00caf2;
+  color: #fff;
 }
 
 /* Danger */
-[role="edit"][data-type="edit"] menu button.danger{
-  background-color: #BE000A;
+[role="dialog"][data-type="edit"] > menu button.danger {
+  background-color: #e51e1e;
   color: #fff;
-  text-shadow: none;
 }
 
 /* Danger Press */
-[role="edit"][data-type="edit"] menu button.danger:active{
-  background-color: #7a0a0a;
+[role="dialog"][data-type="edit"] > menu button.danger:active {
+  background-color: #b2f2ff;
 }
 
 /* Disabled */
-[role="edit"][data-type="edit"] > menu > button[disabled] {
-  background: #5f5f5f;
-  color: #4d4d4d;
-  text-shadow: none;
-  border-color: #4d4d4d;
-  pointer-events: none;
+/* Using pointer-events: none, makes events go through the button. As edit mode is an overlay is quite possible we have active buttons underneath */
+[role="dialog"][data-type="edit"] button[disabled] {
+  pointer-events: auto;
 }
 
-[role="edit"][data-type="edit"] menu button:last-child {
-  margin-left: 1rem;
+[role="dialog"][data-type="edit"] > menu button[disabled] {
+  opacity: 0.6;
+  color: rgba(51,51,51,0.5);
 }
 
-[role="edit"][data-type="edit"] menu button,
-[role="edit"][data-type="edit"] menu button:first-child {
-  margin: 0;
+[role="dialog"][data-type="edit"] button[disabled]::-moz-selection {
+  -moz-user-select: none;
 }
 
-[role="edit"][data-type="edit"] menu button {
-  width: calc((100% - 1rem) / 2);
-    width: -moz-calc((100% - 1rem) / 2);
-    width: -webkit-calc((100% - 1rem) / 2);
-}
-
-[role="edit"][data-type="edit"] menu button.full {
-  width: 100%;
+/* Danger disabled */
+[role="dialog"][data-type="edit"] > menu button[disabled].danger {
+  background-color: #e51e1e;
+  color: #fff;
 }

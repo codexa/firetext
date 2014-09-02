@@ -1,13 +1,15 @@
 @media (min-width: 767px) {
   /* Regions */
-  section[role="dialog"], form[role="dialog"] {
+  section[role="dialog"],
+  form[role="dialog"] {
     width: auto;
     height: auto;
     top: 20%;
     left: 20%;
     right: 20%;
-    bottom: 20%;
-    box-shadow: 0 0 20px black;
+    bottom: 20%;    
+    border: 1px solid #dfdfdf;
+    box-shadow: 0 0 10px #efefef;
       -webkit-transform: translateY(150%);
       -moz-transform: translateY(150%);
       -o-transform: translateY(150%);
@@ -15,9 +17,8 @@
     transform: translateY(150%);
     z-index: 102 !important;
   }
-  section[role="dialog"] + .background, form[role="dialog"] + .background {
-    width: 100%;
-    height: 100%;
+  section[role="dialog"] + .background,
+  form[role="dialog"] + .background {
     z-index: 101;
     top: 0;
     left: 0;
@@ -25,8 +26,7 @@
     bottom: 0;
     display: block;
     position: fixed;
-    background: rgba(0,0,0,.5);
-    content: "";
+    background: rgba(255,255,255,.7);
     opacity: 0;
     visibility: hidden;
       -moz-transition: opacity .4s, visibility .4s 0s;
@@ -47,9 +47,6 @@
       -ms-transition: opacity .4s, visibility 0s;
     transition: opacity .4s, visibility 0s;
   }
-  [role="main"].header-only {
-    overflow: auto;
-  }
   
   /* Tabs */
   [role="tablist"] > [role="tab"] {
@@ -67,14 +64,16 @@
   section[data-type="sidebar"] > nav {
     height: calc(100% - 5rem - 4rem);
   }
-  [data-state="drawer"].current {
+  [data-state="drawer"].current,
+  [dir="rtl"] [data-state="drawer"][data-position="right"].current {
       -moz-transform: translateX(250px) !important;
       -webkit-transform: translateX(250px) !important;
       -o-transform: translateX(250px) !important;
       -ms-transform: translateX(250px) !important;    
     transform: translateX(250px) !important;   
   }
-  [data-state="drawer"][data-position="right"].current {
+  [data-state="drawer"][data-position="right"].current,
+  [dir="rtl"] [data-state="drawer"].current {
       -moz-transform: translateX(-250px) !important;
       -webkit-transform: translateX(-250px) !important;
       -o-transform: translateX(-250px) !important;
@@ -85,5 +84,9 @@
   /* Misc */    
   .firetext {
     text-align: left !important;      
+  }
+  
+  [dir="rtl"] .firetext {
+    text-align: right !important;      
   }
 }

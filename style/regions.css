@@ -114,7 +114,7 @@ section[role="dialog"].current {
 
 
 /* RTL */
-.rtl section[role="region"] {
+[dir="rtl"] section[role="region"] {
     -moz-transform: translateX(100%);
     -webkit-transform: translateX(100%);
     -o-transform: translateX(100%); 
@@ -122,8 +122,8 @@ section[role="dialog"].current {
   transform: translateX(100%);
 }
 
-.rtl section[role="region"].current,
-.rtl [role="region"].parent {
+[dir="rtl"] section[role="region"].current,
+[dir="rtl"] [role="region"].parent {
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
@@ -131,7 +131,7 @@ section[role="dialog"].current {
   transform: none;
 }
 
-.rtl section[role="region"].current ~ section[role="region"] {  
+[dir="rtl"] section[role="region"].current ~ section[role="region"] {  
     -moz-transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
     -o-transform: translateX(-100%);
@@ -139,7 +139,7 @@ section[role="dialog"].current {
   transform: translateX(-100%);
 }
 
-.rtl [data-state="drawer"].current {
+[dir="rtl"] [data-state="drawer"].current {
     -moz-transform: translateX(-80%) !important;
     -webkit-transform: translateX(-80%) !important;
     -o-transform: translateX(-80%) !important;
@@ -147,7 +147,7 @@ section[role="dialog"].current {
   transform: translateX(-80%) !important;
 }
 
-.rtl [data-state="drawer"][data-position="right"].current {
+[dir="rtl"] [data-state="drawer"][data-position="right"].current {
     -moz-transform: translateX(80%) !important;
     -webkit-transform: translateX(80%) !important;
     -o-transform: translateX(80%) !important;

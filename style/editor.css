@@ -11,29 +11,8 @@
   font-family: "Open Sans", Sans-serif;
   outline: none;
   width: 100%;
-  height: calc(100% - 5rem - 4rem);
-    height: -moz-calc(100% - 5rem - 4rem);
-    height: -webkit-calc(100% - 5rem - 4rem);
-  word-wrap: break-word;
-}
-
-.editor.no-toolbar {
-  height: calc(100% - 5rem);
-    height: -moz-calc(100% - 5rem);
-    height: -webkit-calc(100% - 5rem);
-}
-
-.editor.fullscreen {
-  height: calc(100% - 4rem);
-    height: -moz-calc(100% - 4rem);
-    height: -webkit-calc(100% - 4rem);
-}
-
-.editor.fullscreen.no-toolbar {
   height: 100%;
-  height: calc(100%);
-    height: -moz-calc(100%);
-    height: -webkit-calc(100%);
+  word-wrap: break-word;
 }
 
 #tempEditDiv {
@@ -42,13 +21,13 @@
 
 #rawEditor {
   border: none;
-  padding: 5px;
-  padding-bottom: 6rem;
+  padding: 5px 5px 6rem;
   font-size: 2em;
   outline: none;
   font-family: monospace;
   display: block;
   max-width: 100%;
+  direction: ltr;
 }
 
 [role="toolbar"] .hidden {

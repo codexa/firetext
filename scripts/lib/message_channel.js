@@ -91,7 +91,7 @@
 
           if( isWindowToWindowMessage( currentTarget ) ) {
             this.log("posting message from window to window", message, this.destinationUrl);
-            currentTarget.postMessage(messageClone, this.destinationUrl);
+            currentTarget.postMessage(messageClone, "*");
           } else {
             this.log("posting message from or to worker", message);
             currentTarget.postMessage(messageClone);

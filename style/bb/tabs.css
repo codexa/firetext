@@ -123,36 +123,39 @@
   position: absolute;
   top: 4rem;
   left: 0;
+  bottom: 5.2rem;
   visibility: hidden;
   width: 100%;
-    height: -moz-calc(100% - 4rem);
-    height: -webkit-calc(100% - 4rem);
-  height: calc(100% - 4rem);
   display: block;
   overflow: auto;
+  background: #fff;
+    -moz-transition: all .4s;
+    -webkit-transition: all .4s;
+    -o-transition: all .4s;
+  transition: all .4s;    
+}
+
+.fullscreen [role="tablist"] [role="tabpanel"] {
+  bottom: 0; 
+}
+
+.current [role="tablist"] [role="tabpanel"],
+.parent [role="tablist"] [role="tabpanel"],
+.active [role="tablist"] [role="tabpanel"] {
     -moz-transform: translateX(-102%);
     -webkit-transform: translateX(-102%);
     -o-transform: translateX(-102%);
     -ms-transform: translateX(-102%);
   transform: translateX(-102%);
-  background: #fff;
-    -moz-transition: all .4s;
-    -webkit-transition: all .4s;
-    -o-transition: all .4s;
-  transition: all .4s;
 }
 
-.current [role="tablist"] .selected [role="tabpanel"], .parent [role="tablist"] .selected [role="tabpanel"], .active [role="tablist"] .selected [role="tabpanel"] {
+.current [role="tablist"] .selected [role="tabpanel"],
+.parent [role="tablist"] .selected [role="tabpanel"],
+.active [role="tablist"] .selected [role="tabpanel"],
+[dir="rtl"] .current [role="tablist"] .selected [role="tabpanel"],
+[dir="rtl"] .parent [role="tablist"] .selected [role="tabpanel"],
+[dir="rtl"] .active [role="tablist"] .selected [role="tabpanel"] {
   visibility: visible;
-    -moz-transform: none;
-    -webkit-transform: none;
-    -o-transform: none;
-    -ms-transform: none;
-  transform: none;
-}
-
-[role="tablist"] .selected [role="tabpanel"] {
-  opacity: 1;
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none;
@@ -267,11 +270,13 @@
 
 
 /* RTL */
-.rtl [role="tablist"] > [role="tab"] {
+[dir="rtl"] [role="tablist"] > [role="tab"] {
     float: right;   
 }
 
-.rtl [role="tablist"] [role="tabpanel"] {
+[dir="rtl"] .current [role="tablist"] [role="tabpanel"],
+[dir="rtl"] .parent [role="tablist"] [role="tabpanel"],
+[dir="rtl"] .active [role="tablist"] [role="tabpanel"] {
     -moz-transform: translateX(102%);
     -webkit-transform: translateX(102%);
     -o-transform: translateX(102%);
@@ -279,7 +284,7 @@
   transform: translateX(102%);
 }
 
-.rtl [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
+[dir="rtl"] [role="tablist"] .selected ~ [role="tab"] [role="tabpanel"] {
     -moz-transform: translateX(-102%);
     -webkit-transform: translateX(-102%);
     -o-transform: translateX(-102%);

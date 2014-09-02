@@ -1,73 +1,64 @@
-<!--
-* Firetext v0.3
-* Copyright (C) Codexa Organization.
--->
-
 <!DOCTYPE html>
 <html>
 <head>
+  <!--
+  * Firetext
+  * Copyright (C) Codexa Organization
+  -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+  <meta name="theme-color" content="#fff" id="theme-color">
+  
   <!-- links -->
   <link href="style/icons/app/60.png" rel="icon" type="image/x-icon" />
   <link href="style/icons/app/60.png" rel="shortcut icon" type="image/x-icon" />
-  <link rel="localization" href="locales/manifest.json">
 
   <title>Firetext</title>
   
   <!-- Localization -->
   <link rel="resource" type="application/l10n" href="locales/locales.ini" />
-  <script type="application/javascript" src="scripts/lib/l10n.js"></script>
+  <script src="scripts/lib/l10n.js" defer></script>
 
   <!-- Cloud -->
-  <script type="text/javascript" src="scripts/cloud/cloud.js"></script>
-  <script type="text/javascript" src="scripts/cloud/dropbox.min.js"></script>
-  <script type="text/javascript" src="scripts/cloud/dropbox.js"></script>
+  <script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
+  <script type="text/javascript" src="scripts/cloud/dropbox.min.js" defer></script>
+  <script type="text/javascript" src="scripts/cloud/dropbox.js" defer></script>
   
   <!-- Lib -->
-  <script type="text/javascript" src="scripts/lib/kamino.js"></script>
-  <script type="text/javascript" src="scripts/lib/URI.js"></script>
-  <script type="text/javascript" src="scripts/lib/uuid.core.js"></script>
-  <script type="text/javascript" src="scripts/lib/message_channel.js"></script>
-  <script type="text/javascript" src="scripts/lib/encrypt.js"></script>
-  <script type="text/javascript" src="scripts/lib/FileSaver.js"></script>
-  <script type="text/javascript" src="scripts/lib/gesture_detector.js"></script>
-  <script type="text/javascript" src="scripts/lib/jszip.js"></script>
-  <script type="text/javascript" src="scripts/lib/jszip-deflate.js"></script>
-  <script type="text/javascript" src="scripts/lib/jszip-inflate.js"></script>
-  <script type="text/javascript" src="scripts/lib/jszip-load.js"></script>
-  <script type="text/javascript" src="scripts/lib/prettify.js"></script>
-  <script type="text/javascript" src="scripts/lib/lang-css.js"></script>
-  <script type="text/javascript" src="scripts/lib/lang-wiki.js"></script>
-  <script type="text/javascript" src="scripts/lib/stringview.js"></script>
-  <script type="text/javascript" src="scripts/lib/bugsense.js"></script>
+  <script type="text/javascript" src="scripts/lib/kamino.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/URI.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/uuid.core.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/message_channel.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/encrypt.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/FileSaver.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/gesture_detector.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/prettify.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/lang-css.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/stringview.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/bugsense.js" defer></script>
 
   <!-- Scripts -->
-  <script type="text/javascript" src="scripts/editorLoader.js"></script>
-  <script type="text/javascript" src="scripts/messages.js"></script>
-  <script type="text/javascript" src="scripts/firetext.js"></script>
-  <script type="text/javascript" src="scripts/activities.js"></script>
-  <script type="text/javascript" src="scripts/io.js"></script>
-  <script type="text/javascript" src="scripts/language.js"></script>
-  <script type="text/javascript" src="scripts/night.js"></script>
-  <script type="text/javascript" src="scripts/recents.js"></script>
-  <script type="text/javascript" src="scripts/regions.js"></script>
-  <script type="text/javascript" src="scripts/settings.js"></script>
+  <script type="text/javascript" src="scripts/editorLoader.js" defer></script>
+  <script type="text/javascript" src="scripts/messages.js" defer></script>
+  <script type="text/javascript" src="scripts/firetext.js" defer></script>
+  <script type="text/javascript" src="scripts/activities.js" defer></script>
+  <script type="text/javascript" src="scripts/io.js" defer></script>
+  <script type="text/javascript" src="scripts/language.js" defer></script>
+  <script type="text/javascript" src="scripts/night.js" defer></script>
+  <script type="text/javascript" src="scripts/recents.js" defer></script>
+  <script type="text/javascript" src="scripts/regions.js" defer></script>
+  <script type="text/javascript" src="scripts/settings.js" defer></script>
 
   <!-- Parsers -->
-  <script type="text/javascript" src="scripts/parsers/base64.js"></script>
-  <script type="text/javascript" src="scripts/parsers/plain-text.js"></script>
-  <script type="text/javascript" src="scripts/parsers/docx.js"></script>
-
-  <!-- User -->
-  <script type="text/javascript" src="scripts/user/id.js"></script>
+  <script type="text/javascript" src="scripts/parsers/base64.js" defer></script>
+  <script type="text/javascript" src="scripts/parsers/plain-text.js" defer></script>
 
   <!-- Building Blocks -->
-  <link rel="stylesheet" type="text/css" href="style/bb/action_menu.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/drawer.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/edit_mode.css"/>
+  <link rel="stylesheet" type="text/css" href="style/bb/headers.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/input_areas.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/lists.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/progress_activity.css"/>
@@ -83,6 +74,7 @@
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
   <link rel="stylesheet" type="text/css" href="style/headers.css"/>
   <link rel="stylesheet" type="text/css" href="style/icons.css"/>
+  <link rel="stylesheet" type="text/css" href="style/action_menu.css"/>
   <link rel="stylesheet" type="text/css" href="style/desktop.css"/>
   <link rel="stylesheet" type="text/css" href="style/prettify.css"/>
   <link rel="stylesheet" type="text/css" href="style/night.css" />
@@ -131,7 +123,7 @@
       </menu>
       <h1 class="firetext icon-">firetext</h1>
     </header>
-    <div role="main" class="header-only">
+    <div role="main" class="header-only" id="welcome-main-area">
       <article data-type="list" class="docsList" id="welcome-docs-list">
         <div id="welcome-recents-area">
           <h2 data-l10n-id="recent-documents">Recently opened Documents</h2>
@@ -149,7 +141,7 @@
     </div>
   </section>
   
-  <div role="edit" data-type="edit" id="welcome-edit-mode">
+  <div role="dialog" data-type="edit" id="welcome-edit-mode">
     <section>
       <header>
         <menu type="toolbar">
@@ -166,7 +158,7 @@
   
   <section role="dialog" id="add">
     <header>
-      <button data-click="navBack"><span class="icon icon-back"></span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
         <button data-click="createFromDialog" id="add-dialog-create-button" data-l10n-id="create">create</button>
       </menu>
@@ -285,17 +277,18 @@
         <li id="tab-raw" role="tab">
           <a href="#" data-click="tab" data-click-name="raw" data-l10n-id="raw">Raw</a>
           <div role="tabpanel">
-            <code class="prettyprint lang-html" id="rawEditor"></code>
+            <code class="prettyprint lang-html" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></code>
           </div>
         </li>
         <div class="tabToolbar">
-          <button data-click="sidebar" data-click-id="main" class="icon-menu drawerEnabled"></button>
-          <button data-click="closeFile" class="icon-close"></button>
-          <button data-click="fullscreen" class="icon-efs"></button>
           <button data-click="saveFromEditor" id="zenSaveButton" class="icon-save"></button>
+          <button data-click="fullscreen" data-click-state="off" class="icon-efs"></button>
+          <button data-click="closeFile" class="icon-close"></button>
+          <button data-click="sidebar" data-click-id="main" class="icon-menu drawerEnabled"></button>
         </div>
       </ul>
     </div>
+    <button class="icon-more" id="hide-keyboard-button"></button>
     <section role="status" id="save-banner" hidden>
 	  <p>
 	  	<span data-l10n-id="successfully-saved">Successfully saved</span> 
@@ -381,15 +374,14 @@
                   <option value="c" data-l10n-id="center">Center</option>
                   <option value="j" data-l10n-id="justified">Justified</option>
                 </select>
-                <select class="dummy"></select>
               </label>
             </aside>
             <p class="label" data-l10n-id="alignment">Alignment</p>
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
+              <label class="pack-switch">
+                <input type="checkbox" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
                 <span></span>
               </label>
             </aside>
@@ -397,8 +389,8 @@
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
+              <label class="pack-switch">
+                <input type="checkbox" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
                 <span></span>
               </label>
             </aside>
@@ -406,8 +398,8 @@
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
+              <label class="pack-switch">
+                <input type="checkbox" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
                 <span></span>
               </label>
             </aside>
@@ -415,8 +407,8 @@
           </li>
           <li class="noLink">
             <aside class="pack-end">
-              <label>
-                <input type="checkbox" data-type="switch" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
+              <label class="pack-switch">
+                <input type="checkbox" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
                 <span></span>
               </label>
             </aside>
@@ -453,7 +445,9 @@
   <div class="background"></div>
   
   <section role="action" id="image-location">
-    <header data-l10n-id="image-location">Image location</header>
+    <header>
+    	<h1 data-l10n-id="image-location">Image location</h1>
+    </header>
     <menu>
       <button data-click="image" data-click-location="web" data-l10n-id="the-web">The web</button> 
       <button data-click="image" data-click-location="internal" data-l10n-id="internal-storage">Internal storage</button>
@@ -517,7 +511,9 @@
   <div class="background"></div>
   
   <section role="action" id="save-file">
-    <header data-l10n-id="save-changes-question">Would you like to save your changes?</header>
+    <header>
+    	<h1 data-l10n-id="save-changes-question">Would you like to save your changes?</h1>
+    </header>
     <menu>
       <button data-click="closeFile" data-click-action="yes" data-l10n-id="yes">Yes</button> 
       <button data-click="closeFile" data-click-action="no" class="danger" data-l10n-id="no">No</button>
@@ -526,9 +522,9 @@
   </section>
   <div class="background"></div>
 
-  <section role="region" id="settings">
+  <section role="dialog" id="settings">
     <header>
-      <button data-click="navBack"><span class="icon icon-back"></span></button>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
       <h1 data-l10n-id="settings">Settings</h1>
     </header>
     <div role="main" class="header-only">
@@ -538,8 +534,8 @@
           <ul>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="dropbox-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="dropbox-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -551,8 +547,8 @@
           <ul>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autosave-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="autosave-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -560,8 +556,8 @@
             </li>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autoload-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="autoload-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -580,8 +576,8 @@
             </li>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="stats-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="stats-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -592,30 +588,17 @@
           <ul>
             <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="autozen-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="autozen-enabled-switch">
                   <span></span>
                 </label>
               </aside>
               <p class="label" data-l10n-id="edit-with-zen-mode">Edit with <b>Zen Mode</b></p>
             </li>
             <li class="noLink">
-			  <aside class="pack-end">
-                <label>
-                  <select id="nightmode-select">
-                    <option value="1" data-l10n-id="always-on">Always On</option>
-                    <option value="0" data-l10n-id="always-off">Always Off</option>
-                    <option selected value="2" data-l10n-id="auto">Auto</option>
-                  </select>
-                  <select class="dummy"></select>
-                </label>
-			  </aside>
-			  <p class="label" data-l10n-id="enable-night-mode">Enable <b>Night Mode</b></p>
-            </li>
-            <li class="noLink">
               <aside class="pack-end">
-                <label>
-                  <input type="checkbox" data-type="switch" id="previews-enabled-switch" />
+                <label class="pack-switch">
+                  <input type="checkbox" id="previews-enabled-switch">
                   <span></span>
                 </label>
               </aside>
@@ -624,26 +607,37 @@
             <li class="noLink">
               <aside class="pack-end">
                 <label>
+                  <select id="nightmode-select">
+                    <option value="0" data-l10n-id="always-off">Always Off</option>
+                    <option value="1" data-l10n-id="always-on">Always On</option>
+                    <option selected value="2" data-l10n-id="auto">Auto</option>
+                  </select>
+                </label>
+              </aside>
+              <p class="label" data-l10n-id="enable-night-mode">Enable <b>Night Mode</b></p>
+            </li>
+            <li class="noLink">
+              <aside class="pack-end">
+                <label>
                   <select id="language-select">
-                    <option value="af" disabled>Afrikaans</option>
-                    <option value="ar" disabled>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</option>
-                    <option value="zh" disabled>&#20013;&#25991;</option>
+                    <option value="auto" data-l10n-id="auto"></option>
+                    <option value="bn-BD">বাংলা (BD)</option>
                     <option value="cs">&#268;e&#353;tina</option>
+                    <option value="de">Deutsch</option>
                     <option value="en-US" selected>English (US)</option>
+                    <option value="eo">Esperanto</option>
+                    <option value="es">Espa&#241;ol</option>
                     <option value="fr">Fran&#231;ais</option>
-                    <option value="de" disabled>Deutsch</option>
-                    <option value="el" disabled>&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;</option>
                     <option value="he">&#1506;&#1489;&#1512;&#1497;&#1514;</option>
+                    <option value="id">Bahasa Indonesia</option>
                     <option value="it">Italiano</option>
-                    <option value="ja" disabled>&#26085;&#26412;&#35486;</option>
-                    <option value="ko" disabled>&#54620;&#44397;&#50612;</option>
+                    <option value="nl">Nederlands</option>
                     <option value="pl">Polski</option>
                     <option value="pt-BR">Portugu&#234;s (BR)</option>
-                    <option value="ru" disabled>&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</option>
-                    <option value="es">Espa&#241;ol</option>
-                    <option value="tr" disabled>T&#252;rk&#231;e</option>
+                    <option value="ro">Rom&acirc;n&#x103;</option>
+                    <option value="ru">Русский</option>
+                    <option value="zh-CN">&#20013;&#25991; (CN)</option>
                   </select>
-                  <span></span>
                 </label>
               </aside>
               <p class="label" data-l10n-id="language">Interface <b>language</b></p>
@@ -653,6 +647,7 @@
       </article>
     </div>
   </section>
+  <div class="background"></div>
   
 </body>
 </html>
