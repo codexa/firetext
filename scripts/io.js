@@ -279,11 +279,11 @@ function createFromDialog() {
 				break;
 		}
 		var contentBlob;
-		if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-			contentBlob = new Blob([firetext.parsers.DocxEditor.blank], {type: type});
-		} else {
+		//if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+		//	contentBlob = new Blob([firetext.parsers.DocxEditor.blank], {type: type});
+		//} else {
 			contentBlob = new Blob([' '], { "type" : type });
-		}
+		//}
 		if (deviceAPI == 'deviceStorage') {
 			// Make directory accurate
 			directory = ('/sdcard/'+directory);

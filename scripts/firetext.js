@@ -109,9 +109,6 @@ firetext.init = function () {
 	initEditor(function() {		
 		// Init extIcon
 		extIcon();
-	
-		// Initiate user id
-		firetext.user.id.init();
 		
 		// Add event listeners
 		toolbar.addEventListener(
