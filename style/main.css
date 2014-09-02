@@ -11,22 +11,16 @@ html, body {
   margin: 0;
   padding: 0;  
   font-size: 10px;
-  font-family: "Open Sans", sans-serif;  
+  font-family: sans-serif;  
   background: #fff;
   color: #6f6f6f;
 }
 
-[role="main"].header-only {
-  height: calc(100% - 5rem);
-    height: -moz-calc(100% - 5rem);
-    height: -webkit-calc(100% - 5rem);
+[role="main"] {
+    height: -moz-calc(100% - 5.2rem);
+    height: -webkit-calc(100% - 5.2rem);
+  height: calc(100% - 5.2rem);
   overflow: scroll;
-}
-
-.firetext {
-    text-align: center !important;
-    padding-top: 0 !important;
-    margin: 0 0 0 4rem !important;
 }
 
 .redAlert {
@@ -35,6 +29,26 @@ html, body {
   text-align: center;
   display: block;
   margin: 1rem;
+}
+
+#hide-keyboard-button {
+  position: fixed;
+  bottom: 0;
+  right: 1rem;
+  width: 5rem;
+  font-size: 2.5rem;
+    -moz-transform: rotate(0.5turn);
+    -webkit-transform: rotate(0.5turn);
+    -o-transform: rotate(0.5turn);
+    -ms-transform: rotate(0.5turn);
+  transform: rotate(0.5turn);
+  opacity: 0.6;
+  background: transparent;
+  display: none;
+}
+
+#hide-keyboard-button.shown {
+  display: inline-block; 
 }
 
 
@@ -95,6 +109,14 @@ form[role=dialog].current {
 }
 
 
+/* Switches */
+label.pack-checkbox,
+label.pack-radio,
+label.pack-switch {
+    margin: 0.5rem 0 0 0.5rem;  
+}
+
+
 /* Lists */
 [data-type="list"], [data-type="edit"] {
   margin: 0;
@@ -119,15 +141,9 @@ form[role=dialog].current {
   padding-right: 20px;
 }
 
-[data-type="edit"] li {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 
 /* File List */
 [data-type="list"] li.fileListItem {
-  height: auto;
   background: #fff;
   cursor: pointer;
 }
@@ -235,13 +251,15 @@ legend.action select {
   outline: none;
   border: none;
   border-radius: 0;
+  font-size: 1.5rem;
 }
 
 aside.pack-end select {
-  position: absolute;
-  right: 0;
-  margin-top: 1.4rem;
+  margin-top: 1.8rem;
   text-align: right;
+  font-size: 1.8rem;
+  background: transparent;
+  padding-right: 1rem;
 }
 
 legend.action select.dummy,
@@ -253,6 +271,7 @@ aside select.dummy {
 
 /* Tab Toolbar */
 .tabToolbar {
+  text-align: right;
   opacity: 0;
   visibility: hidden;
   height: 4rem;
@@ -270,14 +289,13 @@ aside select.dummy {
 .tabToolbar button,
 .tabToolbar .button,
 .tabToolbar input[type="button"] {
-  float: right;
-  width: 4rem;
   height: 100%;
   background: transparent;
   border: none;
   font-size: 0;
   border-radius: 0;
   width: 4rem;
+  padding: 0 1rem;
 }
 
 .tabToolbar button:active,
@@ -298,30 +316,6 @@ aside select.dummy {
 .tabToolbar input[type="button"][class^="icon-"] {
   font-size: 2.5rem;
   text-shadow: none;
-}
-
-.tabToolbar .icon-menu {
-    padding-right: 0;
-    padding-left: 1rem;
-    width: 3rem;
-}
-
-
-/* Browser */
-.top-button {
-  border-radius: 0;
-  border: none;
-  outline: none;
-  margin: 0;
-}
-
-#browserFrame {
-  width: 100%;
-  border: none;
-  outline: none;
-    height: -moz-calc(100% - 3.9rem);
-    height: -webkit-calc(100% - 3.9rem);
-  height: calc(100% - 3.9rem);
 }
 
 
@@ -420,46 +414,36 @@ aside select.dummy {
 
 
 /* RTL */
-.rtl {
+[dir="rtl"] {
     direction: rtl;
 }
 
-.rtl aside.pack-end select {
-    left: 0;
-    right: auto;
+[dir="rtl"] aside.pack-end select {
     direction: ltr;
     text-indent: 0;
     text-align: left;
 }
 
-.rtl .button-block {
+[dir="rtl"] .button-block {
     margin-right: 1.5%;
 }
 
-.rtl #fileTypeLegend {
+[dir="rtl"] #fileTypeLegend {
     float: left;  
 }
 
-.rtl .tabToolbar button,
-.rtl .tabToolbar .button,
-.rtl .tabToolbar input[type="button"] {
-    float: left;
+[dir="rtl"] .tabToolbar {
+    text-align: left;
 }
 
-.rtl .tabToolbar .icon-menu {
-    padding-left: 0;
-    padding-right: 1rem;
-    width: 3rem;
-}
-
-.rtl .spinner > div {
+[dir="rtl"] .spinner > div {
     -moz-animation-name: rtlSpin;
     -webkit-animation-name: rtlSpin;
     -o-animation-name: rtlSpin;
   animation-name: rtlSpin;
 }
 
-.rtl .icon-arrow {
+[dir="rtl"] .icon-arrow {
        -moz-transform: scale(-1, 1);
        -webkit-transform: scale(-1, 1);
        -o-transform: scale(-1, 1);

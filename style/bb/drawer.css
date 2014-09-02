@@ -94,15 +94,16 @@ section[data-type="sidebar"] > header:after {
   right: 0;
 }
 
-section[data-type="sidebar"] > header h1 {
+section[data-type="sidebar"] > header:first-child h1 {
   font: 2.2rem/4.8rem "MozTT", Sans-serif;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
-  margin: 0 0 0 3rem;
+  padding: 0 2rem;
   height: 100%;
+  margin: 0;
 }
 
 section[data-type="sidebar"] > header h1 em {
@@ -201,7 +202,7 @@ section[data-type="sidebar"] > nav > h2 {
   font-weight: normal;
   font-size: 1.4rem;
   line-height: 3.3rem;
-  text-indent: 3rem;
+  text-indent: 2rem;
   background-color: #1d1d1d;
   margin: 0;
   padding-right: 0.8rem;
@@ -259,7 +260,7 @@ section[data-type="sidebar"] > nav > ul > li > a {
   color: inherit;
   font-size: 1.6rem;
   line-height: 4.35rem; 
-  text-indent: 3rem;
+  text-indent: 2rem;
   padding-right: 0.8rem;
   width: 100%;
   box-sizing: border-box;
@@ -273,22 +274,27 @@ section[data-type="sidebar"] > nav > ul > li > a {
 
 
 /* RTL */
-.rtl section[data-type="sidebar"] {
+[dir="rtl"] section[data-type="sidebar"] {
     left: auto;
     right: 0;
 }
 
-.rtl section[data-type="sidebar"][data-position="right"] {
+[dir="rtl"] section[data-type="sidebar"][data-position="right"] {
     right: auto;
     left: 0;    
 }
 
-.rtl section[data-type="sidebar"] [role="toolbar"] {
+[dir="rtl"] section[data-type="sidebar"] > header:first-child h1 {
+    padding: 0 2.7rem;
+    text-align: right;
+}
+
+[dir="rtl"] section[data-type="sidebar"] [role="toolbar"] {
     left: auto;
     right: 0;
 }
 
-.rtl section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
+[dir="rtl"] section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
     right: auto;
     left: 0;    
 }

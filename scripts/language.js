@@ -6,50 +6,25 @@
 
 'use strict';
 
-
-/* Variables
-------------------------*/
-firetext.language = function () { return this.getCurrent(); }; 
-
-
-/* Init
-------------------------*/ 
-firetext.language.init = function () {
-	if (!firetext.settings.get('language')) {
-		firetext.settings.save('language', document.webL10n.getLanguage());		 
-	} 
-	
-	// Localize interface
-	var language = firetext.language.getCurrent();
-	document.webL10n.setLanguage(language);
-	document.body.setAttribute('data-language', language);
-	
-	// LTR / RTL
-	if (firetext.language.getDirection() == 'rtl') {
-		document.body.classList.remove('ltr');  
-		document.body.classList.add('rtl');   
-		if (doc) { 
-			doc.style.direction = 'rtl';  		
-		}		
+firetext.language = function(code){
+	if (code) {
+		// Catch for 'auto' case
+		if (code === 'auto') {
+			code = navigator.language;
+		}
+		
+		// Localize interface
+		if (code !== navigator.mozL10n.language.code) {
+			navigator.mozL10n.language.code = code;
+		}
 	} else {
-		document.body.classList.remove('rtl');  
-		document.body.classList.add('ltr'); 
-		if (doc) {
-			doc.style.direction = 'ltr'; 
-		} 		 
+		return navigator.mozL10n.language.code;
 	}
-}
+};
 
-firetext.language.getCurrent = function () {
-	return (firetext.settings.get('language'));
-}
-
-firetext.language.getDirection = function () {
-	var language = firetext.language.getCurrent();
-	if (language == 'he' |
-			language == 'ar') {
-		return 'rtl';			
-	} else {
-		return 'ltr';
-	}
-}
+// Lock language (can be removed when Bug 1036696 is fixed)
+window.addEventListener('languagechange', function() {
+	navigator.mozL10n.ready(function () {
+		firetext.language(firetext.settings.get('language'));
+	});
+});

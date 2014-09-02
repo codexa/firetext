@@ -8,7 +8,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  background-color: #efefef;
+  background-color: rgba(255,255,255,0.95);
 }
 
 [role="toolbar"] ul {
@@ -57,15 +57,15 @@
 
 
 /* RTL */
-.rtl [role="toolbar"] ul {
+[dir="rtl"] [role="toolbar"] ul {
     float: right;   
 }
 
-.rtl [role="toolbar"] ul:last-child {
+[dir="rtl"] [role="toolbar"] ul:last-child {
     float: left;
     text-align: left;
 }
 
-.rtl [role="toolbar"] li {
+[dir="rtl"] [role="toolbar"] li {
     float: right;   
 }

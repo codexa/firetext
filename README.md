@@ -1,77 +1,14 @@
 # Firetext
 ## About
-Firetext is a word processor for Firefox OS.  Firetext currently supports html, and plain text files (more will be added later).
-The latest stable nightly is available on <a href="http://firetext.codexa.org/app/">our site</a>.
-You can run Firetext on a Firefox OS device, or on the <a href="https://addons.mozilla.org/en-US/firefox/addon/firefox-os-simulator/">Firefox OS Simulator</a>.
+Firetext is a word processor for Firefox OS [available on the Firefox Marketplace](https://marketplace.firefox.com/app/firetext). Firetext currently supports html and plain text files (more will be added later).
 
+You can run Firetext on a Firefox OS device, on a [Firefox OS simulator](https://ftp.mozilla.org/pub/mozilla.org/labs/fxos-simulator/), or on the Firefox App Manager/WebIDE.
 
-## Donate
-Firetext is kept alive by contributions from the <a href="http://firetext.codexa.org/community/credits">community</a>.
+## Contribute
+Firetext is kept alive by contributions from the community.
 Please donate skills, time, or money to make this project better.
   
-Take an <a href="https://github.com/Codexa/Firetext/issues">issue</a>,
-or contact <a href="mailto:contact@codexa.org">us</a> to learn how you can help!
+Take an [issue](https://github.com/Codexa/Firetext/issues), translate the app on [Transifex](https://www.transifex.com/projects/p/firetext/) or contact [us](mailto:codexa.contact@gmail.com) to learn how you can help!
 
-
-## Features
-### Current:
-- Formats
-  - .html
-  - .txt
-- File I/O
-  - deviceStorage API
-- Formatting
-  - align
-  - bold
-  - italic
-  - removal
-  - strikethrough
-  - underline
-- Elements
-  - horizontal rules
-  - images
-  - links
-  - ordered list
-  - tables
-  - unordered list
-- Zen Mode
-- Night Mode
-- Raw mode for HTML documents
-  - Syntax highlighting
-- Cloud services
-  - Dropbox
-- Autoload
-- Autosave
-- Better performance!
-
-### Future:
-- Formatting
-  - superscript/subscript
-  - font color
-  - font size
-  - background color
-  - and more =)
-- Elements
-  - Equations
-  - Drawings
-- File IO
-  - Filesystem API
-- Cloud services
-  - Google Drive
-  - Box
-  - Skydrive
-  - MediaFire
-- Sharing
-  - Email
-  - Facebook
-  - Dropbox Link
-- Collaborative editing
-- Formats:
-  - .docx
-  - .doc
-  - .rtf
-  - .odt
-  - .fodt
-  - .pdf.
-
-Go to <a href="http://firetext.codexa.org">firetext.codexa.org</a> for more info.
+## Donate
+Donate to [Firetext on Bountysource](https://www.bountysource.com/teams/firetext) to expedite development.  Current bounties: [![](https://www.bountysource.com/badge/team?team_id=318&style=bounties_received)](https://www.bountysource.com/teams/firetext)
