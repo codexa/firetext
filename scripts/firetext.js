@@ -22,11 +22,11 @@ firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
-var deviceType, fileChanged, saveTimeout, saving, tempAutozen, urls={}, version = '0.3.3';
+var deviceType, fileChanged, saveTimeout, saving, tempAutozen, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
-var bugsense, bugsenseKey = '';
+var bugsenseInitialized = false, bugsenseKey = '';
 var editorMessageProxy;
 
 // Lists
@@ -47,11 +47,6 @@ firetext.init = function () {
 	
 	// Initialize l10n
 	navigator.mozL10n.once(function () {
-  
-	// Initialize urls
-	getURLs(function(){
-		fixMenu();
-	});
 		
 	// Initialize Settings
 	firetext.settings.init();
@@ -136,53 +131,59 @@ firetext.init = function () {
 				editDocs();
 			}
 		);
-	
-		// Initialize IO
-		firetext.io.init(null, function() {	
-			// Update Doc Lists
-			updateDocLists();
+		
+		
+		// Initialize urls
+		getURLs(function(){
+			fixMenu();
 			
-			// Initialize sharing
-			cloud.init();
+			// Initialize IO
+			firetext.io.init(null, function() {	
+				// Update Doc Lists
+				updateDocLists();
 			
-			// Check for recent file, and if found, load it.
-			if (firetext.settings.get('autoload') == 'true') {
-				var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
-				var wasEditing = firetext.settings.get('autoload.wasEditing');
+				// Initialize sharing
+				cloud.init();
+			
+				// Check for recent file, and if found, load it.
+				if (firetext.settings.get('autoload') == 'true') {
+					var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
+					var wasEditing = firetext.settings.get('autoload.wasEditing');
 				
-				// Navigate to welcome region
-				regions.nav('welcome');
+					// Navigate to welcome region
+					regions.nav('welcome');
 				
-				// Load file
-				if (wasEditing == 'true') {
-					// Wait until Dropbox is authenticated
-					if (lastDoc[3] == 'dropbox') {
-						if (firetext.settings.get('dropbox.enabled') == 'true') {
-							window.addEventListener('cloud.dropbox.authed', function() {
+					// Load file
+					if (wasEditing == 'true') {
+						// Wait until Dropbox is authenticated
+						if (lastDoc[3] == 'dropbox') {
+							if (firetext.settings.get('dropbox.enabled') == 'true') {
+								window.addEventListener('cloud.dropbox.authed', function() {
+									spinner('hide');
+									loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+								});
+							} else {
 								spinner('hide');
-								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-							});
+							}
 						} else {
 							spinner('hide');
+							loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 						}
 					} else {
 						spinner('hide');
-						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 					}
 				} else {
-					spinner('hide');
+					spinner('hide');  
+					regions.nav('welcome');
 				}
-			} else {
-				spinner('hide');  
-				regions.nav('welcome');
-			}
 			
-			// Night
-			night();
+				// Night
+				night();
 	
-			// Dispatch init event
-			window.dispatchEvent(firetext.initialized);
-			firetext.isInitialized = true;
+				// Dispatch init event
+				window.dispatchEvent(firetext.initialized);
+				firetext.isInitialized = true;
+			});
 		});
 	});
 	
@@ -278,14 +279,10 @@ function updateAddDialog() {
 ------------------------*/
 function bugsenseInit() {
 	if (bugsenseKey) {
-		if (firetext.settings.get('stats.enabled') != 'false') {
-			bugsense = new Bugsense({ appversion: version, apiKey: bugsenseKey });
-		} else {
-			bugsense = null;
-		}	
-	} else {
-		if (firetext.settings.get('stats.enabled') != 'false') {
-			firetext.settings.save('stats.enabled','false');
+		if (firetext.settings.get('stats.enabled') != 'false' &&
+				!bugsenseInitialized) {
+			Bugsense.initAndStartSession({ appname: 'Firetext', appVersion: version, apiKey: bugsenseKey });
+			bugsenseInitialized = true;
 		}
 	}
 }

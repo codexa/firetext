@@ -144,12 +144,19 @@ firetext.settings.init = function () {
 		if (firetext.settings.get('stats.enabled') != 'true') {
 			firetext.settings.save('stats.enabled', 'true');
 		}
-	} else {	
+	} else {
 		statsEnabled.removeAttribute('checked');
 	}
 	statsEnabled.onchange = function () {
 		firetext.settings.save('stats.enabled', this.checked);
-		bugsenseInit();
+		if (!this.checked) {
+			var r = confirm(navigator.mozL10n.get('needs-restart'));
+			if (r) {
+				window.location.reload();
+			}
+		} else {
+			bugsenseInit();
+		}
 	}
 };
 

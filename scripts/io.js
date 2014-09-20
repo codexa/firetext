@@ -480,7 +480,7 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 		
 		// Save file
 		if (deviceAPI == 'deviceStorage') {
-		var req = storage.addNamed(contentBlob, filePath);
+			var req = storage.addNamed(contentBlob, filePath);
 			req.onsuccess = function () {
 				// Show banner or hide spinner
 				if (showBanner) {
