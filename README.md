@@ -8,7 +8,7 @@ You can run Firetext on a Firefox OS device, on a [Firefox OS simulator](https:/
 Firetext is kept alive by contributions from the community. Please donate skills, time, or money to make this project better.
 
 ### Hack
-Is the open web is your passion? Do you dream in code? Well, head on over to our [Get Started](https://github.com/codexa/firetext/wiki/Get-Started) page, and help us bring more productivity power to Firefox OS users!
+Is the open web is your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page, and help us bring more productivity power to Firefox OS users!
 
 ### Localize
 Do you bridge the gap between cultures? Localize Firetext on [Transifex](https://www.transifex.com/projects/p/firetext/), and expand our global impact.
