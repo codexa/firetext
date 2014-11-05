@@ -11,7 +11,7 @@ section > header:first-child {
 
 section > header:first-child h1 {
   color: inherit;
-  margin: 0 2rem;
+  margin: 0 1rem;
 }
 
 section > header:first-child h1.firetext {

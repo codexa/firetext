@@ -86,6 +86,10 @@ section > header:first-child .icon.icon-close {
   font-size: 1.5rem !important;
 }
 
+.firetext {
+  text-align: left !important;
+}
+
 
 /* action_menu.css */
 form[role=dialog] {
@@ -466,6 +470,10 @@ aside select.dummy {
        -webkit-transform: scale(-1, 1);
        -o-transform: scale(-1, 1);
     transform: scale(-1, 1);    
+}
+
+[dir="rtl"] .firetext {
+    text-align: right !important;
 }
 
 @keyframes rtlSpin{
