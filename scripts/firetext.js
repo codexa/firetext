@@ -1155,12 +1155,14 @@ function processActions(eventAttribute, target) {
 			}
 			formatDoc('justify'+justifyDirection);
 		} else if (calledFunction == 'hideToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt' &&
-					target.id === 'editor') {
-				document.getElementById('edit-bar').style.display = 'none';
-				editor.classList.add('no-toolbar');
+			if (deviceType != 'desktop' || html.classList.contains('fullscreen')) {
+				if (document.getElementById('currentFileType').textContent != '.txt' &&
+						target.id === 'editor') {
+					document.getElementById('edit-bar').style.display = 'none';
+					editor.classList.add('no-toolbar');
+				}
+				document.getElementById('hide-keyboard-button').classList.add('shown');
 			}
-			document.getElementById('hide-keyboard-button').classList.add('shown');
 		} else if (calledFunction == 'showToolbar') {
 			if (document.getElementById('currentFileType').textContent != '.txt' &&
 					target.id === 'editor') {
