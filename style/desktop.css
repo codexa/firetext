@@ -172,4 +172,24 @@
   #settings #autozen-enabled {
     display: none;
   }
+  
+  /* Zen mode */
+  .fullscreen #hide-keyboard-button {
+    top: 5rem;
+  }
+  
+  .fullscreen #edit-bar {
+    width: auto;
+    left: auto;
+    top: 4rem;
+    right: 0;
+  }
+  
+  .fullscreen #edit-bar .icon-more {
+      -moz-transform: rotate(0.5turn);
+      -webkit-transform: rotate(0.5turn);
+      -o-transform: rotate(0.5turn);
+      -ms-transform: rotate(0.5turn);
+    transform: rotate(0.5turn);
+  }
 }
