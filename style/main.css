@@ -283,6 +283,7 @@ aside select.dummy {
     -moz-transition: opacity .3s;
     -webkit-transition: opacity .3s;
     -o-transition: opacity .3s;
+  white-space: nowrap;
 }
 
 .tabToolbar.visible {
