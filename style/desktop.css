@@ -80,13 +80,4 @@
       -ms-transform: translateX(-250px) !important;    
     transform: translateX(-250px) !important;
   }  
-  
-  /* Misc */    
-  .firetext {
-    text-align: left !important;      
-  }
-  
-  [dir="rtl"] .firetext {
-    text-align: right !important;      
-  }
 }

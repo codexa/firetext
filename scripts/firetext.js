@@ -1326,7 +1326,8 @@ function editFullScreen(enter) {
 		// Special editor UI
 		document.querySelector('#edit header:first-child').style.display = 'none';
 		document.getElementById('editTabs').setAttribute('data-items', '4.1');
-		document.querySelector('#editTabs .tabToolbar').classList.add('visible');
+		document.querySelector('#editTabs #tabToolbarLeft').classList.add('visible');
+		document.querySelector('#editTabs #tabToolbarRight').classList.add('visible');
 		html.classList.add('fullscreen');
 	} else {
 		// Exit fullscreen
@@ -1341,7 +1342,8 @@ function editFullScreen(enter) {
 		// Regular editor UI
 		document.querySelector('#edit header:first-child').style.display = 'block';
 		document.getElementById('editTabs').setAttribute('data-items', '2');
-		document.querySelector('#editTabs .tabToolbar').classList.remove('visible');
+		document.querySelector('#editTabs #tabToolbarLeft').classList.remove('visible');
+		document.querySelector('#editTabs #tabToolbarRight').classList.remove('visible');
 		html.classList.remove('fullscreen');
 	}
 }

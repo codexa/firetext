@@ -83,7 +83,7 @@
 <body role="application">
   <div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
 
-  <section data-type="sidebar" id="sidebar_welcome" data-swipe-left="sidebar" data-swipe-left-id="welcome">
+  <section data-type="sidebar" id="sidebar_welcome" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="welcome">
     <header>
       <h1 data-l10n-id="menu">Menu</h1>
     </header>
@@ -114,12 +114,12 @@
   </section>
   
   <section role="region" id="welcome" 
-  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="open" data-swipe-right-only="current" 
-  	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="close" data-swipe-left-only="current">
+  	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="open" data-swipe-left-only="current" 
+  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="close" data-swipe-right-only="current">
     <header>
-      <button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-create"></span></button>
+        <button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       </menu>
       <h1 class="firetext icon-">firetext</h1>
     </header>
@@ -257,6 +257,9 @@
     </header>
     <div role="main" class="editor-container">
       <ul role="tablist" data-items="2" id="editTabs">
+        <div class="tabToolbar" id="tabToolbarLeft">
+          <button data-click="closeFile" class="icon-close"></button>
+        </div>
         <li id="tab-design" role="tab">
           <a href="#" data-click="tab" data-click-name="design" data-l10n-id="design">Design</a>
           <div role="tabpanel">
@@ -280,10 +283,9 @@
             <code class="prettyprint lang-html" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></code>
           </div>
         </li>
-        <div class="tabToolbar">
+        <div class="tabToolbar" id="tabToolbarRight">
           <button data-click="saveFromEditor" id="zenSaveButton" class="icon-save"></button>
           <button data-click="fullscreen" data-click-state="off" class="icon-efs"></button>
-          <button data-click="closeFile" class="icon-close"></button>
           <button data-click="sidebar" data-click-id="main" class="icon-menu drawerEnabled"></button>
         </div>
       </ul>

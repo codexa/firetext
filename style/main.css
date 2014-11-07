@@ -82,6 +82,14 @@ section > header:first-child .icon.icon-close {
   padding-top: 1.4rem;
 }
 
+.tabToolbar .icon-close {
+  font-size: 1.5rem !important;
+}
+
+.firetext {
+  text-align: left !important;
+}
+
 #tab-design [role="tabpanel"] {
   overflow: hidden;
 }
@@ -283,6 +291,7 @@ aside select.dummy {
     -moz-transition: opacity .3s;
     -webkit-transition: opacity .3s;
     -o-transition: opacity .3s;
+  white-space: nowrap;
 }
 
 .tabToolbar.visible {
@@ -320,6 +329,15 @@ aside select.dummy {
 .tabToolbar input[type="button"][class^="icon-"] {
   font-size: 2.5rem;
   text-shadow: none;
+}
+
+#tabToolbarLeft {
+  width: 0;
+  float: left;
+}
+
+#tabToolbarLeft.visible {
+  width: auto;
 }
 
 
@@ -440,6 +458,10 @@ aside select.dummy {
     text-align: left;
 }
 
+[dir="rtl"] #tabToolbarLeft {
+    float: right;
+}
+
 [dir="rtl"] .spinner > div {
     -moz-animation-name: rtlSpin;
     -webkit-animation-name: rtlSpin;
@@ -452,6 +474,10 @@ aside select.dummy {
        -webkit-transform: scale(-1, 1);
        -o-transform: scale(-1, 1);
     transform: scale(-1, 1);    
+}
+
+[dir="rtl"] .firetext {
+    text-align: right !important;
 }
 
 @keyframes rtlSpin{
