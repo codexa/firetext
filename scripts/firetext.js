@@ -110,16 +110,13 @@ function initModules(callback) {
 	initGestures();
 	
 	// Initialize extIcon
-	extIcon();
-
-	// Initiate UID
-	firetext.user.id.init();	
-			
+	extIcon();	
+	
+    // Initalize recent docs
+    firetext.recents.init();
+    
 	// Initialize sharing
 	cloud.init();
-	
-	// Initalize recent docs
-	firetext.recents.init();
 	
 	// Initialize IO
 	firetext.io.init(null, function() {
@@ -1359,5 +1356,8 @@ function editFullScreen(enter) {
 }
 
 firetext.alert = function(message) {
+	alert(message);
+};
+etext.alert = function(message) {
 	alert(message);
 };
