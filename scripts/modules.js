@@ -109,10 +109,10 @@ if (!app) {
 				}
 			});
 		},
-    	load: function (url, destinations, callback, store) {
-    		console.log('Loading '+url);
-    		
-    		if (store) {
+		load: function (url, destinations, callback, store) {
+			console.log('Loading '+url);
+			
+			if (store) {
 				loadModule(url, function(e,b){
 					if (e) {
 						console.log(e);
@@ -127,7 +127,7 @@ if (!app) {
 						});
 					}
 				});
-    		} else {
+			} else {
 				fillFrame(url, destinations, function(e){
 					if (e) {
 						console.log(e);
@@ -136,7 +136,7 @@ if (!app) {
 						callback();
 					}
 				});
-    		}
-    	}
-    };
+			}
+		}
+	};
 })(this);
