@@ -1358,6 +1358,3 @@ function editFullScreen(enter) {
 firetext.alert = function(message) {
 	alert(message);
 };
-etext.alert = function(message) {
-	alert(message);
-};
