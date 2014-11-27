@@ -21,6 +21,9 @@ html, body {
     height: -webkit-calc(100% - 5.2rem);
   height: calc(100% - 5.2rem);
   overflow: scroll;
+  width: 100%;
+  border: none;
+  outline: none;
 }
 
 .redAlert {

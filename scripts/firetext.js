@@ -27,7 +27,7 @@ var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, st
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
-var editorMessageProxy;
+var editorMessageProxy, editorURL;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -41,26 +41,90 @@ var appCache = window.applicationCache;
 ------------------------*/
 window.addEventListener('DOMContentLoaded', function() {firetext.init();}, false);
 
-firetext.init = function () {
+firetext.init = function () {	
+	// l10n catch
+	navigator.mozL10n.once(function () {
+		// Select elements
+		initElements();
+	
+		// Load modules
+		initModules(function() {		
+			// Update Doc Lists
+			updateDocLists();
+	
+			// Navigate to welcome
+			regions.nav('welcome');
+		
+			// Check for recent file, and if found, load it.
+			if (firetext.settings.get('autoload') == 'true') {
+				var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
+				if (firetext.settings.get('autoload.wasEditing') == 'true') {
+					// Wait until Dropbox is authenticated
+					if (lastDoc[3] == 'dropbox') {
+						if (firetext.settings.get('dropbox.enabled') == 'true') {
+							window.addEventListener('cloud.dropbox.authed', function() {
+								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+								spinner('hide');
+							});
+						} else {
+							spinner('hide');
+						}
+					} else {
+						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+						spinner('hide');
+					}
+				} else {
+					spinner('hide');
+				}
+			} else {
+				spinner('hide');
+			}
+		
+			// Create listeners
+			initListeners();
+
+			// Dispatch init event
+			window.dispatchEvent(firetext.initialized);
+			firetext.isInitialized = true;
+		});	
+	});
+};
+
+function initModules(callback) {
 	// Initialize Bugsense
 	bugsenseInit();
 	
-	// Initialize l10n
-	navigator.mozL10n.once(function () {
+	// Initialize urls
+	initURLs(function(){fixMenu();});
+	
+	// Find device type
+	checkDevice();
 		
 	// Initialize Settings
 	firetext.settings.init();
 	
-	// Initialize language handler
+	// Initialize Language
 	firetext.language(firetext.settings.get('language'));
 	
-	// Find device type
-	checkDevice();
-	
-	// Initialize gestures
+	// Initialize Gestures
 	initGestures();
+	
+	// Initialize extIcon
+	extIcon();	
+	
+	// Initalize recent docs
+	firetext.recents.init();
+    
+	// Initialize sharing
+	cloud.init();
+	
+	// Initialize IO
+	firetext.io.init(null, function() {
+		callback();
+	});
+}
 
-	/* Select important elements for later */
+function initElements() {
 	// Misc
 	loadSpinner = document.getElementById('loadSpinner');
 	spinner();
@@ -71,7 +135,7 @@ firetext.init = function () {
 	toolbar = document.getElementById('edit-zone');
 	editWindow = document.getElementById('edit');
 	locationLegend = document.getElementById('locationLegend');
-	locationSelect = document.getElementById('createDialogFileLocation');
+	locationSelect = document.getElementById('createDialogFileLocation');	
 	
 	// Lists
 	welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -85,7 +149,7 @@ firetext.init = function () {
 	welcomeDropboxList = document.getElementById('welcome-dropbox-list');
 	openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
 	openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
-	
+
 	// Formatting
 	bold = document.getElementById('bold');
 	boldCheckbox = document.getElementById('boldCheckbox');
@@ -96,101 +160,36 @@ firetext.init = function () {
 	strikethroughCheckbox = document.getElementById('strikethroughCheckbox');
 	underline = document.getElementById('underline');
 	underlineCheckbox = document.getElementById('underlineCheckbox');
-	
-	// Initalize recent docs
-	firetext.recents.init();
-	
-	// Initialize the editor
-	initEditor(function() {		
-		// Init extIcon
-		extIcon();
-		
-		// Add event listeners
-		toolbar.addEventListener(
-			'mousedown', function mouseDown(event) {
-				event.preventDefault();
-				event.target.classList.toggle('active');
-			}
-		);
-		toolbar.addEventListener(
-			'mouseup', function mouseDown(event) {
-				if (event.target.classList.contains('sticky') != true) {
-					event.target.classList.remove('active');
-				}
-			}
-		);
-		editWindow.addEventListener(
-			'mouseenter', function mouseDown(event) {
-				editor.focus();
-			}
-		);
-	
-		document.getElementById('welcome-main-area').addEventListener(
-			'contextmenu', function contextmenu(event) {
-				event.preventDefault();
-				editDocs();
-			}
-		);
-		
-		
-		// Initialize urls
-		getURLs(function(){
-			fixMenu();
-			
-			// Initialize IO
-			firetext.io.init(null, function() {	
-				// Update Doc Lists
-				updateDocLists();
-			
-				// Initialize sharing
-				cloud.init();
-			
-				// Check for recent file, and if found, load it.
-				if (firetext.settings.get('autoload') == 'true') {
-					var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
-					var wasEditing = firetext.settings.get('autoload.wasEditing');
-				
-					// Navigate to welcome region
-					regions.nav('welcome');
-				
-					// Load file
-					if (wasEditing == 'true') {
-						// Wait until Dropbox is authenticated
-						if (lastDoc[3] == 'dropbox') {
-							if (firetext.settings.get('dropbox.enabled') == 'true') {
-								window.addEventListener('cloud.dropbox.authed', function() {
-									spinner('hide');
-									loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-								});
-							} else {
-								spinner('hide');
-							}
-						} else {
-							spinner('hide');
-							loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-						}
-					} else {
-						spinner('hide');
-					}
-				} else {
-					spinner('hide');  
-					regions.nav('welcome');
-				}
-			
-				// Night
-				night();
-	
-				// Dispatch init event
-				window.dispatchEvent(firetext.initialized);
-				firetext.isInitialized = true;
-			});
-		});
-	});
-	
-	});
-};
+}
 
-function getURLs(callback) {
+function initListeners() {	
+	// Add event listeners
+	toolbar.addEventListener(
+		'mousedown', function mouseDown(event) {
+			event.preventDefault();
+			event.target.classList.toggle('active');
+		}
+	);
+	toolbar.addEventListener(
+		'mouseup', function mouseDown(event) {
+			if (event.target.classList.contains('sticky') != true) {
+				event.target.classList.remove('active');
+			}
+		}
+	);
+	editWindow.addEventListener(
+		'mouseenter', function mouseDown(event) {
+			editor.focus();
+		}
+	);	
+	welcomeDocsList.addEventListener(
+		'contextmenu', function contextmenu(event) {
+			editDocs();
+		}
+	);
+}
+
+function initURLs(callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('post','http://firetext.codexa.bugs3.com/',true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -668,52 +667,60 @@ function extIcon() {
 /* Editor
 ------------------------*/ 
 function initEditor(callback) {
-	loadEditor(function(editorURL) {
-		editor.onload = null;
-		editor.src = editorURL;
-		editor.onload = function() {
-			var editorMessageChannel = new MessageChannel();
-			// See: scripts/messages.js
-			editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
-			// Successful initialization
-			editorMessageProxy.registerMessageHandler(function(e) {
-				// Initialize Raw Editor
-				rawEditor.setAttribute('contentEditable', 'true');
-				rawEditor.addEventListener('focus',function(){
-					processActions('data-focus', rawEditor);
-				});
-				rawEditor.addEventListener('blur',function(){
-					processActions('data-blur', rawEditor);
-				});
-			
-				// Nav to the design tab
-				regions.tab(document.querySelector('#editTabs'), 'design');
+	if (editorURL) {
+		app.modules.fill(editorURL, editor, function() {
+			editorCommunication(function(){
 				callback();
-		
-				// Initialize Night Mode
-				night();
-			}, "init-success", true);
+			});
+		});
+	} else {
+		app.modules.load('modules/editor/editor.html', editor, function(u) {
+			editorURL = u;
+			editorCommunication(function(){
+				callback();
+			});
+		}, true, true);
+	}
+}
 
-			editorMessageProxy.registerMessageHandler(function(e) {
-				fileChanged = true;
-				if(e.data.filetype === ".html") {
-					rawEditor.textContent = e.data.html;
-				}
-				autosave();
-			}, "doc-changed");
+function editorCommunication(callback) {
+	editor.onload = null;
+	editor.onload = function() {
+		var editorMessageChannel = new MessageChannel();
+		// See: scripts/messages.js
+		editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+		// Successful initialization
+		editorMessageProxy.registerMessageHandler(function(e) {
+			// Initialize Raw Editor
+			rawEditor.setAttribute('contentEditable', 'true');
+	
+			// Nav to the design tab
+			regions.tab(document.querySelector('#editTabs'), 'design');
+			callback();
 
-			// editor focus and blur
-			editorMessageProxy.registerMessageHandler(function(e) {
-				if(e.data.focus) {
-					processActions('data-focus', editor);
-				} else {
-					processActions('data-blur', editor);
-				}
-			}, "focus");
-			Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
-			editorMessageProxy.getPort().start();
-		}
-	})
+			// Initialize Night Mode
+			night();
+		}, "init-success", true);
+
+		editorMessageProxy.registerMessageHandler(function(e) {
+			fileChanged = true;
+			if(e.data.filetype === ".html") {
+				rawEditor.textContent = e.data.html;
+			}
+			autosave();
+		}, "doc-changed");
+
+		// editor focus and blur
+		editorMessageProxy.registerMessageHandler(function(e) {
+			if(e.data.focus) {
+				processActions('data-focus', editor);
+			} else {
+				processActions('data-blur', editor);
+			}
+		}, "focus");
+		Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
+		editorMessageProxy.getPort().start();
+	}
 }
 
 function watchDocument(filetype) {
@@ -742,7 +749,7 @@ function forceAutosave() {
 
 function autosave(force) {
 	if (firetext.settings.get('autosave') != 'false') {
-		if (!saveTimeout | force == true) {
+		if (!saveTimeout || force == true) {
 			if (saving != true) {
 				// Add timeout for saving
 				saveTimeout = window.setTimeout(saveFromEditor, 1000);
@@ -1347,3 +1354,7 @@ function editFullScreen(enter) {
 		html.classList.remove('fullscreen');
 	}
 }
+
+firetext.alert = function(message) {
+	alert(message);
+};
