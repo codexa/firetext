@@ -1330,13 +1330,6 @@ function editFullScreen(enter) {
 		} else if (document.documentElement.webkitRequestFullscreen) {
 			document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
 		}
-		
-		// Special editor UI
-		document.querySelector('#edit header:first-child').style.display = 'none';
-		document.getElementById('editTabs').setAttribute('data-items', '4.1');
-		document.querySelector('#editTabs #tabToolbarLeft').classList.add('visible');
-		document.querySelector('#editTabs #tabToolbarRight').classList.add('visible');
-		html.classList.add('fullscreen');
 	} else {
 		// Exit fullscreen
 		if (document.cancelFullScreen) {
@@ -1346,7 +1339,22 @@ function editFullScreen(enter) {
 		} else if (document.webkitCancelFullScreen) {
 			document.webkitCancelFullScreen();
 		}
-		
+	}
+}
+
+function onFullScreenChange() {
+	if (
+		document.fullscreenElement ||
+		document.mozFullScreenElement ||
+		document.webkitFullscreenElement
+	) {
+		// Special editor UI
+		document.querySelector('#edit header:first-child').style.display = 'none';
+		document.getElementById('editTabs').setAttribute('data-items', '4.1');
+		document.querySelector('#editTabs #tabToolbarLeft').classList.add('visible');
+		document.querySelector('#editTabs #tabToolbarRight').classList.add('visible');
+		html.classList.add('fullscreen');
+	} else {
 		// Regular editor UI
 		document.querySelector('#edit header:first-child').style.display = 'block';
 		document.getElementById('editTabs').setAttribute('data-items', '2');
@@ -1355,6 +1363,10 @@ function editFullScreen(enter) {
 		html.classList.remove('fullscreen');
 	}
 }
+
+document.addEventListener('fullscreenchange', onFullScreenChange);
+document.addEventListener('mozfullscreenchange', onFullScreenChange);
+document.addEventListener('webkitfullscreenchange', onFullScreenChange);
 
 firetext.alert = function(message) {
 	alert(message);
