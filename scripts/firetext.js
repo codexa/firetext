@@ -95,7 +95,7 @@ function initModules(callback) {
 	bugsenseInit();
 	
 	// Initialize urls
-	initURLs(function(){});
+	initURLs(function(){fixMenu();});
 	
 	// Find device type
 	checkDevice();
@@ -112,8 +112,8 @@ function initModules(callback) {
 	// Initialize extIcon
 	extIcon();	
 	
-    // Initalize recent docs
-    firetext.recents.init();
+	// Initalize recent docs
+	firetext.recents.init();
     
 	// Initialize sharing
 	cloud.init();
