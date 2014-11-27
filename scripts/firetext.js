@@ -679,7 +679,7 @@ function initEditor(callback) {
 			editorCommunication(function(){
 				callback();
 			});
-		}, true);
+		}, true, true);
 	}
 }
 

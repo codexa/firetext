@@ -109,7 +109,7 @@ if (!app) {
 				}
 			});
 		},
-		load: function (url, destinations, callback, store) {
+		load: function (url, destinations, callback, store, deep) {
 			console.log('Loading '+url);
 			
 			if (store) {
@@ -126,7 +126,7 @@ if (!app) {
 							}
 						});
 					}
-				});
+				}, deep);
 			} else {
 				fillFrame(url, destinations, function(e){
 					if (e) {
