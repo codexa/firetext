@@ -101,6 +101,7 @@ firetext.io.init = function (api, callback) {
 	locationDevice.setAttribute('data-l10n-id','internal-storage');
 	locationDevice.textContent = navigator.mozL10n.get('internal-storage');
 	locationSelect.appendChild(locationDevice);
+	updateAddDialog();
 }
 
 function disableInternalStorage() {

@@ -184,6 +184,7 @@ function initListeners() {
 	);	
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
+			event.preventDefault();
 			editDocs();
 		}
 	);
