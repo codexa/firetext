@@ -54,7 +54,7 @@ function nav2() {
 		
 		/* Remove this section when porting to other projects */	 
 		if (tempLoc == 'edit') {
-			if (tempAutozen !== false) {
+			if (tempAutozen !== false && deviceType === 'mobile') {
 				// Start Zen Mode if autozen == true
 				if (firetext.settings.get('autozen') == 'true' ||
 						tempAutozen === true) {
