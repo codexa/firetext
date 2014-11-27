@@ -69,6 +69,10 @@ html, body {
   background-color: #444;
 }
 
+section[data-type="sidebar"] > nav {
+  height: calc(100% - 5rem - 4rem);
+}
+
 section[data-type="sidebar"] [role="toolbar"] .icon-setting {
   padding-top: .3rem;
   font-size: 2.5rem;

@@ -87,13 +87,6 @@
     <header>
       <h1 data-l10n-id="menu">Menu</h1>
     </header>
-    <div role="toolbar">
-      <ul>
-       <li><button href="#" data-click="nav" data-click-location="settings" class="icon-setting"></button></li>
-      </ul>
-      <ul>
-      </ul>
-    </div>
     <nav>
       <h2 data-l10n-id="document-actions">Document actions</h2>
       <ul>
@@ -111,11 +104,19 @@
         <li><a href="#" data-click="browser" data-click-location="rate" data-l10n-id="rate-firetext">Rate Firetext</a></li>
       </ul>
     </nav>
+    <div role="toolbar">
+      <ul>
+       <li><button href="#" data-click="nav" data-click-location="settings" class="icon-setting"></button></li>
+      </ul>
+      <ul>
+      </ul>
+    </div>
   </section>
   
   <section role="region" id="welcome" 
   	data-swipe-left="sidebar" data-swipe-left-id="welcome" data-swipe-left-state="open" data-swipe-left-only="current" 
-  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="close" data-swipe-right-only="current">
+  	data-swipe-right="sidebar" data-swipe-right-id="welcome" data-swipe-right-state="close" data-swipe-right-only="current"
+    data-click="sidebar" data-click-id="welcome" data-click-state="close" data-click-only="current">
     <header>
       <menu type="toolbar">
         <button data-click="nav" data-click-location="add"><span class="icon icon-create"></span></button>
@@ -215,13 +216,6 @@
     <header>
       <h1 data-l10n-id="menu">Menu</h1>
     </header>
-    <div role="toolbar">
-     <ul>
-       <li><button class="icon-setting" href="#" data-click="nav" data-click-location="settings"></button></li>
-      </ul>
-      <ul>
-      </ul>
-    </div>
     <nav>
       <h2 data-l10n-id="document-actions">Document actions</h2>
       <ul>
@@ -241,11 +235,19 @@
         <li><a href="#" data-click="browser" data-click-location="rate" data-l10n-id="rate-firetext">Rate Firetext</a></li>
       </ul>
     </nav>
+    <div role="toolbar">
+     <ul>
+       <li><button class="icon-setting" href="#" data-click="nav" data-click-location="settings"></button></li>
+      </ul>
+      <ul>
+      </ul>
+    </div>
   </section>
   
   <section role="region" id="edit" 
   	data-swipe-left="sidebar" data-swipe-left-id="main" data-swipe-left-state="open"
-  	data-swipe-right="sidebar" data-swipe-right-id="main" data-swipe-right-state="close">
+  	data-swipe-right="sidebar" data-swipe-right-id="main" data-swipe-right-state="close"
+    data-click="sidebar" data-click-id="main" data-click-state="close">
     <header>
       <button data-click="closeFile"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
