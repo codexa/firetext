@@ -20,7 +20,7 @@ html, body {
     height: -moz-calc(100% - 5.2rem);
     height: -webkit-calc(100% - 5.2rem);
   height: calc(100% - 5.2rem);
-  overflow: scroll;
+  overflow: auto;
   width: 100%;
   border: none;
   outline: none;
