@@ -59,28 +59,97 @@
   
   /* Drawer/Sidebar */
   section[data-type="sidebar"] {
-    width: 250px;
+    width: auto;
     position: absolute;
-    top: 5rem;
+    top: 5.5rem;
+    margin: 0 4px;
+    padding-top: 5px;
     z-index: 1000;
     height: auto;
     transition: none;
+    background-color: #ffffff;
+    color: #1f1f1f;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    overflow: visible;
+  }
+  section[data-type="sidebar"]:before,
+  section[data-type="sidebar"]:after {
+    height: 0;
+    width: 0;
+    position: absolute;
+    border: solid transparent;
+    content: " ";
+    pointer-events: none;
+  }
+  section[data-type="sidebar"]:before {
+    border-bottom-color: #ccc;
+    bottom: 100%;
+    right: 9px;
+    border-width: 11px;
+    margin-left: -11px;
+  }
+  section[data-type="sidebar"]:after {
+    border-top-color: #fff;
+    border-width: 10px;
+    margin-left: -moz-calc(100% - 30px);
+    margin-left: -webkit-calc(100% - 30px);
+    margin-left: calc(100% - 30px);
+    margin-top: -20px;
   }
   .fullscreen section[data-type="sidebar"] {
-    top: 4rem;
+    top: 4.5rem;
+  }
+  section[data-type="sidebar"] > header:first-child {
+    display: none;
+  }
+  section[data-type="sidebar"] > nav > h2 {
+    background-color: transparent;
+    padding: 0 20px;
+    text-indent: 0;	  
+  }
+  section[data-type="sidebar"] > nav > ul > li:active {
+    background-color: #efefef;
+  }
+  section[data-type="sidebar"] > nav > ul > li > a {
+    padding: 0 20px;
+    text-indent: 0;
   }
   section[data-type="sidebar"] [role="toolbar"] {
-    width: 250px;
+    width: 100%;
     position: static;
+    background-color: #efefef;
+    color: inherit;
+    margin-top: 10px;
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    overflow: hidden;
   }
   section[data-type="sidebar"] [role="toolbar"] button {
     margin: 0;
   }
-  [data-state="drawer"].current, [data-state="drawer"][data-position="right"].current {
+  section[data-type="sidebar"] [role="toolbar"] button:active,
+  section[data-type="sidebar"] [role="toolbar"] button.active {
+    background-color: #ccc; 
+  }
+  [data-state="drawer"].current,
+  [data-state="drawer"][data-position="right"].current,
+  [dir="rtl"] [data-state="drawer"].current,
+  [dir="rtl"] [data-state="drawer"][data-position="right"].current {
       -moz-transform: translateX(0) !important;
       -webkit-transform: translateX(0) !important;
       -o-transform: translateX(0) !important;
       -ms-transform: translateX(0) !important;    
     transform: translateX(0) !important;   
+  }
+  /* RTL */
+  [dir="rtl"] section[data-type="sidebar"]:before {
+    right: auto;
+    left: 9px;
+    margin-left: 0;
+  }
+  [dir="rtl"] section[data-type="sidebar"]:after {
+    margin-left: 10px;
   }
 }

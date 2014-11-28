@@ -199,6 +199,31 @@
   color: #dfdfdf;
 }
 
+@media (min-width: 767px) {
+  .night section[data-type="sidebar"] {
+    border-color: #555;    
+  }
+  .night section[data-type="sidebar"]:before {
+    border-bottom-color: #555;
+  }
+  .night section[data-type="sidebar"]:after {
+    border-top-color: #161616;
+  }
+  .night section[data-type="sidebar"] > nav > h2 {
+    background-color: transparent;
+  }  
+  .night section[data-type="sidebar"] > nav > ul > li:active {
+    background-color: #333;
+  }
+  .night section[data-type="sidebar"] [role="toolbar"] {
+    background-color: #222;
+  }
+  .night section[data-type="sidebar"] [role="toolbar"] button:active,
+  .night section[data-type="sidebar"] [role="toolbar"] button.active {
+    background-color: #555;
+  }
+}
+
 
 /* Tabs */
 .night [role="tablist"] {
