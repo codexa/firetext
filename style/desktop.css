@@ -143,7 +143,6 @@
       -ms-transform: translateX(0) !important;    
     transform: translateX(0) !important;   
   }
-  /* RTL */
   [dir="rtl"] section[data-type="sidebar"]:before {
     right: auto;
     left: 9px;
@@ -151,5 +150,9 @@
   }
   [dir="rtl"] section[data-type="sidebar"]:after {
     margin-left: 10px;
+  
+  /* Settings */
+  #settings #autozen-enabled {
+    display: none;
   }
 }
