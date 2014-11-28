@@ -83,4 +83,9 @@
       -ms-transform: translateX(0) !important;    
     transform: translateX(0) !important;   
   }
+  
+  /* Settings */
+  #settings #autozen-enabled {
+    display: none;
+  }
 }
