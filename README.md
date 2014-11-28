@@ -2,13 +2,15 @@
 ## About
 Firetext is an open-source word processor for Firefox OS, and is [available on the Firefox Marketplace](https://marketplace.firefox.com/app/firetext).
 
-You can run Firetext on a Firefox OS device, on a [Firefox OS simulator](https://ftp.mozilla.org/pub/mozilla.org/labs/fxos-simulator/), or on the Firefox [App Manager](https://developer.mozilla.org/Firefox_OS/Using_the_App_Manager)/[WebIDE](https://developer.mozilla.org/docs/Tools/WebIDE).
+You can run Firetext on a Firefox OS device, on a [Firefox OS simulator](https://ftp.mozilla.org/pub/mozilla.org/labs/fxos-simulator/),
+or in Firefox/Chrome with a web server. Please see [our documentation](https://github.com/codexa/firetext/wiki/Get-Coding#set-up-a-development-environment) for instructions.
 
 ## Contribute
 Firetext is kept alive by contributions from the community. Please donate skills, time, or money to make this project better.
 
 ### Hack
-Is the open web is your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page, and help us bring more productivity power to Firefox OS users!
+Is the open web is your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page,
+and learn how to bring more productivity power to Firefox OS users!
 
 ### Localize
 Do you bridge the gap between cultures? Localize Firetext on [Transifex](https://www.transifex.com/projects/p/firetext/), and expand our global impact.
