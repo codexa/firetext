@@ -70,6 +70,8 @@ html, body {
 }
 
 section[data-type="sidebar"] > nav {
+    height: -moz-calc(100% - 5rem - 4rem);
+    height: -webkit-calc(100% - 5rem - 4rem);
   height: calc(100% - 5rem - 4rem);
 }
 
