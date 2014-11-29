@@ -57,6 +57,22 @@ var mainClosure = function() {
 				});
 			});
 
+			// Keyboard shortcuts
+			doc.addEventListener('keypress', function (event) {
+				if((event.ctrlKey || event.metaKey) && !event.shiftKey) {
+					if(event.which === 98) { // b
+						document.execCommand('bold');
+					} else if(event.which === 105) { // i
+						document.execCommand('italic');
+					} else if(event.which === 117) { // u
+						document.execCommand('underline');
+					} else {
+						return;
+					}
+					event.preventDefault();
+				}
+			});
+
 			// initialize modules/register handlers
 			// night mode
 			initNight(doc, parentMessageProxy);
