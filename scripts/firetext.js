@@ -169,12 +169,6 @@ function initListeners() {
 		'mouseenter', function mouseDown(event) {
 			editor.focus();
 		}
-	);	
-	welcomeDocsList.addEventListener(
-		'contextmenu', function contextmenu(event) {
-			event.preventDefault();
-			editDocs();
-		}
 	);
 }
 
@@ -1378,13 +1372,6 @@ function onFullScreenChange() {
 }
 
 document.addEventListener('fullscreenchange', onFullScreenChange);
-document.addEventListener('mozfullscreenchange', onFullScreenChange);
-document.addEventListener('webkitfullscreenchange', onFullScreenChange);
-
-firetext.alert = function(message) {
-	alert(message);
-};
-enChange);
 document.addEventListener('mozfullscreenchange', onFullScreenChange);
 document.addEventListener('webkitfullscreenchange', onFullScreenChange);
 
