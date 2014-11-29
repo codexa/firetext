@@ -1371,6 +1371,14 @@ document.addEventListener('fullscreenchange', onFullScreenChange);
 document.addEventListener('mozfullscreenchange', onFullScreenChange);
 document.addEventListener('webkitfullscreenchange', onFullScreenChange);
 
+function onFullScreenError() {
+	tempAutozen = false;
+}
+
+document.addEventListener('fullscreenerror', onFullScreenError);
+document.addEventListener('mozfullscreenerror', onFullScreenError);
+document.addEventListener('webkitfullscreenerror', onFullScreenError);
+
 firetext.alert = function(message) {
 	alert(message);
 };
