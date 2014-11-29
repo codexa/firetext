@@ -109,8 +109,11 @@ function initModules(callback) {
 	// Initialize Gestures
 	initGestures();
 	
+	// Initialize night
+	night();
+	
 	// Initialize extIcon
-	extIcon();	
+	extIcon();
 	
 	// Initalize recent docs
 	firetext.recents.init();
