@@ -103,7 +103,6 @@ firetext.settings.init = function () {
 		nightmodeSelect.value = '2';
 		if (firetext.settings.get('nightmode') != 'auto') {
 			firetext.settings.save('nightmode', 'auto');
-			night();
 		} 
 	}
 	nightmodeSelect.addEventListener('change', function () {
