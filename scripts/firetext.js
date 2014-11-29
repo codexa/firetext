@@ -121,6 +121,9 @@ function initModules(callback) {
 	// Initialize sharing
 	cloud.init();
 	
+	// Initialize night mode
+	night();
+	
 	// Initialize IO
 	firetext.io.init(null, function() {
 		callback();
