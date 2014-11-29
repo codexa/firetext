@@ -201,13 +201,17 @@
 
 @media (min-width: 767px) {
   .night section[data-type="sidebar"] {
+    background-color: transparent;
+  }
+  .night section[data-type="sidebar"] > nav {
+    background: #161616;
     border-color: #555;    
   }
-  .night section[data-type="sidebar"]:before {
+  .night section[data-type="sidebar"] > nav:before {
     border-bottom-color: #555;
   }
-  .night section[data-type="sidebar"]:after {
-    border-top-color: #161616;
+  .night section[data-type="sidebar"] > nav:after {
+    border-bottom-color: #161616;
   }
   .night section[data-type="sidebar"] > nav > h2 {
     background-color: transparent;
@@ -217,6 +221,7 @@
   }
   .night section[data-type="sidebar"] [role="toolbar"] {
     background-color: #222;
+    border-color: #555;    
   }
   .night section[data-type="sidebar"] [role="toolbar"] button:active,
   .night section[data-type="sidebar"] [role="toolbar"] button.active {
