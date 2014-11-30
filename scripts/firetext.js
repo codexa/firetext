@@ -269,7 +269,14 @@ function updateAddDialog() {
 		// Enable elements
 		document.getElementById('add-dialog-create-button').setAttribute('style', 'pointer-events: auto;');
 		document.querySelector('#add [role="main"]').style.display = 'block';
-	
+		
+		// Hide location select if only one option exists
+		if (locationSelect.length === 1) {
+			locationLegend.style.display = 'none';
+		} else {
+			locationLegend.style.display = 'block';			
+		}
+		
 		// Remove notice if present
 		if (document.getElementById('no-storage-notice')) {
 			document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
