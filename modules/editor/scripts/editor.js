@@ -7,6 +7,15 @@
 
 // Closure to isolate code from tampering by scripts in document
 var mainClosure = function() {
+	function updatePaddingBottom() {
+		if(doc.innerHTML === '' || doc.innerHTML === ' ') {
+			doc.innerHTML = '<br>';
+		}
+		var paddingBottom = Math.max(65, window.innerHeight - (doc.offsetHeight - parseInt(doc.style.paddingBottom, 10)));
+		doc.style.paddingBottom = paddingBottom + 'px';
+		doc.style.marginBottom = -paddingBottom + 'px';
+	}
+	
 	// document to be edited
 	var doc;
 	
@@ -32,7 +41,7 @@ var mainClosure = function() {
 			doc = document.createElement('DIV');
 			doc.setAttribute('contentEditable', 'true');
 			doc.id = 'tempEditDiv';
-			doc.setAttribute('style','position: relative; border: none; padding: 10px 10px 65px; font-size: 20px; outline: none; min-height: 100%; box-sizing: border-box; word-wrap: break-word;');
+			doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; word-wrap: break-word;');
 			document.body.appendChild(doc);
 			//doc = document.getElementById('tempEditDiv');
 			document.execCommand('enableObjectResizing', false, 'true');
@@ -72,12 +81,18 @@ var mainClosure = function() {
 					event.preventDefault();
 				}
 			});
+			
+			// Update padding-bottom
+			doc.addEventListener('input', updatePaddingBottom);
+			window.addEventListener('resize', updatePaddingBottom);
 
 			// initialize modules/register handlers
 			// night mode
 			initNight(doc, parentMessageProxy);
 			// editor I/O
-			initDocIO(doc, parentMessageProxy);
+			initDocIO(doc, parentMessageProxy, function loadCallback() {
+				updatePaddingBottom();
+			});
 			// format document
 			parentMessageProxy.registerMessageHandler(function(e) { document.execCommand(e.data.sCmd, false, e.data.sValue); }, "format")
 
