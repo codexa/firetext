@@ -5,7 +5,7 @@
 
 'use strict'
 
-function initDocIO(doc, messageProxy) {
+function initDocIO(doc, messageProxy, loadCallback) {
 	/* 0.4
 	var docxeditor;
 	*/
@@ -43,6 +43,7 @@ function initDocIO(doc, messageProxy) {
 				break;
 		}
 		watchDocument(filetype);
+		loadCallback();
 	}
 
 	messageProxy.registerMessageHandler(function(e) {
