@@ -98,6 +98,17 @@ function nav2() {
 		} else if (tempLoc == 'open') {
 			updateDocLists(['cloud']);		
 		}
+		
+		// Focus filename input
+		if (tempLoc == 'add') {
+			var onTransitionEnd = function () {
+				document.getElementById('createDialogFileName').focus();
+				tempElement.removeEventListener('transitionend', onTransitionEnd);
+				tempElement.removeEventListener('webkitTransitionEnd', onTransitionEnd);
+			};
+			tempElement.addEventListener('transitionend', onTransitionEnd);
+			tempElement.addEventListener('webkitTransitionEnd', onTransitionEnd);
+		}
 		/* End of customized section */
 	}
 }

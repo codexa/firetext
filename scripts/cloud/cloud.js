@@ -94,8 +94,10 @@ cloud.init = function () {
 
 cloud.updateDocLists = function (lists) {
 	if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
+		spinner();
 		cloud.dropbox.enumerate('/Documents/', function(DOCS) {
 			buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "dropbox-documents-found", 'dropbox');
+			spinner('hide');
 		});
 	}
 }

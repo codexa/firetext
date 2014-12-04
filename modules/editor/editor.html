@@ -39,6 +39,46 @@
 
   <!-- Main Script -->
   <script type="text/javascript" src="scripts/editor.js"></script>
+
+  <!-- Styles -->
+  <style>
+  body:before,
+  body:after,
+  #tempEditDiv:before,
+  #tempEditDiv:after {
+    display: block;
+    position: absolute;
+    content: " ";
+    box-sizing: border-box;
+    width: 8px;
+    height: 8px;
+    margin: 2px;
+    border: 1px solid #999;
+    pointer-events: none;
+  }
+  body:before {
+    border-top-width: 0;
+    border-left-width: 0;
+  }
+  body:after {
+    margin-top: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+  }
+  #tempEditDiv:before {
+    top: 0;
+    right: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+  }
+  #tempEditDiv:after {
+    right: 0;
+    margin-top: 0;
+    margin-bottom: -8px;
+    border-bottom-width: 0;
+    border-right-width: 0;
+  }
+  </style>
 </head>
 <body>
 
