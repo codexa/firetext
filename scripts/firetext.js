@@ -313,8 +313,10 @@ function updateDocLists(lists) {
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
 		// Internal
+		spinner();
 		firetext.io.enumerate('/', function(DOCS) {
 			buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "documents-found", 'internal');
+			spinner('hide');
 		});
 	}
 		
