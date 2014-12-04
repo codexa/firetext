@@ -301,6 +301,7 @@ function bugsenseInit() {
 /* Doc lists
 ------------------------*/
 function updateDocLists(lists) {
+  spinner();
 	if (!lists) {
 		lists = [];
 		lists.push('all');
@@ -322,6 +323,7 @@ function updateDocLists(lists) {
 		// Cloud
 		cloud.updateDocLists(lists);
 	}
+  spinner('hide');
 }
 
 function completeHTML(tableHTML) {
