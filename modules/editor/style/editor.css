@@ -5,33 +5,27 @@ html {
 	position: relative;
 }
 
-.night {
+[_firetext_night] {
 	background-color: #000000;
 	color: #ffffff;
 }
 
 body {
-	padding: 0;
-	margin: 0 0 60px;
-	background-color: #ffffff;
-}
-
-.night body {
-	background-color: #000000;
-}
-
-#tempEditDiv {
-	border: none;
-	padding: 10px;
+	padding: 10px 10px 65px;
+	margin: 0;
 	font-size: 20px;
 	outline: none;
 	word-wrap: break-word;
 }
 
+[_firetext_night] body {
+	background-color: #000000;
+}
+
+html:before,
+html:after,
 body:before,
-body:after,
-#tempEditDiv:before,
-#tempEditDiv:after {
+body:after {
 	display: block;
 	position: absolute;
 	content: " ";
@@ -43,25 +37,25 @@ body:after,
 	pointer-events: none;
 }
 
-body:before {
+html:before {
 	top: 10px;
 	border-top-width: 0;
 	border-left-width: 0;
 }
 
-body:after {
-	margin-top: -10px;
+html:after {
+	margin-top: -65px;
 	border-bottom-width: 0;
 	border-left-width: 0;
 }
 
-#tempEditDiv:before {
+body:before {
 	right: 0;
 	border-top-width: 0;
 	border-right-width: 0;
 }
 
-#tempEditDiv:after {
+body:after {
 	right: 0;
 	margin-top: 0;
 	border-bottom-width: 0;
@@ -75,27 +69,32 @@ body:after {
 		background-color: #efefef;
 	}
 	
-	.night {
+	[_firetext_night] {
 		background-color: #111111;
 	}
 	
 	body {				
 		border: 1px solid #ddd;
 		box-shadow: 0 0 5px #ddd;
-		margin-bottom: 0;
+		padding-bottom: 10px;
+		background-color: #ffffff;
 	}
 	
-	.night body {
+	[_firetext_night] body {
 		border-color: #080808;
 		box-shadow: none;
 	}
 	
-	body:before,
-	#tempEditDiv:before {
+	html:before,
+	body:before {
 		top: 75px; 
 	}
 	
-	#tempEditDiv {
+	html:after {
+		margin-top: -10px;
+	}
+	
+	body {
 		margin: -1px;
 	}
 }

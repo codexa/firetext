@@ -20,7 +20,8 @@ firetext.parsers.plain.parse = function (data, type) {
 	// Some code to convert TXT into something else
 	var output = "";
 	if (type == "HTML") {
-		output = data.replace(/</gi, '<pre><code>&lt;')
+		output = '<!DOCTYPE html>' + // Chrome html height
+					data.replace(/</gi, '<pre><code>&lt;')
 					 .replace(/>/gi, '&gt;</code></pre>')
 					 .replace(/&amp;/gi, '&amp;amp;')
 					 .replace(/\n/gi, '<br>');

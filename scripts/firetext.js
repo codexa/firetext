@@ -183,11 +183,6 @@ function initListeners() {
 			}
 		}
 	);
-	editWindow.addEventListener(
-		'mouseenter', function mouseDown(event) {
-			editor.focus();
-		}
-	);	
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
@@ -700,9 +695,13 @@ function initEditor(callback) {
 function editorCommunication(callback) {
 	editor.onload = null;
 	editor.onload = function() {
-		var editorMessageChannel = new MessageChannel();
+		// Stop listening to editor
+		if(editorMessageProxy) editorMessageProxy.setRecv(null);
+		
 		// See: scripts/messages.js
-		editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
+		editorMessageProxy = new MessageProxy();
+		editorMessageProxy.setSend(editor.contentWindow);
+		editorMessageProxy.setRecv(window);
 		// Successful initialization
 		editorMessageProxy.registerMessageHandler(function(e) {
 			// Initialize Raw Editor
@@ -732,8 +731,11 @@ function editorCommunication(callback) {
 				processActions('data-blur', editor);
 			}
 		}, "focus");
-		Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
-		editorMessageProxy.getPort().start();
+		editorMessageProxy.postMessage({command: "init"});
+		
+		editor.onload = function() {
+			editorMessageProxy.setSend(editor.contentWindow);
+		}
 	}
 }
 
@@ -744,7 +746,7 @@ function watchDocument(filetype) {
 		rawEditor.addEventListener('input', function() {
 			fileChanged = true;
 			var callbackKey = editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, null, true);
-			editorMessageProxy.getPort().postMessage({
+			editorMessageProxy.postMessage({
 				command: "load",
 				content: rawEditor.textContent,
 				filetype: ".html",
@@ -915,7 +917,7 @@ function deleteSelected(confirmed) {
 /* Format
 ------------------------*/ 
 function formatDoc(sCmd, sValue) {
-	editorMessageProxy.getPort().postMessage({
+	editorMessageProxy.postMessage({
 		command: "format",
 		sCmd: sCmd,
 		sValue: sValue
@@ -973,7 +975,7 @@ function updateToolbar() {
 				strikethroughCheckbox.checked = false;
 			}
 		}, null, true);
-		editorMessageProxy.getPort().postMessage({
+		editorMessageProxy.postMessage({
 			command: "query-command-states",
 			commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough"],
 			key: key
@@ -1187,7 +1189,7 @@ function processActions(eventAttribute, target) {
 					}
 					regions.nav('hyperlink');
 				}, null, true);
-				editorMessageProxy.getPort().postMessage({
+				editorMessageProxy.postMessage({
 					command: "query-command-states",
 					commands: ["createLink"],
 					key: key

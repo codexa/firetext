@@ -15,9 +15,6 @@
   <script type="text/javascript" src="scripts/editor_night.js"></script>
   
   <!-- Lib -->
-  <script type="text/javascript" src="../../scripts/lib/kamino.js"></script>
-  <script type="text/javascript" src="../../scripts/lib/uuid.core.js"></script>
-  <script type="text/javascript" src="../../scripts/lib/message_channel.js"></script>
   <script type="text/javascript" src="../../scripts/lib/prettify.js"></script>
   <script type="text/javascript" src="../../scripts/lib/lang-css.js"></script>
   <script type="text/javascript" src="../../scripts/lib/lang-wiki.js"></script>
@@ -36,13 +33,16 @@
   <script type="text/javascript" src="scripts/docIO.js"></script>
 
   <!-- Message Communication Proxy -->
-  <script type="text/javascript" src="../../scripts/messages.js"></script>
+  <script data-for-content type="text/javascript" src="../../scripts/messages.js"></script>
 
   <!-- Main Script -->
   <script type="text/javascript" src="scripts/editor.js"></script>
 
-  <!-- Styles -->
-  <link rel="stylesheet" type="text/css" href="style/editor.css"/>
+  <!-- Content styles -->
+  <link data-for-content type="await/content" rel="stylesheet" href="style/editor.css"/>
+  
+  <!-- Content scripts -->
+  <script data-for-content type="await/content" src="scripts/contentscript.js"></script>
 </head>
 <body>
 

@@ -5,30 +5,34 @@
 
 'use strict'
 
-function initDocIO(doc, messageProxy, loadCallback) {
+function initDocIO(document, messageProxy, loadCallback) {
 	/* 0.4
 	var docxeditor;
 	*/
 	var filetype;
 
-	function watchDocument(filetype) {
-		// Add listener to update raw
-		doc.addEventListener('input', function() {
-			messageProxy.getPort().postMessage({
-				command: "doc-changed",
-				html: doc.innerHTML,
-				filetype: filetype
-			});
-		});
+	function getHTML() {
+		/*** This function is duplicated in contentscript.js ***/
+		var doctype = document.doctype;
+		var doctypeString = '<!DOCTYPE '
+			+ doctype.name
+			+ (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '')
+			+ (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
+			+ (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
+			+ '>';
+		return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '');
+	}
+	function getText() {
+		return document.documentElement.textContent;
 	}
 
 	function load(content, ft) {
 		filetype = ft;
-		doc.innerHTML = '';
+		document.open();
 		switch (filetype) {
 			case ".txt":
 				content = firetext.parsers.plain.parse(content, "HTML");
-				doc.innerHTML = content;
+				document.write(content);
 				break;
 			/* 0.4
 			case ".docx":
@@ -39,11 +43,13 @@ function initDocIO(doc, messageProxy, loadCallback) {
 			*/
 			case ".html":
 			default:
-				doc.innerHTML = content;
+				if(!/<!DOCTYPE/i.test(content)) content = '<!DOCTYPE html>' + content;
+				document.write(content);
 				break;
 		}
-		watchDocument(filetype);
-		loadCallback();
+		document.close();
+		
+		loadCallback(filetype);
 	}
 
 	messageProxy.registerMessageHandler(function(e) {
@@ -51,11 +57,11 @@ function initDocIO(doc, messageProxy, loadCallback) {
 		var type;
 		switch (filetype) {
 			case ".html":
-				content = doc.innerHTML;
+				content = getHTML();
 				type = "text\/html";
 				break;
 			case ".txt":
-				content = firetext.parsers.plain.encode(doc.innerHTML, "HTML");
+				content = firetext.parsers.plain.encode(getHTML(), "HTML");
 				type = "text\/plain";
 				break;
 			/* 0.4
@@ -65,12 +71,12 @@ function initDocIO(doc, messageProxy, loadCallback) {
 				break;
 			*/
 			default:
-				content = doc.textContent;
+				content = getText();
 				break;
 		}
 		
 		var contentView = new StringView(content);
-		messageProxy.getPort().postMessage({
+		messageProxy.postMessage({
 			command: e.data.key,
 			content: contentView.toBase64(),
 			type: type
@@ -80,7 +86,7 @@ function initDocIO(doc, messageProxy, loadCallback) {
 	messageProxy.registerMessageHandler(function(e) {
 		load(e.data.content, e.data.filetype);
 		if(e.data.key) {
-			messageProxy.getPort().postMessage({
+			messageProxy.postMessage({
 				command: e.data.key
 			});
 		}
@@ -94,7 +100,7 @@ function initDocIO(doc, messageProxy, loadCallback) {
 			commandStates[commands[i]].state = document.queryCommandState(commands[i]);
 			commandStates[commands[i]].value = document.queryCommandValue(commands[i]);
 		}
-		messageProxy.getPort().postMessage({
+		messageProxy.postMessage({
 			command: e.data.key,
 			commandStates: commandStates
 		})
