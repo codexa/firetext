@@ -43,7 +43,7 @@ if (!app) {
 											var scriptText = this.response;
 											scriptText = scriptText.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin ? window.location.origin : window.location.protocol + "//" + window.location.host);
 											inlineScript.type = "text/javascript";
-											inlineScript.src = "data:text/javascript;base64," + btoa(scriptText);
+											inlineScript.src = "data:text/javascript;base64," + btoa(scriptText + '\n//# sourceURL=' + scriptURL);
 											scripts[scriptURL][0].parentNode.replaceChild(inlineScript, scripts[scriptURL][0]);
 											for (var i = 1; i < scripts[scriptURL].length; i++) {
 												scripts[scriptURL][i].parentNode.removeChild(scripts[scriptURL][i]);
