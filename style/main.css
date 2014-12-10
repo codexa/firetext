@@ -108,6 +108,17 @@ section > header:first-child .icon.icon-close {
   overflow: hidden;
 }
 
+section[data-type="sidebar"] > nav > ul > li {
+  position: relative;
+}
+section[data-type="sidebar"] > nav > ul > li > iframe {
+  border: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
 
 /* action_menu.css */
 form[role=dialog] {
