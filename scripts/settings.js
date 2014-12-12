@@ -17,7 +17,6 @@ firetext.settings.init = function () {
 	// Select elements
 	var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
 	var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
-	var autozenEnabled = document.querySelector('#autozen-enabled-switch');
 	var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
 	var languageSelect = document.querySelector('#language-select');
 	var nightmodeSelect = document.querySelector('#nightmode-select');
@@ -50,24 +49,9 @@ firetext.settings.init = function () {
 		firetext.settings.save('autosave', this.checked);
 		if (firetext.settings.get('autosave') != 'false') {
 			document.getElementById('editorSaveButton').style.display = 'none';
-			document.getElementById('zenSaveButton').style.display = 'none';
 		} else {
 			document.getElementById('editorSaveButton').style.display = 'inline-block';
-			document.getElementById('zenSaveButton').style.display = 'inline-block';
 		}
-	}
-
-	// Autozen
-	if (firetext.settings.get('autozen') == 'false') {
-		autozenEnabled.removeAttribute('checked');
-	} else {
-		autozenEnabled.setAttribute('checked', '');
-		if (!firetext.settings.get('autozen')) {
-			firetext.settings.save('autozen', 'true');
-		}
-	}
-	autozenEnabled.onchange = function () {
-		firetext.settings.save('autozen', this.checked);
 	}
 
 	// Dropbox

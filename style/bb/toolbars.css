@@ -37,6 +37,7 @@
   padding: 0;
   border-radius: 0;
   text-indent: -100%;
+  margin: 0;
 }
 
 [role="toolbar"] button:active, 

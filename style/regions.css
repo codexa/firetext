@@ -21,11 +21,6 @@ section[role="region"], section[role="dialog"] {
 
 section[role="region"] {
   visibility: hidden;
-    -moz-transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
-    -o-transform: translateX(-100%); 
-    -ms-transform: translateX(-100%); 
-  transform: translateX(-100%);
 }
 
 section[role="region"].current,
@@ -33,19 +28,6 @@ section[role="region"].current,
 [role="dialog"].parent {
   visibility: visible;
   z-index: 100; 
-    -moz-transform: none;
-    -webkit-transform: none;
-    -o-transform: none;
-    -ms-transform: none; 
-  transform: none;
-}
-
-section[role="region"].current ~ section[role="region"] {  
-    -moz-transform: translateX(100%);
-    -webkit-transform: translateX(100%);
-    -o-transform: translateX(100%);
-    -ms-transform: translateX(100%);
-  transform: translateX(100%);
 }
 
 section[role="dialog"] {
@@ -55,10 +37,6 @@ section[role="dialog"] {
     -o-transform: translateY(100%);
     -ms-transform: translateY(100%);
   transform: translateY(100%);
-}
-
-section[role="dialog"] + .background {
-  display: none;
 }
 
 section[role="dialog"].current {
@@ -71,86 +49,11 @@ section[role="dialog"].current {
   transform: none;
 }
 
-/* Handle sidebars */
+/* Sidebars */
 [data-type="sidebar"] {
   visibility: collapse;
-    -moz-transition: .4s visibility 0s;
-    -webkit-transition: .4s visibility 0s;
-    -o-transition: 4s visibility 0s;
-  transition: .4s visibility 0s;
 }
 
 [data-type="sidebar"].active {
   visibility: visible;
-    -moz-transition: 0s visibility 0s;
-    -webkit-transition: 0s visibility 0s;
-    -o-transition: 0s visibility 0s;
-  transition: 0s visibility 0s;
-}
-
-[data-state="drawer"].current {
-    -moz-transform: translateX(80%) !important;
-    -webkit-transform: translateX(80%) !important;
-    -o-transform: translateX(80%) !important;
-    -ms-transform: translateX(80%) !important;
-  transform: translateX(80%) !important;
-}
-
-[data-state="drawer"].current > *:not(.drawerEnabled) {
-  pointer-events: none;   
-}
-
-[data-state="drawer"].current .drawerEnabled {
-  pointer-events: all;
-}
-
-[data-state="drawer"][data-position="right"].current {
-    -moz-transform: translateX(-80%) !important;
-    -webkit-transform: translateX(-80%) !important;
-    -o-transform: translateX(-80%) !important;
-    -ms-transform: translateX(-80%) !important;
-  transform: translateX(-80%) !important;
-}
-
-
-/* RTL */
-[dir="rtl"] section[role="region"] {
-    -moz-transform: translateX(100%);
-    -webkit-transform: translateX(100%);
-    -o-transform: translateX(100%); 
-    -ms-transform: translateX(100%); 
-  transform: translateX(100%);
-}
-
-[dir="rtl"] section[role="region"].current,
-[dir="rtl"] [role="region"].parent {
-    -moz-transform: none;
-    -webkit-transform: none;
-    -o-transform: none;
-    -ms-transform: none; 
-  transform: none;
-}
-
-[dir="rtl"] section[role="region"].current ~ section[role="region"] {  
-    -moz-transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
-    -o-transform: translateX(-100%);
-    -ms-transform: translateX(-100%);
-  transform: translateX(-100%);
-}
-
-[dir="rtl"] [data-state="drawer"].current {
-    -moz-transform: translateX(-80%) !important;
-    -webkit-transform: translateX(-80%) !important;
-    -o-transform: translateX(-80%) !important;
-    -ms-transform: translateX(-80%) !important;
-  transform: translateX(-80%) !important;
-}
-
-[dir="rtl"] [data-state="drawer"][data-position="right"].current {
-    -moz-transform: translateX(80%) !important;
-    -webkit-transform: translateX(80%) !important;
-    -o-transform: translateX(80%) !important;
-    -ms-transform: translateX(80%) !important;
-  transform: translateX(80%) !important;
 }
