@@ -95,7 +95,13 @@ function initModules(callback) {
 	bugsenseInit();
 	
 	// Initialize urls
-	initURLs(function(){fixMenu();});
+	initURLs(function(){
+		// Modify links in menu
+		fixMenu();		
+    
+		// Initialize cloud services
+		cloud.init();
+	});
 	
 	// Find device type
 	checkDevice();
@@ -117,9 +123,6 @@ function initModules(callback) {
 	
 	// Initalize recent docs
 	firetext.recents.init();
-    
-	// Initialize sharing
-	cloud.init();
 	
 	// Initialize IO
 	firetext.io.init(null, function() {
