@@ -36,7 +36,7 @@ var mainClosure = function() {
 		}
 		if(e.data.command === "init" && e.ports.length) {
 			// Initialize Designer
-			document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0;');
+			document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0 auto; max-width: 690px; position: relative;');
 			document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
 			doc = document.createElement('DIV');
 			doc.setAttribute('contentEditable', 'true');
