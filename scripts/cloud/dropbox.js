@@ -50,7 +50,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
 					entries[i].push('');
 					
 					// Only get documents
-					if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm') { // 0.4 && entries[i][2] != '.docx') {
+					if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.odt') { // 0.4 && entries[i][2] != '.docx') {
 						entries.splice(i, 1);
 						i = (i - 1);
 					}
@@ -77,9 +77,11 @@ cloud.dropbox.enumerate = function (directory, callback) {
 	}
 };
 
-cloud.dropbox.load = function (path, callback) {
+cloud.dropbox.load = function (path, filetype, callback) {
 	if (cloud.dropbox.client && path) {
-		cloud.dropbox.client.readFile(path, function(e, d) {
+		cloud.dropbox.client.readFile(path, {
+			binary: filetype === '.odt',
+		}, function(e, d) {
 			// Hide spinner
 			spinner('hide');
 					

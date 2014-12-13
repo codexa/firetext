@@ -36,11 +36,12 @@ var mainClosure = function() {
 		
 		var content_scripts = document.querySelectorAll('script[data-for-content]');
 		
-		initDocIO(document, parentMessageProxy, function loadCallback(filetype) {
+		initDocIO(document, parentMessageProxy, function loadCallback(filetype, odtdoc) {
 			window.mainOrigin = mainOrigin;
 			window.parentMessageProxy = parentMessageProxy;
 			window.initNight = initNight;
 			window.filetype = filetype;
+			window.odtdoc = odtdoc;
 			
 			// Content styles
 			[].forEach.call(content_styles, function(content_style) {
@@ -58,6 +59,7 @@ var mainClosure = function() {
 			delete window.parentMessageProxy;
 			delete window.initNight;
 			delete window.filetype;
+			delete window.odtdoc;
 		});
 		
 		// success

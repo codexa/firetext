@@ -3,6 +3,14 @@
     if(document.body.children.length === 0) {
       document.body.appendChild(document.createElement('br'));
     }
+    if(filetype === '.odt') {
+      try {
+        odtdoc.setHTML(getHTML());
+      } catch(e) {
+        document.execCommand('undo');
+        evt.stopImmediatePropagation();
+      }
+    }
   }
   
   var parentMessageProxy = new MessageProxy();
@@ -60,12 +68,12 @@
   function getHTML() {
     /*** This function is duplicated in docIO.js ***/
     var doctype = document.doctype;
-    var doctypeString = '<!DOCTYPE '
+    var doctypeString = doctype ? '<!DOCTYPE '
       + doctype.name
       + (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '')
       + (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
       + (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
-      + '>';
+      + '>' : '';
     return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '');
   }
 
@@ -77,4 +85,4 @@
       filetype: filetype
     });
   });
-})(mainOrigin, parentMessageProxy, initNight, filetype);
+})(mainOrigin, parentMessageProxy, initNight, filetype, odtdoc);

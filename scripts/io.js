@@ -158,7 +158,8 @@ firetext.io.enumerate = function (directory, callback) {
 				// Don't get any files but docs
 				if (!thisFile[1] |
 						 thisFile[3] != 'text/html' &&
-						 thisFile[3] != 'text/plain') {
+						 thisFile[3] != 'text/plain' &&
+						 thisFile[2] != '.odt') {
 					cursor.continue();
 					return;				 
 				}
@@ -215,7 +216,7 @@ firetext.io.enumerate = function (directory, callback) {
 							fileparts = results[i].name.split(".");
 							filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
 							filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-							if (filetype !== ".txt" && filetype !== ".html") {
+							if (filetype !== ".txt" && filetype !== ".html" && filetype !== ".odt") {
 								continue;
 							}
 							FILES.push([directory, filename, filetype]);
@@ -378,6 +379,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 			toolbar.classList.remove('hidden');
 			break;
 		case ".txt":
+		case ".odt":
 		default:
 			document.getElementById('edit-bar').style.display = 'none';
 			editor.classList.add('no-toolbar');
@@ -396,6 +398,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				});
 				switch (filetype) {
 					case ".txt":
+					case ".odt":
 						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
 						tabRaw.classList.add('hidden-item');
 						regions.tab(document.querySelector('#editTabs'), 'design');
@@ -561,7 +564,11 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				var file = req.result;
 				var reader = new FileReader();
 				
-				reader.readAsText(file);
+				if (filetype == ".odt") {
+					reader.readAsArrayBuffer(file);
+				} else {
+					reader.readAsText(file);
+				}
 				
 				reader.onerror = function () {	
 					// Hide spinner
@@ -611,7 +618,11 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 						callback(this.result, undefined, [directory, filename, filetype]);
 					};
 					
-					reader.readAsText(file);
+					if (filetype === ".odt") {
+						reader.readAsArrayBuffer(file);
+					} else {
+						reader.readAsText(file);
+					}
 				}, function(err) {
 					alert(navigator.mozL10n.get('load-unsuccessful')+err.code);
 					
@@ -630,7 +641,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 			});
 		}
 	} else if (location = 'dropbox') {
-		cloud.dropbox.load(filePath, function (result, error) {
+		cloud.dropbox.load(filePath, filetype, function (result, error) {
 			// Hide spinner
 			spinner('hide');
 					
@@ -694,6 +705,9 @@ firetext.io.getDefaultContent = function (extension) {
 		case ".txt":
 			contentData = ' ';
 			break;
+		case ".odt":
+			contentData = 'blabla';
+			break;
 		default:
 			contentData = ' ';
 			break;
@@ -709,6 +723,9 @@ firetext.io.getMime = function (extension) {
 			break;
 		case ".txt":
 			type = "text/plain";
+			break;
+		case ".odt":
+			type = "application/vnd.oasis.opendocument.text";
 			break;
 		default:
 			type = "application/octet-stream";
