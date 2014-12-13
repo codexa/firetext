@@ -30,7 +30,7 @@ if (!app) {
 					for (var i = 0; i < scriptTags.length; i++) {
 						if(scriptTags[i].src) {
 							(function() {
-								var scriptURL = new URI(scriptTags[i].src, new URI(location.href)).toString();
+								var scriptURL = scriptTags[i].src;
 								if(!scripts[scriptURL]) {
 									scripts[scriptURL] = [];
 									var scriptReq = new XMLHttpRequest();
