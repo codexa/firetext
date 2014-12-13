@@ -23,7 +23,7 @@ cloud.dropbox.init = function(){
 		key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
 	});
 
-	cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
+	cloud.dropbox.auth.authDriver(new Dropbox.AuthDriver.Popup({
 		rememberUser: true,
 		receiverUrl: urls.dropboxAuth
 	}));
