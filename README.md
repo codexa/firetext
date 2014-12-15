@@ -9,7 +9,7 @@ or in Firefox/Chrome with a web server. Please see [our documentation](https://g
 Firetext is kept alive by contributions from the community. Please donate skills, time, or money to make this project better.
 
 ### Hack
-Is the open web is your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page,
+Is the open web your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page,
 and learn how to bring more productivity power to Firefox OS users!
 
 ### Localize

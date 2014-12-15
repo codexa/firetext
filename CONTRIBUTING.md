@@ -2,7 +2,7 @@
 Firetext delivers office capabilities to many Firefox OS users.  We could really use your help!
 
 ### Hack
-Is the open web is your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page,
+Is the open web your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page,
 and learn how to bring more productivity power to Firefox OS users!
 
 ### Localize
