@@ -25,31 +25,38 @@ if (!app) {
 			if(this.status === 200) {
 				var response = this.response;
 				if (deep) {
-					var scriptTags = response.querySelectorAll("script");
-					var scripts = {};
-					for (var i = 0; i < scriptTags.length; i++) {
-						if(scriptTags[i].src) {
-							(function() {
-								var scriptURL = scriptTags[i].src;
-								if(!scripts[scriptURL]) {
-									scripts[scriptURL] = [];
-									var scriptReq = new XMLHttpRequest();
-									scriptReq.open("GET", scriptURL, true);
-									scriptReq.responseType = "text";
-									scriptReq.addEventListener("load", function(e) {
+					var elements = response.querySelectorAll("script, link");
+					var loading = {};
+					for (var i = 0; i < elements.length; i++) {
+						(function() {
+							var element = elements[i];
+							var name = element.tagName;
+							if(name === "SCRIPT" ? element.src : element.href) {
+								var url = name === "SCRIPT" ? element.src : element.href;
+								var rel = element.getAttribute('rel');
+								if(!loading[url]) {
+									loading[url] = [];
+									var req = new XMLHttpRequest();
+									req.open("GET", url, true);
+									req.responseType = "text";
+									req.addEventListener("load", function(e) {
 										var done = true;
 										if(this.status === 200) {
-											var inlineScript = response.createElement("script");
-											var scriptText = this.response;
-											scriptText = scriptText.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin ? window.location.origin : window.location.protocol + "//" + window.location.host);
-											inlineScript.type = "text/javascript";
-											inlineScript.src = "data:text/javascript;base64," + btoa(scriptText + '\n//# sourceURL=' + scriptURL);
-											scripts[scriptURL][0].parentNode.replaceChild(inlineScript, scripts[scriptURL][0]);
-											for (var i = 1; i < scripts[scriptURL].length; i++) {
-												scripts[scriptURL][i].parentNode.removeChild(scripts[scriptURL][i]);
+											var inline = response.createElement(name);
+											var text = this.response;
+											text = text.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin ? window.location.origin : window.location.protocol + "//" + window.location.host);
+											if(name === "SCRIPT") {
+												inline.src = "data:text/javascript;base64," + btoa(text + '\n//# sourceURL=' + url);
+											} else {
+												inline.href = "data:text/css;base64," + btoa(text + '\n/*# sourceURL=' + url + '*/');
 											}
-											delete scripts[scriptURL];
-											for(var x in scripts) {
+											inline.setAttribute('rel', rel);
+											loading[url][0].parentNode.replaceChild(inline, loading[url][0]);
+											for (var i = 1; i < loading[url].length; i++) {
+												loading[url][i].parentNode.removeChild(loading[url][i]);
+											}
+											delete loading[url];
+											for(var x in loading) {
 												done = false;
 												break;
 											}
@@ -58,11 +65,11 @@ if (!app) {
 											}
 										}
 									}, false);
-									scriptReq.send();
+									req.send();
 								}
-								scripts[scriptURL].push(scriptTags[i]);
-							})();
-						}
+								loading[url].push(element);
+							}
+						})();
 					}
 				} else {
 					callback(null, createBlob(response));
