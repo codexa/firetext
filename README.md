@@ -1,5 +1,7 @@
 # Firetext
 ## About
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/codexa/firetext?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Firetext is an open-source word processor for Firefox OS, and is [available on the Firefox Marketplace](https://marketplace.firefox.com/app/firetext).
 
 You can run Firetext on a Firefox OS device, on a [Firefox OS simulator](https://ftp.mozilla.org/pub/mozilla.org/labs/fxos-simulator/),
