@@ -1,6 +1,8 @@
 # Calling all contributors!
 Firetext delivers office capabilities to many Firefox OS users.  We could really use your help!
 
+If you would like to talk to us, please join our chat on Gitter: [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/codexa/firetext?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### Hack
 Is the open web your passion? Do you dream in code? Well, head on over to our [Get Coding](https://github.com/codexa/firetext/wiki/Get-Coding) page,
 and learn how to bring more productivity power to Firefox OS users!
