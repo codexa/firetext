@@ -1,195 +1,193 @@
-@media (min-width: 767px) {
-  /* Regions */
-  section[role="dialog"],
-  form[role="dialog"] {
-    width: auto;
-    height: auto;
-    top: 20%;
-    left: 20%;
-    right: 20%;
-    bottom: 20%;    
-    border: 1px solid #dfdfdf;
-    box-shadow: 0 0 10px #efefef;
-      -webkit-transform: translateY(150%);
-      -moz-transform: translateY(150%);
-      -o-transform: translateY(150%);
-      -ms-transform: translateY(150%);
-    transform: translateY(150%);
-    z-index: 102 !important;
-  }
-  section[role="dialog"] + .background,
-  form[role="dialog"] + .background {
-    z-index: 101;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: block;
-    position: fixed;
-    background: rgba(255,255,255,.7);
-    opacity: 0;
-    visibility: hidden;
-      -moz-transition: opacity .4s, visibility .4s 0s;
-      -webkit-transition: opacity .4s, visibility .4s 0s;
-      -o-transition: opacity .4s, visibility .4s 0s;
-      -ms-transition: opacity .4s, visibility .4s 0s;
-    transition: opacity .4s, visibility .4s 0s;
-  }
-  section[role="dialog"].current + .background,
-  section[role="dialog"].parent + .background,
-  form[role="dialog"].current + .background,
-  form[role="dialog"].parent + .background {
-    opacity: 1;
-    visibility: visible;
-      -moz-transition: opacity .4s, visibility 0s;
-      -webkit-transition: opacity .4s, visibility 0s;
-      -o-transition: opacity .4s, visibility 0s;
-      -ms-transition: opacity .4s, visibility 0s;
-    transition: opacity .4s, visibility 0s;
-  }
+/* Regions */
+section[role="dialog"],
+form[role="dialog"] {
+  width: auto;
+  height: auto;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;  
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 0 10px #efefef;
+    -webkit-transform: translateY(150%);
+    -moz-transform: translateY(150%);
+    -o-transform: translateY(150%);
+    -ms-transform: translateY(150%);
+  transform: translateY(150%);
+  z-index: 102 !important;
+}
+section[role="dialog"] + .background,
+form[role="dialog"] + .background {
+  z-index: 101;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  position: fixed;
+  background: rgba(255,255,255,.7);
+  opacity: 0;
+  visibility: hidden;
+    -moz-transition: opacity .4s, visibility .4s 0s;
+    -webkit-transition: opacity .4s, visibility .4s 0s;
+    -o-transition: opacity .4s, visibility .4s 0s;
+    -ms-transition: opacity .4s, visibility .4s 0s;
+  transition: opacity .4s, visibility .4s 0s;
+}
+section[role="dialog"].current + .background,
+section[role="dialog"].parent + .background,
+form[role="dialog"].current + .background,
+form[role="dialog"].parent + .background {
+  opacity: 1;
+  visibility: visible;
+    -moz-transition: opacity .4s, visibility 0s;
+    -webkit-transition: opacity .4s, visibility 0s;
+    -o-transition: opacity .4s, visibility 0s;
+    -ms-transition: opacity .4s, visibility 0s;
+  transition: opacity .4s, visibility 0s;
+}
   
-  /* Tabs */
-  [role="tablist"] > [role="tab"] {
-    width: auto !important;
-  }
-  [role="tablist"] > [role="tab"] > a {
-    padding: 0 15px;
-    width: auto;
-  }
+/* Tabs */
+[role="tablist"] > [role="tab"] {
+  width: auto !important;
+}
+[role="tablist"] > [role="tab"] > a {
+  padding: 0 15px;
+  width: auto;
+}
   
-  /* Drawer/Sidebar */
-  section[data-type="sidebar"] {
-    width: auto;
-    position: absolute;
-    top: 5.5rem;
-    margin: 0 4px;
-    z-index: 1000;
-      height: -moz-calc(100% - 5.5rem - 3rem);
-      height: -webkit-calc(100% - 5.5rem - 3rem);
-    height: calc(100% - 5.5rem - 3rem);
-    transition: none;
-    background-color: transparent;
-    color: #1f1f1f;
-    border-radius: 8px;
-    overflow: visible;
-    pointer-events: none;
-  }
-  .fullscreen section[data-type="sidebar"] {
-    top: 4.5rem;
-      height: -moz-calc(100% - 4.5rem - 3rem);
-      height: -webkit-calc(100% - 4.5rem - 3rem);
-    height: calc(100% - 4.5rem - 3rem);
-  }
-  section[data-type="sidebar"] > * {
-    pointer-events: all;
-  }
-  section[data-type="sidebar"] > header:first-child {
-    display: none;
-  }
-  section[data-type="sidebar"] > nav {
-    height: auto;
-      max-height: -moz-calc(100% - 5rem);
-      max-height: -webkit-calc(100% - 5rem);
-    max-height: calc(100% - 5rem);
-    border: 1px solid #ccc;
-    border-bottom-width: 0;
-    padding: 5px 0;
-    border-radius: inherit;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    background-color: #ffffff;
-  }
-  section[data-type="sidebar"] > nav:before,
-  section[data-type="sidebar"] > nav:after {
-    height: 0;
-    width: 0;
-    position: absolute;
-    border: solid transparent;
-    content: " ";
-    border-width: 11px;
-    margin-left: -11px;
-    right: 9px;
-  }
-  section[data-type="sidebar"] > nav:before {
-    border-bottom-color: #ccc;
-    bottom: 100%;
-  }
-  section[data-type="sidebar"] > nav:after {
-    border-bottom-color: #fff;
-      bottom: -moz-calc(100% - 1px);
-      bottom: -webkit-calc(100% - 1px);
-    bottom: calc(100% - 1px);
-  }
-  section[data-type="sidebar"] > nav > h2 {
-    background-color: transparent;
-    padding: 0 20px;
-    text-indent: 0;	  
-  }
-  section[data-type="sidebar"] > nav > ul > li:active {
-    background-color: #efefef;
-  }
-  section[data-type="sidebar"] > nav > ul > li > a {
-    padding: 0 20px;
-    text-indent: 0;
-  }
-  section[data-type="sidebar"] [role="toolbar"] {
-    width: 100%;
-    position: static;
-    background-color: #efefef;
-    color: inherit;
-    border-radius: inherit;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    overflow: hidden;
-    border: 1px solid #ccc;
-    border-top-width: 0;
-  }
-  section[data-type="sidebar"] [role="toolbar"] button {
-    margin: 0;
-  }
-  section[data-type="sidebar"] [role="toolbar"] button:active,
-  section[data-type="sidebar"] [role="toolbar"] button.active {
-    background-color: #ccc; 
-  }
-  [data-state="drawer"].current,
-  [data-state="drawer"][data-position="right"].current,
-  [dir="rtl"] [data-state="drawer"].current,
-  [dir="rtl"] [data-state="drawer"][data-position="right"].current {
-      -moz-transform: translateX(0) !important;
-      -webkit-transform: translateX(0) !important;
-      -o-transform: translateX(0) !important;
-      -ms-transform: translateX(0) !important;    
-    transform: translateX(0) !important;   
-  }
-  [dir="rtl"] section[data-type="sidebar"] > nav:before,
-  [dir="rtl"] section[data-type="sidebar"] > nav:after {
-    right: auto;
-    left: 9px;
-    margin-left: 0;
-  }
+/* Drawer/Sidebar */
+section[data-type="sidebar"] {
+  width: auto;
+  position: absolute;
+  top: 5.5rem;
+  margin: 0 4px;
+  z-index: 1000;
+    height: -moz-calc(100% - 5.5rem - 3rem);
+    height: -webkit-calc(100% - 5.5rem - 3rem);
+  height: calc(100% - 5.5rem - 3rem);
+  transition: none;
+  background-color: transparent;
+  color: #1f1f1f;
+  border-radius: 8px;
+  overflow: visible;
+  pointer-events: none;
+}
+.fullscreen section[data-type="sidebar"] {
+  top: 4.5rem;
+    height: -moz-calc(100% - 4.5rem - 3rem);
+    height: -webkit-calc(100% - 4.5rem - 3rem);
+  height: calc(100% - 4.5rem - 3rem);
+}
+section[data-type="sidebar"] > * {
+  pointer-events: all;
+}
+section[data-type="sidebar"] > header:first-child {
+  display: none;
+}
+section[data-type="sidebar"] > nav {
+  height: auto;
+    max-height: -moz-calc(100% - 5rem);
+    max-height: -webkit-calc(100% - 5rem);
+  max-height: calc(100% - 5rem);
+  border: 1px solid #ccc;
+  border-bottom-width: 0;
+  padding: 5px 0;
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: #ffffff;
+}
+section[data-type="sidebar"] > nav:before,
+section[data-type="sidebar"] > nav:after {
+  height: 0;
+  width: 0;
+  position: absolute;
+  border: solid transparent;
+  content: " ";
+  border-width: 11px;
+  margin-left: -11px;
+  right: 9px;
+}
+section[data-type="sidebar"] > nav:before {
+  border-bottom-color: #ccc;
+  bottom: 100%;
+}
+section[data-type="sidebar"] > nav:after {
+  border-bottom-color: #fff;
+    bottom: -moz-calc(100% - 1px);
+    bottom: -webkit-calc(100% - 1px);
+  bottom: calc(100% - 1px);
+}
+section[data-type="sidebar"] > nav > h2 {
+  background-color: transparent;
+  padding: 0 20px;
+  text-indent: 0;	  
+}
+section[data-type="sidebar"] > nav > ul > li:active {
+  background-color: #efefef;
+}
+section[data-type="sidebar"] > nav > ul > li > a {
+  padding: 0 20px;
+  text-indent: 0;
+}
+section[data-type="sidebar"] [role="toolbar"] {
+  width: 100%;
+  position: static;
+  background-color: #efefef;
+  color: inherit;
+  border-radius: inherit;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-top-width: 0;
+}
+section[data-type="sidebar"] [role="toolbar"] button {
+  margin: 0;
+}
+section[data-type="sidebar"] [role="toolbar"] button:active,
+section[data-type="sidebar"] [role="toolbar"] button.active {
+  background-color: #ccc; 
+}
+[data-state="drawer"].current,
+[data-state="drawer"][data-position="right"].current,
+[dir="rtl"] [data-state="drawer"].current,
+[dir="rtl"] [data-state="drawer"][data-position="right"].current {
+    -moz-transform: translateX(0) !important;
+    -webkit-transform: translateX(0) !important;
+    -o-transform: translateX(0) !important;
+    -ms-transform: translateX(0) !important;  
+  transform: translateX(0) !important;   
+}
+[dir="rtl"] section[data-type="sidebar"] > nav:before,
+[dir="rtl"] section[data-type="sidebar"] > nav:after {
+  right: auto;
+  left: 9px;
+  margin-left: 0;
+}
   
-  /* Settings */
-  #settings #autozen-enabled {
-    display: none;
-  }
+/* Settings */
+#settings #autozen-enabled {
+  display: none;
+}
   
-  /* Zen mode */
-  .fullscreen #hide-keyboard-button {
-    top: 5rem;
-  }
+/* Zen mode */
+.fullscreen #hide-keyboard-button {
+  top: 5rem;
+}
   
-  .fullscreen #edit-bar {
-    width: auto;
-    left: auto;
-    top: 4rem;
-    right: 0;
-  }
+.fullscreen #edit-bar {
+  width: auto;
+  left: auto;
+  top: 4rem;
+  right: 0;
+}
   
-  .fullscreen #edit-bar .icon-more {
-      -moz-transform: rotate(0.5turn);
-      -webkit-transform: rotate(0.5turn);
-      -o-transform: rotate(0.5turn);
-      -ms-transform: rotate(0.5turn);
-    transform: rotate(0.5turn);
-  }
+.fullscreen #edit-bar .icon-more {
+    -moz-transform: rotate(0.5turn);
+    -webkit-transform: rotate(0.5turn);
+    -o-transform: rotate(0.5turn);
+    -ms-transform: rotate(0.5turn);
+  transform: rotate(0.5turn);
 }
