@@ -1070,6 +1070,8 @@ function processActions(eventAttribute, target) {
 			regions.sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-state'));
 		} else if (calledFunction == 'saveFromEditor') {
 			saveFromEditor(true, true);
+		} else if (calledFunction == 'downloadFile') {
+			download();
 		} else if (calledFunction == 'closeFile') {
 			// Check if file is changed.	If so, prompt the user to save it.
 			if (firetext.settings.get('autosave') == 'false' && fileChanged == true) {
