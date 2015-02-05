@@ -261,12 +261,9 @@ function updateAddDialog() {
 		document.querySelector('#add [role="main"]').style.display = 'none';
 		
 		// Create notice
-		if (!document.getElementById('no-storage-notice')) {
-			var noStorageNotice = document.createElement('div');
-			noStorageNotice.id = 'no-storage-notice';
-			noStorageNotice.classList.add('redAlert');
-			noStorageNotice.textContent = navigator.mozL10n.get('no-storage-method');
-			document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
+		var noStorageNotice = document.getElementById('no-storage-notice');
+		if (noStorageNotice.classList.contains('hidden-item')) {
+			noStorageNotice.classList.remove('hidden-item');
 		}
 	} else {
 		// Enable elements
@@ -281,8 +278,9 @@ function updateAddDialog() {
 		}
 		
 		// Remove notice if present
-		if (document.getElementById('no-storage-notice')) {
-			document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
+		var noStorageNotice = document.getElementById('no-storage-notice');
+		if (!noStorageNotice.classList.contains('hidden-item')) {
+			noStorageNotice.classList.add('hidden-item');
 		}
 	}
 }

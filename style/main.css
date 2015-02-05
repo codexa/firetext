@@ -26,12 +26,20 @@ html, body {
   outline: none;
 }
 
-.redAlert {
-  color: red;
+#no-storage-notice {
   font-size: 2rem;
   text-align: center;
   display: block;
-  margin: 1rem;
+  margin: 10% 1rem 1rem;
+}
+
+#no-storage-notice button {
+  width: auto;
+  margin-top: 1rem;
+}
+
+.hidden-item {
+  display: none !important;
 }
 
 #hide-keyboard-button {
@@ -54,15 +62,12 @@ html, body {
   display: inline-block; 
 }
 
-
 /* Fonts */
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   src: local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
 }
-
-
 
 /* Style hacks */
 [role="toolbar"] button.ftanylitics {
