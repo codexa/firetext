@@ -258,12 +258,15 @@ function createFromDialog() {
 	// Convert location to lower case
 	location = location.toLowerCase();
 	
+	// Get default file contents
+	var contentData = firetext.io.getDefaultContent(filetype);
+	
 	// Save the file
 	if (!location | location == '' | location == 'internal') {	
 		// Get mime
 		var type =  firetext.io.getMime(filetype);
 		
-		var contentBlob = new Blob([' '], { "type" : type });
+		var contentBlob = new Blob([contentData], { "type" : type });
 		if (deviceAPI == 'deviceStorage') {
 			var filePath = (directory + filename + filetype);
 			var req = storage.addNamed(contentBlob, filePath);
@@ -313,7 +316,7 @@ function createFromDialog() {
 		}
 	} else if (location == 'dropbox') {
 		directory = ('/' + directory);
-		firetext.io.save(directory, filename, filetype, ' ', false, function () {	 
+		firetext.io.save(directory, filename, filetype, contentData, false, function () {	 
 			// Load to editor
 			loadToEditor(directory, filename, filetype, location);			
 				
@@ -347,7 +350,7 @@ function saveFromEditor(banner, spinner) {
 	var key = editorMessageProxy.registerMessageHandler(function(e){
 		firetext.io.save(directory, filename, filetype, new Blob([StringView.base64ToBytes(e.data.content)], {type: e.data.type}), banner, function(){ fileChanged = false; }, location, spinner);
 	}, null, true);
-	editorMessageProxy.getPort().postMessage({
+	editorMessageProxy.postMessage({
 		command: "get-content-blob",
 		key: key
 	});
@@ -386,7 +389,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	firetext.io.load(directory, filename, filetype, function(result, error, fileInfo) {
 		if (!error) {
 			initEditor(function() {
-				editorMessageProxy.getPort().postMessage({
+				editorMessageProxy.postMessage({
 					command: "load",
 					content: result,
 					filetype: filetype
@@ -669,6 +672,33 @@ firetext.io.rename = function (directory, name, type, newname, location) {
 		firetext.io.save(directory, name, type, result, function () {}, location);
 		firetext.io.delete(fullName, location);
 	}, location);
+};
+
+firetext.io.getDefaultContent = function (extension) {
+	var contentData;
+	switch (extension) {
+		case ".html":
+			contentData = [
+				'<!DOCTYPE html>',
+				'<html style="max-width: 690px; position: relative; margin: 0 auto;">',
+				'<head>',
+				'	<meta charset="utf-8">',
+				'</head>',
+				'<body>',
+				'	<br>',
+				'</body>',
+				'</html>',
+				''
+			].join('\n');
+			break;
+		case ".txt":
+			contentData = ' ';
+			break;
+		default:
+			contentData = ' ';
+			break;
+	}
+	return contentData;
 };
 
 firetext.io.getMime = function (extension) {

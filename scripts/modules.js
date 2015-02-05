@@ -32,8 +32,10 @@ if (!app) {
 							var element = elements[i];
 							var name = element.tagName;
 							if(name === "SCRIPT" ? element.src : element.href) {
+								var type = element.type;
 								var url = name === "SCRIPT" ? element.src : element.href;
 								var rel = element.getAttribute('rel');
+								var data = element.dataset;
 								if(!loading[url]) {
 									loading[url] = [];
 									var req = new XMLHttpRequest();
@@ -45,12 +47,16 @@ if (!app) {
 											var inline = response.createElement(name);
 											var text = this.response;
 											text = text.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin ? window.location.origin : window.location.protocol + "//" + window.location.host);
+											inline.type = type;
 											if(name === "SCRIPT") {
 												inline.src = "data:text/javascript;base64," + btoa(text + '\n//# sourceURL=' + url);
 											} else {
 												inline.href = "data:text/css;base64," + btoa(text + '\n/*# sourceURL=' + url + '*/');
 											}
 											inline.setAttribute('rel', rel);
+											for (var key in data) {
+												inline.dataset[key] = data[key];
+											}
 											loading[url][0].parentNode.replaceChild(inline, loading[url][0]);
 											for (var i = 1; i < loading[url].length; i++) {
 												loading[url][i].parentNode.removeChild(loading[url][i]);
