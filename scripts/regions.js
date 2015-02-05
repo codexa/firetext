@@ -53,15 +53,7 @@ function nav2() {
 		tempElement.classList.add('current');
 		
 		/* Remove this section when porting to other projects */	 
-		if (tempLoc == 'edit') {
-			if (tempAutozen !== false && deviceType === 'mobile') {
-				// Start Zen Mode if autozen == true
-				if (firetext.settings.get('autozen') == 'true' ||
-						tempAutozen === true) {
-					editFullScreen(true);
-				}
-			}
-			
+		if (tempLoc == 'edit') {			
 			// Save edit status
 			firetext.settings.save('autoload.wasEditing', 'true');
 			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
@@ -77,9 +69,6 @@ function nav2() {
 			}			
 		} else {
 			if (tempElement.getAttribute('role') === 'region') {
-				// No zen mode if region
-				editFullScreen(false);
-				
 				// Not editing if region
 				firetext.settings.save('autoload.wasEditing', 'false');
 			}
@@ -140,23 +129,28 @@ regions.sidebar = function (name, state) {
 
 regions.tab = function (list, name) {
 	if (document.getElementById('tab-'+name)) {
-		if (document.querySelector('.selected')) {
-			document.querySelector('.selected').classList.remove('selected');
+    // Unselect previous tab and button
+    var previousTab = document.querySelector('.selected-tab');
+		if (previousTab) {
+			previousTab.classList.remove('selected-tab');
 		}
-		document.getElementById('tab-'+name).classList.add('selected');
+    var previousTabButton = document.querySelector('.selected-tab-button');
+		if (previousTabButton) {
+			previousTabButton.classList.remove('selected-tab-button');
+		}
+    
+    // Select tab
+		document.getElementById('tab-'+name).classList.add('selected-tab');
+    
+    // Select tab button
+    var tabButton = document.querySelector('[role="tab-button"][data-tab-id="'+name+'"]');
+    if (tabButton) {
+      tabButton.classList.add('selected-tab-button');                
+    }
 		
 		/* Remove this section when porting to other projects */
 		if (name == 'raw') {
 			prettyPrint();
-		}
-		if (name == 'design') {
-			document.getElementById('tab-'+name).querySelector('[role="tabpanel"]').addEventListener('transitionend', function onTransitionEnd() {
-				this.removeEventListener('transitionend', onTransitionEnd);
-				document.getElementById('edit-bar').style.position = 'absolute';
-				setTimeout(function() {
-					document.getElementById('edit-bar').style.position = 'fixed';
-				});
-			});
 		}
 		/* End of customized section */
 	}

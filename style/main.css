@@ -152,7 +152,7 @@ label.pack-switch {
 [data-type="list"] h2,
 [data-type="edit"] h2 {
   background: #efefef;
-  padding: 5px 20px;
+  padding: 0.5rem 2rem;
   color: #2C2C2C;
   margin: 0 0;
   font-family: "Open Sans";
@@ -163,8 +163,8 @@ label.pack-switch {
 [data-type="list"] li a,
 [data-type="edit"] li a,
 .noLink {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 
@@ -293,67 +293,6 @@ aside select.dummy {
   visibility: hidden;
   width: 80%;
 }
-
-
-/* Tab Toolbar */
-.tabToolbar {
-  text-align: right;
-  opacity: 0;
-  visibility: hidden;
-  height: 4rem;
-  transition: opacity .3s;
-    -moz-transition: opacity .3s;
-    -webkit-transition: opacity .3s;
-    -o-transition: opacity .3s;
-  white-space: nowrap;
-}
-
-.tabToolbar.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.tabToolbar button,
-.tabToolbar .button,
-.tabToolbar input[type="button"] {
-  height: 100%;
-  background: transparent;
-  border: none;
-  font-size: 0;
-  border-radius: 0;
-  width: 4rem;
-  padding: 0 1rem;
-}
-
-.tabToolbar button:active,
-.tabToolbar .button:active,
-.tabToolbar input[type="button"]:active {
-  background-color: #dfdfdf;
-  transition: background 0.2s ease;
-    -moz-transition: background 0.2s ease;
-    -webkit-transition: background 0.2s ease;
-    -o-transition: background 0.2s ease;
-}
-
-.tabToolbar button[class*=" icon-"],
-.tabToolbar button[class^="icon-"],
-.tabToolbar .button[class*=" icon-"],
-.tabToolbar .button[class^="icon-"],
-.tabToolbar input[type="button"][class*=" icon-"],
-.tabToolbar input[type="button"][class^="icon-"] {
-  font-size: 2.5rem;
-  text-shadow: none;
-}
-
-#tabToolbarLeft {
-  width: 0;
-  float: left;
-}
-
-#tabToolbarLeft.visible {
-  width: auto;
-}
-
 
 /* Spinner (Throbber) */
 .spinner {

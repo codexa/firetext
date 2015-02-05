@@ -22,7 +22,7 @@ firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
-var deviceType, fileChanged, saveTimeout, saving, tempAutozen, urls={}, version = '0.4';
+var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
@@ -1116,10 +1116,8 @@ function processActions(eventAttribute, target) {
 			clearCreateForm();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
-				tempAutozen = false;
 				editFullScreen(false);		
 			} else {
-				tempAutozen = true;
 				editFullScreen();
 			}
 		} else if (calledFunction == 'browser') {      
@@ -1158,7 +1156,7 @@ function processActions(eventAttribute, target) {
 			}
 			formatDoc('justify'+justifyDirection);
 		} else if (calledFunction == 'hideToolbar') {
-			if (deviceType != 'desktop' || html.classList.contains('fullscreen')) {
+			if (deviceType != 'desktop') {
 				if (document.getElementById('currentFileType').textContent != '.txt' &&
 						target.id === 'editor') {
 					document.getElementById('edit-bar').style.display = 'none';
@@ -1336,7 +1334,9 @@ function spinner(state) {
 }
 
 function editFullScreen(enter) {
-	if (enter != false) {	// current working methods
+	if (enter === true ||
+				enter != false &&
+				!html.classList.contains('fullscreen')) {	// current working methods
 		// Make app fullscreen
 		if (document.documentElement.requestFullscreen) {
 			document.documentElement.requestFullscreen();
@@ -1364,28 +1364,20 @@ function onFullScreenChange() {
 		document.webkitFullscreenElement
 	) {
 		// Special editor UI
-		document.querySelector('#edit header:first-child').style.display = 'none';
-		document.getElementById('editTabs').setAttribute('data-items', '4.1');
-		document.querySelector('#editTabs #tabToolbarLeft').classList.add('visible');
-		document.querySelector('#editTabs #tabToolbarRight').classList.add('visible');
 		html.classList.add('fullscreen');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-fs');
+		document.querySelector('#editor-zen-button span').classList.add('icon-efs');
 	} else {
 		// Regular editor UI
-		document.querySelector('#edit header:first-child').style.display = 'block';
-		document.getElementById('editTabs').setAttribute('data-items', '2');
-		document.querySelector('#editTabs #tabToolbarLeft').classList.remove('visible');
-		document.querySelector('#editTabs #tabToolbarRight').classList.remove('visible');
 		html.classList.remove('fullscreen');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-efs');
+		document.querySelector('#editor-zen-button span').classList.add('icon-fs');
 	}
 }
 
 document.addEventListener('fullscreenchange', onFullScreenChange);
 document.addEventListener('mozfullscreenchange', onFullScreenChange);
 document.addEventListener('webkitfullscreenchange', onFullScreenChange);
-
-function onFullScreenError() {
-	tempAutozen = false;
-}
 
 document.addEventListener('fullscreenerror', onFullScreenError);
 document.addEventListener('mozfullscreenerror', onFullScreenError);

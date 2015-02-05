@@ -455,10 +455,8 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				// Hide save button if autosave is enabled
 				if (firetext.settings.get('autosave') != 'false') {
 					document.getElementById('editorSaveButton').style.display = 'none';
-					document.getElementById('zenSaveButton').style.display = 'none';
 				} else {
 					document.getElementById('editorSaveButton').style.display = 'inline-block';
-					document.getElementById('zenSaveButton').style.display = 'inline-block';
 				}
 			})
 		} else {

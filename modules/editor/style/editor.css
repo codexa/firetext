@@ -1,45 +1,104 @@
+html {
+	padding: 0;
+	margin: 0 auto;
+	max-width: 690px;
+	position: relative;
+}
+
+.night {
+	background-color: #000000;
+	color: #ffffff;
+}
+
+body {
+	padding: 0;
+	margin: 0 0 60px;
+	background-color: #ffffff;
+}
+
+.night body {
+	background-color: #000000;
+}
+
+#tempEditDiv {
+	border: none;
+	padding: 10px;
+	font-size: 20px;
+	outline: none;
+	word-wrap: break-word;
+}
+
 body:before,
 body:after,
 #tempEditDiv:before,
 #tempEditDiv:after {
-  display: block;
-  position: absolute;
-  content: " ";
-  box-sizing: border-box;
-  width: 8px;
-  height: 8px;
-  margin: -8px 2px;
-  border: 1px solid #999;
-  pointer-events: none;
+	display: block;
+	position: absolute;
+	content: " ";
+	box-sizing: border-box;
+	width: 8px;
+	height: 8px;
+	margin: -8px 2px;
+	border: 1px solid #999;
+	pointer-events: none;
 }
+
 body:before {
-  top: 10px;
-  border-top-width: 0;
-  border-left-width: 0;
+	top: 10px;
+	border-top-width: 0;
+	border-left-width: 0;
 }
+
 body:after {
-  margin-top: 0;
-  border-bottom-width: 0;
-  border-left-width: 0;
+	margin-top: -10px;
+	border-bottom-width: 0;
+	border-left-width: 0;
 }
+
 #tempEditDiv:before {
-  right: 0;
-  border-top-width: 0;
-  border-right-width: 0;
+	right: 0;
+	border-top-width: 0;
+	border-right-width: 0;
 }
+
 #tempEditDiv:after {
-  right: 0;
-  margin-top: 0;
-  border-bottom-width: 0;
-  border-right-width: 0;
+	right: 0;
+	margin-top: 0;
+	border-bottom-width: 0;
+	border-right-width: 0;
 }
 
 @media (min-width: 767px) {
-  body:before, #tempEditDiv:before {
-    top: 65px;
-  }
-  
-  #tempEditDiv {
-    padding-top: 65px !important;
-  }
+	html {
+		padding-top: 65px;
+		padding-bottom: 65px;
+		background-color: #efefef;
+	}
+	
+	.night {
+		background-color: #111111;
+	}
+	
+	body {				
+		border: 1px solid #ddd;
+		box-shadow: 0 0 5px #ddd;
+		margin-bottom: 0;
+	}
+	
+	.night body {
+		border-color: #080808;
+		box-shadow: none;
+	}
+	
+	.night body:before,
+	.night body:after,
+	.night #tempEditDiv:before,
+	.night #tempEditDiv:after {
+		border-color: #222222;
+	}
+	
+	body:before,
+	#tempEditDiv:before {
+		top: 75px; 
+	}
 }

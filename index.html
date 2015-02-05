@@ -63,11 +63,11 @@
   <link rel="stylesheet" type="text/css" href="style/bb/progress_activity.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/status.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/switches.css"/>
-  <link rel="stylesheet" type="text/css" href="style/bb/tabs.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/toolbars.css"/>
   <link rel="stylesheet" type="text/css" href="style/bb/value_selector.css"/>
 
   <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="style/tabs.css"/>
   <link rel="stylesheet" type="text/css" href="style/main.css" />
   <link rel="stylesheet" type="text/css" href="style/editor.css" />
   <link rel="stylesheet" type="text/css" href="style/regions.css"/>
@@ -75,6 +75,7 @@
   <link rel="stylesheet" type="text/css" href="style/icons.css"/>
   <link rel="stylesheet" type="text/css" href="style/action_menu.css"/>
   <link rel="stylesheet" type="text/css" media="(min-width: 767px)" href="style/desktop.css"/>
+  <link rel="stylesheet" type="text/css" media="(max-width: 767px)" href="style/mobile.css"/>
   <link rel="stylesheet" type="text/css" href="style/prettify.css"/>
   <link rel="stylesheet" type="text/css" href="style/night.css" />
 </head>
@@ -251,47 +252,37 @@
   	data-swipe-left="sidebar" data-swipe-left-id="main" data-swipe-left-state="open"
   	data-swipe-right="sidebar" data-swipe-right-id="main" data-swipe-right-state="close"
     data-click="sidebar" data-click-id="main" data-click-state="close">
-    <header>
-      <button data-click="closeFile"><span class="icon icon-close"></span></button>
+    <header class="edit-header">
+      <button data-click="closeFile" class="no-zen"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
-        <button data-click="saveFromEditor" id="editorSaveButton"><span class="icon icon-save"></span></button>
-        <button data-click="fullscreen"><span class="icon icon-fs"></span></button>
-        <button data-click="sidebar" data-click-id="main" class="menu drawerEnabled"><span class="icon icon-menu"></span></button>
+        <button data-click="saveFromEditor" class="no-zen" id="editorSaveButton"><span class="icon icon-save"></span></button>
+        <button data-click="fullscreen" class="desktop-only" id="editor-zen-button"><span class="icon icon-fs"></span></button>
+        <button data-click="sidebar" data-click-id="main" class="menu drawerEnabled no-zen"><span class="icon icon-menu"></span></button>
       </menu>
-      <h1><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
-    </header>
+      <h1 id="fileName" class="no-zen"><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
+      <div class="tabBar">
+        <div data-click="tab" data-click-name="design" data-l10n-id="design" role="tab-button" data-tab-id="design">Design</div>
+        <div data-click="tab" data-click-name="raw" data-l10n-id="raw" role="tab-button" data-tab-id="raw">Raw</div>		  
+	    </div>
+	  </header>
     <div role="main" class="editor-container">
-      <ul role="tablist" data-items="2" id="editTabs">
-        <div class="tabToolbar" id="tabToolbarLeft">
-          <button data-click="closeFile" class="icon-close"></button>
+      <ul role="tabs" id="editTabs">
+        <div role="tab" id="tab-design">
+          <iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
+          <div role="toolbar" id="edit-bar">
+            <ul id="edit-zone">
+              <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>
+              <li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic"></button></li>
+              <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline"></button></li>
+              <li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough"></button></li>
+              <li><button class="icon-more" data-click="nav" data-click-location="format"></button></li>
+            </ul>
+            <ul>
+            </ul>
+          </div>
         </div>
-        <li id="tab-design" role="tab">
-          <a href="#" data-click="tab" data-click-name="design" data-l10n-id="design">Design</a>
-          <div role="tabpanel">
-            <iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
-            <div role="toolbar" id="edit-bar">
-              <ul id="edit-zone">
-                <li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>
-                <li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic"></button></li>
-                <li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline"></button></li>
-                <li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough"></button></li>
-                <li><button class="icon-more" data-click="nav" data-click-location="format"></button></li>
-              </ul>
-              <ul>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <li id="tab-raw" role="tab">
-          <a href="#" data-click="tab" data-click-name="raw" data-l10n-id="raw">Raw</a>
-          <div role="tabpanel">
-            <code class="prettyprint lang-html" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></code>
-          </div>
-        </li>
-        <div class="tabToolbar" id="tabToolbarRight">
-          <button data-click="saveFromEditor" id="zenSaveButton" class="icon-save"></button>
-          <button data-click="fullscreen" data-click-state="off" class="icon-efs"></button>
-          <button data-click="sidebar" data-click-id="main" class="icon-menu drawerEnabled"></button>
+        <div role="tab" id="tab-raw">
+          <code class="prettyprint lang-html" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></code>
         </div>
       </ul>
     </div>
@@ -593,15 +584,6 @@
           </ul>
           <h2 data-l10n-id="visual">Visual</h2>
           <ul>
-            <li class="noLink" id="autozen-enabled">
-              <aside class="pack-end">
-                <label class="pack-switch">
-                  <input type="checkbox" id="autozen-enabled-switch">
-                  <span></span>
-                </label>
-              </aside>
-              <p class="label" data-l10n-id="edit-with-zen-mode">Edit with <b>Zen Mode</b></p>
-            </li>
             <li class="noLink">
               <aside class="pack-end">
                 <label class="pack-switch">

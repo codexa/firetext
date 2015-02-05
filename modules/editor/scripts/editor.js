@@ -36,12 +36,9 @@ var mainClosure = function() {
 		}
 		if(e.data.command === "init" && e.ports.length) {
 			// Initialize Designer
-			document.documentElement.setAttribute('style','height: 100%; padding: 0; margin: 0 auto; max-width: 690px; position: relative;');
-			document.body.setAttribute('style','height: 100%; padding: 0; margin: 0;');
 			doc = document.createElement('DIV');
 			doc.setAttribute('contentEditable', 'true');
 			doc.id = 'tempEditDiv';
-			doc.setAttribute('style','border: none; padding: 10px; font-size: 20px; outline: none; word-wrap: break-word; background-color: #ffffff;');
 			document.body.appendChild(doc);
 			//doc = document.getElementById('tempEditDiv');
 			document.execCommand('enableObjectResizing', false, 'true');
@@ -88,7 +85,7 @@ var mainClosure = function() {
 
 			// initialize modules/register handlers
 			// night mode
-			initNight(doc, parentMessageProxy);
+			initNight(parentMessageProxy);
 			// editor I/O
 			initDocIO(doc, parentMessageProxy, function loadCallback() {
 				updatePaddingBottom();

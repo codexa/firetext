@@ -1,9 +1,10 @@
-function initNight(doc, messageProxy){
+function initNight(messageProxy){
 	function nightEditor(nightMode) {
+  		var html = document.getElementsByTagName('html')[0];
 		if(nightMode) {
-			doc.style.color = '#fff';
+			html.classList.add('night');
 		} else {
-			doc.style.color = '#000';
+			html.classList.remove('night');
 		}
 	}
 	messageProxy.registerMessageHandler(function(e) { nightEditor(e.data.nightMode); }, "night");
