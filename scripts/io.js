@@ -393,18 +393,15 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	
 	// Show/hide toolbar
 	switch (filetype) {
-		/* 0.4
-		case ".docx":
-		*/
 		case ".html":
-			document.getElementById('edit-bar').style.display = 'block'; // 0.2 only
-			editor.classList.remove('no-toolbar'); // 0.2 only
+			document.getElementById('edit-bar').style.display = 'block';
+			editor.classList.remove('no-toolbar');
 			toolbar.classList.remove('hidden');
 			break;
 		case ".txt":
 		default:
-			document.getElementById('edit-bar').style.display = 'none'; // 0.2 only
-			editor.classList.add('no-toolbar'); // 0.2 only
+			document.getElementById('edit-bar').style.display = 'none';
+			editor.classList.add('no-toolbar');
 			toolbar.classList.add('hidden');
 			break;
 	}
@@ -420,16 +417,15 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				});
 				switch (filetype) {
 					case ".txt":
-					/* 0.4
-					case ".docx":
-					*/
-						tabRaw.classList.add('hidden');
+						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
+						tabRaw.classList.add('hidden-item');
 						regions.tab(document.querySelector('#editTabs'), 'design');
 						break;
 					case ".html":
 					default:
 						rawEditor.textContent = result;
-						tabRaw.classList.remove('hidden');	
+						document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
+						tabRaw.classList.remove('hidden-item');	
 						break;
 				}
 				

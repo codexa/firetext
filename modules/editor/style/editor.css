@@ -90,15 +90,12 @@ body:after {
 		box-shadow: none;
 	}
 	
-	.night body:before,
-	.night body:after,
-	.night #tempEditDiv:before,
-	.night #tempEditDiv:after {
-		border-color: #222222;
-	}
-	
 	body:before,
 	#tempEditDiv:before {
 		top: 75px; 
+	}
+	
+	#tempEditDiv {
+		margin: -1px;
 	}
 }
