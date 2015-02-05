@@ -118,7 +118,7 @@ firetext.io.enumerate = function (directory, callback) {
 		var FILES = [];
 		
 		// Put directory in proper form
-		if (directory.length > 1 && directory[0] == '/') {
+		if (directory[0] == '/') {
 			directory = directory.slice(1);
 		}
 		if (directory[directory.length - 1] != '/') {
@@ -158,8 +158,7 @@ firetext.io.enumerate = function (directory, callback) {
 				// Don't get any files but docs
 				if (!thisFile[1] |
 						 thisFile[3] != 'text/html' &&
-						 thisFile[3] != 'text/plain') { /* 0.4 &&
-						 thisFile[3] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {*/
+						 thisFile[3] != 'text/plain') {
 					cursor.continue();
 					return;				 
 				}
@@ -216,7 +215,7 @@ firetext.io.enumerate = function (directory, callback) {
 							fileparts = results[i].name.split(".");
 							filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
 							filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-							if (filetype !== ".txt" && filetype !== ".html") { // 0.4 && filetype !== ".docx") {
+							if (filetype !== ".txt" && filetype !== ".html") {
 								continue;
 							}
 							FILES.push([directory, filename, filetype]);
@@ -260,35 +259,12 @@ function createFromDialog() {
 	location = location.toLowerCase();
 	
 	// Save the file
-	if (!location | location == '' | location == 'internal') {
-	
+	if (!location | location == '' | location == 'internal') {	
 		// Get mime
-		var type = "text";
-		switch (filetype) {
-			case ".html":
-				type = "text\/html";
-				break;
-			case ".txt":
-				type = "text\/plain";
-				break;
-			/* 0.4
-			case ".docx":
-				type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-				break;
-			*/
-			default:
-				break;
-		}
-		var contentBlob;
-		//if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-		//	contentBlob = new Blob([firetext.parsers.DocxEditor.blank], {type: type});
-		//} else {
-			contentBlob = new Blob([' '], { "type" : type });
-		//}
+		var type =  firetext.io.getMime(filetype);
+		
+		var contentBlob = new Blob([' '], { "type" : type });
 		if (deviceAPI == 'deviceStorage') {
-			// Make directory accurate
-			directory = ('/sdcard/'+directory);
-
 			var filePath = (directory + filename + filetype);
 			var req = storage.addNamed(contentBlob, filePath);
 			req.onerror = function () {
@@ -407,7 +383,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	}
 	
 	// Fill editor
-	firetext.io.load(directory, filename, filetype, function(result, error) {
+	firetext.io.load(directory, filename, filetype, function(result, error, fileInfo) {
 		if (!error) {
 			initEditor(function() {
 				editorMessageProxy.getPort().postMessage({
@@ -443,7 +419,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				toolbarInterval = window.setInterval(updateToolbar, 100);
 				
 				// Add file to recent docs
-				firetext.recents.add([directory, filename, filetype], location);
+				firetext.recents.add([fileInfo[0], fileInfo[1], fileInfo[2]], location);
 		
 				// Show editor
 				regions.nav('edit');
@@ -582,15 +558,6 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				var file = req.result;
 				var reader = new FileReader();
 				
-				/* 0.4
-				if (filetype == ".docx") {
-					reader.readAsArrayBuffer(file);
-				} else {
-					reader.readAsText(file);
-				}
-				*/
-				
-				// 0.3 only
 				reader.readAsText(file);
 				
 				reader.onerror = function () {	
@@ -604,7 +571,11 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					// Hide spinner
 					spinner('hide');
 					
-					callback(this.result);
+					// Update file info
+					var thisFile = firetext.io.split(file.name);
+					thisFile[3] = file.type;
+					
+					callback(this.result,undefined,thisFile);
 				};
 			};
 			req.onerror = function () {
@@ -637,15 +608,6 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 						callback(this.result);
 					};
 					
-					/* 0.4
-					if (filetype === ".docx") {
-						reader.readAsArrayBuffer(file);
-					} else {
-						reader.readAsText(file);
-					}
-					*/
-					
-					// 0.3 only
 					reader.readAsText(file);
 				}, function(err) {
 					alert(navigator.mozL10n.get('load-unsuccessful')+err.code);
@@ -708,6 +670,22 @@ firetext.io.rename = function (directory, name, type, newname, location) {
 		firetext.io.delete(fullName, location);
 	}, location);
 };
+
+firetext.io.getMime = function (extension) {
+	var type;
+	switch (extension) {
+		case ".html":
+			type = "text/html";
+			break;
+		case ".txt":
+			type = "text/plain";
+			break;
+		default:
+			type = "application/octet-stream";
+			break;
+	}
+	return type;
+}
 
 firetext.io.split = function (path) {
 	var file = new Array();
