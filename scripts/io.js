@@ -608,7 +608,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 						// Hide spinner
 						spinner('hide');
 						
-						callback(this.result);
+						callback(this.result, undefined, [directory, filename, filetype]);
 					};
 					
 					reader.readAsText(file);
@@ -634,7 +634,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 			// Hide spinner
 			spinner('hide');
 					
-			callback(result, error);
+			callback(result, error, [directory, filename, filetype]);
 		});
 	}
 };
