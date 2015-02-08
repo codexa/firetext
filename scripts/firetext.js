@@ -512,7 +512,7 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
 		description = '';
 	}
 	
-	if (firetext.settings.get('previews.enabled') != 'false') {	 
+	if (preview && firetext.settings.get('previews.enabled') != 'false') {	 
 		switch (DOCS[0][2]) {
 			case ".txt":
 				description = firetext.parsers.plain.parse(cleanForPreview(description, DOCS[0][2]), "HTML");
