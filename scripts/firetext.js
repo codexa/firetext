@@ -21,7 +21,7 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign, printButton;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
@@ -128,6 +128,11 @@ function initModules(callback) {
 	firetext.io.init(null, function() {
 		callback();
 	});
+	
+	// Initialize print button
+	initPrintButton(function() {
+		
+	});
 }
 
 function initElements() {
@@ -142,6 +147,7 @@ function initElements() {
 	editWindow = document.getElementById('edit');
 	locationLegend = document.getElementById('locationLegend');
 	locationSelect = document.getElementById('createDialogFileLocation');	
+	printButton = document.getElementById('printButton');
 	
 	// Lists
 	welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -1388,3 +1394,43 @@ document.addEventListener('webkitfullscreenerror', onFullScreenError);
 firetext.alert = function(message) {
 	alert(message);
 };
+
+/* Print button
+------------------------*/ 
+function initPrintButton(callback) {
+	app.modules.load('modules/printButton/printButton.html', printButton, function() {
+		printButtonCommunication(function(){
+			callback();
+		});
+	}, true, true);
+}
+
+function printButtonCommunication(callback) {
+	printButton.onload = null;
+	printButton.onload = function() {
+		// See: scripts/messages.js
+		var printButtonMessageProxy = new MessageProxy();
+		printButtonMessageProxy.setSend(printButton.contentWindow);
+		printButtonMessageProxy.setRecv(window);
+
+		printButtonMessageProxy.registerMessageHandler(function(printEvt) {
+			var key = editorMessageProxy.registerMessageHandler(function(editorEvt){
+				var filename = document.getElementById('currentFileName').textContent;
+				var filetype = document.getElementById('currentFileType').textContent;
+				
+				printButtonMessageProxy.postMessage({
+					command: printEvt.data.key,
+					filename: filename,
+					filetype: filetype,
+					content: editorEvt.data.content,
+					'automatic-printing-failed': navigator.mozL10n.get('automatic-printing-failed')
+				});
+			}, null, true);
+			editorMessageProxy.postMessage({
+				command: "get-content-html",
+				key: key
+			});
+			regions.nav('edit');
+		}, "print-button-pressed");
+	}
+}

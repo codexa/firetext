@@ -84,6 +84,13 @@ function initDocIO(document, messageProxy, loadCallback) {
 	}, "get-content-blob");
 
 	messageProxy.registerMessageHandler(function(e) {
+		messageProxy.postMessage({
+			command: e.data.key,
+			content: getHTML()
+		});
+	}, "get-content-html");
+
+	messageProxy.registerMessageHandler(function(e) {
 		load(e.data.content, e.data.filetype);
 		if(e.data.key) {
 			messageProxy.postMessage({
