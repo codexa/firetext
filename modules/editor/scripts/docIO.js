@@ -58,6 +58,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 		switch (filetype) {
 			case ".html":
 				content = getHTML();
+				if(!/<meta[^>]+charset/.test(content)) content = content.replace('</head>', '<meta charset="utf-8"></head>');
 				type = "text\/html";
 				break;
 			case ".txt":

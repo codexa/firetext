@@ -456,6 +456,22 @@ function saveFromEditor(banner, spinner) {
 	});
 }
 
+function download() {
+	// Select elements
+	var location = document.getElementById('currentFileLocation').textContent;
+	var directory = document.getElementById('currentFileDirectory').textContent;
+	var filename = document.getElementById('currentFileName').textContent;
+	var filetype = document.getElementById('currentFileType').textContent;
+
+	var key = editorMessageProxy.registerMessageHandler(function(e){
+		saveAs(new Blob([StringView.base64ToBytes(e.data.content)], {type: e.data.type}), filename + filetype);
+	}, null, true);
+	editorMessageProxy.postMessage({
+		command: "get-content-blob",
+		key: key
+	});
+}
+
 function loadToEditor(directory, filename, filetype, location, editable) {
 	// Clear editor
 	rawEditor.textContent = '';
