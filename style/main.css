@@ -26,14 +26,14 @@ html, body {
   outline: none;
 }
 
-#no-storage-notice {
+.no-storage-notice {
   font-size: 2rem;
   text-align: center;
   display: block;
   margin: 10% 1rem 1rem;
 }
 
-#no-storage-notice button {
+.no-storage-notice button {
   width: auto;
   margin-top: 1rem;
 }
@@ -246,7 +246,7 @@ label.pack-switch {
 /* Buttons */
 .button-block {
   width: 96%;
-  margin-left: 1.5%;
+  margin: 1.5%;
 }
 
 
@@ -259,6 +259,11 @@ label.pack-switch {
 #createDialogFileType {
   position: absolute;
   padding-top: 11px;  
+}
+
+#uploadDialogFiles {
+  margin: 1.6rem auto 0.4rem;
+  display: block;
 }
 
 #locationLegend {

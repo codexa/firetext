@@ -256,33 +256,38 @@ function addMenuElementsToArray(array, elements) {
 ------------------------*/
 function updateAddDialog() {
 	if (locationSelect.length < 1) {
-		// Disable elements
-		document.getElementById('add-dialog-create-button').style.pointerEvents = 'none';
-		document.getElementById('add-dialog-create-button').style.color = '#999';
-		document.querySelector('#add [role="main"]').style.display = 'none';
-		
-		// Create notice
-		var noStorageNotice = document.getElementById('no-storage-notice');
-		if (noStorageNotice.classList.contains('hidden-item')) {
-			noStorageNotice.classList.remove('hidden-item');
-		}
+		[].forEach.call(document.getElementsByClassName('create-dialog'), function(createDialog) {
+			// Disable elements
+			createDialog.getElementsByClassName('create-button')[0].style.pointerEvents = 'none';
+			createDialog.getElementsByClassName('create-button')[0].style.color = '#999';
+			createDialog.querySelector('[role="main"]').style.display = 'none';
+			
+			// Show notice
+			var noStorageNotice = createDialog.getElementsByClassName('no-storage-notice')[0];
+			if (noStorageNotice.classList.contains('hidden-item')) {
+				noStorageNotice.classList.remove('hidden-item');
+			}
+		});
 	} else {
-		// Enable elements
-		document.getElementById('add-dialog-create-button').setAttribute('style', 'pointer-events: auto;');
-		document.querySelector('#add [role="main"]').style.display = 'block';
-		
-		// Hide location select if only one option exists
-		if (locationSelect.length === 1) {
-			locationLegend.style.display = 'none';
-		} else {
-			locationLegend.style.display = 'block';			
-		}
-		
-		// Remove notice if present
-		var noStorageNotice = document.getElementById('no-storage-notice');
-		if (!noStorageNotice.classList.contains('hidden-item')) {
-			noStorageNotice.classList.add('hidden-item');
-		}
+		[].forEach.call(document.getElementsByClassName('create-dialog'), function(createDialog) {
+			// Disable elements
+			createDialog.getElementsByClassName('create-button')[0].style.pointerEvents = '';
+			createDialog.getElementsByClassName('create-button')[0].style.color = '';
+			createDialog.querySelector('[role="main"]').style.display = '';
+			
+			// Hide location select if only one option exists
+			if (locationSelect.length === 1) {
+				locationLegend.style.display = 'none';
+			} else {
+				locationLegend.style.display = 'block';                 
+			}
+			
+			// Hide notice
+			var noStorageNotice = createDialog.getElementsByClassName('no-storage-notice')[0];
+			if (!noStorageNotice.classList.contains('hidden-item')) {
+				noStorageNotice.classList.add('hidden-item');
+			}
+		});
 	}
 }
 
@@ -1104,6 +1109,8 @@ function processActions(eventAttribute, target) {
 			}
 		} else if (calledFunction == 'createFromDialog') {
 			createFromDialog();
+		} else if (calledFunction == 'uploadFromDialog') {
+			uploadFromDialog();
 		} else if (calledFunction == 'editDocs') {
 			editDocs();
 		} else if (calledFunction == 'extIcon') {

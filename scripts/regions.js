@@ -98,6 +98,11 @@ function nav2() {
 			tempElement.addEventListener('transitionend', onTransitionEnd);
 			tempElement.addEventListener('webkitTransitionEnd', onTransitionEnd);
 		}
+		
+		// Move file location selector to active region
+		if (tempLoc == 'add' || tempLoc == 'upload') {
+			document.getElementById(tempLoc).getElementsByClassName('button-block')[0].appendChild(locationLegend);
+		}
 		/* End of customized section */
 	}
 }

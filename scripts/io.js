@@ -333,6 +333,106 @@ function createFromDialog() {
 	extIcon();
 }
 
+function uploadFromDialog() {
+	var directory = 'Documents/';
+	var location = document.getElementById('createDialogFileLocation').value; // Moved back and forth in regions.js
+	var files = document.getElementById('uploadDialogFiles').files;
+	
+	// Navigate back to the previous screen
+	regions.navBack();
+	
+	// Convert location to lower case
+	location = location.toLowerCase();
+	
+	for (var i = 0; i < files.length; i++) {
+		var file = files[i];
+		
+		if(file.name.lastIndexOf(".") !== -1) {
+			var filename = file.name.substr(0, file.name.lastIndexOf("."));
+			var filetype = file.name.substr(file.name.lastIndexOf("."));
+		} else {
+			var filename = file.name;
+			var filetype = "";
+		}
+		
+		if (filename == null | filename == undefined | filename == '')	{
+			continue;
+		} else if (!isValidFileName(filename)) {
+			alert(navigator.mozL10n.get('contains-special-characters'));
+			continue;
+		}
+		
+		if (['text/html', 'text/plain'].indexOf(file.type) === -1) {
+			continue;
+		}
+		
+		// Save the file
+		if (!location | location == '' | location == 'internal') {	
+			if (deviceAPI == 'deviceStorage') {
+				var filePath = (directory + filename + filetype);
+				var req = storage.addNamed(file, filePath);
+				req.onerror = function () {
+					if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
+						alert(navigator.mozL10n.get('file-exists'));
+					}
+					else {
+						alert(navigator.mozL10n.get('file-creation-fail')+this.error.name);
+					}
+				};	
+				req.onsuccess = function () {	 
+					// Load to editor
+					loadToEditor(directory, filename, filetype, 'internal');
+					
+					// Update list
+					updateDocLists(['internal']);
+				};
+			} else if (deviceAPI == 'file') {
+				storage.root.getFile(directory + filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
+					fileEntry.createWriter(function(fileWriter){
+						fileWriter.onwriteend = function(e) {
+							e.target.write(file);
+							e.target.onwriteend = function(e) {
+								loadToEditor(directory, filename, filetype, 'internal');
+							}
+							e.target.onerror = function(e) {
+								alert(navigator.mozL10n.get('file-creation-fail')+e.message);
+							}
+						};
+						
+						fileWriter.onerror = function(e) {
+							alert(navigator.mozL10n.get('file-creation-fail')+e.message);
+						};
+						
+						fileWriter.truncate(0);
+					}, function(err) {
+						alert(navigator.mozL10n.get('file-creation-fail')+err.code);
+					});
+				}, function(err) {
+					if(err.code === FileError.INVALID_MODIFICATION_ERR) {
+						alert(navigator.mozL10n.get('file-exists'));
+					} else {
+						alert(navigator.mozL10n.get('file-creation-fail')+err.code);
+					}
+				});
+			}
+		} else if (location == 'dropbox') {
+			directory = ('/' + directory);
+			firetext.io.save(directory, filename, filetype, file, false, function () {	 
+				// Load to editor
+				loadToEditor(directory, filename, filetype, location);			
+					
+				// Update list
+				updateDocLists(['cloud']);
+			}, location);
+		} else {
+			alert(navigator.mozL10n.get('invalid-location'));
+		}
+	}
+	
+	// Clear file fields
+	document.getElementById('uploadDialogFiles').value = '';
+}
+
 function isValidFileName(filename) {
 	return (/^[a-zA-Z0-9-\._ ]+$/.test(filename) && !(/\.\./.test(filename)) && !(/\.$/.test(filename)));
 }
