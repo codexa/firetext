@@ -474,8 +474,15 @@ function download() {
 }
 
 function loadToEditor(directory, filename, filetype, location, editable) {
-	// Clear editor
-	rawEditor.textContent = '';
+	// Reset variables
+	tempText = undefined;
+	
+	// Initialize raw editor
+	if (!rawEditor) {
+		rawEditor = CodeMirror(rawEditorElement, {
+			lineNumbers: true
+		});
+	}
 	
 	// Set file name and type
 	document.getElementById('currentFileLocation').textContent = location;
@@ -517,11 +524,10 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 					case ".odt":
 						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
 						tabRaw.classList.add('hidden-item');
-						regions.tab(document.querySelector('#editTabs'), 'design');
 						break;
 					case ".html":
 					default:
-						rawEditor.textContent = result;
+						rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
 						document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
 						tabRaw.classList.remove('hidden-item');	
 						break;
@@ -545,6 +551,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 		
 				// Show editor
 				regions.nav('edit');
+				regions.tab(document.querySelector('#editTabs'), 'design');
 		
 				// Hide save button if autosave is enabled
 				if (firetext.settings.get('autosave') != 'false') {
@@ -552,6 +559,9 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				} else {
 					document.getElementById('editorSaveButton').style.display = 'inline-block';
 				}
+				
+				// Re-initialize night
+				night();
 			})
 		} else {
 			alert(navigator.mozL10n.get('load-unsuccessful')+result);

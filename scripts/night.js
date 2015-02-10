@@ -44,7 +44,10 @@ function startNight(start) {
 				command: "night",
 				nightMode: true
 			});
-		}	
+		}
+		if (rawEditor) {
+			rawEditor.setOption("theme", 'tomorrow-night-bright');
+		}
 	} else {
 		html.classList.remove('night');
 		themeColor.setAttribute('content', dayTheme);
@@ -53,6 +56,9 @@ function startNight(start) {
 				command: "night",
 				nightMode: false
 			});
-		}	
+		}
+		if (rawEditor) {
+			rawEditor.setOption("theme", 'default');
+		}
 	}
 }
