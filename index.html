@@ -94,7 +94,7 @@
     <nav>
       <h2 data-l10n-id="document-actions">Document actions</h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="add" data-l10n-id="create-document">Create document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create-document">Create document</a></li>
         <li><a href="#" data-click="nav" data-click-location="upload" data-l10n-id="upload-document">Import document</a></li>
         <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open-document">Open document</a></li>
       </ul>
@@ -124,7 +124,7 @@
     data-click="sidebar" data-click-id="welcome" data-click-state="close" data-click-only="current">
     <header>
       <menu type="toolbar">
-        <button data-click="nav" data-click-location="add"><span class="icon icon-create"></span></button>
+        <button data-click="nav" data-click-location="create"><span class="icon icon-create"></span></button>
         <button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
       </menu>
       <h1 class="firetext icon-">firetext</h1>
@@ -162,7 +162,7 @@
     </menu>
   </div>
   
-  <section role="dialog" id="add" class="create-dialog">
+  <section role="dialog" id="create" class="create-dialog">
     <header>
       <button data-click="navBack"><span class="icon icon-close"></span></button>
       <menu type="toolbar">
@@ -179,7 +179,7 @@
         <br>
         <img alt="" src="style/icons/extensions/default.png" id="extIconFile" height="150px" style="display:block; margin: 10px auto;"/>
         <fieldset class="button-block">
-          <legend id="fileTypeLegend" class="action">
+          <legend class="fileTypeLegend action">
             <select name="File type" id="createDialogFileType" data-change="extIcon">
               <option>.html</option>
               <option>.txt</option>
@@ -223,6 +223,36 @@
   </section>
   <div class="background"></div>
   
+  <section role="dialog" id="save-as" class="create-dialog">
+    <header>
+      <button data-click="navBack"><span class="icon icon-close"></span></button>
+      <menu type="toolbar">
+        <button data-click="saveAsFromDialog" class="create-button" data-l10n-id="save-as">save</button>
+      </menu>
+      <h1 data-l10n-id="save-as-document">Save document as</h1>
+    </header>
+    <div class="no-storage-notice">
+      <div data-l10n-id="no-storage-method"></div>
+      <button data-click="nav" data-click-location="settings" data-l10n-id="settings"></button>
+    </div>
+    <div role="main" class="header-only">
+      <div class="form">
+        <fieldset class="button-block">
+          <legend class="fileTypeLegend">
+            <span id="saveAsDialogFileType"></span>
+          </legend>
+          <section id="fileNameInput">
+            <p>
+              <input placeholder="untitled" required="" type="text" id="saveAsDialogFileName" data-enter="saveAsFromDialog" />
+              <button type="reset" data-mouse-down="clearSaveAsForm"></button>
+            </p>
+          </section>
+        </fieldset>
+      </div>
+    </div>
+  </section>
+  <div class="background"></div>
+  
   <section role="dialog" id="open">
     <header>
       <button data-click="navBack"><span class="icon icon-close"></span></button>
@@ -250,10 +280,11 @@
     <nav>
       <h2 data-l10n-id="document-actions">Document actions</h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="add" data-l10n-id="create-document">Create document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create-document">Create document</a></li>
         <li><a href="#" data-click="nav" data-click-location="upload" data-l10n-id="upload-document">Import document</a></li>
         <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open-document">Open document</a></li>
         <li><a href="#" data-click="saveFromEditor" data-l10n-id="save-document">Save document</a></li>
+        <li><a href="#" data-click="nav" data-click-location="save-as" data-l10n-id="save-as-document">Save document as</a></li>
         <li><a href="#" data-click="downloadFile" data-l10n-id="download-document">Export document</a></li>
         <li><a href="#" data-click="printFile" data-l10n-id="print-document">Print document</a><iframe class="printButton" id="printButton" sandbox="allow-scripts allow-popups" src=""></iframe></li>
         <li><a href="#" data-click="closeFile" data-l10n-id="close-document">Close document</a></li>

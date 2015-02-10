@@ -1101,6 +1101,8 @@ function processActions(eventAttribute, target) {
 			createFromDialog();
 		} else if (calledFunction == 'uploadFromDialog') {
 			uploadFromDialog();
+		} else if (calledFunction == 'saveAsFromDialog') {
+			saveAsFromDialog();
 		} else if (calledFunction == 'editDocs') {
 			editDocs();
 		} else if (calledFunction == 'extIcon') {
@@ -1119,6 +1121,8 @@ function processActions(eventAttribute, target) {
 			}
 		} else if (calledFunction == 'clearCreateForm') {
 			clearCreateForm();
+		} else if (calledFunction == 'clearSaveAsForm') {
+			clearSaveAsForm();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
 				editFullScreen(false);		
@@ -1328,6 +1332,10 @@ function clearCreateForm() {
 	document.getElementById('createDialogFileName').value = '';
 	document.getElementById('createDialogFileType').value = '.html';
 	extIcon();
+}
+
+function clearSaveAsForm() {
+	document.getElementById('saveAsDialogFileName').value = '';
 }
 
 function spinner(state) {

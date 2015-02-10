@@ -89,9 +89,9 @@ function nav2() {
 		}
 		
 		// Focus filename input
-		if (tempLoc == 'add') {
+		if (tempLoc == 'create' || tempLoc == 'save-as') {
 			var onTransitionEnd = function () {
-				document.getElementById('createDialogFileName').focus();
+				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').focus();
 				tempElement.removeEventListener('transitionend', onTransitionEnd);
 				tempElement.removeEventListener('webkitTransitionEnd', onTransitionEnd);
 			};
@@ -99,8 +99,14 @@ function nav2() {
 			tempElement.addEventListener('webkitTransitionEnd', onTransitionEnd);
 		}
 		
+		// Prefill filename and show filetype
+		if (tempLoc == 'save-as') {
+			document.getElementById('saveAsDialogFileName').value = document.getElementById('currentFileName').textContent;
+			document.getElementById('saveAsDialogFileType').textContent = document.getElementById('currentFileType').textContent;
+		}
+		
 		// Move file location selector to active region
-		if (tempLoc == 'add' || tempLoc == 'upload') {
+		if (tempLoc == 'create' || tempLoc == 'upload' || tempLoc == 'save-as') {
 			document.getElementById(tempLoc).getElementsByClassName('button-block')[0].appendChild(locationLegend);
 		}
 		/* End of customized section */
