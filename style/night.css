@@ -251,27 +251,9 @@
 }
 
 /* Editor */
-@media (min-width: 767px) {
-	.night #edit-bar {
-		background-color: #222;
-		color: #fff;
-		border-color: #2c2c2c;
-	}
-}
-
-/* Toolbar */
-.night [role="toolbar"] {
-	background-color: rgba(17,17,17,0.95);
-}
-
-.night [role="toolbar"] button:active, 
-.night [role="toolbar"] button.active {
-	background-color: #444;
-}
-
-.night [role="toolbar"] button[class^="icon-"], 
-.night [role="toolbar"] [class*=" icon-"] {
-	color: #dfdfdf;		
+.night #tab-design {
+		-webkit-filter: invert(100%) hue-rotate(180deg);
+	filter: invert(100%) hue-rotate(180deg);
 }
 
 /* Status */
