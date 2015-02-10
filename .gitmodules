@@ -1,3 +1,4 @@
-[submodule "scripts/parsers/odt2html2odt"]
-	path = scripts/parsers/odt2html2odt
-	url = https://github.com/codexa/odt2html2odt.git
+[submodule "scripts/parsers/odt.js"]
+	path = scripts/parsers/odt.js
+	url = https://github.com/codexa/odt.js.git
+	branch = master
