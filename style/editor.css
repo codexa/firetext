@@ -29,18 +29,6 @@
 	bottom: 0;
 }
 
-/* Code editor */
-#rawEditor {
-	border: none;
-	padding: 5px 5px 6rem;
-	font-size: 2em;
-	outline: none;
-	font-family: monospace;
-	display: block;
-	max-width: 100%;
-	direction: ltr;
-}
-
 /* Header */
 #fileName {
 	text-align: left;

@@ -24,6 +24,12 @@
   <script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.min.js" defer></script>
   <script type="text/javascript" src="scripts/cloud/dropbox.js" defer></script>
+	
+  <!-- Ace -->
+  <script type="text/javascript" src="scripts/lib/ace/ace.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/ace/mode-html.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/ace/theme-tomorrow_night.js" defer></script>
+  <script type="text/javascript" src="scripts/lib/ace/worker-html.js" defer></script>
   
   <!-- Lib -->
   <script type="text/javascript" src="scripts/lib/kamino.js" defer></script>
@@ -32,8 +38,6 @@
   <script type="text/javascript" src="scripts/lib/encrypt.js" defer></script>
   <script type="text/javascript" src="scripts/lib/FileSaver.js" defer></script>
   <script type="text/javascript" src="scripts/lib/gesture_detector.js" defer></script>
-  <script type="text/javascript" src="scripts/lib/prettify.js" defer></script>
-  <script type="text/javascript" src="scripts/lib/lang-css.js" defer></script>
   <script type="text/javascript" src="scripts/lib/stringview.js" defer></script>
   <script type="text/javascript" src="scripts/lib/bugsense.min.js" defer></script>
   <script type="text/javascript" src="scripts/lib/jszip.js" defer></script>
@@ -80,7 +84,6 @@
   <link rel="stylesheet" type="text/css" href="style/action_menu.css"/>
   <link rel="stylesheet" type="text/css" media="(min-width: 767px)" href="style/desktop.css"/>
   <link rel="stylesheet" type="text/css" media="(max-width: 767px)" href="style/mobile.css"/>
-  <link rel="stylesheet" type="text/css" href="style/prettify.css"/>
   <link rel="stylesheet" type="text/css" href="style/night.css" />
 </head>
 
@@ -312,7 +315,7 @@
           </div>
         </div>
         <div role="tab" id="tab-raw">
-          <code class="prettyprint lang-html" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></code>
+          <code class="editor" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></code>
         </div>
       </ul>
     </div>
