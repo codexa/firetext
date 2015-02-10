@@ -507,9 +507,6 @@ function cleanForPreview(text, documentType) {
 					return htmlNode.innerHTML;
 				}
 				return text;
-		case ".docx":
-			console.warn("cleanForPreview docx not implemented text = %s.", text);
-			return text;
 	}
 }
 
@@ -517,24 +514,29 @@ function sortByCellIndex(a,b) {
 		return a.cellIndex - b.cellIndex;
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location, preview) {
+function buildDocListItems(DOCS, listElms, description, output, location, preview, error) {
 	// Handle description
 	if (!description) {
 		description = '';
 	}
 	
 	if (preview && firetext.settings.get('previews.enabled') != 'false') {	 
-		switch (DOCS[0][2]) {
+		switch (error ? ".txt" : DOCS[0][2]) {
 			case ".txt":
-				description = firetext.parsers.plain.parse(cleanForPreview(description, DOCS[0][2]), "HTML");
+				description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
 				break;
 			case ".docx":
-				var tmp = document.createElement("DIV");
-				var docx = new DocxEditor(description);
-				tmp.appendChild(docx.HTMLout());
-				description = tmp.innerHTML;
+			case ".odt":
+				if(DOCS[0][2] === ".docx") {
+					var tmp = document.createElement("DIV");
+					var docx = new DocxEditor(description);
+					tmp.appendChild(docx.HTMLout());
+					description = tmp.innerHTML;
+				} else {
+					description = new JSZip(description).file('content.xml').asText();
+				}
 			case ".html":
-				description = cleanForPreview(description, DOCS[0][2]);
+				description = cleanForPreview(description, ".html");
 				break;
 			default:
 				break;
@@ -585,11 +587,11 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
 	
 	// build next item
 	if (preview == true) {
-		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result) {
-			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview);
+		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result, error) {
+			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview, error);
 		}, location);
 	} else {
-		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location);	
+		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location, preview, true);	
 	}
 }
 
@@ -608,11 +610,11 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 			
 			// build next item
 			if (preview == true) {
-				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result) {
-					buildDocListItems(DOCS, listElms, result, "", location, preview);
+				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result, error) {
+					buildDocListItems(DOCS, listElms, result, "", location, preview, error);
 				}, location);
 			} else {
-				buildDocListItems(DOCS, listElms, null, "", location, preview);			 
+				buildDocListItems(DOCS, listElms, null, "", location, preview, true);			 
 			}
 		} else {
 			// No docs message

@@ -9,17 +9,18 @@ function initDocIO(document, messageProxy, loadCallback) {
 	/* 0.4
 	var docxeditor;
 	*/
+	var odtdoc;
 	var filetype;
 
 	function getHTML() {
 		/*** This function is duplicated in contentscript.js ***/
 		var doctype = document.doctype;
-		var doctypeString = '<!DOCTYPE '
+		var doctypeString = doctype ? '<!DOCTYPE '
 			+ doctype.name
 			+ (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '')
 			+ (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
 			+ (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
-			+ '>';
+			+ '>' : '';
 		return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '');
 	}
 	function getText() {
@@ -33,6 +34,15 @@ function initDocIO(document, messageProxy, loadCallback) {
 			case ".txt":
 				content = firetext.parsers.plain.parse(content, "HTML");
 				document.write(content);
+				break;
+			case ".odt":
+				odtdoc = new ODTDocument(content);
+				var html = odtdoc.getHTMLUnsafe();
+				try {
+					html = odtdoc.getHTML();
+				} finally {
+					document.write(html);
+				}
 				break;
 			/* 0.4
 			case ".docx":
@@ -49,12 +59,13 @@ function initDocIO(document, messageProxy, loadCallback) {
 		}
 		document.close();
 		
-		loadCallback(filetype);
+		loadCallback(filetype, odtdoc);
 	}
 
 	messageProxy.registerMessageHandler(function(e) {
 		var content;
 		var type;
+		var binary = false;
 		switch (filetype) {
 			case ".html":
 				content = getHTML();
@@ -64,6 +75,12 @@ function initDocIO(document, messageProxy, loadCallback) {
 			case ".txt":
 				content = firetext.parsers.plain.encode(getHTML(), "HTML");
 				type = "text\/plain";
+				break;
+			case ".odt":
+				odtdoc.setHTML(getHTML());
+				content = odtdoc.getODT({type: 'string'});
+				type = "application\/vnd.oasis.opendocument.text";
+				binary = true;
 				break;
 			/* 0.4
 			case ".docx":
@@ -76,10 +93,9 @@ function initDocIO(document, messageProxy, loadCallback) {
 				break;
 		}
 		
-		var contentView = new StringView(content);
 		messageProxy.postMessage({
 			command: e.data.key,
-			content: contentView.toBase64(),
+			content: binary ? btoa(content) : new StringView(content).toBase64(),
 			type: type
 		});
 	}, "get-content-blob");
