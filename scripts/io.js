@@ -363,7 +363,7 @@ function uploadFromDialog() {
 			continue;
 		}
 		
-		if (['text/html', 'text/plain'].indexOf(file.type) === -1) {
+		if (['text/html', 'text/plain', 'application/vnd.oasis.opendocument.text'].indexOf(file.type) === -1) {
 			continue;
 		}
 		
