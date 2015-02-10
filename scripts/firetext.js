@@ -21,7 +21,7 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign, printButton;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
@@ -142,7 +142,7 @@ function initElements() {
 	tabDesign = document.getElementById('tab-design');
 	tabRaw = document.getElementById('tab-raw');
 	editor = document.getElementById('editor');
-	rawEditor = document.getElementById('rawEditor');
+	rawEditorElement = document.getElementById('rawEditor');
 	toolbar = document.getElementById('edit-zone');
 	editWindow = document.getElementById('edit');
 	locationLegend = document.getElementById('locationLegend');
@@ -717,22 +717,12 @@ function editorCommunication(callback) {
 		editorMessageProxy.setRecv(window);
 		// Successful initialization
 		editorMessageProxy.registerMessageHandler(function(e) {
-			// Initialize Raw Editor
-			rawEditor.setAttribute('contentEditable', 'true');
-	
-			// Nav to the design tab
-			regions.tab(document.querySelector('#editTabs'), 'design');
 			callback();
-
-			// Initialize Night Mode
-			night();
 		}, "init-success", true);
 
 		editorMessageProxy.registerMessageHandler(function(e) {
+			tempText = e.data.html;
 			fileChanged = true;
-			if(e.data.filetype === ".html") {
-				rawEditor.textContent = e.data.html;
-			}
 			autosave();
 		}, "doc-changed");
 
@@ -754,20 +744,16 @@ function editorCommunication(callback) {
 
 function watchDocument(filetype) {
 	if(filetype === ".html") {
-		prettyPrint();
 		// Add listener to update design
-		rawEditor.addEventListener('input', function() {
+		((rawEditor.getSession()).getDocument()).addEventListener('change', function() {
 			fileChanged = true;
 			var callbackKey = editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, null, true);
 			editorMessageProxy.postMessage({
 				command: "load",
-				content: rawEditor.textContent,
+				content: ((rawEditor.getSession()).getDocument()).getValue(),
 				filetype: ".html",
 				key: callbackKey
 			});
-		});
-		rawEditor.addEventListener('blur', function() {
-			prettyPrint();
 		});
 	}
 }

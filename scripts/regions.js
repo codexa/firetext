@@ -134,28 +134,29 @@ regions.sidebar = function (name, state) {
 
 regions.tab = function (list, name) {
 	if (document.getElementById('tab-'+name)) {
-    // Unselect previous tab and button
-    var previousTab = document.querySelector('.selected-tab');
+		// Unselect previous tab and button
+		var previousTab = document.querySelector('.selected-tab');
 		if (previousTab) {
 			previousTab.classList.remove('selected-tab');
 		}
-    var previousTabButton = document.querySelector('.selected-tab-button');
+		var previousTabButton = document.querySelector('.selected-tab-button');
 		if (previousTabButton) {
 			previousTabButton.classList.remove('selected-tab-button');
 		}
-    
-    // Select tab
+
+		// Select tab
 		document.getElementById('tab-'+name).classList.add('selected-tab');
-    
-    // Select tab button
-    var tabButton = document.querySelector('[role="tab-button"][data-tab-id="'+name+'"]');
-    if (tabButton) {
-      tabButton.classList.add('selected-tab-button');                
-    }
-		
+
+		// Select tab button
+		var tabButton = document.querySelector('[role="tab-button"][data-tab-id="'+name+'"]');
+		if (tabButton) {
+			tabButton.classList.add('selected-tab-button');                
+		}
+
 		/* Remove this section when porting to other projects */
-		if (name == 'raw') {
-			prettyPrint();
+		if (name === 'raw' && tempText) {
+			((rawEditor.getSession()).getDocument()).setValue(tempText);
+			tempText = undefined;
 		}
 		/* End of customized section */
 	}

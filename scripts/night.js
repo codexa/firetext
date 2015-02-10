@@ -44,7 +44,10 @@ function startNight(start) {
 				command: "night",
 				nightMode: true
 			});
-		}	
+		}
+		if (rawEditor) {
+			rawEditor.setTheme("ace/theme/tomorrow_night");
+		}
 	} else {
 		html.classList.remove('night');
 		themeColor.setAttribute('content', dayTheme);
@@ -53,6 +56,9 @@ function startNight(start) {
 				command: "night",
 				nightMode: false
 			});
-		}	
+		}
+		if (rawEditor) {
+			rawEditor.setTheme("");
+		}
 	}
 }
