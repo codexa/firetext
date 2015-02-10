@@ -251,7 +251,7 @@ label.pack-switch {
 
 
 /* Value selectors */
-#fileTypeLegend {
+.fileTypeLegend {
   float: right;
   width: 9rem;
 }
@@ -274,19 +274,23 @@ label.pack-switch {
   text-align: center;
 }
   
-legend.action { 
+fieldset legend {
+  text-transform: initial;
+}
+
+fieldset legend.action { 
   background: none;
   border: none;
   border-radius: 0;
   outline: none;
 }
 
-legend.action:active {
+fieldset legend.action:active {
   background-color: #eee;
   outline: none;
 }
 
-legend.action select {
+fieldset legend.action select {
   width: 100%;
   height: 100%;
   background: transparent;
@@ -419,7 +423,7 @@ aside select.dummy {
     margin-right: 1.5%;
 }
 
-[dir="rtl"] #fileTypeLegend {
+[dir="rtl"] .fileTypeLegend {
     float: left;  
 }
 

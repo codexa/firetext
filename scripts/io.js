@@ -240,34 +240,10 @@ firetext.io.enumerate = function (directory, callback) {
 
 /* File IO
 ------------------------*/
-function createFromDialog() {
-	var directory = 'Documents/';
-	var location = document.getElementById('createDialogFileLocation').value;
-	var filename = document.getElementById('createDialogFileName').value;
-	var filetype = document.getElementById('createDialogFileType').value;
-	if (filename == null | filename == undefined | filename == '')	{
-		alert(navigator.mozL10n.get('enter-name'));
-		return;
-	} else if (!isValidFileName(filename)) {
-		alert(navigator.mozL10n.get('contains-special-characters'));
-		return;
-	}
-	
-	// Navigate back to the previous screen
-	regions.navBack();
-	
-	// Convert location to lower case
-	location = location.toLowerCase();
-	
-	// Get default file contents
-	var contentData = firetext.io.getDefaultContent(filetype);
-	
+
+function createAndOpen(location, directory, filename, filetype, contentBlob) {
 	// Save the file
 	if (!location | location == '' | location == 'internal') {	
-		// Get mime
-		var type =  firetext.io.getMime(filetype);
-		
-		var contentBlob = new Blob([contentData], { "type" : type });
 		if (deviceAPI == 'deviceStorage') {
 			var filePath = (directory + filename + filetype);
 			var req = storage.addNamed(contentBlob, filePath);
@@ -317,7 +293,7 @@ function createFromDialog() {
 		}
 	} else if (location == 'dropbox') {
 		directory = ('/' + directory);
-		firetext.io.save(directory, filename, filetype, contentData, false, function () {	 
+		firetext.io.save(directory, filename, filetype, contentBlob, false, function () {	 
 			// Load to editor
 			loadToEditor(directory, filename, filetype, location);			
 				
@@ -327,6 +303,36 @@ function createFromDialog() {
 	} else {
 		alert(navigator.mozL10n.get('invalid-location'));
 	}
+}
+
+function createFromDialog() {
+	var directory = 'Documents/';
+	var location = document.getElementById('createDialogFileLocation').value; // Moved back and forth in regions.js
+	var filename = document.getElementById('createDialogFileName').value;
+	var filetype = document.getElementById('createDialogFileType').value;
+	if (filename == null | filename == undefined | filename == '')	{
+		alert(navigator.mozL10n.get('enter-name'));
+		return;
+	} else if (!isValidFileName(filename)) {
+		alert(navigator.mozL10n.get('contains-special-characters'));
+		return;
+	}
+	
+	// Navigate back to the previous screen
+	regions.navBack();
+	
+	// Convert location to lower case
+	location = location.toLowerCase();
+	
+	// Get default file contents
+	var contentData = firetext.io.getDefaultContent(filetype);
+	
+	// Get mime
+	var type =  firetext.io.getMime(filetype);
+	
+	var contentBlob = new Blob([contentData], { "type" : type });
+	
+	createAndOpen(location, directory, filename, filetype, contentBlob);
 	
 	// Clear file fields
 	document.getElementById('createDialogFileName').value = '';
@@ -367,71 +373,39 @@ function uploadFromDialog() {
 			continue;
 		}
 		
-		// Save the file
-		if (!location | location == '' | location == 'internal') {	
-			if (deviceAPI == 'deviceStorage') {
-				var filePath = (directory + filename + filetype);
-				var req = storage.addNamed(file, filePath);
-				req.onerror = function () {
-					if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
-						alert(navigator.mozL10n.get('file-exists'));
-					}
-					else {
-						alert(navigator.mozL10n.get('file-creation-fail')+this.error.name);
-					}
-				};	
-				req.onsuccess = function () {	 
-					// Load to editor
-					loadToEditor(directory, filename, filetype, 'internal');
-					
-					// Update list
-					updateDocLists(['internal']);
-				};
-			} else if (deviceAPI == 'file') {
-				storage.root.getFile(directory + filename + filetype, {create: true, exclusive: true}, function(fileEntry) {
-					fileEntry.createWriter(function(fileWriter){
-						fileWriter.onwriteend = function(e) {
-							e.target.write(file);
-							e.target.onwriteend = function(e) {
-								loadToEditor(directory, filename, filetype, 'internal');
-							}
-							e.target.onerror = function(e) {
-								alert(navigator.mozL10n.get('file-creation-fail')+e.message);
-							}
-						};
-						
-						fileWriter.onerror = function(e) {
-							alert(navigator.mozL10n.get('file-creation-fail')+e.message);
-						};
-						
-						fileWriter.truncate(0);
-					}, function(err) {
-						alert(navigator.mozL10n.get('file-creation-fail')+err.code);
-					});
-				}, function(err) {
-					if(err.code === FileError.INVALID_MODIFICATION_ERR) {
-						alert(navigator.mozL10n.get('file-exists'));
-					} else {
-						alert(navigator.mozL10n.get('file-creation-fail')+err.code);
-					}
-				});
-			}
-		} else if (location == 'dropbox') {
-			directory = ('/' + directory);
-			firetext.io.save(directory, filename, filetype, file, false, function () {	 
-				// Load to editor
-				loadToEditor(directory, filename, filetype, location);			
-					
-				// Update list
-				updateDocLists(['cloud']);
-			}, location);
-		} else {
-			alert(navigator.mozL10n.get('invalid-location'));
-		}
+		createAndOpen(location, directory, filename, filetype, file);
 	}
 	
 	// Clear file fields
 	document.getElementById('uploadDialogFiles').value = '';
+}
+
+function saveAsFromDialog() {
+	var directory = 'Documents/';
+	var location = document.getElementById('createDialogFileLocation').value; // Moved back and forth in regions.js
+	var filename = document.getElementById('saveAsDialogFileName').value;
+	var filetype = document.getElementById('currentFileType').textContent; // Current filetype
+	if (filename == null | filename == undefined | filename == '')	{
+		alert(navigator.mozL10n.get('enter-name'));
+		return;
+	} else if (!isValidFileName(filename)) {
+		alert(navigator.mozL10n.get('contains-special-characters'));
+		return;
+	}
+	
+	// Navigate back to the previous screen
+	regions.navBack();
+	
+	// Convert location to lower case
+	location = location.toLowerCase();
+	
+	var key = editorMessageProxy.registerMessageHandler(function(e){
+		createAndOpen(location, directory, filename, filetype, new Blob([StringView.base64ToBytes(e.data.content)], {type: e.data.type}));
+	}, null, true);
+	editorMessageProxy.postMessage({
+		command: "get-content-blob",
+		key: key
+	});
 }
 
 function isValidFileName(filename) {
