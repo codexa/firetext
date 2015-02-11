@@ -463,6 +463,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	document.getElementById('currentFileDirectory').textContent = directory;
 	document.getElementById('currentFileName').textContent = filename;
 	document.getElementById('currentFileType').textContent = filetype;
+	document.getElementById('sidebar-file-name').textContent = filename + filetype;
 	
 	// Set alert banner name and type
 	document.getElementById('save-banner-name').textContent = (directory + filename);
