@@ -92,11 +92,11 @@
       <h1 data-l10n-id="menu"></h1>
     </header>
     <nav>
-      <h2 data-l10n-id="document-actions"></h2>
+      <h2 data-l10n-id="documents"></h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create-document"></a></li>
-        <li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import-document"></a></li>
-        <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open-document"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open"></a></li>
       </ul>
       <h2 data-l10n-id="help"></h2>
       <ul>
@@ -168,7 +168,7 @@
       <menu type="toolbar">
         <button data-click="createFromDialog" class="create-button" data-l10n-id="create"></button>
       </menu>
-      <h1 data-l10n-id="create-document"></h1>
+      <h1 data-l10n-id="create"></h1>
     </header>
     <div class="no-storage-notice">
       <div data-l10n-id="no-storage-method"></div>
@@ -207,7 +207,7 @@
       <menu type="toolbar">
         <button data-click="uploadFromDialog" class="create-button" data-l10n-id="import"></button>
       </menu>
-      <h1 data-l10n-id="import-document"></h1>
+      <h1 data-l10n-id="import"></h1>
     </header>
     <div class="no-storage-notice">
       <div data-l10n-id="no-storage-method"></div>
@@ -229,7 +229,7 @@
       <menu type="toolbar">
         <button data-click="saveAsFromDialog" class="create-button" data-l10n-id="save"></button>
       </menu>
-      <h1 data-l10n-id="save-as-document"></h1>
+      <h1 data-l10n-id="save-as"></h1>
     </header>
     <div class="no-storage-notice">
       <div data-l10n-id="no-storage-method"></div>
@@ -256,7 +256,7 @@
   <section role="dialog" id="open">
     <header>
       <button data-click="navBack"><span class="icon icon-close"></span></button>
-      <h1 data-l10n-id="open-document"></h1>
+      <h1 data-l10n-id="open"></h1>
     </header>
     <div role="main" class="header-only">
       <article data-type="list" class="docsList">
@@ -275,24 +275,25 @@
   
   <section data-type="sidebar" id="sidebar_main" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="main">
     <header>
-      <h1 id="sidebar-file-name"></h1>
+      <h1 class="file-name"></h1>
     </header>
     <nav>
+	  <h2 class="desktop-only file-name"></h2>
       <ul>
-        <li><a href="#" data-click="saveFromEditor" data-l10n-id="save-document"></a></li>
-        <li><a href="#" data-click="nav" data-click-location="save-as" data-l10n-id="save-as-document"></a></li>
-        <li><a href="#" data-click="downloadFile" data-l10n-id="export-document"></a></li>
+        <li><a href="#" data-click="saveFromEditor" data-l10n-id="save"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="save-as" data-l10n-id="save-as"></a></li>
+        <li><a href="#" data-click="downloadFile" data-l10n-id="export"></a></li>
         <li>
-			<a href="#" data-click="printFile" data-l10n-id="print-document"></a>
+			<a href="#" data-click="printFile" data-l10n-id="print"></a>
 			<iframe class="printButton" id="printButton" sandbox="allow-scripts allow-popups" src=""></iframe>
 		</li>
-        <li><a href="#" data-click="closeFile" data-l10n-id="close-document"></a></li>
+        <li><a href="#" data-click="closeFile" data-l10n-id="close"></a></li>
       </ul>
-      <h2 data-l10n-id="document-actions"></h2>
+      <h2 data-l10n-id="documents"></h2>
       <ul>
-        <li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create-document"></a></li>
-        <li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import-document"></a></li>
-        <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open-document"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import"></a></li>
+        <li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open"></a></li>
       </ul>
       <h2 data-l10n-id="help"></h2>
       <ul>
