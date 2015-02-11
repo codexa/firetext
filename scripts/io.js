@@ -36,7 +36,7 @@ firetext.io.init = function (api, callback) {
 			if (this.result != "available") {
 				deviceAPI = null;
 				storage = null;
-				alert(navigator.mozL10n.get('shared-sdcard'));
+				firetext.notify(navigator.mozL10n.get('shared-sdcard'));
 				firetext.io.init('file', callback);
 				return;
 			} else {
@@ -50,7 +50,7 @@ firetext.io.init = function (api, callback) {
 		request.onerror = function () {
 			deviceAPI = null;
 			storage = null;
-			alert(navigator.mozL10n.get('unable-to-get-sdcard') + this.error);
+			firetext.notify(navigator.mozL10n.get('unable-to-get-sdcard') + this.error);
 			firetext.io.init('file', callback);
 			return;
 		};
@@ -59,7 +59,7 @@ firetext.io.init = function (api, callback) {
 		window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 		if (window.requestFileSystem) {
 			var onFSError = function() {
-				alert(navigator.mozL10n.get('could-not-initialize-filesystem'));
+				firetext.notify(navigator.mozL10n.get('could-not-initialize-filesystem'));
 				deviceAPI = 'none';
 				disableInternalStorage();
 				callback();
@@ -135,9 +135,9 @@ firetext.io.enumerate = function (directory, callback) {
 		
 			cursor.onerror = function() {
 				if (cursor.error.name == 'SecurityError') {
-					alert(navigator.mozL10n.get('allow-sdcard'));
+					firetext.notify(navigator.mozL10n.get('allow-sdcard'));
 				} else {
-					alert(navigator.mozL10n.get('load-unsuccessful')+cursor.error.name);
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+cursor.error.name);
 				}
 			};
 			cursor.onsuccess = function() {
@@ -229,7 +229,7 @@ firetext.io.enumerate = function (directory, callback) {
 				if(err.code == FileError.NOT_FOUND_ERR) {
 					callback();
 				} else {
-					alert(navigator.mozL10n.get('load-unsuccessful')+err.code);
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);
 				}
 			});
 		}
@@ -249,10 +249,10 @@ function createAndOpen(location, directory, filename, filetype, contentBlob) {
 			var req = storage.addNamed(contentBlob, filePath);
 			req.onerror = function () {
 				if (this.error.name == "NoModificationAllowedError" | this.error.name == "FileExistsError") {
-					alert(navigator.mozL10n.get('file-exists'));
+					firetext.notify(navigator.mozL10n.get('file-exists'));
 				}
 				else {
-					alert(navigator.mozL10n.get('file-creation-fail')+this.error.name);
+					firetext.notify(navigator.mozL10n.get('file-creation-fail')+this.error.name);
 				}
 			};	
 			req.onsuccess = function () {	 
@@ -271,23 +271,23 @@ function createAndOpen(location, directory, filename, filetype, contentBlob) {
 							loadToEditor(directory, filename, filetype, 'internal');
 						}
 						e.target.onerror = function(e) {
-							alert(navigator.mozL10n.get('file-creation-fail')+e.message);
+							firetext.notify(navigator.mozL10n.get('file-creation-fail')+e.message);
 						}
 					};
 					
 					fileWriter.onerror = function(e) {
-						alert(navigator.mozL10n.get('file-creation-fail')+e.message);
+						firetext.notify(navigator.mozL10n.get('file-creation-fail')+e.message);
 					};
 					
 					fileWriter.truncate(0);
 				}, function(err) {
-					alert(navigator.mozL10n.get('file-creation-fail')+err.code);
+					firetext.notify(navigator.mozL10n.get('file-creation-fail')+err.code);
 				});
 			}, function(err) {
 				if(err.code === FileError.INVALID_MODIFICATION_ERR) {
-					alert(navigator.mozL10n.get('file-exists'));
+					firetext.notify(navigator.mozL10n.get('file-exists'));
 				} else {
-					alert(navigator.mozL10n.get('file-creation-fail')+err.code);
+					firetext.notify(navigator.mozL10n.get('file-creation-fail')+err.code);
 				}
 			});
 		}
@@ -301,7 +301,7 @@ function createAndOpen(location, directory, filename, filetype, contentBlob) {
 			updateDocLists(['cloud']);
 		}, location);
 	} else {
-		alert(navigator.mozL10n.get('invalid-location'));
+		firetext.notify(navigator.mozL10n.get('invalid-location'));
 	}
 }
 
@@ -311,10 +311,10 @@ function createFromDialog() {
 	var filename = document.getElementById('createDialogFileName').value;
 	var filetype = document.getElementById('createDialogFileType').value;
 	if (filename == null | filename == undefined | filename == '')	{
-		alert(navigator.mozL10n.get('enter-name'));
+		firetext.notify(navigator.mozL10n.get('enter-name'));
 		return;
 	} else if (!isValidFileName(filename)) {
-		alert(navigator.mozL10n.get('contains-special-characters'));
+		firetext.notify(navigator.mozL10n.get('contains-special-characters'));
 		return;
 	}
 	
@@ -365,7 +365,7 @@ function uploadFromDialog() {
 		if (filename == null | filename == undefined | filename == '')	{
 			continue;
 		} else if (!isValidFileName(filename)) {
-			alert(navigator.mozL10n.get('contains-special-characters'));
+			firetext.notify(navigator.mozL10n.get('contains-special-characters'));
 			continue;
 		}
 		
@@ -386,10 +386,10 @@ function saveAsFromDialog() {
 	var filename = document.getElementById('saveAsDialogFileName').value;
 	var filetype = document.getElementById('currentFileType').textContent; // Current filetype
 	if (filename == null | filename == undefined | filename == '')	{
-		alert(navigator.mozL10n.get('enter-name'));
+		firetext.notify(navigator.mozL10n.get('enter-name'));
 		return;
 	} else if (!isValidFileName(filename)) {
-		alert(navigator.mozL10n.get('contains-special-characters'));
+		firetext.notify(navigator.mozL10n.get('contains-special-characters'));
 		return;
 	}
 	
@@ -467,10 +467,6 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 		element.textContent = filename + filetype;		
 	});
 	
-	// Set alert banner name and type
-	document.getElementById('save-banner-name').textContent = (directory + filename);
-	document.getElementById('save-banner-type').textContent = filetype;
-	
 	// Show/hide toolbar
 	switch (filetype) {
 		case ".html":
@@ -541,7 +537,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				night();
 			})
 		} else {
-			alert(navigator.mozL10n.get('load-unsuccessful')+result);
+			firetext.notify(navigator.mozL10n.get('load-unsuccessful')+result);
 		}
 	}, location); 
 }
@@ -564,7 +560,7 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 			req.onsuccess = function () {
 				// Show banner or hide spinner
 				if (showBanner) {
-					showSaveBanner();
+					showSaveBanner(filePath);
 				}
 				if (showSpinner == true) {
 					spinner('hide');
@@ -583,10 +579,10 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 						}, location, showSpinner);
 					};
 					req2.onerror = function () {
-						alert(navigator.mozL10n.get('save-unsuccessful')+this.error.name);
+						firetext.notify(navigator.mozL10n.get('save-unsuccessful')+this.error.name);
 					}
 				} else {
-					alert(navigator.mozL10n.get('save-unsuccessful')+this.error.name);
+					firetext.notify(navigator.mozL10n.get('save-unsuccessful')+this.error.name);
 				}
 				saving = false;
 			};
@@ -597,7 +593,7 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 						e.target.onwriteend = function(e) {
 							// Show banner or hide spinner
 							if (showBanner) {
-								showSaveBanner();
+								showSaveBanner(filePath);
 							}
 							if (showSpinner == true) {
 								spinner('hide');
@@ -609,30 +605,30 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 						}
 						e.target.onerror = function(e) {
 							saving = false;
-							alert(navigator.mozL10n.get('save-unsuccessful')+e.message);
+							firetext.notify(navigator.mozL10n.get('save-unsuccessful')+e.message);
 						}
 						e.target.write(contentBlob);
 					};
 					
 					fileWriter.onerror = function(e) {
 						saving = false;
-						alert(navigator.mozL10n.get('save-unsuccessful')+e.message);
+						firetext.notify(navigator.mozL10n.get('save-unsuccessful')+e.message);
 					};
 					fileWriter.truncate(0);
 				}, function(err) {
 					saving = false;
-					alert(navigator.mozL10n.get('save-unsuccessful')+err.code);
+					firetext.notify(navigator.mozL10n.get('save-unsuccessful')+err.code);
 				});
 			}, function(err) {
 				saving = false;
-				alert(navigator.mozL10n.get('load-unsuccessful')+err.code);
+				firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);
 			});
 		}
 	} else if (location == 'dropbox') {
 		cloud.dropbox.save(filePath, contentBlob, showSpinner, function () { 
 			// Show banner
 			if (showBanner) {
-				showSaveBanner();
+				showSaveBanner(filePath);
 			}
 			 
 			// Finish 
@@ -677,7 +673,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					// Hide spinner
 					spinner('hide');
 					
-					alert(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 					callback(this.error.name, true);
 				};
 				reader.onload = function () {
@@ -696,7 +692,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					// New file, leave user to edit and save it
 				}
 				else {
-					alert(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 				}
 				
 				// Hide spinner
@@ -711,7 +707,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 						// Hide spinner
 						spinner('hide');
 						
-						alert(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
+						firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 						callback(this.error.name, true);
 					};
 					reader.onload = function () {
@@ -727,16 +723,16 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 						reader.readAsText(file);
 					}
 				}, function(err) {
-					alert(navigator.mozL10n.get('load-unsuccessful')+err.code);
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);
 					
 					// Hide spinner
 					spinner('hide');
 				});
 			}, function(err) {
 				if (err.code === FileError.NOT_FOUND_ERR) {
-					alert(navigator.mozL10n.get('load-unsuccessful')+err.code);					 
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);					 
 				} else {
-					alert(navigator.mozL10n.get('load-unsuccessful')+err.code);
+					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);
 				}
 				
 				// Hide spinner
@@ -762,17 +758,17 @@ firetext.io.delete = function (name, location) {
 				// Code to show a deleted banner
 			}
 			req.onerror = function () {
-				// Code to show an error banner (the alert is temporary)
-				alert(navigator.mozL10n.get('delete-unsuccessful')+this.error.name);
+				// Code to show an error banner (the firetext.notify is temporary)
+				firetext.notify(navigator.mozL10n.get('delete-unsuccessful')+this.error.name);
 			}
 		} else if (deviceAPI == 'file') {
 			storage.root.getFile(path, {}, function(fileEntry) {
 				fileEntry.remove(function() {
 				}, function(err) {
-					alert(navigator.mozL10n.get('delete-unsuccessful')+err.code);
+					firetext.notify(navigator.mozL10n.get('delete-unsuccessful')+err.code);
 				});
 			}, function(err) {
-				alert(navigator.mozL10n.get('delete-unsuccessful')+err.code);
+				firetext.notify(navigator.mozL10n.get('delete-unsuccessful')+err.code);
 			});
 		}
 	} else if (location == 'dropbox') {

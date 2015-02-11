@@ -177,3 +177,12 @@ section[role="dialog"] + .background {
 	font-size: 1.8rem;
 	line-height: 5rem;
 }
+
+/* Status */
+section[role="status"] {
+	transform: translateY(100%);
+}
+
+section[role="status"].notification-shown {
+	transform: none;
+}

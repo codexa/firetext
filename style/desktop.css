@@ -320,3 +320,30 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
     -ms-transform: rotate(.25turn);
   transform: rotate(.25turn);
 }
+
+/* Status */
+section[role="status"] {
+  left: 0;
+  right: auto;
+  max-width: 400px;
+  border-radius: 8px;
+  margin: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 0 10px #ccc;
+	opacity: 0;
+}
+
+[dir="rtl"] section[role="status"] {
+  left: auto;
+  right: 0;  
+}
+
+section[role="status"] p {
+  margin: 0; 
+}
+
+section[role="status"].notification-shown {
+	opacity: 1;
+}

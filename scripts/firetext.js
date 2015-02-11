@@ -662,17 +662,8 @@ function buildEditDocList(DOCS, listElm, display, location) {
 
 /* Display
 ------------------------*/
-// Make save banner hidden after 4 seconds
-function hideSaveBanner() {
-	window.setTimeout(function() {
-		document.getElementById("save-banner").hidden = true;
-	}, 4000);
-}
-
-// Show the banner
-function showSaveBanner() {
-	document.getElementById("save-banner").hidden = false;
-	hideSaveBanner();
+function showSaveBanner(filepath) {
+	firetext.notify(navigator.mozL10n.get('successfully-saved')+' '+filepath);
 }
 	
 // File Extension Icon on Create new file
@@ -885,7 +876,7 @@ function deleteSelected(confirmed) {
 			} else if (selected.length > 1) {
 				var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-plural'));			
 			} else {
-				alert(navigator.mozL10n.get('no-files-selected'));
+				firetext.notify(navigator.mozL10n.get('no-files-selected'));
 				return;
 			}
 			if (confirmDeletion != true) {
@@ -1146,7 +1137,7 @@ function processActions(eventAttribute, target) {
 
 			// Fix for empty locations
 			if(!browseLocation || browseLocation==''){
-				alert(navigator.mozL10n.get('not-functional-link'));
+				firetext.notify(navigator.mozL10n.get('not-functional-link'));
 				return;
 			}
 
@@ -1262,7 +1253,7 @@ function processActions(eventAttribute, target) {
 					var rows = parseInt(document.getElementById('table-rows').value);
 					var cols = parseInt(document.getElementById('table-columns').value);						
 				} else {
-					alert(navigator.mozL10n.get('valid-integer-value'));
+					firetext.notify(navigator.mozL10n.get('valid-integer-value'));
 					return;
 				}
 			
@@ -1297,7 +1288,7 @@ function processActions(eventAttribute, target) {
 			document.getElementById('table-columns').value = null;
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
-			alert(navigator.mozL10n.get('recents-eliminated'));
+			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
 		}
 	}
 }
@@ -1324,7 +1315,7 @@ function checkDevice() {
 	}
 	
 	if (window.opera) {
-		alert(navigator.mozL10n.get('warning-unsupported-technology'));
+		firetext.notify(navigator.mozL10n.get('warning-unsupported-technology'));
 	}
 };
 
@@ -1395,10 +1386,6 @@ document.addEventListener('webkitfullscreenchange', onFullScreenChange);
 document.addEventListener('fullscreenerror', onFullScreenError);
 document.addEventListener('mozfullscreenerror', onFullScreenError);
 document.addEventListener('webkitfullscreenerror', onFullScreenError);
-
-firetext.alert = function(message) {
-	alert(message);
-};
 
 /* Print button
 ------------------------*/ 

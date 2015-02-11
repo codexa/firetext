@@ -153,12 +153,12 @@ cloud.dropbox.error = function (error) {
 	case Dropbox.ApiError.OVER_QUOTA:
 		// The user is over their Dropbox quota.
 		// Tell them their Dropbox is full. Refreshing the page won't help.
-		alert(navigator.mozL10n.get('dropbox-full'));
+		firetext.notify(navigator.mozL10n.get('dropbox-full'));
 		break;
 
 
 	case Dropbox.ApiError.NETWORK_ERROR:
-		alert(navigator.mozL10n.get('network-error'));
+		firetext.notify(navigator.mozL10n.get('network-error'));
 		break;
 
 	case Dropbox.ApiError.RATE_LIMITED:

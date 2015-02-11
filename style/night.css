@@ -280,6 +280,13 @@
 	color: #dfdfdf;
 }
 
+@media (min-width: 767px) {
+	.night section[role="status"] {
+		box-shadow: 0 0 10px #444;
+		border-color: #444;
+	}
+}
+
 /* Zen */
 @media (min-width: 767px) {
 	.night.fullscreen #edit-bar button:active,
