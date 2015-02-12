@@ -28,6 +28,12 @@ function initDocIO(document, messageProxy, loadCallback) {
 	}
 
 	function load(content, ft) {
+		// Check for night
+		var wasNight = false
+		if (document.documentElement.hasAttribute('_firetext_night')) {
+			wasNight = true;
+		}
+		
 		filetype = ft;
 		document.open();
 		switch (filetype) {
@@ -58,6 +64,10 @@ function initDocIO(document, messageProxy, loadCallback) {
 				break;
 		}
 		document.close();
+		
+		if (wasNight) {
+			nightEditor(true);
+		}
 		
 		loadCallback(filetype, odtdoc);
 	}
