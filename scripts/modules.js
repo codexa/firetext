@@ -34,7 +34,6 @@ if (!app) {
 							if(name === "SCRIPT" ? element.src : element.href) {
 								var type = element.type;
 								var url = name === "SCRIPT" ? element.src : element.href;
-								var rel = element.getAttribute('rel');
 								var data = element.dataset;
 								if(!loading[url]) {
 									loading[url] = [];
@@ -44,16 +43,17 @@ if (!app) {
 									req.addEventListener("load", function(e) {
 										var done = true;
 										if(this.status === 200) {
-											var inline = response.createElement(name);
+											var inline = response.createElement(name === "SCRIPT" ? "SCRIPT" : "STYLE");
 											var text = this.response;
 											text = text.replace(/\[ORIGIN_OF_MAIN_DOCUMENT\]/g, window.location.origin ? window.location.origin : window.location.protocol + "//" + window.location.host);
 											inline.type = type;
 											if(name === "SCRIPT") {
-												inline.src = "data:text/javascript;base64," + btoa(text + '\n//# sourceURL=' + url);
+												inline.textContent = text.replace(/<\/(script)/ig, '<\\\/$1') +
+													'\n//# sourceURL=' + url;
 											} else {
-												inline.href = "data:text/css;base64," + btoa(text + '\n/*# sourceURL=' + url + '*/');
+												inline.textContent = text.replace(/</g, '%3C').replace(/>/g, '%3E') + // Hack to not trip up getHTML() regex and keep editor.css cleaner.
+													'\n/*# sourceURL=' + url + '*/';
 											}
-											inline.setAttribute('rel', rel);
 											for (var key in data) {
 												inline.dataset[key] = data[key];
 											}
