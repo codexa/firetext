@@ -13,7 +13,7 @@ firetext.io = {};
 
 /* Variables
 ------------------------*/
-var storage, deviceAPI, locationDevice
+var storage, deviceAPI, locationDevice;
 
 
 /* Init
@@ -43,6 +43,7 @@ firetext.io.init = function (api, callback) {
 				storage.onchange = function (change) {
 					updateDocLists(['internal', 'recents']);
 				}
+				enableInternalStorage();
 				callback();
 			}
 		};
@@ -50,7 +51,7 @@ firetext.io.init = function (api, callback) {
 		request.onerror = function () {
 			deviceAPI = null;
 			storage = null;
-			firetext.notify(navigator.mozL10n.get('unable-to-get-sdcard') + this.error);
+			firetext.notify(navigator.mozL10n.get('unable-to-get-sdcard') + this.error.name);
 			firetext.io.init('file', callback);
 			return;
 		};
@@ -70,6 +71,7 @@ firetext.io.init = function (api, callback) {
 						storage = fs;
 						storage.root.getDirectory("Documents/", {create: true});
 						deviceAPI = 'file';
+						enableInternalStorage();
 						callback();
 					}, onFSError);
 				} else {
@@ -94,14 +96,16 @@ firetext.io.init = function (api, callback) {
 			return;
 		}
 	}
-	
+}
+
+function enableInternalStorage() {	
 	// Create storage option
 	locationDevice = document.createElement('option');
 	locationDevice.value = 'internal';
 	locationDevice.setAttribute('data-l10n-id','internal-storage');
 	locationDevice.textContent = navigator.mozL10n.get('internal-storage');
 	locationSelect.appendChild(locationDevice);
-	updateAddDialog();
+	updateAddDialog();	
 }
 
 function disableInternalStorage() {
