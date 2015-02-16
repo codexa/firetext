@@ -94,10 +94,13 @@ function initModules(callback) {
 	// Initialize Bugsense
 	bugsenseInit();
 	
+	// Fix menu before url request
+	fixMenu();
+	
 	// Initialize urls
 	initURLs(function(){
 		// Modify links in menu
-		fixMenu();		
+		fixMenu();
     
 		// Initialize cloud services
 		cloud.init();
