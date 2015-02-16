@@ -21,6 +21,7 @@
 /* GUTTER */
 
 .CodeMirror-gutters {
+  background-color: #fff;
   border-right: 1px solid #ddd;
   white-space: nowrap;
 }

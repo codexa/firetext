@@ -741,12 +741,12 @@ function watchDocument(filetype) {
 		// Add listener to update design
 		rawEditor.on('change', function() {
 			fileChanged = true;
-			var callbackKey = editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, null, true);
+			editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, 'autosave-ready');
 			editorMessageProxy.postMessage({
 				command: "load",
 				content: rawEditor.getValue(),
 				filetype: ".html",
-				key: callbackKey
+				key: 'autosave-ready'
 			});
 		});
 	}
@@ -1380,6 +1380,10 @@ function onFullScreenChange() {
 		document.querySelector('#editor-zen-button span').classList.remove('icon-efs');
 		document.querySelector('#editor-zen-button span').classList.add('icon-fs');
 	}
+}
+
+function onFullScreenError() {
+	firetext.notify('Could not enter into fullscreen.');
 }
 
 document.addEventListener('fullscreenchange', onFullScreenChange);

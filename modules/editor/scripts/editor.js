@@ -54,12 +54,6 @@ var mainClosure = function() {
 			[].forEach.call(content_scripts, function(content_script) {
 				window.eval(atob(content_script.src.split(',')[1]));
 			});
-			
-			delete window.mainOrigin;
-			delete window.parentMessageProxy;
-			delete window.initNight;
-			delete window.filetype;
-			delete window.odtdoc;
 		});
 		
 		// success

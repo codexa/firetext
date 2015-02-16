@@ -19,16 +19,18 @@ cloud.dropbox.client = undefined;
 /* Auth
 ------------------------*/
 cloud.dropbox.init = function(){
-	cloud.dropbox.auth = new Dropbox.Client({
-		key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
-	});
+	if (urls.dropboxAuth) {
+		cloud.dropbox.auth = new Dropbox.Client({
+			key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
+		});
 
-	cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
-		rememberUser: true,
-		receiverUrl: urls.dropboxAuth
-	}));
+		cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
+			rememberUser: true,
+			receiverUrl: urls.dropboxAuth
+		}));
 
-	cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');
+		cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');		
+	}
 }
 
 

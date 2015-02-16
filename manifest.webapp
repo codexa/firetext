@@ -67,8 +67,7 @@
     "device-storage:sdcard": {
       "description": "Required for document storage.",
       "access": "readwrite"
-    },
-	"desktop-notification":{}
+    }
   },
   "activities": {
     "open": {
