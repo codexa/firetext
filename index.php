@@ -8,7 +8,7 @@ if (isset($_POST) && !empty($_POST)) {
 					"credits"=>"",
 					"support"=>"",
 					"rate"=>"https://marketplace.firefox.com/app/firetext/ratings/add",
-					"dropboxAuth"=>"http://firetext.codexa.bugs3.com/auth/dropbox/"
+					"dropboxAuth"=>"https://codexa.github.io/firetext/auth/dropbox/"
 				);
 	
 		// Echo variables
