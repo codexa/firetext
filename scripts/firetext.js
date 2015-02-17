@@ -51,9 +51,6 @@ firetext.init = function () {
 		initModules(function() {		
 			// Update Doc Lists
 			updateDocLists();
-	
-			// Navigate to welcome
-			regions.nav('welcome');
 		
 			// Check for recent file, and if found, load it.
 			if (firetext.settings.get('autoload') == 'true') {
@@ -74,9 +71,11 @@ firetext.init = function () {
 						spinner('hide');
 					}
 				} else {
+					regions.nav('welcome');
 					spinner('hide');
 				}
 			} else {
+				regions.nav('welcome');
 				spinner('hide');
 			}
 		
