@@ -748,6 +748,12 @@ function watchDocument(filetype) {
 				key: 'autosave-ready'
 			});
 		});
+		rawEditor.on('focus', function() {
+			processActions('data-focus',rawEditorElement);	
+		});
+		rawEditor.on('blur', function() {
+			processActions('data-blur',rawEditorElement);	
+		});
 	}
 }
 
