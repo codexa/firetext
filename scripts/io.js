@@ -504,9 +504,9 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 						break;
 					case ".html":
 					default:
-						rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
 						document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
-						tabRaw.classList.remove('hidden-item');	
+						tabRaw.classList.remove('hidden-item');
+						rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
 						break;
 				}
 				

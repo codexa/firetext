@@ -160,9 +160,12 @@ regions.tab = function (list, name) {
 		}
 
 		/* Remove this section when porting to other projects */
-		if (name === 'raw' && tempText) {
-			rawEditor.setValue(tempText);
-			tempText = undefined;
+		if (name === 'raw') {
+			setTimeout(function(){rawEditor.focus();},300);
+			if (tempText) {
+				rawEditor.setValue(tempText);
+				tempText = undefined;				
+			}
 		}
 		/* End of customized section */
 	}
