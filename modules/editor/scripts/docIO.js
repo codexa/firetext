@@ -11,6 +11,9 @@ function initDocIO(document, messageProxy, loadCallback) {
 	*/
 	var odtdoc;
 	var filetype;
+	
+	// Unsupported odt features flag
+	var readOnly;
 
 	function getHTML() {
 		/*** This function is duplicated in contentscript.js ***/
@@ -35,6 +38,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 		}
 		
 		filetype = ft;
+		readOnly = false;
 		document.open();
 		switch (filetype) {
 			case ".txt":
@@ -46,9 +50,10 @@ function initDocIO(document, messageProxy, loadCallback) {
 				var html = odtdoc.getHTMLUnsafe();
 				try {
 					html = odtdoc.getHTML();
-				} finally {
-					document.write(html);
+				} catch(e) {
+					readOnly = true;
 				}
+				document.write(html);
 				break;
 			/* 0.4
 			case ".docx":
@@ -69,7 +74,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 			nightEditor(true);
 		}
 		
-		loadCallback(filetype, odtdoc);
+		loadCallback(filetype, odtdoc, readOnly);
 	}
 
 	messageProxy.registerMessageHandler(function(e) {
@@ -87,7 +92,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 				type = "text\/plain";
 				break;
 			case ".odt":
-				odtdoc.setHTML(getHTML());
+				if(!readOnly) odtdoc.setHTML(getHTML());
 				content = odtdoc.getODT({type: 'string'});
 				type = "application\/vnd.oasis.opendocument.text";
 				binary = true;
