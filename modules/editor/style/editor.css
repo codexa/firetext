@@ -5,10 +5,6 @@ html {
 	position: relative;
 }
 
-[_firetext_night] {
-	background-color: #000000;
-}
-
 body {
 	padding: 10px 10px 65px;
 	margin: 0;
@@ -17,7 +13,7 @@ body {
 	word-wrap: break-word;
 }
 
-[_firetext_night] body, [_firetext_night] img {
+[_firetext_night] img {
 		-webkit-filter: invert(100%) hue-rotate(180deg);
 	filter: invert(100%) hue-rotate(180deg);
 }
@@ -35,13 +31,6 @@ body:after {
 	margin: -8px 2px;
 	border: 1px solid #999;
 	pointer-events: none;
-}
-
-[_firetext_night]:before,
-[_firetext_night]:after,
-[_firetext_night] body:before,
-[_firetext_night] body:after {
-	border-color: rgb(127, 127, 127);
 }
 
 html:before {
