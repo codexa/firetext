@@ -94,7 +94,7 @@ function initModules(callback) {
 	bugsenseInit();
 	
 	// Fix menu before url request
-	fixMenu();
+	fixMenu(true);
 	
 	// Initialize urls
 	initURLs(function(){
@@ -215,33 +215,44 @@ function initURLs(callback) {
 	xhr.send('request=urls&version='+version);
 }
 
-function fixMenu() {
-	var tempElements = [];
+function fixMenu(soft) {
+	var tempElements = [], tempLinks = [];
 	var urlNames = ['about','support','credits','rate'];
 
 	// Find empty urls
 	urlNames.forEach(function(v){
 		if (!urls[v]) {
 			tempElements = addMenuElementsToArray(tempElements, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+		} else {
+			tempLinks = addMenuElementsToArray(tempLinks, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+			for (var i = 0; i < tempLinks.length; i++) {
+				tempLinks[i].parentNode.classList.remove('hidden-item');
+			}
 		}
 	});
 
-	// Remove list items
-	for (var i = 0; i < tempElements.length; i++) {
-		var tempParent = tempElements[i].parentNode.parentNode;
-		if (tempParent) {
-			tempParent.removeChild(tempElements[i].parentNode);
+	if (soft === true) {
+		for (var i = 0; i < tempElements.length; i++) {
+			tempElements[i].parentNode.classList.add('hidden-item');
 		}
-	}
-
-	// Remove empty lists
-	var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
-	for (var i = 0; i < tempLists.length; i++) {
-		if (tempLists[i].childElementCount == 0) {
-			if (tempLists[i].previousElementSibling) {
-				tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
+	} else {
+		// Remove list items
+		for (var i = 0; i < tempElements.length; i++) {
+			var tempParent = tempElements[i].parentNode.parentNode;
+			if (tempParent) {
+				tempParent.removeChild(tempElements[i].parentNode);
 			}
-			tempLists[i].parentNode.removeChild(tempLists[i]);
+		}
+
+		// Remove empty lists
+		var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
+		for (var i = 0; i < tempLists.length; i++) {
+			if (tempLists[i].childElementCount == 0) {
+				if (tempLists[i].previousElementSibling) {
+					tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
+				}
+				tempLists[i].parentNode.removeChild(tempLists[i]);
+			}
 		}
 	}
 }
@@ -1166,6 +1177,7 @@ function processActions(eventAttribute, target) {
 		} else if (calledFunction == 'hideToolbar') {
 			if (deviceType != 'desktop') {
 				if (document.getElementById('currentFileType').textContent != '.txt' &&
+						document.getElementById('currentFileType').textContent != '.odt' &&
 						target.id === 'editor') {
 					document.getElementById('edit-bar').style.display = 'none';
 					editor.classList.add('no-toolbar');
@@ -1174,6 +1186,7 @@ function processActions(eventAttribute, target) {
 			}
 		} else if (calledFunction == 'showToolbar') {
 			if (document.getElementById('currentFileType').textContent != '.txt' &&
+					document.getElementById('currentFileType').textContent != '.odt' &&
 					target.id === 'editor') {
 				document.getElementById('edit-bar').style.display = 'block';
 				editor.classList.remove('no-toolbar');
