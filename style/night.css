@@ -251,6 +251,10 @@
 }
 
 /* Editor */
+.night .editor {
+	background-color: #000;
+}
+
 @media (min-width: 767px) {
 	.night #edit-bar {
 		background-color: #222;
