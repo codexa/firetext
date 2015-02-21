@@ -20,7 +20,7 @@
   
   // Initialize Designer
   if(!readOnly) {
-    document.designMode = 'on';
+    document.documentElement.contentEditable = "true";
     document.execCommand('enableObjectResizing', false, 'true');
   }
   
