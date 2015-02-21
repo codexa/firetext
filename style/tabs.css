@@ -1,0 +1,33 @@
+/* ----------------------------------
+* Tabs
+* ---------------------------------- */
+
+[role="tabs"] {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+[role="tabs"] [role="tab"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  visibility: hidden;
+    -moz-transition: all .4s;
+    -webkit-transition: all .4s;
+    -o-transition: all .4s;
+  transition: all .4s;
+}
+
+.current [role="tabs"] [role="tab"].selected-tab,
+.parent [role="tabs"] [role="tab"].selected-tab {  
+  visibility: visible;
+}

@@ -1,0 +1,1 @@
+tx pull -r firetext.appproperties -a -s --minimum-perc 100

@@ -21,13 +21,13 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, tabRaw, tabDesign;
-var deviceType, fileChanged, saveTimeout, saving, tempAutozen, urls={}, version = '0.3.3';
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton;
+var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
-var bugsense, bugsenseKey = '';
-var editorMessageProxy;
+var bugsenseInitialized = false, bugsenseKey = '';
+var editorMessageProxy, editorURL;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -41,42 +41,115 @@ var appCache = window.applicationCache;
 ------------------------*/
 window.addEventListener('DOMContentLoaded', function() {firetext.init();}, false);
 
-firetext.init = function () {
+firetext.init = function () {	
+	// l10n catch
+	navigator.mozL10n.once(function () {
+		// Select elements
+		initElements();
+	
+		// Load modules
+		initModules(function() {		
+			// Update Doc Lists
+			updateDocLists();
+		
+			// Check for recent file, and if found, load it.
+			if (firetext.settings.get('autoload') == 'true') {
+				var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
+				if (firetext.settings.get('autoload.wasEditing') == 'true') {
+					// Wait until Dropbox is authenticated
+					if (lastDoc[3] == 'dropbox') {
+						if (firetext.settings.get('dropbox.enabled') == 'true') {
+							window.addEventListener('cloud.dropbox.authed', function() {
+								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+								spinner('hide');
+							});
+						} else {
+							spinner('hide');
+						}
+					} else {
+						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+						spinner('hide');
+					}
+				} else {
+					regions.nav('welcome');
+					spinner('hide');
+				}
+			} else {
+				regions.nav('welcome');
+				spinner('hide');
+			}
+		
+			// Create listeners
+			initListeners();
+
+			// Dispatch init event
+			window.dispatchEvent(firetext.initialized);
+			firetext.isInitialized = true;
+		});	
+	});
+};
+
+function initModules(callback) {
 	// Initialize Bugsense
 	bugsenseInit();
 	
-	// Initialize l10n
-	navigator.mozL10n.once(function () {
-  
+	// Fix menu before url request
+	fixMenu(true);
+	
 	// Initialize urls
-	getURLs(function(){
+	initURLs(function(){
+		// Modify links in menu
 		fixMenu();
+    
+		// Initialize cloud services
+		cloud.init();
 	});
+	
+	// Find device type
+	checkDevice();
 		
 	// Initialize Settings
 	firetext.settings.init();
 	
-	// Initialize language handler
+	// Initialize Language
 	firetext.language(firetext.settings.get('language'));
 	
-	// Find device type
-	checkDevice();
-	
-	// Initialize gestures
+	// Initialize Gestures
 	initGestures();
+	
+	// Initialize night
+	night();
+	
+	// Initialize extIcon
+	extIcon();
+	
+	// Initalize recent docs
+	firetext.recents.init();
+	
+	// Initialize IO
+	firetext.io.init(null, function() {
+		callback();
+	});
+	
+	// Initialize print button
+	initPrintButton(function() {
+		
+	});
+}
 
-	/* Select important elements for later */
+function initElements() {
 	// Misc
 	loadSpinner = document.getElementById('loadSpinner');
 	spinner();
 	tabDesign = document.getElementById('tab-design');
 	tabRaw = document.getElementById('tab-raw');
 	editor = document.getElementById('editor');
-	rawEditor = document.getElementById('rawEditor');
+	rawEditorElement = document.getElementById('rawEditor');
 	toolbar = document.getElementById('edit-zone');
 	editWindow = document.getElementById('edit');
 	locationLegend = document.getElementById('locationLegend');
-	locationSelect = document.getElementById('createDialogFileLocation');
+	locationSelect = document.getElementById('createDialogFileLocation');	
+	printButton = document.getElementById('printButton');
 	
 	// Lists
 	welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -90,7 +163,7 @@ firetext.init = function () {
 	welcomeDropboxList = document.getElementById('welcome-dropbox-list');
 	openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
 	openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
-	
+
 	// Formatting
 	bold = document.getElementById('bold');
 	boldCheckbox = document.getElementById('boldCheckbox');
@@ -101,95 +174,32 @@ firetext.init = function () {
 	strikethroughCheckbox = document.getElementById('strikethroughCheckbox');
 	underline = document.getElementById('underline');
 	underlineCheckbox = document.getElementById('underlineCheckbox');
-	
-	// Initalize recent docs
-	firetext.recents.init();
-	
-	// Initialize the editor
-	initEditor(function() {		
-		// Init extIcon
-		extIcon();
-		
-		// Add event listeners
-		toolbar.addEventListener(
-			'mousedown', function mouseDown(event) {
-				event.preventDefault();
-				event.target.classList.toggle('active');
-			}
-		);
-		toolbar.addEventListener(
-			'mouseup', function mouseDown(event) {
-				if (event.target.classList.contains('sticky') != true) {
-					event.target.classList.remove('active');
-				}
-			}
-		);
-		editWindow.addEventListener(
-			'mouseenter', function mouseDown(event) {
-				editor.focus();
-			}
-		);
-	
-		document.getElementById('welcome-main-area').addEventListener(
-			'contextmenu', function contextmenu(event) {
-				event.preventDefault();
-				editDocs();
-			}
-		);
-	
-		// Initialize IO
-		firetext.io.init(null, function() {	
-			// Update Doc Lists
-			updateDocLists();
-			
-			// Initialize sharing
-			cloud.init();
-			
-			// Check for recent file, and if found, load it.
-			if (firetext.settings.get('autoload') == 'true') {
-				var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
-				var wasEditing = firetext.settings.get('autoload.wasEditing');
-				
-				// Navigate to welcome region
-				regions.nav('welcome');
-				
-				// Load file
-				if (wasEditing == 'true') {
-					// Wait until Dropbox is authenticated
-					if (lastDoc[3] == 'dropbox') {
-						if (firetext.settings.get('dropbox.enabled') == 'true') {
-							window.addEventListener('cloud.dropbox.authed', function() {
-								spinner('hide');
-								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-							});
-						} else {
-							spinner('hide');
-						}
-					} else {
-						spinner('hide');
-						loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-					}
-				} else {
-					spinner('hide');
-				}
-			} else {
-				spinner('hide');  
-				regions.nav('welcome');
-			}
-			
-			// Night
-			night();
-	
-			// Dispatch init event
-			window.dispatchEvent(firetext.initialized);
-			firetext.isInitialized = true;
-		});
-	});
-	
-	});
-};
+}
 
-function getURLs(callback) {
+function initListeners() {	
+	// Add event listeners
+	toolbar.addEventListener(
+		'mousedown', function mouseDown(event) {
+			event.preventDefault();
+			event.target.classList.toggle('active');
+		}
+	);
+	toolbar.addEventListener(
+		'mouseup', function mouseDown(event) {
+			if (event.target.classList.contains('sticky') != true) {
+				event.target.classList.remove('active');
+			}
+		}
+	);
+	welcomeDocsList.addEventListener(
+		'contextmenu', function contextmenu(event) {
+			event.preventDefault();
+			editDocs();
+		}
+	);
+}
+
+function initURLs(callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('post','http://firetext.codexa.bugs3.com/',true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -205,33 +215,44 @@ function getURLs(callback) {
 	xhr.send('request=urls&version='+version);
 }
 
-function fixMenu() {
-	var tempElements = [];
+function fixMenu(soft) {
+	var tempElements = [], tempLinks = [];
 	var urlNames = ['about','support','credits','rate'];
 
 	// Find empty urls
 	urlNames.forEach(function(v){
 		if (!urls[v]) {
 			tempElements = addMenuElementsToArray(tempElements, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+		} else {
+			tempLinks = addMenuElementsToArray(tempLinks, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+			for (var i = 0; i < tempLinks.length; i++) {
+				tempLinks[i].parentNode.classList.remove('hidden-item');
+			}
 		}
 	});
 
-	// Remove list items
-	for (var i = 0; i < tempElements.length; i++) {
-		var tempParent = tempElements[i].parentNode.parentNode;
-		if (tempParent) {
-			tempParent.removeChild(tempElements[i].parentNode);
+	if (soft === true) {
+		for (var i = 0; i < tempElements.length; i++) {
+			tempElements[i].parentNode.classList.add('hidden-item');
 		}
-	}
-
-	// Remove empty lists
-	var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
-	for (var i = 0; i < tempLists.length; i++) {
-		if (tempLists[i].childElementCount == 0) {
-			if (tempLists[i].previousElementSibling) {
-				tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
+	} else {
+		// Remove list items
+		for (var i = 0; i < tempElements.length; i++) {
+			var tempParent = tempElements[i].parentNode.parentNode;
+			if (tempParent) {
+				tempParent.removeChild(tempElements[i].parentNode);
 			}
-			tempLists[i].parentNode.removeChild(tempLists[i]);
+		}
+
+		// Remove empty lists
+		var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
+		for (var i = 0; i < tempLists.length; i++) {
+			if (tempLists[i].childElementCount == 0) {
+				if (tempLists[i].previousElementSibling) {
+					tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
+				}
+				tempLists[i].parentNode.removeChild(tempLists[i]);
+			}
 		}
 	}
 }
@@ -248,28 +269,38 @@ function addMenuElementsToArray(array, elements) {
 ------------------------*/
 function updateAddDialog() {
 	if (locationSelect.length < 1) {
-		// Disable elements
-		document.getElementById('add-dialog-create-button').style.pointerEvents = 'none';
-		document.getElementById('add-dialog-create-button').style.color = '#999';
-		document.querySelector('#add [role="main"]').style.display = 'none';
-		
-		// Create notice
-		if (!document.getElementById('no-storage-notice')) {
-			var noStorageNotice = document.createElement('div');
-			noStorageNotice.id = 'no-storage-notice';
-			noStorageNotice.classList.add('redAlert');
-			noStorageNotice.textContent = navigator.mozL10n.get('no-storage-method');
-			document.getElementById('add').insertBefore(noStorageNotice, document.querySelector('#add [role="main"]'));
-		}
+		[].forEach.call(document.getElementsByClassName('create-dialog'), function(createDialog) {
+			// Disable elements
+			createDialog.getElementsByClassName('create-button')[0].style.pointerEvents = 'none';
+			createDialog.getElementsByClassName('create-button')[0].style.color = '#999';
+			createDialog.querySelector('[role="main"]').style.display = 'none';
+			
+			// Show notice
+			var noStorageNotice = createDialog.getElementsByClassName('no-storage-notice')[0];
+			if (noStorageNotice.classList.contains('hidden-item')) {
+				noStorageNotice.classList.remove('hidden-item');
+			}
+		});
 	} else {
-		// Enable elements
-		document.getElementById('add-dialog-create-button').setAttribute('style', 'pointer-events: auto;');
-		document.querySelector('#add [role="main"]').style.display = 'block';
-	
-		// Remove notice if present
-		if (document.getElementById('no-storage-notice')) {
-			document.getElementById('no-storage-notice').parentNode.removeChild(document.getElementById('no-storage-notice'));
-		}
+		[].forEach.call(document.getElementsByClassName('create-dialog'), function(createDialog) {
+			// Disable elements
+			createDialog.getElementsByClassName('create-button')[0].style.pointerEvents = '';
+			createDialog.getElementsByClassName('create-button')[0].style.color = '';
+			createDialog.querySelector('[role="main"]').style.display = '';
+			
+			// Hide location select if only one option exists
+			if (locationSelect.length === 1) {
+				locationLegend.style.display = 'none';
+			} else {
+				locationLegend.style.display = 'block';                 
+			}
+			
+			// Hide notice
+			var noStorageNotice = createDialog.getElementsByClassName('no-storage-notice')[0];
+			if (!noStorageNotice.classList.contains('hidden-item')) {
+				noStorageNotice.classList.add('hidden-item');
+			}
+		});
 	}
 }
 
@@ -278,14 +309,10 @@ function updateAddDialog() {
 ------------------------*/
 function bugsenseInit() {
 	if (bugsenseKey) {
-		if (firetext.settings.get('stats.enabled') != 'false') {
-			bugsense = new Bugsense({ appversion: version, apiKey: bugsenseKey });
-		} else {
-			bugsense = null;
-		}	
-	} else {
-		if (firetext.settings.get('stats.enabled') != 'false') {
-			firetext.settings.save('stats.enabled','false');
+		if (firetext.settings.get('stats.enabled') != 'false' &&
+				!bugsenseInitialized) {
+			Bugsense.initAndStartSession({ appname: 'Firetext', appVersion: version, apiKey: bugsenseKey });
+			bugsenseInitialized = true;
 		}
 	}
 }
@@ -306,8 +333,10 @@ function updateDocLists(lists) {
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
 		// Internal
+		spinner();
 		firetext.io.enumerate('/', function(DOCS) {
 			buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "documents-found", 'internal');
+			spinner('hide');
 		});
 	}
 		
@@ -491,9 +520,6 @@ function cleanForPreview(text, documentType) {
 					return htmlNode.innerHTML;
 				}
 				return text;
-		case ".docx":
-			console.warn("cleanForPreview docx not implemented text = %s.", text);
-			return text;
 	}
 }
 
@@ -501,24 +527,29 @@ function sortByCellIndex(a,b) {
 		return a.cellIndex - b.cellIndex;
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location, preview) {
+function buildDocListItems(DOCS, listElms, description, output, location, preview, error) {
 	// Handle description
 	if (!description) {
 		description = '';
 	}
 	
-	if (firetext.settings.get('previews.enabled') != 'false') {	 
-		switch (DOCS[0][2]) {
+	if (preview && firetext.settings.get('previews.enabled') != 'false') {	 
+		switch (error ? ".txt" : DOCS[0][2]) {
 			case ".txt":
-				description = firetext.parsers.plain.parse(cleanForPreview(description, DOCS[0][2]), "HTML");
+				description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
 				break;
 			case ".docx":
-				var tmp = document.createElement("DIV");
-				var docx = new DocxEditor(description);
-				tmp.appendChild(docx.HTMLout());
-				description = tmp.innerHTML;
+			case ".odt":
+				if(DOCS[0][2] === ".docx") {
+					var tmp = document.createElement("DIV");
+					var docx = new DocxEditor(description);
+					tmp.appendChild(docx.HTMLout());
+					description = tmp.innerHTML;
+				} else {
+					description = new JSZip(description).file('content.xml').asText();
+				}
 			case ".html":
-				description = cleanForPreview(description, DOCS[0][2]);
+				description = cleanForPreview(description, ".html");
 				break;
 			default:
 				break;
@@ -569,11 +600,11 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
 	
 	// build next item
 	if (preview == true) {
-		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result) {
-			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview);
+		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result, error) {
+			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview, error);
 		}, location);
 	} else {
-		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location);	
+		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location, preview, true);	
 	}
 }
 
@@ -592,11 +623,11 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 			
 			// build next item
 			if (preview == true) {
-				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result) {
-					buildDocListItems(DOCS, listElms, result, "", location, preview);
+				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result, error) {
+					buildDocListItems(DOCS, listElms, result, "", location, preview, error);
 				}, location);
 			} else {
-				buildDocListItems(DOCS, listElms, null, "", location, preview);			 
+				buildDocListItems(DOCS, listElms, null, "", location, preview, true);			 
 			}
 		} else {
 			// No docs message
@@ -644,17 +675,8 @@ function buildEditDocList(DOCS, listElm, display, location) {
 
 /* Display
 ------------------------*/
-// Make save banner hidden after 4 seconds
-function hideSaveBanner() {
-	window.setTimeout(function() {
-		document.getElementById("save-banner").hidden = true;
-	}, 4000);
-}
-
-// Show the banner
-function showSaveBanner() {
-	document.getElementById("save-banner").hidden = false;
-	hideSaveBanner();
+function showSaveBanner(filepath) {
+	firetext.notify(navigator.mozL10n.get('successfully-saved')+' '+filepath);
 }
 	
 // File Extension Icon on Create new file
@@ -671,70 +693,77 @@ function extIcon() {
 /* Editor
 ------------------------*/ 
 function initEditor(callback) {
-	loadEditor(function(editorURL) {
-		editor.onload = null;
-		editor.src = editorURL;
-		editor.onload = function() {
-			var editorMessageChannel = new MessageChannel();
-			// See: scripts/messages.js
-			editorMessageProxy = new MessageProxy(editorMessageChannel.port1);
-			// Successful initialization
-			editorMessageProxy.registerMessageHandler(function(e) {
-				// Initialize Raw Editor
-				rawEditor.setAttribute('contentEditable', 'true');
-				rawEditor.addEventListener('focus',function(){
-					processActions('data-focus', rawEditor);
-				});
-				rawEditor.addEventListener('blur',function(){
-					processActions('data-blur', rawEditor);
-				});
-			
-				// Nav to the design tab
-				regions.tab(document.querySelector('#editTabs'), 'design');
+	if (editorURL) {
+		app.modules.fill(editorURL, editor, function() {
+			editorCommunication(function(){
 				callback();
+			});
+		});
+	} else {
+		app.modules.load('modules/editor/editor.html', editor, function(u) {
+			editorURL = u;
+			editorCommunication(function(){
+				callback();
+			});
+		}, true, true);
+	}
+}
+
+function editorCommunication(callback) {
+	editor.onload = null;
+	editor.onload = function() {
+		// Stop listening to editor
+		if(editorMessageProxy) editorMessageProxy.setRecv(null);
 		
-				// Initialize Night Mode
-				night();
-			}, "init-success", true);
+		// See: scripts/messages.js
+		editorMessageProxy = new MessageProxy();
+		editorMessageProxy.setSend(editor.contentWindow);
+		editorMessageProxy.setRecv(window);
+		// Successful initialization
+		editorMessageProxy.registerMessageHandler(function(e) {
+			callback();
+		}, "init-success", true);
 
-			editorMessageProxy.registerMessageHandler(function(e) {
-				fileChanged = true;
-				if(e.data.filetype === ".html") {
-					rawEditor.textContent = e.data.html;
-				}
-				autosave();
-			}, "doc-changed");
+		editorMessageProxy.registerMessageHandler(function(e) {
+			tempText = e.data.html;
+			fileChanged = true;
+			autosave();
+		}, "doc-changed");
 
-			// editor focus and blur
-			editorMessageProxy.registerMessageHandler(function(e) {
-				if(e.data.focus) {
-					processActions('data-focus', editor);
-				} else {
-					processActions('data-blur', editor);
-				}
-			}, "focus");
-			Window.postMessage(editor.contentWindow, {command: "init"}, "*", [editorMessageChannel.port2]);
-			editorMessageProxy.getPort().start();
+		// editor focus and blur
+		editorMessageProxy.registerMessageHandler(function(e) {
+			if(e.data.focus) {
+				processActions('data-focus', editor);
+			} else {
+				processActions('data-blur', editor);
+			}
+		}, "focus");
+		editorMessageProxy.postMessage({command: "init"});
+		
+		editor.onload = function() {
+			editorMessageProxy.setSend(editor.contentWindow);
 		}
-	})
+	}
 }
 
 function watchDocument(filetype) {
 	if(filetype === ".html") {
-		prettyPrint();
 		// Add listener to update design
-		rawEditor.addEventListener('input', function() {
+		rawEditor.on('change', function() {
 			fileChanged = true;
-			var callbackKey = editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, null, true);
-			editorMessageProxy.getPort().postMessage({
+			editorMessageProxy.registerMessageHandler(function(e) { autosave(); }, 'autosave-ready');
+			editorMessageProxy.postMessage({
 				command: "load",
-				content: rawEditor.textContent,
+				content: rawEditor.getValue(),
 				filetype: ".html",
-				key: callbackKey
+				key: 'autosave-ready'
 			});
 		});
-		rawEditor.addEventListener('blur', function() {
-			prettyPrint();
+		rawEditor.on('focus', function() {
+			processActions('data-focus',rawEditorElement);	
+		});
+		rawEditor.on('blur', function() {
+			processActions('data-blur',rawEditorElement);	
 		});
 	}
 }
@@ -745,7 +774,7 @@ function forceAutosave() {
 
 function autosave(force) {
 	if (firetext.settings.get('autosave') != 'false') {
-		if (!saveTimeout | force == true) {
+		if (!saveTimeout || force == true) {
 			if (saving != true) {
 				// Add timeout for saving
 				saveTimeout = window.setTimeout(saveFromEditor, 1000);
@@ -866,7 +895,7 @@ function deleteSelected(confirmed) {
 			} else if (selected.length > 1) {
 				var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-plural'));			
 			} else {
-				alert(navigator.mozL10n.get('no-files-selected'));
+				firetext.notify(navigator.mozL10n.get('no-files-selected'));
 				return;
 			}
 			if (confirmDeletion != true) {
@@ -897,7 +926,7 @@ function deleteSelected(confirmed) {
 /* Format
 ------------------------*/ 
 function formatDoc(sCmd, sValue) {
-	editorMessageProxy.getPort().postMessage({
+	editorMessageProxy.postMessage({
 		command: "format",
 		sCmd: sCmd,
 		sValue: sValue
@@ -955,7 +984,7 @@ function updateToolbar() {
 				strikethroughCheckbox.checked = false;
 			}
 		}, null, true);
-		editorMessageProxy.getPort().postMessage({
+		editorMessageProxy.postMessage({
 			command: "query-command-states",
 			commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough"],
 			key: key
@@ -1044,6 +1073,8 @@ function processActions(eventAttribute, target) {
 			regions.sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-state'));
 		} else if (calledFunction == 'saveFromEditor') {
 			saveFromEditor(true, true);
+		} else if (calledFunction == 'downloadFile') {
+			download();
 		} else if (calledFunction == 'closeFile') {
 			// Check if file is changed.	If so, prompt the user to save it.
 			if (firetext.settings.get('autosave') == 'false' && fileChanged == true) {
@@ -1078,6 +1109,10 @@ function processActions(eventAttribute, target) {
 			}
 		} else if (calledFunction == 'createFromDialog') {
 			createFromDialog();
+		} else if (calledFunction == 'uploadFromDialog') {
+			uploadFromDialog();
+		} else if (calledFunction == 'saveAsFromDialog') {
+			saveAsFromDialog();
 		} else if (calledFunction == 'editDocs') {
 			editDocs();
 		} else if (calledFunction == 'extIcon') {
@@ -1096,12 +1131,12 @@ function processActions(eventAttribute, target) {
 			}
 		} else if (calledFunction == 'clearCreateForm') {
 			clearCreateForm();
+		} else if (calledFunction == 'clearSaveAsForm') {
+			clearSaveAsForm();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
-				tempAutozen = false;
 				editFullScreen(false);		
 			} else {
-				tempAutozen = true;
 				editFullScreen();
 			}
 		} else if (calledFunction == 'browser') {      
@@ -1121,7 +1156,7 @@ function processActions(eventAttribute, target) {
 
 			// Fix for empty locations
 			if(!browseLocation || browseLocation==''){
-				alert(navigator.mozL10n.get('not-functional-link'));
+				firetext.notify(navigator.mozL10n.get('not-functional-link'));
 				return;
 			}
 
@@ -1140,14 +1175,18 @@ function processActions(eventAttribute, target) {
 			}
 			formatDoc('justify'+justifyDirection);
 		} else if (calledFunction == 'hideToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt' &&
-					target.id === 'editor') {
-				document.getElementById('edit-bar').style.display = 'none';
-				editor.classList.add('no-toolbar');
+			if (deviceType != 'desktop') {
+				if (document.getElementById('currentFileType').textContent != '.txt' &&
+						document.getElementById('currentFileType').textContent != '.odt' &&
+						target.id === 'editor') {
+					document.getElementById('edit-bar').style.display = 'none';
+					editor.classList.add('no-toolbar');
+				}
+				document.getElementById('hide-keyboard-button').classList.add('shown');
 			}
-			document.getElementById('hide-keyboard-button').classList.add('shown');
 		} else if (calledFunction == 'showToolbar') {
 			if (document.getElementById('currentFileType').textContent != '.txt' &&
+					document.getElementById('currentFileType').textContent != '.odt' &&
 					target.id === 'editor') {
 				document.getElementById('edit-bar').style.display = 'block';
 				editor.classList.remove('no-toolbar');
@@ -1169,7 +1208,7 @@ function processActions(eventAttribute, target) {
 					}
 					regions.nav('hyperlink');
 				}, null, true);
-				editorMessageProxy.getPort().postMessage({
+				editorMessageProxy.postMessage({
 					command: "query-command-states",
 					commands: ["createLink"],
 					key: key
@@ -1235,7 +1274,7 @@ function processActions(eventAttribute, target) {
 					var rows = parseInt(document.getElementById('table-rows').value);
 					var cols = parseInt(document.getElementById('table-columns').value);						
 				} else {
-					alert(navigator.mozL10n.get('valid-integer-value'));
+					firetext.notify(navigator.mozL10n.get('valid-integer-value'));
 					return;
 				}
 			
@@ -1270,7 +1309,7 @@ function processActions(eventAttribute, target) {
 			document.getElementById('table-columns').value = null;
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
-			alert(navigator.mozL10n.get('recents-eliminated'));
+			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
 		}
 	}
 }
@@ -1297,7 +1336,7 @@ function checkDevice() {
 	}
 	
 	if (window.opera) {
-		alert(navigator.mozL10n.get('warning-unsupported-technology'));
+		firetext.notify(navigator.mozL10n.get('warning-unsupported-technology'));
 	}
 };
 
@@ -1305,6 +1344,10 @@ function clearCreateForm() {
 	document.getElementById('createDialogFileName').value = '';
 	document.getElementById('createDialogFileType').value = '.html';
 	extIcon();
+}
+
+function clearSaveAsForm() {
+	document.getElementById('saveAsDialogFileName').value = '';
 }
 
 function spinner(state) {
@@ -1316,7 +1359,9 @@ function spinner(state) {
 }
 
 function editFullScreen(enter) {
-	if (enter != false) {	// current working methods
+	if (enter === true ||
+				enter != false &&
+				!html.classList.contains('fullscreen')) {	// current working methods
 		// Make app fullscreen
 		if (document.documentElement.requestFullscreen) {
 			document.documentElement.requestFullscreen();
@@ -1325,12 +1370,6 @@ function editFullScreen(enter) {
 		} else if (document.documentElement.webkitRequestFullscreen) {
 			document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
 		}
-		
-		// Special editor UI
-		document.querySelector('#edit header:first-child').style.display = 'none';
-		document.getElementById('editTabs').setAttribute('data-items', '4.1');
-		document.querySelector('#editTabs .tabToolbar').classList.add('visible');
-		html.classList.add('fullscreen');
 	} else {
 		// Exit fullscreen
 		if (document.cancelFullScreen) {
@@ -1340,11 +1379,75 @@ function editFullScreen(enter) {
 		} else if (document.webkitCancelFullScreen) {
 			document.webkitCancelFullScreen();
 		}
-		
+	}
+}
+
+function onFullScreenChange() {
+	if (
+		document.fullscreenElement ||
+		document.mozFullScreenElement ||
+		document.webkitFullscreenElement
+	) {
+		// Special editor UI
+		html.classList.add('fullscreen');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-fs');
+		document.querySelector('#editor-zen-button span').classList.add('icon-efs');
+	} else {
 		// Regular editor UI
-		document.querySelector('#edit header:first-child').style.display = 'block';
-		document.getElementById('editTabs').setAttribute('data-items', '2');
-		document.querySelector('#editTabs .tabToolbar').classList.remove('visible');
 		html.classList.remove('fullscreen');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-efs');
+		document.querySelector('#editor-zen-button span').classList.add('icon-fs');
+	}
+}
+
+function onFullScreenError() {
+	firetext.notify('Could not enter into fullscreen.');
+}
+
+document.addEventListener('fullscreenchange', onFullScreenChange);
+document.addEventListener('mozfullscreenchange', onFullScreenChange);
+document.addEventListener('webkitfullscreenchange', onFullScreenChange);
+
+document.addEventListener('fullscreenerror', onFullScreenError);
+document.addEventListener('mozfullscreenerror', onFullScreenError);
+document.addEventListener('webkitfullscreenerror', onFullScreenError);
+
+/* Print button
+------------------------*/ 
+function initPrintButton(callback) {
+	app.modules.load('modules/printButton/printButton.html', printButton, function() {
+		printButtonCommunication(function(){
+			callback();
+		});
+	}, true, true);
+}
+
+function printButtonCommunication(callback) {
+	printButton.onload = null;
+	printButton.onload = function() {
+		// See: scripts/messages.js
+		var printButtonMessageProxy = new MessageProxy();
+		printButtonMessageProxy.setSend(printButton.contentWindow);
+		printButtonMessageProxy.setRecv(window);
+
+		printButtonMessageProxy.registerMessageHandler(function(printEvt) {
+			var key = editorMessageProxy.registerMessageHandler(function(editorEvt){
+				var filename = document.getElementById('currentFileName').textContent;
+				var filetype = document.getElementById('currentFileType').textContent;
+				
+				printButtonMessageProxy.postMessage({
+					command: printEvt.data.key,
+					filename: filename,
+					filetype: filetype,
+					content: editorEvt.data.content,
+					'automatic-printing-failed': navigator.mozL10n.get('automatic-printing-failed')
+				});
+			}, null, true);
+			editorMessageProxy.postMessage({
+				command: "get-content-html",
+				key: key
+			});
+			regions.nav('edit');
+		}, "print-button-pressed");
 	}
 }

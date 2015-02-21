@@ -189,7 +189,7 @@ section[data-type="sidebar"][data-position="right"]:after {
 }
 
 section[data-type="sidebar"] > nav {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   max-height: calc(100% - 5rem);
     max-height: -moz-calc(100% - 5rem);
@@ -213,7 +213,7 @@ section[data-type="sidebar"] [role="toolbar"] {
   width: 80%;
   right: auto;
   background-color: #1d1d1d;
-  color: #6f6f6f
+  color: #fff;
 }
 
 section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
@@ -221,14 +221,14 @@ section[data-type="sidebar"][data-position="right"] [role="toolbar"] {
   right: 0;
 }
 
-section[data-type="sidebar"] [role="toolbar"] button[class^="icon-"], 
-section[data-type="sidebar"] [role="toolbar"] [class*=" icon-"] {
-  color: #fff;
-}
-
 section[data-type="sidebar"] [role="toolbar"] button:active, 
 section[data-type="sidebar"] [role="toolbar"] button.active {
   background-color: #111;
+}
+
+section[data-type="sidebar"] [role="toolbar"] button[class^="icon-"],                                                                                
+section[data-type="sidebar"] [role="toolbar"] [class*=" icon-"] {                                                                                    
+  color: inherit;                                                                                                                                       
 }
 
 section[data-type="sidebar"] [role="toolbar"] + nav {

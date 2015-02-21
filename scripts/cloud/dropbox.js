@@ -19,16 +19,18 @@ cloud.dropbox.client = undefined;
 /* Auth
 ------------------------*/
 cloud.dropbox.init = function(){
-	cloud.dropbox.auth = new Dropbox.Client({
-		key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
-	});
+	if (urls.dropboxAuth) {
+		cloud.dropbox.auth = new Dropbox.Client({
+			key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
+		});
 
-	cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
-		rememberUser: true,
-		receiverUrl: urls.dropboxAuth
-	}));
+		cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
+			rememberUser: true,
+			receiverUrl: urls.dropboxAuth
+		}));
 
-	cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');
+		cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');		
+	}
 }
 
 
@@ -50,7 +52,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
 					entries[i].push('');
 					
 					// Only get documents
-					if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm') { // 0.4 && entries[i][2] != '.docx') {
+					if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.odt') { // 0.4 && entries[i][2] != '.docx') {
 						entries.splice(i, 1);
 						i = (i - 1);
 					}
@@ -77,9 +79,11 @@ cloud.dropbox.enumerate = function (directory, callback) {
 	}
 };
 
-cloud.dropbox.load = function (path, callback) {
+cloud.dropbox.load = function (path, filetype, callback) {
 	if (cloud.dropbox.client && path) {
-		cloud.dropbox.client.readFile(path, function(e, d) {
+		cloud.dropbox.client.readFile(path, {
+			binary: filetype === '.odt',
+		}, function(e, d) {
 			// Hide spinner
 			spinner('hide');
 					
@@ -151,12 +155,12 @@ cloud.dropbox.error = function (error) {
 	case Dropbox.ApiError.OVER_QUOTA:
 		// The user is over their Dropbox quota.
 		// Tell them their Dropbox is full. Refreshing the page won't help.
-		alert(navigator.mozL10n.get('dropbox-full'));
+		firetext.notify(navigator.mozL10n.get('dropbox-full'));
 		break;
 
 
 	case Dropbox.ApiError.NETWORK_ERROR:
-		alert(navigator.mozL10n.get('network-error'));
+		firetext.notify(navigator.mozL10n.get('network-error'));
 		break;
 
 	case Dropbox.ApiError.RATE_LIMITED:

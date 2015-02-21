@@ -21,7 +21,7 @@ a[role="button"] {
   white-space: nowrap;
   overflow: hidden;
   background: #fafafa url(buttons/images/ui/default.png) repeat-x left bottom;
-  border: 0.1rem solid #a6a6a6;
+  border: 1px solid #a6a6a6;
   border-radius: 0.2rem;
   font: 500 1.5rem/3.8rem 'MozTT', Sans-serif;
   color: #333;
@@ -203,14 +203,14 @@ ol.compact {
   border-radius: 0 0 0.3rem 0.3rem;
 }
 
-/* Pressed */
+/* Pressed */
 .compact > li button:active,
 .compact > li a[role="button"]:active {
   border-color: #eee;
   background: #eee;
 }
 
-/* Disabled */
+/* Disabled */
 .compact > li button[disabled],
 .compact > li a[role="button"][aria-disabled="true"] {
   color: #a6a6a6;

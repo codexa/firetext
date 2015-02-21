@@ -53,15 +53,7 @@ function nav2() {
 		tempElement.classList.add('current');
 		
 		/* Remove this section when porting to other projects */	 
-		if (tempLoc == 'edit') {
-			if (tempAutozen !== false) {
-				// Start Zen Mode if autozen == true
-				if (firetext.settings.get('autozen') == 'true' ||
-						tempAutozen === true) {
-					editFullScreen(true);
-				}
-			}
-			
+		if (tempLoc == 'edit') {			
 			// Save edit status
 			firetext.settings.save('autoload.wasEditing', 'true');
 			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
@@ -77,9 +69,6 @@ function nav2() {
 			}			
 		} else {
 			if (tempElement.getAttribute('role') === 'region') {
-				// No zen mode if region
-				editFullScreen(false);
-				
 				// Not editing if region
 				firetext.settings.save('autoload.wasEditing', 'false');
 			}
@@ -97,6 +86,28 @@ function nav2() {
 			updateDocLists(['recents', 'cloud']);
 		} else if (tempLoc == 'open') {
 			updateDocLists(['cloud']);		
+		}
+		
+		// Focus filename input
+		if (tempLoc == 'create' || tempLoc == 'save-as') {
+			var onTransitionEnd = function () {
+				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').focus();
+				tempElement.removeEventListener('transitionend', onTransitionEnd);
+				tempElement.removeEventListener('webkitTransitionEnd', onTransitionEnd);
+			};
+			tempElement.addEventListener('transitionend', onTransitionEnd);
+			tempElement.addEventListener('webkitTransitionEnd', onTransitionEnd);
+		}
+		
+		// Prefill filename and show filetype
+		if (tempLoc == 'save-as') {
+			document.getElementById('saveAsDialogFileName').value = document.getElementById('currentFileName').textContent;
+			document.getElementById('saveAsDialogFileType').textContent = document.getElementById('currentFileType').textContent;
+		}
+		
+		// Move file location selector to active region
+		if (tempLoc == 'create' || tempLoc == 'upload' || tempLoc == 'save-as') {
+			document.getElementById(tempLoc).getElementsByClassName('button-block')[0].appendChild(locationLegend);
 		}
 		/* End of customized section */
 	}
@@ -129,14 +140,32 @@ regions.sidebar = function (name, state) {
 
 regions.tab = function (list, name) {
 	if (document.getElementById('tab-'+name)) {
-		if (document.querySelector('.selected')) {
-			document.querySelector('.selected').classList.remove('selected');
+		// Unselect previous tab and button
+		var previousTab = document.querySelector('.selected-tab');
+		if (previousTab) {
+			previousTab.classList.remove('selected-tab');
 		}
-		document.getElementById('tab-'+name).classList.add('selected');
-		
+		var previousTabButton = document.querySelector('.selected-tab-button');
+		if (previousTabButton) {
+			previousTabButton.classList.remove('selected-tab-button');
+		}
+
+		// Select tab
+		document.getElementById('tab-'+name).classList.add('selected-tab');
+
+		// Select tab button
+		var tabButton = document.querySelector('[role="tab-button"][data-tab-id="'+name+'"]');
+		if (tabButton) {
+			tabButton.classList.add('selected-tab-button');                
+		}
+
 		/* Remove this section when porting to other projects */
-		if (name == 'raw') {
-			prettyPrint();
+		if (name === 'raw') {
+			setTimeout(function(){rawEditor.focus();},300);
+			if (tempText) {
+				rawEditor.setValue(tempText);
+				tempText = undefined;				
+			}
 		}
 		/* End of customized section */
 	}

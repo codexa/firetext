@@ -1,92 +1,349 @@
-@media (min-width: 767px) {
-  /* Regions */
-  section[role="dialog"],
-  form[role="dialog"] {
-    width: auto;
-    height: auto;
-    top: 20%;
-    left: 20%;
-    right: 20%;
-    bottom: 20%;    
-    border: 1px solid #dfdfdf;
-    box-shadow: 0 0 10px #efefef;
-      -webkit-transform: translateY(150%);
-      -moz-transform: translateY(150%);
-      -o-transform: translateY(150%);
-      -ms-transform: translateY(150%);
-    transform: translateY(150%);
-    z-index: 102 !important;
-  }
-  section[role="dialog"] + .background,
-  form[role="dialog"] + .background {
-    z-index: 101;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: block;
-    position: fixed;
-    background: rgba(255,255,255,.7);
-    opacity: 0;
-    visibility: hidden;
-      -moz-transition: opacity .4s, visibility .4s 0s;
-      -webkit-transition: opacity .4s, visibility .4s 0s;
-      -o-transition: opacity .4s, visibility .4s 0s;
-      -ms-transition: opacity .4s, visibility .4s 0s;
-    transition: opacity .4s, visibility .4s 0s;
-  }
-  section[role="dialog"].current + .background,
-  section[role="dialog"].parent + .background,
-  form[role="dialog"].current + .background,
-  form[role="dialog"].parent + .background {
-    opacity: 1;
-    visibility: visible;
-      -moz-transition: opacity .4s, visibility 0s;
-      -webkit-transition: opacity .4s, visibility 0s;
-      -o-transition: opacity .4s, visibility 0s;
-      -ms-transition: opacity .4s, visibility 0s;
-    transition: opacity .4s, visibility 0s;
-  }
+html {
+  font-size: 9px;
+}
+
+.mobile-only {
+  display: none !important;
+}
+
+/* Regions */
+section[role="region"] {
+  opacity: 0;
+    -moz-transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+section[role="region"].current,
+[role="region"].parent,
+[role="dialog"].parent {
+  opacity: 1;
+}
+
+section[role="dialog"],
+form[role="dialog"] {
+  width: auto;
+  height: auto;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;    
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 0 10px #efefef;
+    -webkit-transform: translateY(150%);
+    -moz-transform: translateY(150%);
+    -o-transform: translateY(150%);
+    -ms-transform: translateY(150%);
+  transform: translateY(150%);
+  z-index: 102 !important;
+}
+
+section[role="dialog"] + .background,
+form[role="dialog"] + .background {
+  z-index: 101;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  position: fixed;
+  background: rgba(255,255,255,.7);
+  opacity: 0;
+  visibility: hidden;
+    -moz-transition: opacity .4s, visibility .4s 0s;
+    -webkit-transition: opacity .4s, visibility .4s 0s;
+    -o-transition: opacity .4s, visibility .4s 0s;
+    -ms-transition: opacity .4s, visibility .4s 0s;
+  transition: opacity .4s, visibility .4s 0s;
+}
+
+section[role="dialog"].current + .background,
+section[role="dialog"].parent + .background,
+form[role="dialog"].current + .background,
+form[role="dialog"].parent + .background {
+  opacity: 1;
+  visibility: visible;
+    -moz-transition: opacity .4s, visibility 0s;
+    -webkit-transition: opacity .4s, visibility 0s;
+    -o-transition: opacity .4s, visibility 0s;
+    -ms-transition: opacity .4s, visibility 0s;
+  transition: opacity .4s, visibility 0s;
+}
+
+/* Tabs */
+[role="tabs"] [role="tab"] {
+  opacity: 0;
+    -moz-transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+[role="tabs"] [role="tab"].selected-tab {
+  opacity: 1;
+}
   
-  /* Tabs */
-  [role="tablist"] > [role="tab"] {
-    width: auto !important;
-  }
-  [role="tablist"] > [role="tab"] > a {
-    padding: 0 15px;
-    width: auto;
-  }
-  
-  /* Drawer/Sidebar */
-  section[data-type="sidebar"], section[data-type="sidebar"] [role="toolbar"] {
-    width: 250px;
-  }
-  section[data-type="sidebar"] > nav {
-    height: calc(100% - 5rem - 4rem);
-  }
-  [data-state="drawer"].current,
-  [dir="rtl"] [data-state="drawer"][data-position="right"].current {
-      -moz-transform: translateX(250px) !important;
-      -webkit-transform: translateX(250px) !important;
-      -o-transform: translateX(250px) !important;
-      -ms-transform: translateX(250px) !important;    
-    transform: translateX(250px) !important;   
-  }
-  [data-state="drawer"][data-position="right"].current,
-  [dir="rtl"] [data-state="drawer"].current {
-      -moz-transform: translateX(-250px) !important;
-      -webkit-transform: translateX(-250px) !important;
-      -o-transform: translateX(-250px) !important;
-      -ms-transform: translateX(-250px) !important;    
-    transform: translateX(-250px) !important;
-  }  
-  
-  /* Misc */    
-  .firetext {
-    text-align: left !important;      
-  }
-  
-  [dir="rtl"] .firetext {
-    text-align: right !important;      
-  }
+/* Drawer/Sidebar */
+section[data-type="sidebar"] {
+  width: auto;
+  position: absolute;
+  top: 5.5rem;
+  margin: 0 4px;
+  z-index: 1000;
+    height: -moz-calc(100% - 5.5rem - 3rem);
+    height: -webkit-calc(100% - 5.5rem - 3rem);
+  height: calc(100% - 5.5rem - 3rem);
+  transition: none;
+  background-color: transparent;
+  color: #1f1f1f;
+  border-radius: 8px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.fullscreen section[data-type="sidebar"] {
+  top: 4.5rem;
+    height: -moz-calc(100% - 4.5rem - 3rem);
+    height: -webkit-calc(100% - 4.5rem - 3rem);
+  height: calc(100% - 4.5rem - 3rem);
+}
+
+section[data-type="sidebar"] > * {
+  pointer-events: all;
+}
+
+section[data-type="sidebar"] > header:first-child {
+  display: none;
+}
+
+section[data-type="sidebar"] > nav {
+  height: auto;
+    max-height: -moz-calc(100% - 5rem);
+    max-height: -webkit-calc(100% - 5rem);
+  max-height: calc(100% - 5rem);
+  border: 1px solid #ccc;
+  border-bottom-width: 0;
+  padding: 5px 0;
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: #ffffff;
+}
+
+section[data-type="sidebar"] > nav:before,
+section[data-type="sidebar"] > nav:after {
+  height: 0;
+  width: 0;
+  position: absolute;
+  border: solid transparent;
+  content: " ";
+  border-width: 11px;
+  margin-left: -11px;
+  right: 9px;
+}
+
+section[data-type="sidebar"] > nav:before {
+  border-bottom-color: #ccc;
+  bottom: 100%;
+}
+
+section[data-type="sidebar"] > nav:after {
+  border-bottom-color: #fff;
+    bottom: -moz-calc(100% - 1px);
+    bottom: -webkit-calc(100% - 1px);
+  bottom: calc(100% - 1px);
+}
+
+section[data-type="sidebar"] > nav > h2 {
+  background-color: transparent;
+  text-indent: 0;
+  font-size: 1.8rem;
+  padding: 0.5rem 2rem;
+}
+
+section[data-type="sidebar"] > nav > ul > li:active {
+  background-color: #efefef;
+}
+
+section[data-type="sidebar"] > nav > ul > li > a {
+  font-size: 1.8rem;
+  line-height: 4rem;
+  padding: 0.5rem 2rem;
+  text-indent: 0;
+}
+
+section[data-type="sidebar"] [role="toolbar"] {
+  width: 100%;
+  position: static;
+  background-color: #efefef;
+  color: inherit;
+  border-radius: inherit;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-top-width: 0;
+}
+
+section[data-type="sidebar"] [role="toolbar"] button {
+  margin: 0;
+}
+
+section[data-type="sidebar"] [role="toolbar"] button:active,
+section[data-type="sidebar"] [role="toolbar"] button.active {
+  background-color: #ccc; 
+}
+
+[data-state="drawer"].current,
+[data-state="drawer"][data-position="right"].current,
+[dir="rtl"] [data-state="drawer"].current,
+[dir="rtl"] [data-state="drawer"][data-position="right"].current {
+    -moz-transform: translateX(0) !important;
+    -webkit-transform: translateX(0) !important;
+    -o-transform: translateX(0) !important;
+    -ms-transform: translateX(0) !important;    
+  transform: translateX(0) !important;   
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav:before,
+[dir="rtl"] section[data-type="sidebar"] > nav:after {
+  right: auto;
+  left: 9px;
+  margin-left: 0;
+}
+
+/* Editor */
+#fileName {
+  display: inline-block;
+}
+
+.edit-header .tabBar {
+  display: inline-block;
+  height: 100%;
+}
+
+.edit-header .tabBar > div {
+  font-size: 2rem;
+  line-height: 5rem;
+    -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#edit-bar {
+  top: 0;
+  background-color: #fafafa;
+  border-bottom: 2px solid #efefef;
+}
+
+.icon-more {
+    -moz-transform: rotate(0.5turn);
+    -webkit-transform: rotate(0.5turn);
+    -o-transform: rotate(0.5turn);
+    -ms-transform: rotate(0.5turn);
+  transform: rotate(0.5turn);
+}
+
+/* Zen mode */
+.fullscreen .edit-header {
+  right: 1.1rem;
+  top: 0.5rem;
+  background-color: transparent;
+  position: absolute;
+  border: none;
+}
+
+.fullscreen .no-zen {
+  display: none !important;
+}
+
+.fullscreen #edit-bar {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  width: auto;
+  top: 6rem;
+  left: auto;
+  right: 0;
+}
+
+.fullscreen #edit-bar li {
+  float: none;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.fullscreen #edit-bar button {
+  border-right: 4px solid transparent;
+}
+
+.fullscreen #edit-bar button:active,
+.fullscreen #edit-bar button.active {
+  background-color: transparent;
+  border-color: #aaa !important;
+}
+
+.fullscreen #edit-bar .icon-more {
+    -moz-transform: rotate(-.25turn);
+    -webkit-transform: rotate(-.25turn);
+    -o-transform: rotate(-.25turn);
+    -ms-transform: rotate(-.25turn);
+  transform: rotate(-.25turn);
+}
+
+.fullscreen .editor-container {
+  height: 100%;
+}
+
+.fullscreen #rawEditor {
+  padding-top: 7rem;
+}
+
+[dir="rtl"].fullscreen .edit-header {
+  left: 1.1rem;
+  right: auto;
+}
+
+[dir="rtl"].fullscreen #edit-bar {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] #edit-bar button {
+  border-left: 4px solid transparent;
+  border-right: none;
+}
+
+[dir="rtl"].fullscreen #edit-bar .icon-more {
+    -moz-transform: rotate(.25turn);
+    -webkit-transform: rotate(.25turn);
+    -o-transform: rotate(.25turn);
+    -ms-transform: rotate(.25turn);
+  transform: rotate(.25turn);
+}
+
+/* Status */
+section[role="status"] {
+  left: 0;
+  right: auto;
+  max-width: 400px;
+  border-radius: 8px;
+  margin: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 0 10px #ccc;
+	opacity: 0;
+}
+
+[dir="rtl"] section[role="status"] {
+  left: auto;
+  right: 0;  
+}
+
+section[role="status"] p {
+  margin: 0; 
+}
+
+section[role="status"].notification-shown {
+	opacity: 1;
 }

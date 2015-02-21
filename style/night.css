@@ -5,394 +5,296 @@
 
 .night,
 .night body {
-  background: #111;
-  color: #a0a0a0;
+	background: #111;
+	color: #a0a0a0;
 }
-
 
 /* Regions */
 .night section[role="region"],
 .night section[role="dialog"],
 .night form[role="region"],
 .night form[role="dialog"] {
-  background: #111;
+	background: #111;
 }
 
-.night [role="action"] {  
-  background-color: #111;
-  border-top: 1px solid #222;
+.night [role="action"] {	
+	background-color: #111;
+	border-top: 1px solid #222;
 }
 
 .night [role="action"] + .background {
-  background-color: rgba(0,0,0,0.7);
+	background-color: rgba(0,0,0,0.7);
 }
 
 .night [role="action"] > menu > button {
-  background-color: #333;
-  color: #fff;
+	background-color: #333;
+	color: #fff;
 }
 
 .night [role="action"] > menu > button:active {
-  background-color: #555;
+	background-color: #555;
 }
 
 .night [role="action"] > menu > button.danger {
-  background-color: #BE000A;
+	background-color: #BE000A;
 }
 
 .night [role="action"] > menu > button.danger:active {
-  background-color: #DE000A;  
+	background-color: #DE000A;	
 }
 
 @media (min-width: 767px) {
-  .night section[role="dialog"],
-  .night form[role="dialog"] {
-    border-color: #222;
-    box-shadow: none;
-  }
-  .night section[role="dialog"] + .background,
-  .night form[role="dialog"] + .background {
-    background-color: rgba(0,0,0,0.7); 
-  }
+	.night section[role="dialog"],
+	.night form[role="dialog"] {
+		border-color: #222;
+		box-shadow: none;
+	}
+	.night section[role="dialog"] + .background,
+	.night form[role="dialog"] + .background {
+		background-color: rgba(0,0,0,0.7); 
+	}
 }
-
 
 /* Headers */
 .night section > header:first-child {
-  background-color: #111;
-  color: #eee;
-  border-color: #2C2C2C;
-}
-
-.night .tabToolbar button:active {
-  background-color: #111;
+	background-color: #111;
+	color: #eee;
+	border-color: #2C2C2C;
 }
 
 .night section > header:first-child h1.firetext {
-  color: inherit; 
+	color: inherit; 
 }
 
 .night section > header:first-child a,
 .night section > header:first-child button {
-  color: inherit;
+	color: inherit;
 }
 
 .night section > header:first-child a:active,
 .night section > header:first-child button:active,
 .night section > header:first-child a:hover,
 .night section > header:first-child button:hover {
-  background-color: #222;
+	background-color: #222;
 }
 
 .night section > header:first-child [class^="icon-"], 
 .night section > header:first-child [class*=" icon-"] {
-  color: #eee;
+	color: #eee;
 }
-
 
 /* Spinner */
 .night .spinner {
-  background: rgba(44,44,44,0.5);
-  border: none;
+	background: rgba(44,44,44,0.5);
+	border: none;
 }
 
 .night .spinner > div {
-  background-image: url(icons/night/misc/spinner-night.png);
+	background-image: url(icons/night/misc/spinner-night.png);
 }
-
 
 /* Switches */
 .night label input[data-type="switch"] + span:after {
-  background: transparent;
+	background: transparent;
 }
 
 .night label input[data-type="switch"] + span:before {
-  background-color: #2c2c2c;
+	background-color: #2c2c2c;
 }
 
 .night label input[data-type="switch"]:checked + span {
-  border-color: #2c2c2c;
+	border-color: #2c2c2c;
 }
 
 /* Input areas */
 .night fieldset {
-  background-color: #2c2c2c;
-  color: #dfdfdf;
-  border-color: transparent;
+	background-color: #2c2c2c;
+	color: #dfdfdf;
+	border-color: transparent;
 }
 
 .night fieldset input,
 .night fieldset select {
-  color: #dfdfdf;
-  background-color: #2c2c2c;
+	color: #dfdfdf;
+	background-color: #2c2c2c;
+}
+
+.night fieldset legend {
+	color: #dfdfdf;
 }
 
 .night fieldset legend.action:after {
-  border-top-color: #dfdfdf;
+	border-top-color: #dfdfdf;
 }
 
-.night fieldset legend:active {
-  background: #1a1a1a;
+.night fieldset legend.action:active {
+	background: #1a1a1a;
 }
 
 .night aside.pack-end select {
-  color: #dfdfdf;
+	color: #dfdfdf;
+	background: #111;
 }
 
 .night button {
-  background-color: transparent;
-  color: #dfdfdf;
-  border-color: #dfdfdf;
-  text-shadow: none;
+	background-color: transparent;
+	color: #dfdfdf;
+	border-color: #dfdfdf;
+	text-shadow: none;
 }
-
 
 /* Lists */
 .night [data-type="list"] h2,
 .night [data-type="edit"] h2 {
-  background: #2c2c2c;
-  color: #dfdfdf;
+	background: #2c2c2c;
+	color: #dfdfdf;
 }
 
 .night [data-type="list"] li {
-  border-color: #1f1f1f;
-  color: #a0a0a0;
+	border-color: #1f1f1f;
+	color: #a0a0a0;
 }
 
 .night [data-type="list"] li p:first-of-type {
-  color: #a0a0a0;
+	color: #a0a0a0;
 }
 
 .night [data-type="list"] li > label {
-  border-color: #1f1f1f;
+	border-color: #1f1f1f;
 }
-
 
 /* File lists */
 .night [data-type="list"] li.fileListItem {
-  background: #111;
-  color: #a0a0a0;
+	background: #111;
+	color: #a0a0a0;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemDescription {
-  background: #161616;
-  color: #a0a0a0;
+	background: #161616;
+	color: #a0a0a0;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemName {
-  color: #dfdfdf;
+	color: #dfdfdf;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemPath {
-  color: #a0a0a0;
+	color: #a0a0a0;
 }
-
 
 /* Sidebar */
 .night section[data-type="sidebar"] {
-  background: #161616;
-  color: #a0a0a0;
+	background: #161616;
+	color: #a0a0a0;
 }
 
 .night section[data-type="sidebar"] > nav > h2 {
-  background-color: #2c2c2c;
-  color: #dfdfdf;
+	background-color: #2c2c2c;
+	color: #dfdfdf;
 }
 
+@media (min-width: 767px) {
+	.night section[data-type="sidebar"] {
+		background-color: transparent;
+	}
+	.night section[data-type="sidebar"] > nav {
+		background: #161616;
+		border-color: #555;		 
+	}
+	.night section[data-type="sidebar"] > nav:before {
+		border-bottom-color: #555;
+	}
+	.night section[data-type="sidebar"] > nav:after {
+		border-bottom-color: #161616;
+	}
+	.night section[data-type="sidebar"] > nav > h2 {
+		background-color: transparent;
+	}	 
+	.night section[data-type="sidebar"] > nav > ul > li:active {
+		background-color: #333;
+	}
+	.night section[data-type="sidebar"] [role="toolbar"] {
+		background-color: #222;
+		border-color: #555;		 
+	}
+	.night section[data-type="sidebar"] [role="toolbar"] button:active,
+	.night section[data-type="sidebar"] [role="toolbar"] button.active {
+		background-color: #555;
+	}
+}
 
 /* Tabs */
-.night [role="tablist"] {
-  color: #0a0a0a;
-  background-color: #222;
-}
-
-.night [role="tablist"] > [role="tab"] > a {
-  background-color: #222;
-}
-
-.night [role="tablist"] > [role="tab"] > a:active {
-  background-color: #444;
-  color: #cacaca;
-}
-
-.night [role="tablist"] > [role="tab"].selected > a {
-  background-color: #111;
-  color: #dfdfdf;
+.night .tabBar div.selected-tab-button {
+	color: #fff;
+	border-color: #fff;
 }
 
 .night [role="tablist"] [role="tabpanel"] {
-  background-color: #111;
-  color: #0a0a0a;
+	background-color: #111;
+	color: #0a0a0a;
 }
-
 
 /* Edit Mode */
 .night [role="dialog"][data-type="edit"] > menu {
-    background-color: #222;
-    border-color: #333;
+		background-color: #222;
+		border-color: #333;
 }
 
 .night [role="dialog"][data-type="edit"] > menu button {
-    background-color: #333;
-    color: #fff;
-    text-shadow: none;
+		background-color: #333;
+		color: #fff;
+		text-shadow: none;
 }
 
 .night [role="dialog"][data-type="edit"] > menu button.danger {
-    background-color: #BE000A;
+		background-color: #BE000A;
 }
-
 
 /* Editor */
 .night .editor {
-  background: #111;
-  color: #a0a0a0;
+	background-color: #000;
 }
 
+@media (min-width: 767px) {
+	.night #edit-bar {
+		background-color: #222;
+		color: #fff;
+		border-color: #2c2c2c;
+	}
+}
 
 /* Toolbar */
 .night [role="toolbar"] {
-  background-color: rgba(17,17,17,0.95);
+	background-color: rgba(17,17,17,0.95);
 }
 
 .night [role="toolbar"] button:active, 
 .night [role="toolbar"] button.active {
-  background-color: #444;
+	background-color: #444;
 }
 
 .night [role="toolbar"] button[class^="icon-"], 
 .night [role="toolbar"] [class*=" icon-"] {
-  color: #dfdfdf;   
+	color: #dfdfdf;		
 }
-
-
-/* Tab Toolbar */
-.night .tabToolbar button,
-.night .tabToolbar .button,
-.night .tabToolbar input[type="button"] {
-  color: #dfdfdf;
-}
-
 
 /* Status */
 .night section[role="status"] {
-  background: #222;
-  color: #dfdfdf;
+	background: #222;
+	color: #dfdfdf;
 }
 
-
-/* Google Code Prettify */
-/* Tomorrow Night Bright Theme */
-.night .pln {
-  color: #eaeaea;
+@media (min-width: 767px) {
+	.night section[role="status"] {
+		box-shadow: 0 0 10px #444;
+		border-color: #444;
+	}
 }
 
-/* string content */
-.night .str {
-  color: #b9ca4a;
+/* Zen */
+@media (min-width: 767px) {
+	.night.fullscreen #edit-bar button:active,
+	.night.fullscreen #edit-bar button.active {
+		border-color: #eee !important;	
+	}
 }
-
-/* a keyword */
-.night .kwd {
-  color: #c397d8;
-}
-
-/* a comment */
-.night .com {
-  color: #969896;
-}
-
-/* a type name */
-.night .typ {
-  color: #7aa6da;
-}
-
-/* a literal value */
-.night .lit {
-  color: #e78c45;
-}
-
-/* punctuation */
-.night .pun {
-  color: #eaeaea;
-}
-
-/* lisp open bracket */
-.night .opn {
-  color: #eaeaea;
-}
-
-/* lisp close bracket */
-.night .clo {
-  color: #eaeaea;
-}
-
-/* a markup tag name */
-.night .tag {
-  color: #d54e53;
-}
-
-/* a markup attribute name */
-.night .atn {
-  color: #e78c45;
-}
-
-/* a markup attribute value */
-.night .atv {
-  color: #70c0b1;
-}
-
-/* a declaration */
-.night .dec {
-  color: #e78c45;
-}
-
-/* a variable name */
-.night .var {
-  color: #d54e53;
-}
-
-/* a function name */
-.night .fun {
-  color: #7aa6da;
-}
-
-/* pre style */
-.night pre.prettyprint {
-  font-family: Menlo, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Consolas, monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  border: 1px solid #cccccc;
-  padding: 10px;
-}
-
-/* Specify class=linenums on a pre to get line numbering */
-.night ol.linenums {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-/* IE indents via margin-left */
-.night li.L0,
-.night li.L1,
-.night li.L2,
-.night li.L3,
-.night li.L4,
-.night li.L5,
-.night li.L6,
-.night li.L7,
-.night li.L8,
-.night li.L9 {
-  /* */
-}
-
-/* Alternate shading for lines */
-.night li.L1,
-.night li.L3,
-.night li.L5,
-.night li.L7,
-.night li.L9 {
-  /* */
-}
-
-/* End of Google Code Prettify CSS */

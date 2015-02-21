@@ -3,7 +3,8 @@
 * Copyright (C) Codexa Organization 2013.
 */
 
-function MessageProxy(port) {
+function MessageProxy() {
+	var send, recv;
 	var messageHandlers = {};
 	var pub = this;
 
@@ -30,11 +31,26 @@ function MessageProxy(port) {
 		messageHandlers[key] = undefined;
 	}
 
-	this.getPort = function getPort() {
-		return port;
+	this.getMessageHandlers = function getMessageHandlers() {
+		return messageHandlers;
 	}
 
-	port.addEventListener("message", function (e) {
+	this.setMessageHandlers = function setMessageHandlers(_messageHandlers) {
+		messageHandlers = _messageHandlers;
+	}
+
+	this.postMessage = function postMessage(data) {
+		send.postMessage(data, "*");
+	}
+
+	this.setSend = function setSend(_send) {
+		send = _send;
+	}
+
+	function handler(e) {
+		if(e.source !== send) {
+			return;
+		}
 		// check for command
 		if(!messageHandlers[e.data.command]) {
 			throw new Error('No command registered: "' + e.data.command + '"');
@@ -47,5 +63,11 @@ function MessageProxy(port) {
 		if(messageHandlers[e.data.command].useOnce) {
 			pub.unRegisterMessageHandler(e.data.command);
 		}
-	}, false);
+	}
+
+	this.setRecv = function setRecv(_recv) {
+		if(recv) recv.removeEventListener("message", handler, false);
+		recv = _recv;
+		if(recv) recv.addEventListener("message", handler, false);
+	}
 };

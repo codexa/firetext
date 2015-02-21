@@ -17,7 +17,7 @@ var cloud = {};
 cloud.init = function () {
 	// Dropbox
 	cloud.dropbox.init();
-	if (firetext.settings.get('dropbox.enabled') == 'true') {
+	if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.auth) {
 		// Error Handler
 		cloud.dropbox.auth.onError.addListener(function (error) {
 			if (window.console) {
@@ -89,44 +89,15 @@ cloud.init = function () {
 		}	 
 	}
 	
-	/* 0.4
-	// Google Drive
-	if (firetext.settings.get('gdrive.enabled') == 'true') {
-		// Code to get Google Drive files
-		updateDocLists();
-		
-		// Show UI Elements
-		welcomeGoogleArea.style.display = 'block';
-		openDialogGoogleArea.style.display = 'block';
-		locationGoogle = document.createElement('option');
-		locationGoogle.textContent = 'Google Drive';
-		locationSelect.appendChild(locationGoogle);
-	} else {
-		// Hide/Remove UI elements
-		welcomeGoogleArea.style.display = 'none';
-		openDialogGoogleArea.style.display = 'none';
-		if (locationGoogle) {
-			locationSelect.removeChild(locationGoogle);
-			locationGoogle = undefined;
-		}
-		
-		// Remove Google recents
-		var driveRecents = firetext.recents.get();
-		for (var i = 0; i < driveRecents.length; i++) {
-			if (driveRecents[i][4] == 'gdrive') {
-				firetext.recents.remove([driveRecents[i][0], driveRecents[i][1], driveRecents[i][2]], driveRecents[i][3], driveRecents[i][4]);
-			}
-		}
-	}
-	*/
-	
 	updateAddDialog();
 };
 
 cloud.updateDocLists = function (lists) {
 	if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
+		spinner();
 		cloud.dropbox.enumerate('/Documents/', function(DOCS) {
 			buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "dropbox-documents-found", 'dropbox');
+			spinner('hide');
 		});
 	}
 }

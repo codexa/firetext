@@ -1,7 +1,7 @@
 {
   "name": "Firetext",
   "description": "The word processor for Firefox OS",
-  "version": "0.3.3",
+  "version": "0.4",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
@@ -16,7 +16,10 @@
     "256": "/style/icons/app/256.png"
   },
   "default_locale": "en-US",
-  "locales": {  
+  "locales": {
+	"bg": {
+	  "description": "Програмата за текстова обработка на Файърфокс ОС"
+	},
 	"bn-BD": {
 	  "description": "ফায়ারফক্স ওএস এর জন্য ওয়ার্ড প্রসেসর"
 	},
@@ -37,6 +40,9 @@
 	},
 	"he": {
 	  "description": "מעבד התמלילים ל-Firefox OS"
+	},
+	"hu": {
+	  "description": "A Firefox OS szövegszerkesztője"
 	},
 	"id": {
 	  "description": "Pengolah kata untuk Firefox OS"
