@@ -1,4 +1,4 @@
-(function(mainOrigin, _parentMessageProxy, initNight, filetype) {
+(function(mainOrigin, _parentMessageProxy, initNight, filetype, odtdoc, readOnly) {
   function fixupDocument() {
     if(document.body.children.length === 0) {
       document.body.appendChild(document.createElement('br'));
@@ -19,8 +19,10 @@
   parentMessageProxy.setMessageHandlers(_parentMessageProxy.getMessageHandlers());
   
   // Initialize Designer
-  document.designMode = 'on';
-  document.execCommand('enableObjectResizing', false, 'true');
+  if(!readOnly) {
+    document.designMode = 'on';
+    document.execCommand('enableObjectResizing', false, 'true');
+  }
   
   // Hide and show toolbar.
   // For reviewers, just in case this looks like a security problem:
@@ -85,4 +87,4 @@
       filetype: filetype
     });
   });
-})(mainOrigin, parentMessageProxy, initNight, filetype, odtdoc);
+})(mainOrigin, parentMessageProxy, initNight, filetype, odtdoc, readOnly);
