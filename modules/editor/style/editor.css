@@ -18,6 +18,7 @@ body {
 }
 
 [_firetext_night] body, [_firetext_night] img {
+	filter: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="invertBrightness" x="0" y="0" width="100%" heigth="100%" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0"/><feColorMatrix type="hueRotate" values="180"/></filter></svg>#invertBrightness');
 		-webkit-filter: invert(100%) hue-rotate(180deg);
 	filter: invert(100%) hue-rotate(180deg);
 }
