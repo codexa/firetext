@@ -217,7 +217,7 @@
 		<div role="main" class="header-only">
 			<div class="form">
 				<fieldset class="button-block">
-					<input type="file" multiple accept="text/html,text/plain,application/vnd.oasis.opendocument.text,.odt" id="uploadDialogFiles" data-enter="uploadFromDialog">
+					<input type="file" multiple id="uploadDialogFiles" data-enter="uploadFromDialog">
 				</fieldset>
 			</div>
 		</div>
@@ -334,6 +334,7 @@
 			<ul role="tabs" id="editTabs">
 				<div role="tab" id="tab-design">
 					<iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
+					<iframe class="editor" id="viewerJS" src="" allowfullscreen></iframe>
 					<div role="toolbar" id="edit-bar">
 						<ul id="edit-zone">
 							<li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>

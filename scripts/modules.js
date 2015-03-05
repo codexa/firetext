@@ -15,6 +15,10 @@ if (!app) {
 		if (!url) {
 			callback('bad-params');
 		}
+		
+		console.log('loadModule', url);
+		callback(null, url);
+		return;
 	
 		// Get module
 		var request = new XMLHttpRequest();

@@ -10,9 +10,6 @@ var mainClosure = function() {
 	// document to be edited
 	var doc;
 	
-	// WARNING: DO NOT REPLACE, THIS STRING IS REPLACED WITH THE ORIGIN AUTOMATICALLY WHEN LOADED FROM editorProxy.js
-	var mainOrigin = "[ORIGIN_OF_MAIN_DOCUMENT]";
-	
 	// Overide popups
 	window.alert = null;
 	window.confirm = null;
@@ -24,10 +21,6 @@ var mainClosure = function() {
 	parentMessageProxy.setRecv(window);
 
 	parentMessageProxy.registerMessageHandler(function(e){
-		if(e.origin !== mainOrigin) {
-			throw new Error("origin did not match");
-		}
-		
 		// initialize modules/register handlers
 		// night mode
 		initNight(doc, parentMessageProxy);
@@ -46,14 +39,19 @@ var mainClosure = function() {
 			
 			// Content styles
 			[].forEach.call(content_styles, function(content_style) {
+				content_style = document.importNode(content_style, false);
 				content_style.setAttribute('_firetext_remove', '');
 				content_style.setAttribute('type', 'text/css');
-				document.head.appendChild(document.adoptNode(content_style));
+				document.head.appendChild(content_style);
 			});
 			
 			// Content scripts
 			[].forEach.call(content_scripts, function(content_script) {
-				window.eval(atob(content_script.src.split(',')[1]));
+				content_script = document.importNode(content_script, false);
+				content_script.setAttribute('_firetext_remove', '');
+				content_script.setAttribute('type', 'text/javascript');
+				content_script.async = false;
+				document.body.appendChild(content_script);
 			});
 		});
 		
