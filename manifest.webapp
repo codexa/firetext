@@ -15,13 +15,16 @@
     "120": "/style/icons/app/120.png",
     "256": "/style/icons/app/256.png"
   },
-  "default_locale": "en-US",
+  "default_locale": "en",
   "locales": {
 	"bg": {
 	  "description": "Програмата за текстова обработка на Файърфокс ОС"
 	},
 	"bn-BD": {
 	  "description": "ফায়ারফক্স ওএস এর জন্য ওয়ার্ড প্রসেসর"
+	},
+	"bn-IN": {
+	  "description": "Firefox OS এর word processor"
 	},
 	"cs": {
 	  "description": "Textový procesor pro Firefox OS"
@@ -41,6 +44,9 @@
 	"he": {
 	  "description": "מעבד התמלילים ל-Firefox OS"
 	},
+	"hi-IN": {
+	  "description": "फ़ायरफ़ॉक्स ओएस के लिए फायरटेक्सट"
+	},
 	"hu": {
 	  "description": "A Firefox OS szövegszerkesztője"
 	},
@@ -49,6 +55,12 @@
 	},
 	"it": {
 	  "description": "L'editor di testo per Firefox OS"
+	},
+	"ja": {
+	  "description": "Firefox OS 用のワードプロセッサーです"
+	},
+	"ml-IN": {
+	  "description": "ഫയര്‍ഫോക്സ് ഒയസിന്റെ വേര്‍ഡ്‌ പ്രോസ്സസര്‍"
 	},
 	"nl": {
 	  "description": "De tekstverwerker voor Firefox OS"
@@ -64,6 +76,9 @@
 	},
 	"ru": {
 	  "description": "Текстовый процессор для Firefox OS"
+	},
+	"ta-IN": {
+	  "description": "Firefox OS க்கான சொல் செயலி"
 	},
 	"zh-CN": {
 	  "description": "适用于 Firefox OS 的文字处理程序"
