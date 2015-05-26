@@ -16,6 +16,41 @@ firetext.io = {};
 var storage, deviceAPI, locationDevice;
 
 
+/* File types
+------------------------*/
+var FILETYPES = {
+	
+	'.txt':		{									mime: 'text/plain'},
+	'.html':	{formattable: true, rawView: true,	mime: 'text/html'},
+	'.htm':		{formattable: true, rawView: true,	mime: 'text/html'},
+	'.odt':		{binary: true, /* odt.js */			mime: 'application/vnd.oasis.opendocument.text'},
+	'.fodt':	{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.text-flat-xml'},
+	'.ott':		{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.text-template'},
+	'.odp':		{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.presentation'},
+	'.fodp':	{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.presentation-flat-xml'},
+	'.otp':		{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.presentation-template'},
+	'.ods':		{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.spreadsheet'},
+	'.fods':	{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.spreadsheet-flat-xml'},
+	'.ots':		{binary: true, viewerJS: true,		mime: 'application/vnd.oasis.opendocument.spreadsheet-template'},
+	'.pdf':		{binary: true, viewerJS: true,		mime: 'application/pdf'},
+	
+};
+function getFileTypes() {
+	return Object.keys(FILETYPES);
+}
+function getFileType(filetype, prop) {
+	return prop ? FILETYPES[filetype][prop] : FILETYPES[filetype];
+}
+function getMimeTypes() {
+	return getFileTypes().map(function(filetype) {
+		return getFileType(filetype, 'mime');
+	});
+}
+function getMimeType(mime) {
+	return getMimeTypes().indexOf(mime) !== -1;
+}
+
+
 /* Init
 ------------------------*/
 firetext.io.init = function (api, callback) {
@@ -96,6 +131,9 @@ firetext.io.init = function (api, callback) {
 			return;
 		}
 	}
+	
+	// Set allowed upload filetypes
+	document.getElementById('uploadDialogFiles').accept = getMimeTypes().concat(getFileTypes()).join(',');
 }
 
 function enableInternalStorage() {	
@@ -161,9 +199,8 @@ firetext.io.enumerate = function (directory, callback) {
 				
 				// Don't get any files but docs
 				if (!thisFile[1] |
-						 thisFile[3] != 'text/html' &&
-						 thisFile[3] != 'text/plain' &&
-						 thisFile[2] != '.odt') {
+						 !getMimeType(thisFile[3]) &&
+						 !getFileType(thisFile[2])) {
 					cursor.continue();
 					return;				 
 				}
@@ -220,7 +257,7 @@ firetext.io.enumerate = function (directory, callback) {
 							fileparts = results[i].name.split(".");
 							filetype = fileparts.length >= 2 ? "." + fileparts[fileparts.length - 1] : "";
 							filename = filetype.length >= 2 ? fileparts.slice(0, -1).join("") : fileparts[0];
-							if (filetype !== ".txt" && filetype !== ".html" && filetype !== ".odt") {
+							if (!getFileType(filetype)) {
 								continue;
 							}
 							FILES.push([directory, filename, filetype]);
@@ -332,7 +369,7 @@ function createFromDialog() {
 	var contentData = firetext.io.getDefaultContent(filetype);
 	
 	// Get mime
-	var type =  firetext.io.getMime(filetype);
+	var type =  getFileType(filetype, 'mime');
 	
 	var contentBlob = new Blob([contentData], { "type" : type });
 	
@@ -373,7 +410,7 @@ function uploadFromDialog() {
 			continue;
 		}
 		
-		if (['text/html', 'text/plain', 'application/vnd.oasis.opendocument.text'].indexOf(file.type) === -1) {
+		if (getMimeTypes().indexOf(file.type) === -1) {
 			continue;
 		}
 		
@@ -472,74 +509,83 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	});
 	
 	// Show/hide toolbar
-	switch (filetype) {
-		case ".html":
-			document.getElementById('edit-bar').style.display = 'block';
-			editor.classList.remove('no-toolbar');
-			toolbar.classList.remove('hidden');
-			break;
-		case ".txt":
-		case ".odt":
-		default:
-			document.getElementById('edit-bar').style.display = 'none';
-			editor.classList.add('no-toolbar');
-			toolbar.classList.add('hidden');
-			break;
+	if (getFileType(filetype, 'formattable')) {
+		document.getElementById('edit-bar').style.display = 'block';
+		editor.classList.remove('no-toolbar');
+		toolbar.classList.remove('hidden');
+	} else {
+		document.getElementById('edit-bar').style.display = 'none';
+		editor.classList.add('no-toolbar');
+		toolbar.classList.add('hidden');
 	}
 	
 	// Fill editor
 	firetext.io.load(directory, filename, filetype, function(result, error, fileInfo) {
+		function cont() {
+			if (getFileType(filetype, 'rawView')) {
+				document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
+				tabRaw.classList.remove('hidden-item');
+				rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
+			} else {
+				document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
+				tabRaw.classList.add('hidden-item');
+			}
+			
+			// Add file to recent docs
+			firetext.recents.add([fileInfo[0], fileInfo[1], fileInfo[2]], location);
+			
+			// Show editor
+			regions.nav('edit');
+			regions.tab(document.querySelector('#editTabs'), 'design');
+		}
+		
 		if (!error) {
-			initEditor(function() {
-				editorMessageProxy.postMessage({
-					command: "load",
-					content: result,
-					filetype: filetype
+			if (getFileType(filetype, 'viewerJS')) {
+				loadViewerJS(result, filetype, function() {
+					// View appropriate editor
+					viewerJS.style.display = 'block';
+					editor.style.display = 'none';
+					
+					cont();
 				});
-				switch (filetype) {
-					case ".txt":
-					case ".odt":
-						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
-						tabRaw.classList.add('hidden-item');
-						break;
-					case ".html":
-					default:
-						document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
-						tabRaw.classList.remove('hidden-item');
-						rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
-						break;
-				}
-				
-				// Handle read-only files
-				if (editable == false) {
-					formatDoc('contentReadOnly', true);
-				} else {
-					formatDoc('contentReadOnly', false);			
-				}
-				
-				// Add listener to update views
-				watchDocument(filetype);
-				
-				// Start toolbar update interval			
-				toolbarInterval = window.setInterval(updateToolbar, 100);
-				
-				// Add file to recent docs
-				firetext.recents.add([fileInfo[0], fileInfo[1], fileInfo[2]], location);
-		
-				// Show editor
-				regions.nav('edit');
-				regions.tab(document.querySelector('#editTabs'), 'design');
-		
-				// Hide save button if autosave is enabled
-				if (firetext.settings.get('autosave') != 'false') {
-					document.getElementById('editorSaveButton').style.display = 'none';
-				} else {
-					document.getElementById('editorSaveButton').style.display = 'inline-block';
-				}
-				
-				// Re-initialize night
-				night();
-			})
+			} else {
+				initEditor(function() {
+					editorMessageProxy.postMessage({
+						command: "load",
+						content: result,
+						filetype: filetype
+					});
+					
+					// View appropriate editor
+					viewerJS.style.display = 'none';
+					editor.style.display = 'block';
+					
+					// Handle read-only files
+					if (editable == false) {
+						formatDoc('contentReadOnly', true);
+					} else {
+						formatDoc('contentReadOnly', false);			
+					}
+					
+					// Add listener to update views
+					watchDocument(filetype);
+					
+					// Start toolbar update interval			
+					toolbarInterval = window.setInterval(updateToolbar, 100);
+					
+					// Hide save button if autosave is enabled
+					if (firetext.settings.get('autosave') != 'false') {
+						document.getElementById('editorSaveButton').style.display = 'none';
+					} else {
+						document.getElementById('editorSaveButton').style.display = 'inline-block';
+					}
+					
+					// Re-initialize night
+					night();
+					
+					cont();
+				})
+			}
 		} else {
 			firetext.notify(navigator.mozL10n.get('load-unsuccessful')+result);
 		}
@@ -667,7 +713,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				var file = req.result;
 				var reader = new FileReader();
 				
-				if (filetype == ".odt") {
+				if (getFileType(filetype, 'binary')) {
 					reader.readAsArrayBuffer(file);
 				} else {
 					reader.readAsText(file);
@@ -721,7 +767,7 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 						callback(this.result, undefined, [directory, filename, filetype]);
 					};
 					
-					if (filetype === ".odt") {
+					if (getFileType(filetype, 'binary')) {
 						reader.readAsArrayBuffer(file);
 					} else {
 						reader.readAsText(file);

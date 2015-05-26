@@ -21,13 +21,13 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, viewerJS;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
-var editorMessageProxy, editorURL;
+var editorMessageProxy, editorURL, viewerJSURL;
 
 // Lists
 var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
@@ -150,6 +150,7 @@ function initElements() {
 	locationLegend = document.getElementById('locationLegend');
 	locationSelect = document.getElementById('createDialogFileLocation');	
 	printButton = document.getElementById('printButton');
+	viewerJS = document.getElementById('viewerJS');
 	
 	// Lists
 	welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -552,6 +553,7 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
 				description = cleanForPreview(description, ".html");
 				break;
 			default:
+				description = '';
 				break;
 		}
 	}
@@ -782,6 +784,35 @@ function autosave(force) {
 				saveTimeout = window.setTimeout(forceAutosave, 1000);				 
 			}
 		}
+	}
+}
+
+
+/* ViewerJS
+------------------------*/ 
+function loadViewerJS(contents, filetype, callback) {
+	if (viewerJSURL) {
+		var type = getFileType(filetype, 'mime');
+		var documentUrl;
+		try {
+			viewerJS.contentDocument.a; // Check if we're same-origin with ViewerJS (Firetext is not in a sandboxed iframe)
+			documentUrl = URL.createObjectURL(new Blob([contents], {type: type}));
+		} catch(e) {
+			var binary = '';
+			var bytes = new Uint8Array(contents);
+			for (var i = 0, l = bytes.byteLength; i < l; i++) {
+				binary += String.fromCharCode(bytes[i]);
+			}
+			documentUrl = 'data:' + type + ';base64,' + window.btoa(binary);
+		}
+		app.modules.fill(viewerJSURL + '?refresh=' + Math.random() + '#' + documentUrl, viewerJS, function() {
+			callback();
+		});
+	} else {
+		app.modules.load('modules/ViewerJS/index.html', [], function(u) {
+			viewerJSURL = u;
+			loadViewerJS(contents, filetype, callback);
+		}, true, true);
 	}
 }
 
@@ -1176,8 +1207,7 @@ function processActions(eventAttribute, target) {
 			formatDoc('justify'+justifyDirection);
 		} else if (calledFunction == 'hideToolbar') {
 			if (deviceType != 'desktop') {
-				if (document.getElementById('currentFileType').textContent != '.txt' &&
-						document.getElementById('currentFileType').textContent != '.odt' &&
+				if (getFileType(document.getElementById('currentFileType').textContent, 'formattable') &&
 						target.id === 'editor') {
 					document.getElementById('edit-bar').style.display = 'none';
 					editor.classList.add('no-toolbar');
@@ -1185,8 +1215,7 @@ function processActions(eventAttribute, target) {
 				document.getElementById('hide-keyboard-button').classList.add('shown');
 			}
 		} else if (calledFunction == 'showToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt' &&
-					document.getElementById('currentFileType').textContent != '.odt' &&
+			if (getFileType(document.getElementById('currentFileType').textContent, 'formattable') &&
 					target.id === 'editor') {
 				document.getElementById('edit-bar').style.display = 'block';
 				editor.classList.remove('no-toolbar');
