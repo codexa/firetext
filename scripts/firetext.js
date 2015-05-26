@@ -21,7 +21,7 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton;
+var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
@@ -150,6 +150,7 @@ function initElements() {
 	locationLegend = document.getElementById('locationLegend');
 	locationSelect = document.getElementById('createDialogFileLocation');	
 	printButton = document.getElementById('printButton');
+	mainButtonConnectDropbox = document.getElementById('mainButtonConnectDropbox');
 	
 	// Lists
 	welcomeDocsList = document.getElementById('welcome-docs-list');

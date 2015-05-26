@@ -59,6 +59,9 @@ cloud.init = function () {
 				}								 
 			});
 		} 
+		
+		// Hide connect button
+		mainButtonConnectDropbox.style.display = 'none';
 	} else {
 		// Hide/Remove UI elements
 		welcomeDropboxArea.style.display = 'none';
@@ -87,6 +90,9 @@ cloud.init = function () {
 				firetext.recents.remove([dropRecents[i][0], dropRecents[i][1], dropRecents[i][2]], dropRecents[i][3], dropRecents[i][4]);
 			}
 		}	 
+		
+		// Show connect button
+		mainButtonConnectDropbox.style.display = '';
 	}
 	
 	updateAddDialog();
