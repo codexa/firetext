@@ -111,7 +111,7 @@
 		</nav>
 		<div role="toolbar">
 			<ul>
-			 <li><button href="#" data-click="nav" data-click-location="settings" class="icon-setting"></button></li>
+			 <li><button href="#" data-click="nav" data-click-location="settings" class="icon-setting" data-l10n-title="settings"></button></li>
 			</ul>
 			<ul>
 			</ul>
@@ -124,8 +124,8 @@
 		data-click="sidebar" data-click-id="welcome" data-click-state="close" data-click-only="current">
 		<header>
 			<menu type="toolbar">
-				<button data-click="nav" data-click-location="create"><span class="icon icon-create"></span></button>
-				<button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
+				<button data-click="nav" data-click-location="create" data-l10n-title="create"><span class="icon icon-create"></span></button>
+				<button data-click="sidebar" data-click-id="welcome" class="drawerEnabled" data-l10n-title="menu"><span class="icon icon-menu"></span></button>
 			</menu>
 			<h1 class="firetext icon-">firetext</h1>
 		</header>
@@ -169,7 +169,7 @@
 	
 	<section role="dialog" id="create" class="create-dialog">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="createFromDialog" class="create-button" data-l10n-id="create"></button>
 			</menu>
@@ -208,7 +208,7 @@
 	
 	<section role="dialog" id="import" class="create-dialog">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="uploadFromDialog" class="create-button" data-l10n-id="import"></button>
 			</menu>
@@ -230,7 +230,7 @@
 	
 	<section role="dialog" id="save-as" class="create-dialog">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="saveAsFromDialog" class="create-button" data-l10n-id="save"></button>
 			</menu>
@@ -260,7 +260,7 @@
 	
 	<section role="dialog" id="open">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<h1 data-l10n-id="open"></h1>
 		</header>
 		<div role="main" class="header-only">
@@ -313,7 +313,7 @@
 		</nav>
 		<div role="toolbar">
 		 <ul>
-			 <li><button class="icon-setting" href="#" data-click="nav" data-click-location="settings"></button></li>
+			 <li><button class="icon-setting" href="#" data-click="nav" data-click-location="settings" data-l10n-title="settings"></button></li>
 			</ul>
 			<ul>
 			</ul>
@@ -322,11 +322,11 @@
 	
 	<section role="region" id="edit" data-click="sidebar" data-click-id="main" data-click-state="close" data-click-only="current">
 		<header class="edit-header">
-			<button data-click="closeFile" class="no-zen"><span class="icon icon-close"></span></button>
+			<button data-click="closeFile" class="no-zen" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
-				<button data-click="saveFromEditor" class="no-zen" id="editorSaveButton"><span class="icon icon-save"></span></button>
-				<button data-click="fullscreen" class="desktop-only" id="editor-zen-button"><span class="icon icon-fs"></span></button>
-				<button data-click="sidebar" data-click-id="main" class="menu drawerEnabled no-zen"><span class="icon icon-menu"></span></button>
+				<button data-click="saveFromEditor" class="no-zen" id="editorSaveButton" data-l10n-title="save"><span class="icon icon-save"></span></button>
+				<button data-click="fullscreen" class="desktop-only" id="editor-zen-button" data-l10n-title="fullscreen"><span class="icon icon-fs"></span></button>
+				<button data-click="sidebar" data-click-id="main" class="menu drawerEnabled no-zen" data-l10n-title="menu"><span class="icon icon-menu"></span></button>
 			</menu>
 			<h1 id="fileName" class="no-zen"><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
 			<div class="tabBar">
@@ -340,11 +340,11 @@
 					<iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
 					<div role="toolbar" id="edit-bar">
 						<ul id="edit-zone">
-							<li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>
-							<li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic"></button></li>
-							<li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline"></button></li>
-							<li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough"></button></li>
-							<li><button class="icon-more" data-click="nav" data-click-location="format"></button></li>
+							<li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold" data-l10n-title="bold"></button></li>
+							<li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
+							<li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
+							<li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough" data-l10n-title="strikethrough"></button></li>
+							<li><button class="icon-more" data-click="nav" data-click-location="format" data-l10n-title="formatting"></button></li>
 						</ul>
 						<ul>
 						</ul>
@@ -360,7 +360,7 @@
 	
 	<section role="dialog" id="format">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<h1 data-l10n-id="tools"></h1>
 		</header>
 		<div role="main" class="header-only">
@@ -481,7 +481,7 @@
 	
 	<section role="dialog" id="hyperlink">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="hyperlink" data-click-dialog="true" data-l10n-id="okay"></button>
 			</menu>
@@ -517,7 +517,7 @@
 	
 	<section role="dialog" id="image-web">
 			<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="image" data-click-location="web" data-click-dialog="true" data-l10n-id="okay"></button>
 			</menu>
@@ -541,7 +541,7 @@
 	
 	<section role="dialog" id="table">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="table" data-click-dialog="true" data-l10n-id="okay"></button>
 			</menu>
@@ -583,7 +583,7 @@
 
 	<section role="dialog" id="settings">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<h1 data-l10n-id="settings"></h1>
 		</header>
 		<div role="main" class="header-only">

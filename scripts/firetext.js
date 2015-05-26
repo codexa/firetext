@@ -44,6 +44,9 @@ window.addEventListener('DOMContentLoaded', function() {firetext.init();}, false
 firetext.init = function () {	
 	// l10n catch
 	navigator.mozL10n.once(function () {
+		// Add l10n title attributes and long-press help popups
+		initElementTitles();
+		
 		// Select elements
 		initElements();
 	
@@ -137,6 +140,47 @@ function initModules(callback) {
 	});
 }
 
+function initElementTitles() {
+	Array.prototype.forEach.call(document.querySelectorAll('[data-l10n-title]'), function(elm) {
+		var titleId = elm.getAttribute('data-l10n-title');
+		var title = navigator.mozL10n.get(titleId);
+		elm.title = title;
+		var timeout;
+		elm.addEventListener('touchstart', function() {
+			timeout = setTimeout(function() {
+				var titlePopup = document.createElement('div');
+				titlePopup.textContent = title;
+				titlePopup.className = 'titlePopup';
+				elm.offsetParent.appendChild(titlePopup); // We put it in the document now because we want to know its width, to center it.
+				var elmPos = elm.getBoundingClientRect();
+				var offsetParentPos = elm.offsetParent.getBoundingClientRect(); // To make calculations easier.
+				if (window.innerHeight - elmPos.top - elm.offsetHeight >= 45) {
+					titlePopup.style.top = elm.offsetTop + elm.offsetHeight + 10 + 'px';
+				} else {
+					titlePopup.style.top = elm.offsetTop - 35 + 'px';
+				}
+				titlePopup.style.left = Math.max(10, Math.min(window.innerWidth - elm.offsetWidth - 10, elmPos.left + (elm.offsetWidth - titlePopup.offsetWidth) / 2)) - offsetParentPos.left + 'px';
+				titlePopup.classList.add('shown');
+				setTimeout(hide, 3000);
+				document.addEventListener('touchstart', hide);
+				function hide() {
+					document.removeEventListener('touchstart', hide);
+					titlePopup.classList.remove('shown');
+					titlePopup.addEventListener('transitionend', function() {
+						this.parentElement.removeChild(this);
+					});
+				}
+			}, 500);
+		});
+		elm.addEventListener('touchend', cancel);
+		elm.addEventListener('touchleave', cancel);
+		elm.addEventListener('touchcancel', cancel);
+		function cancel(evt) {
+			clearTimeout(timeout);
+		};
+	});
+}
+
 function initElements() {
 	// Misc
 	loadSpinner = document.getElementById('loadSpinner');
@@ -185,13 +229,13 @@ function initListeners() {
 			event.target.classList.toggle('active');
 		}
 	);
-	toolbar.addEventListener(
-		'mouseup', function mouseDown(event) {
-			if (event.target.classList.contains('sticky') != true) {
-				event.target.classList.remove('active');
-			}
+	toolbar.addEventListener('mouseup', mouseEnd);
+	toolbar.addEventListener('mouseleave', mouseEnd);
+	function mouseEnd(event) {
+		if (event.target.classList.contains('sticky') != true) {
+			event.target.classList.remove('active');
 		}
-	);
+	}
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
