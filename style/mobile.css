@@ -179,10 +179,10 @@ section[role="dialog"] + .background {
 }
 
 /* Status */
-section[role="status"] {
+section[role="status"] > div {
 	transform: translateY(100%);
 }
 
-section[role="status"].notification-shown {
+section[role="status"] > div.notification-shown {
 	transform: none;
 }

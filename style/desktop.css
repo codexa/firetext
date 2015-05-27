@@ -323,8 +323,14 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 /* Status */
 section[role="status"] {
-  left: 0;
-  right: auto;
+  top: 0;
+  bottom: auto;
+  text-align: center;
+  background: transparent;
+  pointer-events: none;
+}
+
+section[role="status"] > div {
   max-width: 400px;
   border-radius: 8px;
   margin: 1rem;
@@ -333,17 +339,16 @@ section[role="status"] {
   padding: 10px;
   box-shadow: 0 0 10px #ccc;
 	opacity: 0;
+  transition: opacity 0.3s;
+  position: static;
+  display: inline-block;
+  pointer-events: all;
 }
 
-[dir="rtl"] section[role="status"] {
-  left: auto;
-  right: 0;  
-}
-
-section[role="status"] p {
+section[role="status"] > div p {
   margin: 0; 
 }
 
-section[role="status"].notification-shown {
+section[role="status"] > div.notification-shown {
 	opacity: 1;
 }
