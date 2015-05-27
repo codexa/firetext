@@ -22,7 +22,7 @@ firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton;
-var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
+var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
