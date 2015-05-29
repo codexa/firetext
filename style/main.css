@@ -26,6 +26,26 @@ html, body {
   outline: none;
 }
 
+.mainButtons {
+  text-align: center;
+  padding: 0;
+}
+
+.mainButtons button {
+  width: auto;
+  font-size: 2rem;
+  background: #e7e7e7;
+  margin: .5rem;
+}
+
+.mainButtons button .icon {
+  margin-right: 1rem;
+}
+
+.mainButtons button b {
+  font-weight: normal !important;
+}
+
 .no-storage-notice {
   font-size: 2rem;
   text-align: center;
