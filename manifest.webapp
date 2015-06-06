@@ -7,7 +7,7 @@
   "origin": "app://firetext",
   "developer": {
     "name": "Codexa",
-    "url": "http://firetext.codexa.org"
+    "url": "https://github.com/codexa"
   },
   "icons": {
     "32": "/style/icons/app/32.png",
