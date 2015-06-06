@@ -5,7 +5,7 @@
 
 if (Dropbox && Dropbox.AuthDriver) {
 	Dropbox.AuthDriver.FFOSPopup = (function(superClass) {
-		var allowedOrigins = ["https://codexa.github.io", "http://firetext.codexa.bugs3.com", "app://firetext", "localhost", "file"];
+		var allowedOrigins = ["https://codexa.github.io", "http://firetext.codexa.bugs3.com", "app://firetext", "localhost"];
 
 		function FFOSPopup() {
 		}
@@ -17,7 +17,7 @@ if (Dropbox && Dropbox.AuthDriver) {
 				return "file";
 			}
 			
-			match = /^([^\:]+\:\/\/localhost(:[0-9]*){0,1}\/{1})/.exec(location);
+			match = /^([^\:]+\:\/\/localhost(:[0-9]*){0,1}([\/]|$))/.exec(location);
 			if (match) {
 				return "localhost";
 			}
