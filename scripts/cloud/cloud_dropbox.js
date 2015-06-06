@@ -24,7 +24,7 @@ cloud.dropbox.init = function(callback){
 			key: urls.dropboxKey
 		});
 
-		cloud.dropbox.auth.authDriver(new Dropbox.AuthDriver.Popup({
+		cloud.dropbox.auth.authDriver(new Dropbox.AuthDriver.FFOSPopup({
 			rememberUser: true,
 			receiverUrl: urls.dropboxAuth
 		}));
@@ -67,7 +67,6 @@ cloud.dropbox.signOut = function () {
 		cloud.dropbox.client = undefined;
 	}
 };
-
 
 /* File IO
 ------------------------*/
