@@ -1,3 +1,8 @@
+/build/
+/builder/node_modules/
+logs
+*.log
+npm-debug.log*
 .DS_Store
 ._.DS_Store
 .db

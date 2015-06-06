@@ -1,0 +1,11 @@
+{
+	"devDependencies": {
+		"sjcl": "~1.0.3",
+		"html-minifier": "~0.7.2",
+		"uncss": "https://github.com/twiss/uncss/tarball/6f21bc960b45534ead2674b19e969176d6a85b0d",
+		"google-closure-compiler": "~20150505.0.0",
+		"more-css": "~0.12.0",
+		"fontmin": "0.9.0-alpha-3",
+		"yargs": "~3.31.0"
+	}
+}
