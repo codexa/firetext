@@ -46,7 +46,7 @@ if (Dropbox && Dropbox.AuthDriver) {
 				}
 				if (opener) {
 					receiveMessage = function(e) {
-						if (e.source === opener && allowedOrigins.indexOf(Dropbox.AuthDriver.FFOSPopup.locationOrigin(e.origin !== -1))) {
+						if (e.source === opener && allowedOrigins.indexOf(Dropbox.AuthDriver.FFOSPopup.locationOrigin(e.origin)) !== -1) {
 							opener.postMessage(message, e.origin);
 							window.close();
 						}
