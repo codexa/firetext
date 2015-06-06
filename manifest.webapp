@@ -4,6 +4,7 @@
   "version": "0.5",
   "type": "privileged",
   "launch_path": "/index.html",
+  "origin": "app://firetext",
   "developer": {
     "name": "Codexa",
     "url": "http://firetext.codexa.org"

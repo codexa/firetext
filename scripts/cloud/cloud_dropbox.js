@@ -18,21 +18,55 @@ cloud.dropbox.client = undefined;
 
 /* Auth
 ------------------------*/
-cloud.dropbox.init = function(){
+cloud.dropbox.init = function(callback){
 	if (urls.dropboxAuth) {
 		cloud.dropbox.auth = new Dropbox.Client({
-			key: "CBB0GYTWGYA=|aeSB7VBcIP94mzfQPoykIzGm++Z97KtaDn2snjXCGQ=="
+			key: urls.dropboxKey
 		});
 
-		cloud.dropbox.auth.authDriver(new Dropbox.Drivers.Popup({
+		cloud.dropbox.auth.authDriver(new Dropbox.AuthDriver.FFOSPopup({
 			rememberUser: true,
 			receiverUrl: urls.dropboxAuth
 		}));
 
-		cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');		
+		cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');
+		
+		// Error Handler
+		cloud.dropbox.auth.onError.addListener(function (error) {
+			if (window.console) {
+				console.error(error);
+				cloud.dropbox.error(error);
+			}
+		});
+		
+		// Launch authentication
+		if (!cloud.dropbox.client) {
+			// Auth
+			cloud.dropbox.auth.authenticate(function(error, client) {
+				if (!error && client) {
+					// Set client
+					cloud.dropbox.client = client;
+					
+					// Send success message
+					window.dispatchEvent(cloud.dropbox.auth.onAuth);
+					callback(false);
+				} else {
+					callback(true);
+				}								 
+			});
+		} else {
+			// Already authenticated
+			callback(false);
+		}
 	}
-}
+};
 
+cloud.dropbox.signOut = function () {	
+	if (cloud.dropbox.client) {
+		cloud.dropbox.auth.signOut();
+		cloud.dropbox.client = undefined;
+	}
+};
 
 /* File IO
 ------------------------*/
