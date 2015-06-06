@@ -3,14 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<script src="dropbox.min.js" type="text/javascript"></script>
+	<script src="dropbox_authdriver_firefoxos_receiver.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		Dropbox.AuthDriver.Popup.oauthReceiver();
+		Dropbox.AuthDriver.FFOSPopup.oauthReceiver();
 	</script>
 	<style>
 		body, html {
 			color: #515151;
 			text-shadow: 0 0 2px white;
 			background: #ffffff;
+			font-size: 1em;
 		}
 		.container {
 			text-align: center;
@@ -26,7 +28,7 @@
 <body>
 	<div class="container">
 		<img src="dropbox.svg" alt="Dropbox Logo" width="150" height="150" />
-		<h3 style="margin: 0;">You have successfully connected Firetext with Dropbox!</h3>
+		<h3 style="margin: 0;">You can now use Firetext with Dropbox!</h3>
 		<p><i>This window should close automatically in a few seconds...</i></p>
 	</div>
 </body>
