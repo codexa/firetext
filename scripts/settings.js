@@ -150,6 +150,9 @@ firetext.settings.get = function (name) {
 };
 
 firetext.settings.save = function (name, value) {
+	if (bugsenseInitialized) {
+		Bugsense.leaveBreadcrumb("Setting: "+name+" set to: "+value);
+	}
 	name = ("firetext.settings."+name);
 	localStorage.setItem(name, value);
 };

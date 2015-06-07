@@ -269,6 +269,14 @@ function addMenuElementsToArray(array, elements) {
 /* Add dialog
 ------------------------*/
 function updateAddDialog() {
+	if (bugsenseInitialized) {
+		var storageSystems = [], tempLocationOption;
+		for (var i=0;i<locationSelect.length;i++) {
+			tempLocationOption = locationSelect.children[i];
+			storageSystems.push(tempLocationOption.value);
+		}
+		Bugsense.addExtraData('storage_systems', storageSystems.toString());
+	}
 	if (locationSelect.length < 1) {
 		[].forEach.call(document.getElementsByClassName('create-dialog'), function(createDialog) {
 			// Disable elements
@@ -1334,6 +1342,11 @@ function checkDevice() {
 		deviceType = 'mobile';	
 	} else {
 		deviceType = 'desktop';
+	}
+	
+	// Let Bugsense know about device type 
+	if (bugsenseInitialized) {
+		Bugsense.addExtraData('device_type', deviceType);
 	}
 	
 	if (window.opera) {

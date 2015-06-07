@@ -37,6 +37,11 @@ function night() {
 
 function startNight(start) {
 	if (start) {
+		// Leave breadcrumb
+		if (bugsenseInitialized) {
+			Bugsense.leaveBreadcrumb("Night mode activated");
+		}	
+		
 		html.classList.add('night');
 		themeColor.setAttribute('content', nightTheme);
 		if (editorMessageProxy) {
@@ -49,6 +54,11 @@ function startNight(start) {
 			rawEditor.setOption("theme", 'tomorrow-night-bright');
 		}
 	} else {
+		// Leave breadcrumb
+		if (bugsenseInitialized) {
+			Bugsense.leaveBreadcrumb("Night mode deactivated");
+		}
+		
 		html.classList.remove('night');
 		themeColor.setAttribute('content', dayTheme);
 		if (editorMessageProxy) {

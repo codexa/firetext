@@ -16,6 +16,11 @@ firetext.language = function(code){
 		// Localize interface
 		if (code !== navigator.mozL10n.language.code) {
 			navigator.mozL10n.language.code = code;
+	
+			// Let Bugsense know about language
+			if (bugsenseInitialized) {
+				Bugsense.addExtraData('app_locale', code);
+			}
 		}
 	} else {
 		return navigator.mozL10n.language.code;
