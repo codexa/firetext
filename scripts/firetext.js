@@ -1348,10 +1348,6 @@ function checkDevice() {
 	if (bugsenseInitialized) {
 		Bugsense.addExtraData('device_type', deviceType);
 	}
-	
-	if (window.opera) {
-		firetext.notify(navigator.mozL10n.get('warning-unsupported-technology'));
-	}
 };
 
 function clearCreateForm() {
