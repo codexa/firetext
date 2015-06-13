@@ -5,4 +5,4 @@ host = https://www.transifex.com
 file_filter = ../locales/<lang>.app.properties
 source_lang = en
 type = MOZILLAPROPERTIES
-lang_map = bn_BD: bn-BD, bn_IN: bn-IN, hi_IN: hi-IN, ml_IN: ml-IN, pt_BR: pt-BR, ta_IN: ta-IN, zh_CN: zh-CN
+lang_map = bn_BD: bn-BD, bn_IN: bn-IN, fa_IR: fa-IR, hi_IN: hi-IN, ml_IN: ml-IN, pt_BR: pt-BR, ta_IN: ta-IN, zh_CN: zh-CN

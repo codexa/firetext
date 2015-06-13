@@ -39,6 +39,9 @@
 	"es": {
 	  "description": "El procesador de textos para Firefox OS"
 	},
+	"fa-IR": {
+	  "description": "پردازش واژه برای سیستم عامل فایرفاکس"
+	},
 	"fr": {
 	  "description": "L'éditeur de texte pour Firefox OS"
 	},
