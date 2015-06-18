@@ -1209,7 +1209,6 @@ function processActions(eventAttribute, target) {
 			} else {
 				var key = editorMessageProxy.registerMessageHandler(function(e) {
 					var createLink = e.data.commandStates.createLink;
-					console.log(createLink);
 					if (createLink.state) {
 						document.getElementById('web-address').value = createLink.value;
 					} else {

@@ -320,12 +320,17 @@ fieldset legend.action select {
   font-size: 1.5rem;
 }
 
+[data-type="list"] aside.pack-end {
+  max-width: 40%;
+}
+
 aside.pack-end select {
   margin-top: 1.8rem;
   text-align: right;
   font-size: 1.8rem;
   background: transparent;
   padding-right: 1rem;
+  max-width: 100%;
 }
 
 legend.action select.dummy,

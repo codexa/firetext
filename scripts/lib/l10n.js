@@ -1953,8 +1953,8 @@
   };
 
 
-
-  var rtlList = ['ar', 'he', 'fa', 'ps', 'qps-plocm', 'ur'];
+  // Added fa-IR because of bug 1175795 (This is not pure l10n.js)
+  var rtlList = ['ar', 'he', 'fa', 'fa-IR', 'ps', 'qps-plocm', 'ur'];
   var nodeObserver = null;
   var pendingElements = null;
 
