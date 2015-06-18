@@ -15,12 +15,6 @@
 	<link href="style/icons/app/60.png" rel="shortcut icon" type="image/x-icon" />
 
 	<title>Firetext</title>
-	
-	<!-- Localization -->
-	<meta name="defaultLanguage" content="en">
-	<meta name="availableLanguages" content="bg,bn-BD,bn-IN,cs,de,en,eo,es,fa-IR,fr,he,hi-IN,hu,id,it,ja,ml-IN,nl,pl,pt-BR,ro,ru,ta-IN,zh-CN">
-	<link rel="localization" href="locales/{locale}.app.properties">
-	<script src="scripts/lib/l10n.js" defer></script>
 
 	<!-- Cloud -->
 	<script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
@@ -29,6 +23,7 @@
 	<script type="text/javascript" src="scripts/cloud/cloud_dropbox.js" defer></script>
 
 	<!-- Lib -->
+	<script type="text/javascript" src="scripts/lib/es6-promise.min.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/FileSaver.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/gesture_detector.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/stringview.js" defer></script>
@@ -38,6 +33,12 @@
 	<script type="text/javascript" src="scripts/lib/jszip-inflate.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/jszip-load.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/codemirror-compressed.js" defer></script>
+	
+	<!-- Localization -->
+	<meta name="defaultLanguage" content="en">
+	<meta name="availableLanguages" content="bg,bn-BD,bn-IN,cs,de,en,eo,es,fa-IR,fr,he,hi-IN,hu,id,it,ja,ml-IN,nl,pl,pt-BR,ro,ru,ta-IN,zh-CN">
+	<link rel="localization" href="locales/{locale}.app.properties">
+	<script src="scripts/lib/l10n.js" defer></script>
 
 	<!-- Scripts -->
 	<script type="text/javascript" src="scripts/modules.js" defer></script>
