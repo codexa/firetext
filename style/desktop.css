@@ -51,6 +51,7 @@ form[role="dialog"] + .background {
   background: rgba(255,255,255,.7);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
     -moz-transition: opacity .4s, visibility .4s 0s;
     -webkit-transition: opacity .4s, visibility .4s 0s;
     -o-transition: opacity .4s, visibility .4s 0s;
@@ -64,6 +65,7 @@ form[role="dialog"].current + .background,
 form[role="dialog"].parent + .background {
   opacity: 1;
   visibility: visible;
+  pointer-events: all;
     -moz-transition: opacity .4s, visibility 0s;
     -webkit-transition: opacity .4s, visibility 0s;
     -o-transition: opacity .4s, visibility 0s;
