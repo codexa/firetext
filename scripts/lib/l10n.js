@@ -2362,6 +2362,15 @@
         // `element` but such that `element`'s own children are not replaced
         var translation = element.ownerDocument.createElement('template');
         translation.innerHTML = value;
+        // polyfill html5 template element for Firefox OS 1.1 (added by Firetext)
+        if (!('content' in translation)) {
+          translation.content = element.ownerDocument.createDocumentFragment();
+          var childElement;
+          while ((childElement = translation.childNodes[0])) {
+            translation.removeChild(childElement);
+            translation.content.appendChild(childElement);
+          }
+        }
         // overlay the node with the DocumentFragment
         overlayElement(element, translation.content);
       }
