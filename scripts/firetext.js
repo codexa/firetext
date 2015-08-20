@@ -23,7 +23,7 @@ var html = document.getElementsByTagName('html')[0], head = document.getElements
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
-var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
+var bold, italic, justifySelect, strikethrough;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
@@ -173,6 +173,7 @@ function initElementTitles() {
 			}, 500);
 		});
 		elm.addEventListener('touchend', cancel);
+		elm.addEventListener('touchmove', cancel);
 		elm.addEventListener('touchleave', cancel);
 		elm.addEventListener('touchcancel', cancel);
 		function cancel(evt) {
@@ -211,24 +212,33 @@ function initElements() {
 
 	// Formatting
 	bold = document.getElementById('bold');
-	boldCheckbox = document.getElementById('boldCheckbox');
 	italic = document.getElementById('italic');
-	italicCheckbox = document.getElementById('italicCheckbox');
 	justifySelect = document.getElementById('justify-select');
 	strikethrough = document.getElementById('strikethrough');
-	strikethroughCheckbox = document.getElementById('strikethroughCheckbox');
 	underline = document.getElementById('underline');
-	underlineCheckbox = document.getElementById('underlineCheckbox');
 }
 
 function initListeners() {	
 	// Add event listeners
 	toolbar.addEventListener(
 		'mousedown', function mouseDown(event) {
-			event.preventDefault();
-			event.target.classList.toggle('active');
+			if (event.target.nodeName.toLowerCase() !== 'select') {
+				event.preventDefault();
+				event.target.classList.toggle('active');
+			}
 		}
 	);
+	if (deviceType == 'desktop') {
+		Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+			select.addEventListener(
+				// This doesn't catch the case where the user selects the
+				// same option, but we don't have anything better.
+				'change', function change() {
+					editor.contentWindow.focus();
+				}
+			);
+		});
+	}
 	toolbar.addEventListener('mouseup', mouseEnd);
 	toolbar.addEventListener('mouseleave', mouseEnd);
 	function mouseEnd(event) {
@@ -993,19 +1003,15 @@ function updateToolbar() {
 			// Bold
 			if (commandStates.bold.state) {
 				bold.classList.add('active');
-				boldCheckbox.checked = true;
 			} else {
 				bold.classList.remove('active');
-				boldCheckbox.checked = false;
 			}
 			
 			// Italic
 			if (commandStates.italic.state) {
 				italic.classList.add('active');
-				italicCheckbox.checked = true;
 			} else {
 				italic.classList.remove('active');
-				italicCheckbox.checked = false;
 			}
 			
 			// Justify
@@ -1022,19 +1028,15 @@ function updateToolbar() {
 			// Underline
 			if (commandStates.underline.state) {
 				underline.classList.add('active');
-				underlineCheckbox.checked = true;
 			} else {
 				underline.classList.remove('active');
-				underlineCheckbox.checked = false;
 			}
 			
 			// Strikethrough
 			if (commandStates.strikeThrough.state) {
 				strikethrough.classList.add('active');
-				strikethroughCheckbox.checked = true;
 			} else {
 				strikethrough.classList.remove('active');
-				strikethroughCheckbox.checked = false;
 			}
 		}, null, true);
 		editorMessageProxy.postMessage({
@@ -1157,9 +1159,6 @@ function processActions(eventAttribute, target) {
 			regions.nav('welcome');
 		} else if (calledFunction == 'formatDoc') {
 			formatDoc(target.getAttribute(eventAttribute + '-action'), target.getAttribute(eventAttribute + '-value'));
-			if (target.getAttribute(eventAttribute + '-back') == 'true') {
-				regions.navBack();
-			}
 		} else if (calledFunction == 'createFromDialog') {
 			createFromDialog();
 		} else if (calledFunction == 'uploadFromDialog') {
@@ -1249,7 +1248,6 @@ function processActions(eventAttribute, target) {
 			if (target.getAttribute(eventAttribute + '-dialog')) {
 				formatDoc('createLink', document.getElementById('web-address').value);
 				regions.navBack();
-				regions.navBack();
 			} else {
 				var key = editorMessageProxy.registerMessageHandler(function(e) {
 					var createLink = e.data.commandStates.createLink;
@@ -1291,7 +1289,6 @@ function processActions(eventAttribute, target) {
 						// Read blob
 						reader.addEventListener("loadend", function() {
 							formatDoc('insertImage', reader.result);
-							regions.navBack();
 						});
 				
 						reader.readAsDataURL(image);
@@ -1302,7 +1299,6 @@ function processActions(eventAttribute, target) {
 				} else {
 					if (target.getAttribute(eventAttribute + '-dialog') == 'true') {
 						formatDoc('insertImage', document.getElementById('image-address').value);
-						regions.navBack();
 					} else {
 						regions.nav('image-web');
 					}
@@ -1350,7 +1346,6 @@ function processActions(eventAttribute, target) {
 					
 					// Nav Back
 					regions.navBack();
-					regions.navBack();					
 				}
 			} else {
 				regions.nav('table');
