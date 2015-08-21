@@ -1010,13 +1010,13 @@ function updateToolbar() {
 			
 			// Justify
 			if (commandStates.justifyCenter.state) {
-				justifySelect.value = 'Center';
+				justifySelect.value = 'c';
 			} else if (commandStates.justifyFull.state) {
-				justifySelect.value = 'Justified';
+				justifySelect.value = 'j';
 			} else if (commandStates.justifyRight.state) {
-				justifySelect.value = 'Right';
+				justifySelect.value = 'r';
 			} else {
-				justifySelect.value = 'Left';
+				justifySelect.value = 'l';
 			}
 			
 			// Underline
