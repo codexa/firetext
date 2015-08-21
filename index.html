@@ -340,6 +340,18 @@
 					<iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
 					<div role="toolbar" id="edit-bar">
 						<ul id="edit-zone">
+							<li>
+								<select data-change="style" id="style-select" data-l10n-title="style">
+									<option value="" disabled></option>
+									<option value="h1" data-l10n-id="heading-1"></option>
+									<option value="h2" data-l10n-id="heading-2"></option>
+									<option value="h3" data-l10n-id="heading-3"></option>
+									<option value="h4" data-l10n-id="heading-4"></option>
+									<option value="h5" data-l10n-id="heading-5"></option>
+									<option value="h6" data-l10n-id="heading-6"></option>
+									<option selected value="p" data-l10n-id="paragraph"></option>
+								</select>
+							</li>
 							<li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold" data-l10n-title="bold"></button></li>
 							<li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
 							<li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
