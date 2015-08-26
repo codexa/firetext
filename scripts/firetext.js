@@ -21,7 +21,7 @@ firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
+var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
 var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
 var underline, underlineCheckbox;
@@ -783,6 +783,10 @@ function editorCommunication(callback) {
 			autosave();
 		}, "doc-changed");
 
+		editorMessageProxy.registerMessageHandler(function(e) {
+			updateToolbar();
+		}, "update-toolbar");
+
 		// editor focus and blur
 		editorMessageProxy.registerMessageHandler(function(e) {
 			if(e.data.focus) {
@@ -1149,9 +1153,6 @@ function processActions(eventAttribute, target) {
 					return;
 				}
 			}
-			
-			// Clear toolbar update interval
-			window.clearInterval(toolbarInterval);
 			
 			// Navigate to the welcome screen
 			regions.nav('welcome');
