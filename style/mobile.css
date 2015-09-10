@@ -178,6 +178,11 @@ section[role="dialog"] + .background {
 	line-height: 5rem;
 }
 
+#edit-zone li select {
+	width: 5rem;
+	text-overflow: ellipsis;
+}
+
 /* Status */
 section[role="status"] > div {
 	transform: translateY(100%);

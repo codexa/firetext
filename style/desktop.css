@@ -234,6 +234,7 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 #edit-bar {
   top: 0;
+  bottom: auto;
   background-color: #fafafa;
   border-bottom: 2px solid #efefef;
 }

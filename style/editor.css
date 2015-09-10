@@ -28,6 +28,29 @@
 #edit-bar {
 	position: absolute;
 	bottom: 0;
+	height: auto;
+}
+
+#edit-zone {
+	width: 100%;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+#edit-zone li {
+	display: inline-block;
+	float: none;
+	width: auto;
+	padding: 0 .15rem;
+	height: 4rem;
+	line-height: 4rem;
+}
+
+#edit-zone li select {
+	font-size: 1.8rem;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 1rem;
 }
 
 /* Header */
