@@ -32,7 +32,7 @@ var mainClosure = function() {
 		// night mode
 		initNight(doc, parentMessageProxy);
 		
-		var content_styles = document.querySelectorAll('link[data-for-content]');
+		var content_styles = document.querySelectorAll('style[data-for-content]');
 		
 		var content_scripts = document.querySelectorAll('script[data-for-content]');
 		
@@ -53,7 +53,7 @@ var mainClosure = function() {
 			
 			// Content scripts
 			[].forEach.call(content_scripts, function(content_script) {
-				window.eval(atob(content_script.src.split(',')[1]));
+				window.eval(content_script.textContent);
 			});
 		});
 		
