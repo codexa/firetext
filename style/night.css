@@ -278,6 +278,11 @@
 	color: #dfdfdf;		
 }
 
+/* Title popups */
+.night .titlePopup {
+	background: #111;
+}
+
 /* Status */
 .night section[role="status"] {
 	background: #222;
@@ -285,9 +290,9 @@
 }
 
 @media (min-width: 767px) {
-	.night section[role="status"] {
-		box-shadow: 0 0 10px #444;
-		border-color: #444;
+	.night section[role="status"] > div {
+		background: #111;
+		border-color: black;
 	}
 }
 
