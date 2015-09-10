@@ -520,9 +520,6 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				// Add listener to update views
 				watchDocument(filetype);
 				
-				// Start toolbar update interval			
-				toolbarInterval = window.setInterval(updateToolbar, 100);
-				
 				// Add file to recent docs
 				firetext.recents.add([fileInfo[0], fileInfo[1], fileInfo[2]], location);
 		

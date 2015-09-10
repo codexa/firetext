@@ -54,6 +54,9 @@
         return;
       }
       event.preventDefault();
+      parentMessageProxy.postMessage({
+        command: "update-toolbar"
+      });
     }
   });
   
@@ -87,4 +90,29 @@
       filetype: filetype
     });
   });
+  
+  document.addEventListener('selectionchange', function() {
+    parentMessageProxy.postMessage({
+      command: "update-toolbar"
+    });
+  });
+  if(!('onselectionchange' in document)) { // Firefox
+    var getSelectionRange = function() {
+      var selection = document.getSelection();
+      return selection.rangeCount ? selection.getRangeAt(selection.rangeCount - 1) : null; // Last range to match Firefox behavior
+    }
+    var prevRange;
+    setInterval(function() {
+      var range = getSelectionRange();
+      if(range !== prevRange &&
+        (!range || !prevRange || ['startContainer', 'startOffset', 'endContainer', 'endOffset'].some(function(attr) {
+          return range[attr] !== prevRange[attr];
+        }))) {
+        parentMessageProxy.postMessage({
+          command: "update-toolbar"
+        });
+      }
+      prevRange = range;
+    }, 100);
+  }
 })(mainOrigin, parentMessageProxy, initNight, filetype, odtdoc, readOnly);
