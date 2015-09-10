@@ -23,7 +23,7 @@ var html = document.getElementsByTagName('html')[0], head = document.getElements
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
-var bold, italic, justifySelect, strikethrough;
+var bold, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
@@ -216,6 +216,7 @@ function initElements() {
 	justifySelect = document.getElementById('justify-select');
 	strikethrough = document.getElementById('strikethrough');
 	underline = document.getElementById('underline');
+	styleSelect = document.getElementById('style-select');
 }
 
 function initListeners() {	
@@ -1042,10 +1043,13 @@ function updateToolbar() {
 			} else {
 				strikethrough.classList.remove('active');
 			}
+			
+			// Style
+			styleSelect.value = commandStates.formatBlock.value;
 		}, null, true);
 		editorMessageProxy.postMessage({
 			command: "query-command-states",
-			commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough"],
+			commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough", "formatBlock"],
 			key: key
 		});
 	}
@@ -1227,6 +1231,8 @@ function processActions(eventAttribute, target) {
 				justifyDirection = 'Full';
 			}
 			formatDoc('justify'+justifyDirection);
+		} else if (calledFunction == 'style') {
+			formatDoc('formatBlock', styleSelect.value);
 		} else if (calledFunction == 'hideToolbar') {
 			if (deviceType != 'desktop') {
 				if (document.getElementById('currentFileType').textContent != '.txt' &&
