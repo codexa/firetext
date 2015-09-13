@@ -22,6 +22,7 @@ firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
+var currentFileName, currentFileType, currentFileLocation, currentFileDirectory;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
 var bold, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
@@ -196,6 +197,12 @@ function initElements() {
 	locationSelect = document.getElementById('createDialogFileLocation');	
 	printButton = document.getElementById('printButton');
 	mainButtonConnectDropbox = document.getElementById('mainButtonConnectDropbox');
+	
+	// Current file information
+	currentFileName = document.getElementById('currentFileName');
+	currentFileType = document.getElementById('currentFileType');
+	currentFileLocation = document.getElementById('currentFileLocation');
+	currentFileDirectory = document.getElementById('currentFileDirectory');
 	
 	// Lists
 	welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -1504,5 +1511,18 @@ function printButtonCommunication(callback) {
 			});
 			regions.nav('edit');
 		}, "print-button-pressed");
+	}
+}
+
+function setDocumentTitle() {
+	var selectedRegion = document.querySelector('section.current');
+	if (selectedRegion) {
+		if (selectedRegion.id == 'welcome') {
+			document.title = 'Firetext';
+		} else if (selectedRegion.id == 'edit') {
+			document.title = currentFileName.textContent+currentFileType.textContent+' - Firetext';
+		} else {
+			document.title = selectedRegion.querySelector('header:first-child h1').textContent+' - Firetext';
+		}		
 	}
 }

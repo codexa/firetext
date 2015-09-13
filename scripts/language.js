@@ -21,6 +21,11 @@ firetext.language = function(code){
 			if (bugsenseInitialized) {
 				Bugsense.addExtraData('app_locale', code);
 			}
+		
+			navigator.mozL10n.ready(function () {
+				// Update document title
+				setDocumentTitle();
+			});
 		}
 	} else {
 		return navigator.mozL10n.language.code;

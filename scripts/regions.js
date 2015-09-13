@@ -52,8 +52,8 @@ function nav2() {
 		regions.history.push(tempLoc);
 		tempElement.classList.add('current');
 		
-		/* Remove this section when porting to other projects */	 
-		if (tempLoc == 'edit') {			
+		/* Remove this section when porting to other projects */
+		if (tempLoc == 'edit') {
 			// Save edit status
 			firetext.settings.save('autoload.wasEditing', 'true');
 			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
@@ -109,6 +109,9 @@ function nav2() {
 		if (tempLoc == 'create' || tempLoc == 'upload' || tempLoc == 'save-as') {
 			document.getElementById(tempLoc).getElementsByClassName('button-block')[0].appendChild(locationLegend);
 		}
+		
+		// Document title
+		setDocumentTitle();
 		/* End of customized section */
 	}
 }

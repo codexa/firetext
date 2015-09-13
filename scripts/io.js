@@ -463,10 +463,10 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	}
 	
 	// Set file name and type
-	document.getElementById('currentFileLocation').textContent = location;
-	document.getElementById('currentFileDirectory').textContent = directory;
-	document.getElementById('currentFileName').textContent = filename;
-	document.getElementById('currentFileType').textContent = filetype;
+	currentFileName.textContent = filename;
+	currentFileType.textContent = filetype;
+	currentFileLocation.textContent = location;
+	currentFileDirectory.textContent = directory;
 	[].forEach.call(document.getElementsByClassName('file-name'), function(element) {
 		element.textContent = filename + filetype;		
 	});
