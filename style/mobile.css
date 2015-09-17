@@ -179,7 +179,6 @@ section[role="dialog"] + .background {
 }
 
 #edit-zone li select {
-	width: 5rem;
 	text-overflow: ellipsis;
 }
 
