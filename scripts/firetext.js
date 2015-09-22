@@ -28,6 +28,7 @@ var bold, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
+var rate;
 var editorMessageProxy, editorURL;
 
 // Lists
@@ -139,6 +140,14 @@ function initModules(callback) {
 	initPrintButton(function() {
 		
 	});
+	
+	// Initialize rating prompter
+	rate = Object.create(fxosRate);
+	var config = {
+				usesUntilPrompt: 4
+			};
+	rate.init("firetext", version, config);
+	rate.promptRequired();
 }
 
 function initElementTitles() {
@@ -1211,6 +1220,14 @@ function processActions(eventAttribute, target) {
 			} else if (target.getAttribute(eventAttribute + '-location') == 'credits') {
 				browseLocation = urls.credits;
 			} else if (target.getAttribute(eventAttribute + '-location') == 'rate') {
+				// Launch rate activity if available
+				if (window.MozActivity) {
+					var activity = new MozActivity({
+						name: "marketplace-app-rating",
+						data: {slug: "firetext"}
+					});
+					return;
+				}
 				browseLocation = urls.rate;
 			} else if (target.getAttribute(eventAttribute + '-location') == 'support') {
 				browseLocation = urls.support;
