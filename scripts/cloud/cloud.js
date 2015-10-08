@@ -20,7 +20,7 @@ cloud.init = function () {
 		cloud.dropbox.init(function(error){
 			if (!error) {	
 				// Code to get dropbox files
-				updateDocLists();
+				updateDocLists(['recents', 'cloud']);
 				
 				// Show UI elements
 				welcomeDropboxArea.style.display = 'block';
