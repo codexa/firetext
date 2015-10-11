@@ -71,7 +71,7 @@ cloud.dropbox.signOut = function () {
 /* File IO
 ------------------------*/
 cloud.dropbox.enumerate = function (directory, callback) {
-	if (directory && cloud.dropbox.client && cloud.dropbox.client.readdir(directory)) {
+	if (directory && cloud.dropbox.client && cloud.dropbox.client.readdir) {
 		var docs = cloud.dropbox.client.readdir(directory, function(error, entries) {
 			if (!error) {
 				for (var i = 0; i < entries.length; i++) {
@@ -106,7 +106,7 @@ cloud.dropbox.enumerate = function (directory, callback) {
 				callback(entries);
 			} else {
 				cloud.dropbox.client.mkdir(directory, function() {
-					callback(cloud.dropbox.enumerate(directory, function(l) { return l; }));
+					cloud.dropbox.enumerate(directory, callback);
 				});
 			}
 		});
