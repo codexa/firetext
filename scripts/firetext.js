@@ -32,8 +32,8 @@ var rate;
 var editorMessageProxy, editorURL;
 
 // Lists
-var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
-var welcomeRecentsArea, welcomeRecentsList;
+var welcomeMainArea, welcomeDocsList, openDialogMainArea, openDialogRecentsArea, openDialogRecentsList;
+var welcomeRecentsArea, welcomeRecentsList, welcomeEditRecentsArea, welcomeEditRecentsList;
 
 // Cache
 var appCache = window.applicationCache;
@@ -214,17 +214,15 @@ function initElements() {
 	currentFileDirectory = document.getElementById('currentFileDirectory');
 	
 	// Lists
+	welcomeMainArea = document.getElementById('welcome-main-area');
 	welcomeDocsList = document.getElementById('welcome-docs-list');
-	welcomeDeviceArea = document.getElementById('welcome-device-area');
-	welcomeDeviceList = document.getElementById('welcome-device-list');
-	openDialogDeviceArea = document.getElementById('open-dialog-device-area');
-	openDialogDeviceList = document.getElementById('open-dialog-device-list');
 	welcomeRecentsArea = document.getElementById('welcome-recents-area');
 	welcomeRecentsList = document.getElementById('welcome-recents-list');
-	welcomeDropboxArea = document.getElementById('welcome-dropbox-area');
-	welcomeDropboxList = document.getElementById('welcome-dropbox-list');
-	openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
-	openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
+	welcomeEditRecentsArea = document.getElementById('welcome-edit-recents-area');
+	welcomeEditRecentsList = document.getElementById('welcome-edit-recents-list');
+	openDialogMainArea = document.getElementById('open-dialog-main-area');
+	openDialogRecentsArea = document.getElementById('open-dialog-recents-area');
+	openDialogRecentsList = document.getElementById('open-dialog-recents-list');
 
 	// Formatting
 	bold = document.getElementById('bold');
@@ -233,6 +231,22 @@ function initElements() {
 	strikethrough = document.getElementById('strikethrough');
 	underline = document.getElementById('underline');
 	styleSelect = document.getElementById('style-select');
+}
+
+function throttle(fn, ms) {
+	var lastCall = 0;
+	var timeout;
+	return function() {
+		var now = Date.now();
+		if(now - lastCall > ms) {
+			fn.apply(this, arguments);
+			lastCall = now;
+		}
+		if(timeout) {
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(fn, ms);
+	};
 }
 
 function initListeners() {	
@@ -263,6 +277,12 @@ function initListeners() {
 			event.target.classList.remove('active');
 		}
 	}
+	welcomeMainArea.addEventListener(
+		'scroll', throttle(updatePreviews, 300)
+	);
+	openDialogMainArea.addEventListener(
+		'scroll', throttle(updatePreviews, 300)
+	);
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
@@ -400,29 +420,74 @@ function bugsenseInit() {
 
 /* Doc lists
 ------------------------*/
-function updateDocLists(lists) {
+var allDocs,
+	recentsDocs,
+	internalDocs = [],
+	cloudDocs = [];
+
+function updateAllDocs(editMode) {
+	allDocs = recentsDocs.concat(internalDocs.concat(cloudDocs).sort(function(a, b) {
+		return b[5] - a[5];
+	})).filter(function(doc, j, docs) {
+		for(var i = 0; i < j; i++) {
+			if(docs[i][0] == doc[0] && docs[i][1] == doc[1] && docs[i][2] == doc[2]) {
+				return false;
+			}
+		}
+		return true;
+	});
+	if(firetext.settings.get('previews.enabled') == 'false') {
+		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+			docList.classList.remove('previews');
+		});
+	} else {
+		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+			docList.classList.add('previews');
+		});
+	}
+	if(editMode) {
+		buildEditDocList(allDocs, welcomeEditRecentsList, 'documents-found');
+	} else {
+		buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
+	}
+}
+
+function updateDocLists(lists, editMode) {
 	if (!lists) {
 		lists = [];
 		lists.push('all');
 	}
 	
+	if (!lists.length) {
+		updateAllDocs(editMode);
+	}
+	
 	if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
 		// Recents
-		buildDocList(firetext.recents.get(), [welcomeRecentsList], "recent-documents", 'internal', true);
+		recentsDocs = firetext.recents.get();
+		updateAllDocs(editMode);
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
 		// Internal
 		spinner();
 		firetext.io.enumerate('/', function(DOCS) {
-			buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "documents-found", 'internal');
+			internalDocs = DOCS;
+			updateAllDocs(editMode);
 			spinner('hide');
 		});
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('cloud') != '-1') {
 		// Cloud
-		cloud.updateDocLists(lists);
+		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
+			spinner();
+			cloud.dropbox.enumerate('/Documents/', function(DOCS) {
+				cloudDocs = DOCS;
+				updateAllDocs(editMode);
+				spinner('hide');
+			});
+		}
 	}
 }
 
@@ -607,43 +672,98 @@ function sortByCellIndex(a,b) {
 		return a.cellIndex - b.cellIndex;
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location, preview, error) {
+function getPreview(filetype, description, error) {
 	// Handle description
 	if (!description) {
 		description = '';
 	}
 	
-	if (preview && firetext.settings.get('previews.enabled') != 'false') {	 
-		switch (error ? ".txt" : DOCS[0][2]) {
-			case ".txt":
-				description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
-				break;
-			case ".docx":
-			case ".odt":
-				if(DOCS[0][2] === ".docx") {
-					var tmp = document.createElement("DIV");
-					var docx = new DocxEditor(description);
-					tmp.appendChild(docx.HTMLout());
-					description = tmp.innerHTML;
-				} else {
-					description = new JSZip(description).file('content.xml').asText();
-				}
-			case ".html":
-				description = cleanForPreview(description, ".html");
-				break;
-			default:
-				break;
-		}
+	switch (error ? ".txt" : filetype) {
+		case ".txt":
+			description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
+			break;
+		case ".docx":
+		case ".odt":
+			if(filetype === ".docx") {
+				var tmp = document.createElement("DIV");
+				var docx = new DocxEditor(description);
+				tmp.appendChild(docx.HTMLout());
+				description = tmp.innerHTML;
+			} else {
+				description = new JSZip(description).file('content.xml').asText();
+			}
+		case ".html":
+			description = cleanForPreview(description, ".html");
+			break;
+		default:
+			break;
 	}
 	
-	// UI refinements
-	var icon, directory;
-	if (location != 'internal' && location && location != '') {
-		icon = ('document-' + location);
-	} else {
-		icon = 'document';
-		location = 'internal';
+	if(!description.replace(/\s/g, '')) {
+		description = '&nbsp;';
 	}
+	
+	return description;
+}
+
+var gettingPreview = {};
+
+function resetPreviews(location) {
+	Object.keys(gettingPreview).forEach(function(key) {
+		if(key.substr(key.lastIndexOf(',') + 1) === location) {
+			delete gettingPreview[key];
+		}
+	});
+}
+
+function resetPreview() {
+	delete gettingPreview[Array.prototype.join.call(arguments, ',')];
+}
+
+function updatePreviews() {
+	if(firetext.settings.get('previews.enabled') == 'false') {
+		return;
+	}
+	Array.prototype.forEach.call(document.getElementsByClassName('fileListItem'), function(item) {
+		if(!item.offsetParent) {
+			// We're in edit mode, item is hidden.
+			return;
+		}
+		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
+		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
+			var directory = item.getAttribute('data-click-directory');
+			var filename = item.getAttribute('data-click-filename');
+			var filetype = item.getAttribute('data-click-filetype');
+			var location = item.getAttribute('data-click-location');
+			var key = [directory, filename, filetype, location];
+			if(!gettingPreview[key]) {
+				gettingPreview[key] = true;
+				firetext.io.load(directory, filename, filetype, function (result, error) {
+					var preview = gettingPreview[key] = getPreview(filetype, result, error);
+					Array.prototype.forEach.call(document.querySelectorAll(
+						'.fileListItem' +
+						'[data-click-directory="' + directory + '"]' +
+						'[data-click-filename="' + filename + '"]' +
+						'[data-click-filetype="' + filetype + '"]' +
+						'[data-click-location="' + location + '"]'
+					), function(item) {
+						item.getElementsByClassName('fileItemDescription')[0].innerHTML = preview;
+					});
+				}, location);
+			} else if(gettingPreview[key] !== true) {
+				item.getElementsByClassName('fileItemDescription')[0].innerHTML = gettingPreview[key];
+			}
+		}
+	})
+}
+
+function buildDocListItems(DOCS, listElms, output) {
+	// Get doc location
+	var location = DOCS[0][4] || 'internal';
+	
+	// UI refinements
+	var directory;
 	if (DOCS[0][0].charAt(0) == '/' && DOCS[0][0].length > 1) {
 		directory = DOCS[0][0].slice(1);
 	} else {
@@ -653,13 +773,11 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
 	// Generate item
 	output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
 	output += '<a href="#">';
-	if (description != '' && firetext.settings.get('previews.enabled') != 'false') {
-		output += '<div class="fileItemDescription">'+description+'</div>';
-	}
+	output += '<div class="fileItemDescription">&nbsp;</div>';
 	output += '<div class="fileItemInfo">';
 	output += '<aside class="pack-end icon-arrow"></aside>';	
 	output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
-	output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
+	output += '<p class="fileItemPath">'+(location==='dropbox'?'<span class="icon-dropbox"></span> ':'')+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
 	output += '</div>'; 
 	output += '</a></li>';
 	
@@ -668,27 +786,19 @@ function buildDocListItems(DOCS, listElms, description, output, location, previe
 		listElms[i].innerHTML = output;
 	}
 	
+	// Fetch previews
+	updatePreviews();
+	
 	// Base case
 	if (DOCS.length <= 1) {		 
 		return;
 	}
 	
-	// Per doc locations
-	if (DOCS[1][4] && DOCS[1][4] != location) {
-		location = DOCS[1][4];
-	}
-	
 	// build next item
-	if (preview == true) {
-		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result, error) {
-			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview, error);
-		}, location);
-	} else {
-		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location, preview, true);	
-	}
+	buildDocListItems(DOCS.slice(1, DOCS.length), listElms, output);
 }
 
-function buildDocList(DOCS, listElms, display, location, preview) {
+function buildDocList(DOCS, listElms, display) {
 	if (listElms && DOCS) {
 		// Make sure list is not an edit list
 		for (var i = 0; i < listElms.length; i++) {
@@ -696,19 +806,8 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 		}
 		
 		if (DOCS.length > 0) {
-			// Per doc locations
-			if (DOCS[0][4] && DOCS[0][4] != location) {
-				location = DOCS[0][4];
-			}
-			
 			// build next item
-			if (preview == true) {
-				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result, error) {
-					buildDocListItems(DOCS, listElms, result, "", location, preview, error);
-				}, location);
-			} else {
-				buildDocListItems(DOCS, listElms, null, "", location, preview, true);			 
-			}
+			buildDocListItems(DOCS, listElms, "");
 		} else {
 			// No docs message
 			var output = '<li style="margin-top: -5px" class="noLink">';
@@ -724,7 +823,7 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 	}
 }
 
-function buildEditDocList(DOCS, listElm, display, location) {
+function buildEditDocList(DOCS, listElm, display) {
 	if (listElm != undefined) {
 		// Output HTML
 		var output = "";
@@ -734,7 +833,7 @@ function buildEditDocList(DOCS, listElm, display, location) {
 			for (var i = 0; i < DOCS.length; i++) {
 				output += '<li>';
 				output += '<label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label>';
-				output += '<p data-location="'+location+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
+				output += '<p data-location="'+(DOCS[i][4]||'internal')+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
 				output += '</li>';
 			}		
 			 
@@ -874,33 +973,21 @@ function autosave(force) {
 ------------------------*/ 
 function editDocs() {
 	if (editState == true) {
-		// Clear lists
-		welcomeDeviceList.innerHTML = '';
-		welcomeDropboxList.innerHTML = '';
-		
-		updateDocLists(['all']);
 		editState = false;
 		welcomeRecentsArea.style.display = 'block';
+		welcomeEditRecentsArea.style.display = 'none';
 		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+		
+		updateDocLists(['all']);
+		
 		regions.navBack();
 	} else {		
 		welcomeRecentsArea.style.display = 'none';
+		welcomeEditRecentsArea.style.display = 'block';
 		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
 		editState = true;
 		
-		// Clear lists
-		welcomeDeviceList.innerHTML = '';
-		welcomeDropboxList.innerHTML = '';
-		
-		// Code to build list
-		firetext.io.enumerate('/', function(result) {
-			buildEditDocList(result, welcomeDeviceList, 'documents-found', 'internal');
-		});
-		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
-			cloud.dropbox.enumerate('/Documents', function(DOCS) {
-				buildEditDocList(DOCS, welcomeDropboxList, "dropbox-documents-found", 'dropbox');
-			});
-		}
+		updateDocLists(['all'], true);
 		watchCheckboxes();
 		
 		regions.nav('welcome-edit-mode');

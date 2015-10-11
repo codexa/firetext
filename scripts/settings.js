@@ -119,7 +119,8 @@ firetext.settings.init = function () {
 	}
 	previewsEnabled.onchange = function () {
 		firetext.settings.save('previews.enabled', this.checked);
-		updateDocLists(['recents']);
+		updateDocLists([]);
+		updatePreviews();
 	}
 
 	// Stats

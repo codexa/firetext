@@ -19,6 +19,9 @@ cloud.init = function () {
 	if (firetext.settings.get('dropbox.enabled') == 'true') {
 		cloud.dropbox.init(function(error){
 			if (!error) {	
+				// Try again to fetch previews for dropfox files
+				resetPreviews('dropbox');
+				
 				// Code to get dropbox files
 				updateDocLists(['recents', 'cloud']);
 				
@@ -44,8 +47,6 @@ cloud.init = function () {
 		});
 	} else {
 		// Hide/Remove UI elements
-		welcomeDropboxArea.style.display = 'none';
-		openDialogDropboxArea.style.display = 'none';
 		if (locationDropbox) {
 			locationSelect.removeChild(locationDropbox);
 			locationDropbox = undefined;
@@ -74,13 +75,3 @@ cloud.init = function () {
 	
 	updateAddDialog();
 };
-
-cloud.updateDocLists = function (lists) {
-	if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
-		spinner();
-		cloud.dropbox.enumerate('/Documents/', function(DOCS) {
-			buildDocList(DOCS, [welcomeDropboxList, openDialogDropboxList], "dropbox-documents-found", 'dropbox');
-			spinner('hide');
-		});
-	}
-}

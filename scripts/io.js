@@ -41,6 +41,8 @@ firetext.io.init = function (api, callback) {
 				return;
 			} else {
 				storage.onchange = function (change) {
+					var fileparts = firetext.io.split(change.path)
+					resetPreview(fileparts[0], fileparts[1], fileparts[2], 'internal');
 					updateDocLists(['internal', 'recents']);
 				}
 				enableInternalStorage();
@@ -158,6 +160,7 @@ firetext.io.enumerate = function (directory, callback) {
 				// Split name into parts
 				var thisFile = firetext.io.split(file.name);
 				thisFile[3] = file.type;
+				thisFile[5] = file.lastModifiedDate;
 				
 				// Don't get any files but docs
 				if (!thisFile[1] |
@@ -600,6 +603,9 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 								spinner('hide');
 							}
 							
+							// Refresh preview
+							resetPreview(directory, filename, filetype, 'internal');
+							
 							// Finish
 							saving = false;
 							callback();
@@ -631,6 +637,9 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 			if (showBanner) {
 				showSaveBanner(filePath);
 			}
+			
+			// Refresh preview
+			resetPreview(directory, filename, filetype, 'dropbox');
 			 
 			// Finish 
 			saving = false;

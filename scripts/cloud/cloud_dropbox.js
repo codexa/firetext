@@ -12,7 +12,6 @@
 cloud.dropbox = {};
 
 // Dropbox
-var welcomeDropboxArea, welcomeDropboxList, openDialogDropboxArea, openDialogDropboxList;
 cloud.dropbox.client = undefined;
 
 
@@ -72,7 +71,7 @@ cloud.dropbox.signOut = function () {
 ------------------------*/
 cloud.dropbox.enumerate = function (directory, callback) {
 	if (directory && cloud.dropbox.client && cloud.dropbox.client.readdir) {
-		var docs = cloud.dropbox.client.readdir(directory, function(error, entries) {
+		var docs = cloud.dropbox.client.readdir(directory, function(error, entries, stat, entryStats) {
 			if (!error) {
 				for (var i = 0; i < entries.length; i++) {
 					var dir;
@@ -83,7 +82,9 @@ cloud.dropbox.enumerate = function (directory, callback) {
 					}
 					entries[i] = (dir + entries[i]);
 					entries[i] = firetext.io.split(entries[i]);
-					entries[i].push('');
+					entries[i].push(entryStats[i].mimeType);
+					entries[i].push('dropbox');
+					entries[i].push(entryStats[i].clientModifiedAt || entryStats[i].modifiedAt);
 					
 					// Only get documents
 					if (entries[i][2] != '.txt' && entries[i][2] != '.html' && entries[i][2] != '.htm' && entries[i][2] != '.odt') { // 0.4 && entries[i][2] != '.docx') {
