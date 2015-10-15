@@ -672,38 +672,71 @@ function sortByCellIndex(a,b) {
 		return a.cellIndex - b.cellIndex;
 }
 
-function getPreview(filetype, description, error) {
-	// Handle description
-	if (!description) {
-		description = '';
+function getPreview(filetype, content, error) {
+	if (!content) {
+		content = '';
 	}
 	
-	switch (error ? ".txt" : filetype) {
+	if(error) {
+		return document.createTextNode(content);
+	}
+	
+	switch (filetype) {
 		case ".txt":
-			description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
+			content = firetext.parsers.plain.parse(content, "HTML");
 			break;
-		case ".docx":
 		case ".odt":
-			if(filetype === ".docx") {
-				var tmp = document.createElement("DIV");
-				var docx = new DocxEditor(description);
-				tmp.appendChild(docx.HTMLout());
-				description = tmp.innerHTML;
-			} else {
-				description = new JSZip(description).file('content.xml').asText();
-			}
+			content = new ODTDocument(content).getHTMLUnsafe();
+			break;
+		/* 0.4
+		case ".docx":
+			docxeditor = new firetext.parsers.DocxEditor(content);
+			content = result.HTMLout();
+			doc.appendChild(content);
+			break;
+		*/
 		case ".html":
-			description = cleanForPreview(description, ".html");
-			break;
 		default:
+			if(!/<!DOCTYPE/i.test(content)) content = '<!DOCTYPE html>' + content;
 			break;
 	}
 	
-	if(!description.replace(/\s/g, '')) {
-		description = '&nbsp;';
+	var iframe = document.createElement('iframe');
+	iframe.sandbox = 'allow-scripts';
+	iframe.srcdoc = content
+		.replace(' contenteditable="true"', '') // Work around the bug that we include contenteditable in the saved file, to disable the spellchecker in Firefox.
+		+ [
+			'<style>',
+			'[_firetext_night] body, [_firetext_night] img {',
+			'		-webkit-filter: invert(100%) hue-rotate(180deg);',
+			'	filter: invert(100%) hue-rotate(180deg);',
+			'}',
+			'</style>',
+			'<script>',
+			'window.addEventListener("message", function(e) { nightEditor(e.data.nightMode); });',
+			'function nightEditor(nightMode) {',
+			'	var html = document.getElementsByTagName("html")[0];',
+			'	if(nightMode) {',
+			'		document.documentElement.setAttribute("_firetext_night", "");',
+			'	} else {',
+			'		document.documentElement.removeAttribute("_firetext_night");',
+			'	}',
+			'}',
+			'</script>'
+		].join('\n');
+	iframe.scrolling = 'no';
+	return iframe;
+}
+
+function updatePreviewNightModes(iframes) {
+	if(firetext.settings.get('previews.enabled') == 'false') {
+		return;
 	}
-	
-	return description;
+	Array.prototype.forEach.call(iframes, function(iframe) {
+		iframe.contentWindow.postMessage({
+			nightMode: html.classList.contains('night')
+		}, '*');
+	});
 }
 
 var gettingPreview = {};
@@ -718,6 +751,34 @@ function resetPreviews(location) {
 
 function resetPreview() {
 	delete gettingPreview[Array.prototype.join.call(arguments, ',')];
+}
+
+function setPreview(description, previews) {
+	var done;
+	var preview;
+	previews.some(function(_preview) {
+		if(description.firstChild === _preview) {
+			done = true;
+			return true;
+		} else if(!document.contains(_preview)) {
+			preview = _preview;
+			return true;
+		}
+	});
+	if(done) {
+		return;
+	}
+	if(!preview) {
+		preview = previews[0].cloneNode();
+		previews.push(preview);
+	}
+	description.innerHTML = '';
+	description.appendChild(preview);
+	if(html.classList.contains('night')) {
+		preview.addEventListener('load', function() {
+			updatePreviewNightModes([preview]);
+		});
+	}
 }
 
 function updatePreviews() {
@@ -740,7 +801,7 @@ function updatePreviews() {
 			if(!gettingPreview[key]) {
 				gettingPreview[key] = true;
 				firetext.io.load(directory, filename, filetype, function (result, error) {
-					var preview = gettingPreview[key] = getPreview(filetype, result, error);
+					gettingPreview[key] = [getPreview(filetype, result, error)];
 					Array.prototype.forEach.call(document.querySelectorAll(
 						'.fileListItem' +
 						'[data-click-directory="' + directory + '"]' +
@@ -748,54 +809,68 @@ function updatePreviews() {
 						'[data-click-filetype="' + filetype + '"]' +
 						'[data-click-location="' + location + '"]'
 					), function(item) {
-						item.getElementsByClassName('fileItemDescription')[0].innerHTML = preview;
+						setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 					});
 				}, location);
 			} else if(gettingPreview[key] !== true) {
-				item.getElementsByClassName('fileItemDescription')[0].innerHTML = gettingPreview[key];
+				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 			}
 		}
 	})
 }
 
-function buildDocListItems(DOCS, listElms, output) {
+function buildDocListItems(DOCS, listElms, ctr) {
+	// Get current doc
+	var DOC = DOCS[ctr];
+	
 	// Get doc location
-	var location = DOCS[0][4] || 'internal';
+	var location = DOC[4] || 'internal';
 	
 	// UI refinements
 	var directory;
-	if (DOCS[0][0].charAt(0) == '/' && DOCS[0][0].length > 1) {
-		directory = DOCS[0][0].slice(1);
+	if (DOC[0].charAt(0) == '/' && DOC[0].length > 1) {
+		directory = DOC[0].slice(1);
 	} else {
-		directory = DOCS[0][0];
+		directory = DOC[0];
 	}
 			
 	// Generate item
-	output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
+	var output = '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" style="order: '+ctr+'">';
 	output += '<a href="#">';
-	output += '<div class="fileItemDescription">&nbsp;</div>';
+	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
 	output += '<aside class="pack-end icon-arrow"></aside>';	
-	output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
-	output += '<p class="fileItemPath">'+(location==='dropbox'?'<span class="icon-dropbox"></span> ':'')+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
+	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>'; 
+	output += '<p class="fileItemPath" title="'+directory+DOC[1]+DOC[2]+'">'+(location==='dropbox'?'<span class="icon-dropbox" title="'+navigator.mozL10n.get('documents-dropbox')+'"></span> ':'')+directory+DOC[1]+DOC[2]+'</p>';
 	output += '</div>'; 
 	output += '</a></li>';
 	
 	// Display output HTML
 	for (var i = 0; i < listElms.length; i++) {
-		listElms[i].innerHTML = output;
+		var elm = listElms[i].querySelector(
+			'.fileListItem' +
+			'[data-click-directory="' + DOC[0] + '"]' +
+			'[data-click-filename="' + DOC[1] + '"]' +
+			'[data-click-filetype="' + DOC[2] + '"]' +
+			'[data-click-location="' + location + '"]'
+		);
+		if(elm) {
+			elm.style.order = ctr;
+		} else {
+			listElms[i].insertAdjacentHTML('beforeend', output);
+		}
 	}
 	
 	// Fetch previews
 	updatePreviews();
 	
 	// Base case
-	if (DOCS.length <= 1) {		 
+	if (ctr === DOCS.length - 1) {		 
 		return;
 	}
 	
 	// build next item
-	buildDocListItems(DOCS.slice(1, DOCS.length), listElms, output);
+	buildDocListItems(DOCS, listElms, ctr + 1);
 }
 
 function buildDocList(DOCS, listElms, display) {
@@ -807,7 +882,24 @@ function buildDocList(DOCS, listElms, display) {
 		
 		if (DOCS.length > 0) {
 			// build next item
-			buildDocListItems(DOCS, listElms, "");
+			buildDocListItems(DOCS, listElms, 0);
+			
+			// remove outdated items
+			for (var i = 0; i < listElms.length; i++) {
+				for (var j = 0; j < listElms[i].childNodes.length; j++) {
+					var childNode = listElms[i].childNodes[j];
+					var DOC = DOCS[childNode.style.order];
+					if (
+						!DOC ||
+						DOC[0] !== childNode.getAttribute('data-click-directory') ||
+						DOC[1] !== childNode.getAttribute('data-click-filename') ||
+						DOC[2] !== childNode.getAttribute('data-click-filetype') ||
+						(DOC[4] || 'internal') !== childNode.getAttribute('data-click-location')
+					) {
+						listElms[i].removeChild(childNode);
+					}
+				}
+			}
 		} else {
 			// No docs message
 			var output = '<li style="margin-top: -5px" class="noLink">';

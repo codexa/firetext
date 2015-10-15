@@ -71,4 +71,5 @@ function startNight(start) {
 			rawEditor.setOption("theme", 'default');
 		}
 	}
+	updatePreviewNightModes(document.querySelectorAll('[data-type="list"] li.fileListItem .fileItemDescription iframe'));
 }

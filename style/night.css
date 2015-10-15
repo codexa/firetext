@@ -164,14 +164,23 @@
 }
 
 /* File lists */
+.night .docsList.previews {
+	background: #111;
+}
+
 .night [data-type="list"] li.fileListItem {
 	background: #111;
 	color: #a0a0a0;
 }
 
+.night .docsList.previews li.fileListItem {
+	background: none;
+}
+
 .night [data-type="list"] li.fileListItem .fileItemDescription {
-	background: #161616;
+	background: #000000;
 	color: #a0a0a0;
+	box-shadow: 0 0 5px #616161;
 }
 
 .night [data-type="list"] li.fileListItem .fileItemName {
@@ -180,6 +189,10 @@
 
 .night [data-type="list"] li.fileListItem .fileItemPath {
 	color: #a0a0a0;
+}
+
+.night [data-type="list"] li.fileListItem:hover .icon-arrow {
+  color: #fff;
 }
 
 /* Sidebar */

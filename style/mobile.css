@@ -114,6 +114,48 @@ section[role="dialog"] + .background {
 	transform: translateX(80%) !important;
 }
 
+/* File Lists */
+.docsList.previews {
+	min-height: 100%;
+}
+
+.docsList.previews h2 {
+	padding: 0.5rem calc((100% - 450px) / 2 + 2rem);
+}
+
+.docsList.previews ul {
+	padding: 1rem calc((100% - 450px) / 2);
+}
+
+@media (max-width: 479px) {
+	.docsList.previews h2 {
+		padding: 0.5rem calc((100% - 300px) / 2 + 2rem);
+	}
+
+	.docsList.previews ul {
+		padding: 1rem calc((100% - 300px) / 2);
+	}
+}
+
+.docsList.previews li.fileListItem {
+	width: 150px;
+}
+
+.docsList.previews li.fileListItem .fileItemDescription {
+	padding: 1.5rem;
+	height: 150px;
+}
+
+.docsList.previews li.fileListItem .fileItemDescription iframe {
+	width: 300px;
+	height: 424px;
+	transform: scale(0.333);
+}
+
+.docsList.previews li.fileListItem .fileItemInfo {
+	padding: 0 1rem;
+}
+
 /* Tabs */
 .current [role="tabs"] [role="tab"],
 .parent [role="tabs"] [role="tab"],

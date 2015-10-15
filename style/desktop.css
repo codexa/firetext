@@ -215,6 +215,37 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   margin-left: 0;
 }
 
+/* File Lists */
+@media (max-width: 1833px) {
+  [role="dialog"] .docsList.previews h2 {
+    padding: 0.5rem calc((100% - 800px) / 2 + 2rem);
+  }
+  
+  [role="dialog"] .docsList.previews ul {
+    padding: 1rem calc((100% - 800px) / 2);
+  }
+}
+
+@media (max-width: 1500px) {
+  [role="dialog"] .docsList.previews h2 {
+    padding: 0.5rem calc((100% - 600px) / 2 + 2rem);
+  }
+  
+  [role="dialog"] .docsList.previews ul {
+    padding: 1rem calc((100% - 600px) / 2);
+  }
+}
+
+@media (max-width: 1167px) {
+  [role="dialog"] .docsList.previews h2 {
+    padding: 0.5rem calc((100% - 400px) / 2 + 2rem);
+  }
+  
+  [role="dialog"] .docsList.previews ul {
+    padding: 1rem calc((100% - 400px) / 2);
+  }
+}
+
 /* Editor */
 #fileName {
   display: inline-block;
