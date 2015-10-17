@@ -349,6 +349,23 @@ label.pack-switch {
   color: #4a4a4a;
 }
 
+.docsList.editMode li.fileListItem .icon-arrow {
+  display: none;
+}
+
+.docsList:not(.editMode) li.fileListItem .edit-checkbox {
+  display: none;
+}
+
+.docsList:.editMode li.fileListItem .edit-checkbox {
+  display: block;
+}
+
+[data-type="list"] li.fileListItem label.pack-checkbox {
+  width: auto;
+  height: auto;
+}
+
 
 /* Buttons */
 .button-block {

@@ -33,7 +33,7 @@ var editorMessageProxy, editorURL;
 
 // Lists
 var welcomeMainArea, welcomeDocsList, openDialogMainArea, openDialogRecentsArea, openDialogRecentsList;
-var welcomeRecentsArea, welcomeRecentsList, welcomeEditRecentsArea, welcomeEditRecentsList;
+var welcomeRecentsArea, welcomeRecentsList;
 
 // Cache
 var appCache = window.applicationCache;
@@ -218,8 +218,6 @@ function initElements() {
 	welcomeDocsList = document.getElementById('welcome-docs-list');
 	welcomeRecentsArea = document.getElementById('welcome-recents-area');
 	welcomeRecentsList = document.getElementById('welcome-recents-list');
-	welcomeEditRecentsArea = document.getElementById('welcome-edit-recents-area');
-	welcomeEditRecentsList = document.getElementById('welcome-edit-recents-list');
 	openDialogMainArea = document.getElementById('open-dialog-main-area');
 	openDialogRecentsArea = document.getElementById('open-dialog-recents-area');
 	openDialogRecentsList = document.getElementById('open-dialog-recents-list');
@@ -425,7 +423,7 @@ var allDocs,
 	internalDocs = [],
 	cloudDocs = [];
 
-function updateAllDocs(editMode) {
+function updateAllDocs() {
 	allDocs = recentsDocs.concat(internalDocs.concat(cloudDocs).sort(function(a, b) {
 		return b[5] - a[5];
 	})).filter(function(doc, j, docs) {
@@ -445,27 +443,23 @@ function updateAllDocs(editMode) {
 			docList.classList.add('previews');
 		});
 	}
-	if(editMode) {
-		buildEditDocList(allDocs, welcomeEditRecentsList, 'documents-found');
-	} else {
-		buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
-	}
+	buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
 }
 
-function updateDocLists(lists, editMode) {
+function updateDocLists(lists) {
 	if (!lists) {
 		lists = [];
 		lists.push('all');
 	}
 	
 	if (!lists.length) {
-		updateAllDocs(editMode);
+		updateAllDocs();
 	}
 	
 	if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
 		// Recents
 		recentsDocs = firetext.recents.get();
-		updateAllDocs(editMode);
+		updateAllDocs();
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
@@ -473,7 +467,7 @@ function updateDocLists(lists, editMode) {
 		spinner();
 		firetext.io.enumerate('/', function(DOCS) {
 			internalDocs = DOCS;
-			updateAllDocs(editMode);
+			updateAllDocs();
 			spinner('hide');
 		});
 	}
@@ -484,7 +478,7 @@ function updateDocLists(lists, editMode) {
 			spinner();
 			cloud.dropbox.enumerate('/Documents/', function(DOCS) {
 				cloudDocs = DOCS;
-				updateAllDocs(editMode);
+				updateAllDocs();
 				spinner('hide');
 			});
 		}
@@ -840,6 +834,7 @@ function buildDocListItems(DOCS, listElms, ctr) {
 	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
 	output += '<aside class="pack-end icon-arrow"></aside>';	
+	output += '<aside class="pack-end edit-checkbox"><label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label></aside>';
 	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>'; 
 	output += '<p class="fileItemPath" title="'+directory+DOC[1]+DOC[2]+'">'+(location==='dropbox'?'<span class="icon-dropbox" title="'+navigator.mozL10n.get('documents-dropbox')+'"></span> ':'')+directory+DOC[1]+DOC[2]+'</p>';
 	output += '</div>'; 
@@ -912,34 +907,6 @@ function buildDocList(DOCS, listElms, display) {
 				listElms[i].innerHTML = output;
 			}
 		}
-	}
-}
-
-function buildEditDocList(DOCS, listElm, display) {
-	if (listElm != undefined) {
-		// Output HTML
-		var output = "";
-		
-		if (DOCS.length != 0) {
-			// generate each list item
-			for (var i = 0; i < DOCS.length; i++) {
-				output += '<li>';
-				output += '<label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label>';
-				output += '<p data-location="'+(DOCS[i][4]||'internal')+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
-				output += '</li>';
-			}		
-			 
-			// Make list an edit list
-			listElm.setAttribute("data-type","edit");
-		} else {
-			output += '<li style="margin-top: -5px" class="noLink">';
-			output += '<p style="padding: 1.5rem 0 0.5rem;" data-l10n-id="no-'+display+'">'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p style="padding-bottom: 1rem;" data-l10n-id="click-compose-icon-to-create">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
-			output += '</li>';
-		}
-		
-		// Display output HTML
-		listElm.innerHTML = output;
 	}
 }
 
@@ -1066,33 +1033,46 @@ function autosave(force) {
 function editDocs() {
 	if (editState == true) {
 		editState = false;
-		welcomeRecentsArea.style.display = 'block';
-		welcomeEditRecentsArea.style.display = 'none';
 		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+		welcomeDocsList.classList.remove('editMode');
 		
 		updateDocLists(['all']);
+		editModeListeners();
 		
 		regions.navBack();
 	} else {		
-		welcomeRecentsArea.style.display = 'none';
-		welcomeEditRecentsArea.style.display = 'block';
-		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
 		editState = true;
+		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
+		welcomeDocsList.classList.add('editMode');
 		
-		updateDocLists(['all'], true);
-		watchCheckboxes();
+		editModeListeners();
 		
 		regions.nav('welcome-edit-mode');
 	}
 }
 
-function watchCheckboxes() {
-	// Only use this function in edit mode
+function editModeListeners() {
 	if (editState == true) {
 		var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
 		for (var i = 0; i < checkboxes.length; i++ ) {
 			checkboxes[i].onchange = updateSelectButton;
 		}
+		var listItems = welcomeDocsList.getElementsByClassName('fileListItem');
+		for (var i = 0; i < listItems.length; i++ ) {
+			listItems[i].onclick = updateCheckbox;
+		}
+	} else {
+		var listItems = welcomeDocsList.getElementsByClassName('fileListItem');
+		for (var i = 0; i < listItems.length; i++ ) {
+			listItems[i].onclick = null;
+		}
+	}
+}
+
+function updateCheckbox(evt) {
+	evt.stopPropagation();
+	if(!this.getElementsByClassName('pack-checkbox')[0].contains(evt.target)) {
+		this.getElementsByClassName('edit-selected')[0].click();
 	}
 }
 
@@ -1169,8 +1149,9 @@ function deleteSelected(confirmed) {
 		// Delete selected files
 		for (var i = 0; i < selected.length; i++) {
 			// Get filename
-			var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
-			var location = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].getAttribute('data-location');
+			var elm = selected[i].closest('.fileListItem');
+			var filename = elm.getAttribute('data-click-directory') + elm.getAttribute('data-click-filename') + elm.getAttribute('data-click-filetype');
+			var location = elm.getAttribute('data-click-location');
 			
 			// Remove from RecentDocs
 			firetext.recents.remove((filename + location), true);
@@ -1179,7 +1160,6 @@ function deleteSelected(confirmed) {
 			firetext.io.delete(filename, location);
 			
 			// Remove from list
-			var elm = selected[i].parentNode.parentNode;
 			elm.parentNode.removeChild(elm);
 		}
 	}
