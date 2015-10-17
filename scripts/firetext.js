@@ -284,7 +284,14 @@ function initListeners() {
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
-			editDocs();
+			if (editState != true) {
+				editDocs();
+			}
+			var elm = event.target.closest('.fileListItem');
+			if (elm) {
+				elm.getElementsByClassName('edit-selected')[0].click();
+				updateSelectButton();
+			}
 		}
 	);
 }
@@ -1077,7 +1084,7 @@ function updateCheckbox(evt) {
 }
 
 function updateSelectButton() {
-	if (numSelected() == 0) {
+	if (numSelected() != numCheckboxes()) {
 		// Add select all button
 		document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll" data-l10n-id="select-all"></button><button data-click="delete" class="danger" data-l10n-id="delete-selected"></button>';
 	}
@@ -1098,6 +1105,14 @@ function numSelected() {
 			}
 		}
 		return n;
+	}
+}
+
+function numCheckboxes() {
+	// Only use this function in edit mode
+	if (editState == true) {
+		var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
+		return checkboxes.length;
 	}
 }
 
