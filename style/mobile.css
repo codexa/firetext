@@ -167,7 +167,6 @@ section[role="dialog"] + .background {
 }
 
 .edit-header .tabBar {
-	display: block;
 	white-space: nowrap;
 	overflow-x: auto;
 	text-align: center;
