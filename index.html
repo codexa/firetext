@@ -541,9 +541,12 @@
 					<ul>
 						<li class="noLink">
 							<aside class="pack-end">
-								<label class="pack-switch">
-									<input type="checkbox" id="previews-enabled-switch">
-									<span></span>
+								<label>
+									<select id="previews-select">
+										<option value="0" data-l10n-id="always-off"></option>
+										<option value="1" data-l10n-id="always-on"></option>
+										<option selected value="2" data-l10n-id="auto"></option>
+									</select>
 								</label>
 							</aside>
 							<p class="label" data-l10n-id="enable-file-previews"></p>

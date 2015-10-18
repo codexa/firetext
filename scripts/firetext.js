@@ -441,16 +441,50 @@ function updateAllDocs() {
 		}
 		return true;
 	});
-	if(firetext.settings.get('previews.enabled') == 'false') {
+	buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
+}
+
+function updatePreviewsEnabled() {
+	if(firetext.settings.get('previews.enabled') == 'never') {
 		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
 			docList.classList.remove('previews');
 		});
-	} else {
+		updatePreviews();
+	} else if(firetext.settings.get('previews.enabled') == 'always') {
 		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
 			docList.classList.add('previews');
 		});
+		updatePreviews();
+	} else {
+		var conn = navigator.connection || navigator.webkitConnection;
+		if(conn) {
+			conn.onchange = conn.ontypechange = updatePreviewsEnabledFromConnection;
+			updatePreviewsEnabledFromConnection();
+		} else {
+			Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+				docList.classList.add('previews');
+			});
+			updatePreviews();
+		}
 	}
-	buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
+}
+
+function updatePreviewsEnabledFromConnection() {
+	if(firetext.settings.get('previews.enabled') == 'auto') {
+		var conn = navigator.connection || navigator.webkitConnection;
+		if(conn.type !== 'none') { // Don't change if no connection
+			if(['bluethooth', 'cellular', 'wimax'].indexOf(conn.type) !== -1) {
+				Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+					docList.classList.remove('previews');
+				});
+			} else {
+				Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+					docList.classList.add('previews');
+				});
+			}
+			updatePreviews();
+		}
+	}
 }
 
 function updateDocLists(lists) {
@@ -730,7 +764,7 @@ function getPreview(filetype, content, error) {
 }
 
 function updatePreviewNightModes(iframes) {
-	if(firetext.settings.get('previews.enabled') == 'false') {
+	if(!welcomeDocsList.classList.contains('previews')) {
 		return;
 	}
 	Array.prototype.forEach.call(iframes, function(iframe) {
@@ -783,7 +817,7 @@ function setPreview(description, previews) {
 }
 
 function updatePreviews() {
-	if(firetext.settings.get('previews.enabled') == 'false') {
+	if(!welcomeDocsList.classList.contains('previews')) {
 		return;
 	}
 	Array.prototype.forEach.call(document.getElementsByClassName('fileListItem'), function(item) {
