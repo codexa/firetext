@@ -90,13 +90,9 @@ function nav2() {
 		
 		// Focus filename input
 		if (tempLoc == 'create' || tempLoc == 'save-as') {
-			var onTransitionEnd = function () {
+			setTimeout(function() {
 				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').focus();
-				tempElement.removeEventListener('transitionend', onTransitionEnd);
-				tempElement.removeEventListener('webkitTransitionEnd', onTransitionEnd);
-			};
-			tempElement.addEventListener('transitionend', onTransitionEnd);
-			tempElement.addEventListener('webkitTransitionEnd', onTransitionEnd);
+			});
 		}
 		
 		// Prefill filename and show filetype
