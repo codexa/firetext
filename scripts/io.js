@@ -337,11 +337,6 @@ function createFromDialog() {
 	var contentBlob = new Blob([contentData], { "type" : type });
 	
 	createAndOpen(location, directory, filename, filetype, contentBlob);
-	
-	// Clear file fields
-	document.getElementById('createDialogFileName').value = '';
-	document.getElementById('createDialogFileType').value = '.html';
-	extIcon();
 }
 
 function uploadFromDialog() {
@@ -379,9 +374,6 @@ function uploadFromDialog() {
 		
 		createAndOpen(location, directory, filename, filetype, file);
 	}
-	
-	// Clear file fields
-	document.getElementById('uploadDialogFiles').value = '';
 }
 
 function saveAsFromDialog() {

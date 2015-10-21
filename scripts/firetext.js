@@ -1292,8 +1292,6 @@ function processActions(eventAttribute, target) {
 					var createLink = e.data.commandStates.createLink;
 					if (createLink.state) {
 						document.getElementById('web-address').value = createLink.value;
-					} else {
-						document.getElementById('web-address').value = '';				
 					}
 					regions.nav('hyperlink');
 				}, null, true);
@@ -1342,9 +1340,6 @@ function processActions(eventAttribute, target) {
 						regions.nav('image-web');
 					}
 				}
-				
-				// Clear inputs
-				document.getElementById('image-address').value = null;
 			} else {
 				if (navigator.mozSetMessageHandler) {
 					// Web Activities are supported, allow user to choose them or web URI
@@ -1389,10 +1384,6 @@ function processActions(eventAttribute, target) {
 			} else {
 				regions.nav('table');
 			}
-			
-			// Clear inputs
-			document.getElementById('table-rows').value = null;
-			document.getElementById('table-columns').value = null;
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
