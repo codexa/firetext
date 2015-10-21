@@ -65,6 +65,9 @@
       'p {',
       '  margin: 0;',
       '}',
+      'blockquote {',
+      '  margin: 0px 0px 0px 40px;',
+      '}',
       'table.default, table.default td {',
       '  border: 1px solid #afafaf;',
       '}',
@@ -100,6 +103,19 @@
         document.execCommand('underline');
       } else {
         return;
+      }
+      event.preventDefault();
+      parentMessageProxy.postMessage({
+        command: "update-toolbar"
+      });
+    }
+  });
+  document.addEventListener('keydown', function (event) {
+    if(event.which === 9) { // Tab
+      if(event.shiftKey) {
+        document.execCommand('outdent');
+      } else {
+        document.execCommand('indent');
       }
       event.preventDefault();
       parentMessageProxy.postMessage({
