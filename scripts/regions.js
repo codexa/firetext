@@ -92,6 +92,7 @@ function nav2() {
 		if (tempLoc == 'create' || tempLoc == 'save-as') {
 			setTimeout(function() {
 				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').focus();
+				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').select();
 			});
 		}
 		
