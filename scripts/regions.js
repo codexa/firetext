@@ -88,14 +88,19 @@ function nav2() {
 			updateDocLists(['cloud']);		
 		}
 		
-		// Focus first input
-		setTimeout(function() {
-			var input = tempElement.getElementsByTagName('input')[0] || tempElement.getElementsByTagName('button')[0];
-			if (input) {
-				input.focus();
-				if(input.select) input.select();
-			}
-		});
+		if (tempLoc == 'edit') {
+			// Focus editor
+			editor.focus();
+		} else {
+			// Focus first input
+			setTimeout(function() {
+				var input = tempElement.getElementsByTagName('input')[0] || tempElement.getElementsByTagName('button')[0];
+				if (input) {
+					input.focus();
+					if(input.select) input.select();
+				}
+			});
+		}
 		
 		// Prefill filename and show filetype
 		if (tempLoc == 'save-as') {
