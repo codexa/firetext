@@ -1087,6 +1087,12 @@ document.addEventListener('keypress', function(event) {
 	}
 });
 
+document.addEventListener('keyup', function(event) {
+	if (event.key == 27 | event.keyCode == 27) {
+		processActions('data-esc', event.target);
+	}
+});
+
 document.addEventListener('mousedown', function(event) {
 	processActions('data-mouse-down', event.target);
 });
@@ -1148,6 +1154,8 @@ function processActions(eventAttribute, target) {
 			regions.nav(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'navBack') {
 			regions.navBack();
+		} else if (calledFunction == 'closeOverlay') {
+			regions.closeOverlay();
 		} else if (calledFunction == 'sidebar') {
 			regions.sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-state'));
 		} else if (calledFunction == 'saveFromEditor') {

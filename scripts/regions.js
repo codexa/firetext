@@ -171,3 +171,14 @@ regions.tab = function (list, name) {
 		/* End of customized section */
 	}
 };
+
+regions.closeOverlay = function () {
+	if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
+		regions.sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
+	} else if (document.querySelector('.current') &&
+		(document.querySelector('.current').getAttribute('role') == 'dialog' ||
+		document.querySelector('.current').getAttribute('role') == 'action')
+	) {
+		regions.navBack();
+	}
+};
