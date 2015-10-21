@@ -88,13 +88,14 @@ function nav2() {
 			updateDocLists(['cloud']);		
 		}
 		
-		// Focus filename input
-		if (tempLoc == 'create' || tempLoc == 'save-as') {
-			setTimeout(function() {
-				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').focus();
-				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').select();
-			});
-		}
+		// Focus first input
+		setTimeout(function() {
+			var input = tempElement.getElementsByTagName('input')[0] || tempElement.getElementsByTagName('button')[0];
+			if (input) {
+				input.focus();
+				if(input.select) input.select();
+			}
+		});
 		
 		// Prefill filename and show filetype
 		if (tempLoc == 'save-as') {
@@ -104,7 +105,7 @@ function nav2() {
 		
 		// Move file location selector to active region
 		if (tempLoc == 'create' || tempLoc == 'upload' || tempLoc == 'save-as') {
-			document.getElementById(tempLoc).getElementsByClassName('button-block')[0].appendChild(locationLegend);
+			tempElement.getElementsByClassName('button-block')[0].appendChild(locationLegend);
 		}
 		
 		// Document title
