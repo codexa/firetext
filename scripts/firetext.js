@@ -1360,7 +1360,7 @@ function processActions(eventAttribute, target) {
 				// Make sure # is above 0
 				if ((rows > 0) && (cols > 0)) {
 					// Generate HTML
-					var output = '<table class="default">';
+					var output = '<table class="default" style="width: 100%;">';
 					for (var r = 0; r < rows; r++) {
 						output += '<tr>';
 						for (var c = 0; c < cols; c++) {

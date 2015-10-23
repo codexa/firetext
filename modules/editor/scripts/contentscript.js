@@ -65,11 +65,7 @@
       'p {',
       '  margin: 0;',
       '}',
-      'table.default {',
-      '  border: 1px solid #afafaf;',
-      '  width: 100%;',
-      '}',
-      'table.default td {',
+      'table.default, table.default td {',
       '  border: 1px solid #afafaf;',
       '}',
     ].join('\n');
