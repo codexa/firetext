@@ -1075,7 +1075,7 @@ function autosave(force) {
 		if (!saveTimeout || force == true) {
 			if (saving != true) {
 				// Add timeout for saving
-				saveTimeout = window.setTimeout(function() { saveFromEditor(deviceType == 'desktop'); }, 1000);
+				saveTimeout = window.setTimeout(function() { saveFromEditor(deviceType == 'desktop' && firetext.settings.get('autosaveNotification') == 'true'); }, 1000);
 			} else {
 				saveTimeout = window.setTimeout(forceAutosave, 1000);				 
 			}

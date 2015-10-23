@@ -17,6 +17,7 @@ firetext.settings.init = function () {
 	// Select elements
 	var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
 	var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
+	var autosaveNotificationEnabled = document.querySelector('#autosave-notification-enabled-switch');
 	var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
 	var languageSelect = document.querySelector('#language-select');
 	var nightmodeSelect = document.querySelector('#nightmode-select');
@@ -42,16 +43,37 @@ firetext.settings.init = function () {
 		if (firetext.settings.get('autosave') != 'true') {
 			firetext.settings.save('autosave', 'true');
 		}
+		document.getElementById('autosave-notification-setting').style.display = 'block';
 	} else {	
 		autosaveEnabled.removeAttribute('checked');
+		document.getElementById('autosave-notification-setting').style.display = 'none';
 	}
 	autosaveEnabled.onchange = function () {
 		firetext.settings.save('autosave', this.checked);
 		if (firetext.settings.get('autosave') != 'false') {
 			document.getElementById('editorSaveButton').style.display = 'none';
+			if (deviceType == 'desktop') document.getElementById('autosave-notification-setting').style.display = 'block';
 		} else {
 			document.getElementById('editorSaveButton').style.display = 'inline-block';
+			if (deviceType == 'desktop') document.getElementById('autosave-notification-setting').style.display = 'none';
 		}
+	}
+
+	// Autosave Notification
+	if (deviceType == 'desktop') {
+		if (firetext.settings.get('autosaveNotification') != 'false') {
+			autosaveNotificationEnabled.setAttribute('checked', '');
+			if (firetext.settings.get('autosaveNotification') != 'true') {
+				firetext.settings.save('autosaveNotification', 'true');
+			}
+		} else {	
+			autosaveNotificationEnabled.removeAttribute('checked');
+		}
+		autosaveNotificationEnabled.onchange = function () {
+			firetext.settings.save('autosaveNotification', this.checked);
+		}
+	} else {
+		document.getElementById('autosave-notification-setting').style.display = 'none';
 	}
 
 	// Dropbox
