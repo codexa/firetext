@@ -156,7 +156,13 @@ function initElementTitles() {
 		var title = navigator.mozL10n.get(titleId);
 		elm.title = title;
 		var timeout;
-		elm.addEventListener('touchstart', function() {
+		var startTime;
+		var startX;
+		var startY;
+		elm.addEventListener('touchstart', function(evt) {
+			startTime = Date.now();
+			startX = evt.touches[0].clientX;
+			startY = evt.touches[0].clientY;
 			timeout = setTimeout(function() {
 				var titlePopup = document.createElement('div');
 				titlePopup.textContent = title;
@@ -182,8 +188,18 @@ function initElementTitles() {
 				}
 			}, 500);
 		});
-		elm.addEventListener('touchend', cancel);
-		elm.addEventListener('touchmove', cancel);
+		elm.addEventListener('touchend', function(evt) {
+			if (Date.now() - startTime > 500) {
+				evt.preventDefault();
+			} else {
+				cancel();
+			}
+		});
+		elm.addEventListener('touchmove', function(evt) {
+			if(Math.pow(evt.touches[0].clientX - startX, 2) + Math.pow(evt.touches[0].clientY - startY, 2) > 100) { // 10px * 10px in any direction
+				cancel();
+			}
+		});
 		elm.addEventListener('touchleave', cancel);
 		elm.addEventListener('touchcancel', cancel);
 		function cancel(evt) {
