@@ -1074,33 +1074,39 @@ function updateToolbar() {
 /* Actions (had to do this because of CSP policies)
 ------------------------*/ 
 document.addEventListener('click', function(event) {
-	processActions('data-click', event.target);
+	processActions('data-click', event.target, event);
 });
 
 document.addEventListener('submit', function(event) {
-	processActions('data-submit', event.target);
+	processActions('data-submit', event.target, event);
 });
 
 document.addEventListener('keypress', function(event) {
 	if (event.key == 13 | event.keyCode == 13) {
-		processActions('data-enter', event.target);
+		processActions('data-enter', event.target, event);
+	}
+});
+
+document.addEventListener('keyup', function(event) {
+	if (event.key == 27 | event.keyCode == 27) {
+		processActions('data-esc', event.target, event);
 	}
 });
 
 document.addEventListener('mousedown', function(event) {
-	processActions('data-mouse-down', event.target);
+	processActions('data-mouse-down', event.target, event);
 });
 
 document.addEventListener('change', function(event) {
-	processActions('data-change', event.target);
+	processActions('data-change', event.target, event);
 });
 
 document.addEventListener('focus', function(event) {
-	processActions('data-focus', event.target);
+	processActions('data-focus', event.target, event);
 });
 
 document.addEventListener('blur', function(event) {
-	processActions('data-blur', event.target);
+	processActions('data-blur', event.target, event);
 });
 
 function initGestures () {
@@ -1119,11 +1125,11 @@ function initGestures () {
 		} 
 		
 		// Process the action
-		processActions(('data-swipe-'+direction), event.target); 
+		processActions(('data-swipe-'+direction), event.target, event); 
 	});
 }
 
-function processActions(eventAttribute, target) {
+function processActions(eventAttribute, target, event) {
 	if (target && target.getAttribute) {
 		if (target.hasAttribute(eventAttribute) != true) {
 			while (target.parentNode && target.parentNode.getAttribute) {
@@ -1148,6 +1154,8 @@ function processActions(eventAttribute, target) {
 			regions.nav(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'navBack') {
 			regions.navBack();
+		} else if (calledFunction == 'closeOverlay') {
+			regions.closeOverlay();
 		} else if (calledFunction == 'sidebar') {
 			regions.sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-state'));
 		} else if (calledFunction == 'saveFromEditor') {
@@ -1201,11 +1209,15 @@ function processActions(eventAttribute, target) {
 		} else if (calledFunction == 'clearForm') {
 			if (target.parentNode.children[0]) {
 				target.parentNode.children[0].value = '';
+				event.preventDefault();
+				setTimeout(function() { // Fix autocapitalization in Chrome mobile
+					target.parentNode.children[0].blur();
+					target.parentNode.children[0].focus();
+				});
 			}
 		} else if (calledFunction == 'clearCreateForm') {
 			clearCreateForm();
-		} else if (calledFunction == 'clearSaveAsForm') {
-			clearSaveAsForm();
+			event.preventDefault();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
 				editFullScreen(false);		
@@ -1284,8 +1296,6 @@ function processActions(eventAttribute, target) {
 					var createLink = e.data.commandStates.createLink;
 					if (createLink.state) {
 						document.getElementById('web-address').value = createLink.value;
-					} else {
-						document.getElementById('web-address').value = '';				
 					}
 					regions.nav('hyperlink');
 				}, null, true);
@@ -1334,9 +1344,6 @@ function processActions(eventAttribute, target) {
 						regions.nav('image-web');
 					}
 				}
-				
-				// Clear inputs
-				document.getElementById('image-address').value = null;
 			} else {
 				if (navigator.mozSetMessageHandler) {
 					// Web Activities are supported, allow user to choose them or web URI
@@ -1379,10 +1386,6 @@ function processActions(eventAttribute, target) {
 			} else {
 				regions.nav('table');
 			}
-			
-			// Clear inputs
-			document.getElementById('table-rows').value = null;
-			document.getElementById('table-columns').value = null;
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
@@ -1421,10 +1424,10 @@ function clearCreateForm() {
 	document.getElementById('createDialogFileName').value = '';
 	document.getElementById('createDialogFileType').value = '.html';
 	extIcon();
-}
-
-function clearSaveAsForm() {
-	document.getElementById('saveAsDialogFileName').value = '';
+	setTimeout(function() { // Fix autocapitalization in Chrome mobile
+		document.getElementById('createDialogFileName').blur();
+		document.getElementById('createDialogFileName').focus();
+	});
 }
 
 function spinner(state) {
