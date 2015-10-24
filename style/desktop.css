@@ -249,11 +249,20 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 /* Zen mode */
 .fullscreen .edit-header {
-  right: 1.1rem;
-  top: 0.5rem;
+  top: 0rem;
   background-color: transparent;
   position: absolute;
   border: none;
+  width: 100%;
+  background-color: #efefef;
+}
+
+.fullscreen .edit-header .tabBar {
+  width: 21rem;
+  margin-left: 1rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  height: auto;
 }
 
 .fullscreen .no-zen {
@@ -264,25 +273,17 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   background-color: transparent !important;
   border-color: transparent !important;
   width: auto;
-  top: 6rem;
-  left: auto;
-  right: 0;
+  top: 0rem;
+  left: 22rem;
+  right: 22rem;
+  z-index: 10;
+  text-align: center;
 }
 
 .fullscreen #edit-bar li {
   float: none;
   margin: 0;
   padding: 0.5rem;
-}
-
-.fullscreen #edit-bar button {
-  border-right: 4px solid transparent;
-}
-
-.fullscreen #edit-bar button:active,
-.fullscreen #edit-bar button.active {
-  background-color: transparent;
-  border-color: #aaa !important;
 }
 
 .fullscreen #edit-bar .icon-more {
