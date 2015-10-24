@@ -94,7 +94,7 @@ function nav2() {
 		} else {
 			// Focus first input
 			setTimeout(function() {
-				var input = tempElement.getElementsByTagName('input')[0] || tempElement.getElementsByTagName('button')[0];
+				var input = tempElement.querySelector('input:not([disabled])') || tempElement.querySelector('button');
 				if (input) {
 					input.focus();
 					if(input.select) input.select();

@@ -355,6 +355,20 @@ aside select.dummy {
   width: 80%;
 }
 
+/* Table dialog */
+#table table {
+  width: 100%;
+}
+
+#table table td:first-child {
+  width: 190px; /* The longest language for this is ta-IN (second last in settings) */
+}
+
+#table table td:first-child input {
+  border: none;
+  background: none;
+}
+
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 100%;

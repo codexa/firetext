@@ -456,18 +456,30 @@
 			<div class="form">
 				<br>
 				<fieldset class="button-block">
-					<section>
-						<p>
-							<input data-l10n-id="number-of-rows" placeholder="# of rows" required type="text" id="table-rows" data-enter="table" data-enter-dialog="true" />
-							<button type="reset" data-mouse-down="clearForm"></button>
-						</p>
-					</section>
-					<section>
-						<p>
-							<input data-l10n-id="number-of-columns" placeholder="# of columns" required type="text" id="table-columns" data-enter="table" data-enter-dialog="true" />
-							<button type="reset" data-mouse-down="clearForm"></button>
-						</p>
-					</section>
+					<table>
+						<tr>
+							<td>
+								<input data-l10n-id="number-of-rows" placeholder="# of rows" required="" type="text" disabled="">
+							</td>
+							<td>
+								<p>
+									<input required="" type="text" id="table-rows" data-enter="table" data-enter-dialog="true">
+									<button type="reset" data-mouse-down="clearForm"></button>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input data-l10n-id="number-of-columns" placeholder="# of columns" required="" type="text" disabled="">
+							</td>
+							<td>
+								<p>
+									<input required="" type="text" id="table-columns" data-enter="table" data-enter-dialog="true">
+									<button type="reset" data-mouse-down="clearForm"></button>
+								</p>
+							</td>
+						</tr>
+					</table>
 				</fieldset>
 			</div>
 		</div>
