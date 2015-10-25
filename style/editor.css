@@ -53,6 +53,11 @@
 	margin: 0 1rem;
 }
 
+/* Raw editor */
+#rawEditor {
+	direction: ltr;
+}
+
 /* Header */
 #fileName {
 	text-align: left;
