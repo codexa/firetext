@@ -51,6 +51,8 @@
 	display: inline-block;
 	vertical-align: middle;
 	margin: 0 1rem;
+	box-sizing: content-box;
+	height: 2.7rem;
 }
 
 /* Raw editor */
