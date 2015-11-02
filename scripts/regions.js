@@ -82,11 +82,7 @@ function nav2() {
 		}
 	
 		// Update docs lists
-		if (tempLoc == 'welcome') {
-			updateDocLists(['recents', 'cloud']);
-		} else if (tempLoc == 'open') {
-			updateDocLists(['cloud']);		
-		}
+		updateDocLists(['recents', 'cloud']);
 		
 		if (tempLoc == 'edit') {
 			// Focus editor

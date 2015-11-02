@@ -32,7 +32,7 @@ var rate;
 var editorMessageProxy, editorURL;
 
 // Lists
-var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
+var welcomeMainArea, welcomeDocsList, openDialogMainArea, openDialogRecentsArea, openDialogRecentsList;
 var welcomeRecentsArea, welcomeRecentsList;
 
 // Cache
@@ -230,17 +230,13 @@ function initElements() {
 	currentFileDirectory = document.getElementById('currentFileDirectory');
 	
 	// Lists
+	welcomeMainArea = document.getElementById('welcome-main-area');
 	welcomeDocsList = document.getElementById('welcome-docs-list');
-	welcomeDeviceArea = document.getElementById('welcome-device-area');
-	welcomeDeviceList = document.getElementById('welcome-device-list');
-	openDialogDeviceArea = document.getElementById('open-dialog-device-area');
-	openDialogDeviceList = document.getElementById('open-dialog-device-list');
 	welcomeRecentsArea = document.getElementById('welcome-recents-area');
 	welcomeRecentsList = document.getElementById('welcome-recents-list');
-	welcomeDropboxArea = document.getElementById('welcome-dropbox-area');
-	welcomeDropboxList = document.getElementById('welcome-dropbox-list');
-	openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
-	openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
+	openDialogMainArea = document.getElementById('open-dialog-main-area');
+	openDialogRecentsArea = document.getElementById('open-dialog-recents-area');
+	openDialogRecentsList = document.getElementById('open-dialog-recents-list');
 
 	// Formatting
 	bold = document.getElementById('bold');
@@ -249,6 +245,22 @@ function initElements() {
 	strikethrough = document.getElementById('strikethrough');
 	underline = document.getElementById('underline');
 	styleSelect = document.getElementById('style-select');
+}
+
+function throttle(fn, ms) {
+	var lastCall = 0;
+	var timeout;
+	return function() {
+		var now = Date.now();
+		if(now - lastCall > ms) {
+			fn.apply(this, arguments);
+			lastCall = now;
+		}
+		if(timeout) {
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(fn, ms);
+	};
 }
 
 function initListeners() {	
@@ -279,10 +291,23 @@ function initListeners() {
 			event.target.classList.remove('active');
 		}
 	}
+	welcomeMainArea.addEventListener(
+		'scroll', throttle(updatePreviews, 300)
+	);
+	openDialogMainArea.addEventListener(
+		'scroll', throttle(updatePreviews, 300)
+	);
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
-			editDocs();
+			if (editState != true) {
+				editDocs();
+			}
+			var elm = event.target.closest('.fileListItem');
+			if (elm) {
+				elm.getElementsByClassName('edit-selected')[0].click();
+				updateSelectButton();
+			}
 		}
 	);
 }
@@ -416,29 +441,104 @@ function bugsenseInit() {
 
 /* Doc lists
 ------------------------*/
+var allDocs,
+	recentsDocs,
+	internalDocs = [],
+	cloudDocs = [];
+
+function updateAllDocs() {
+	allDocs = recentsDocs.concat(internalDocs.concat(cloudDocs).sort(function(a, b) {
+		return b[5] - a[5];
+	})).filter(function(doc, j, docs) {
+		for(var i = 0; i < j; i++) {
+			if(docs[i][0] == doc[0] && docs[i][1] == doc[1] && docs[i][2] == doc[2]) {
+				return false;
+			}
+		}
+		return true;
+	});
+	buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
+}
+
+function updatePreviewsEnabled() {
+	if(firetext.settings.get('previews.enabled') == 'never') {
+		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+			docList.classList.remove('previews');
+		});
+		updatePreviews();
+	} else if(firetext.settings.get('previews.enabled') == 'always') {
+		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+			docList.classList.add('previews');
+		});
+		updatePreviews();
+	} else {
+		var conn = navigator.connection || navigator.webkitConnection;
+		if(conn) {
+			conn.onchange = conn.ontypechange = updatePreviewsEnabledFromConnection;
+			updatePreviewsEnabledFromConnection();
+		} else {
+			Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+				docList.classList.add('previews');
+			});
+			updatePreviews();
+		}
+	}
+}
+
+function updatePreviewsEnabledFromConnection() {
+	if(firetext.settings.get('previews.enabled') == 'auto') {
+		var conn = navigator.connection || navigator.webkitConnection;
+		if(conn.type !== 'none') { // Don't change if no connection
+			if(['bluethooth', 'cellular', 'wimax'].indexOf(conn.type) !== -1) {
+				Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+					docList.classList.remove('previews');
+				});
+			} else {
+				Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+					docList.classList.add('previews');
+				});
+			}
+			updatePreviews();
+		}
+	}
+}
+
 function updateDocLists(lists) {
 	if (!lists) {
 		lists = [];
 		lists.push('all');
 	}
 	
+	if (!lists.length) {
+		updateAllDocs();
+	}
+	
 	if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
 		// Recents
-		buildDocList(firetext.recents.get(), [welcomeRecentsList], "recent-documents", 'internal', true);
+		recentsDocs = firetext.recents.get();
+		updateAllDocs();
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
 		// Internal
 		spinner();
 		firetext.io.enumerate('/', function(DOCS) {
-			buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "documents-found", 'internal');
+			internalDocs = DOCS;
+			updateAllDocs();
 			spinner('hide');
 		});
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('cloud') != '-1') {
 		// Cloud
-		cloud.updateDocLists(lists);
+		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
+			spinner();
+			cloud.dropbox.enumerate('/Documents/', function(DOCS) {
+				cloudDocs = DOCS;
+				updateAllDocs();
+				spinner('hide');
+			});
+		}
 	}
 }
 
@@ -623,88 +723,209 @@ function sortByCellIndex(a,b) {
 		return a.cellIndex - b.cellIndex;
 }
 
-function buildDocListItems(DOCS, listElms, description, output, location, preview, error) {
-	// Handle description
-	if (!description) {
-		description = '';
+function getPreview(filetype, content, error) {
+	if (!content) {
+		content = '';
 	}
 	
-	if (preview && firetext.settings.get('previews.enabled') != 'false') {	 
-		switch (error ? ".txt" : DOCS[0][2]) {
-			case ".txt":
-				description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
-				break;
-			case ".docx":
-			case ".odt":
-				if(DOCS[0][2] === ".docx") {
-					var tmp = document.createElement("DIV");
-					var docx = new DocxEditor(description);
-					tmp.appendChild(docx.HTMLout());
-					description = tmp.innerHTML;
-				} else {
-					description = new JSZip(description).file('content.xml').asText();
-				}
-			case ".html":
-				description = cleanForPreview(description, ".html");
-				break;
-			default:
-				break;
-		}
+	if(error) {
+		return document.createTextNode(content);
 	}
+	
+	switch (filetype) {
+		case ".txt":
+			content = firetext.parsers.plain.parse(content, "HTML");
+			break;
+		case ".odt":
+			content = new ODTDocument(content).getHTMLUnsafe();
+			break;
+		/* 0.4
+		case ".docx":
+			docxeditor = new firetext.parsers.DocxEditor(content);
+			content = result.HTMLout();
+			doc.appendChild(content);
+			break;
+		*/
+		case ".html":
+		default:
+			if(!/<!DOCTYPE/i.test(content)) content = '<!DOCTYPE html>' + content;
+			break;
+	}
+	
+	var iframe = document.createElement('iframe');
+	iframe.sandbox = 'allow-scripts';
+	iframe.srcdoc = content
+		.replace(' contenteditable="true"', '') // Work around the bug that we include contenteditable in the saved file, to disable the spellchecker in Firefox.
+		+ [
+			'<style>',
+			'[_firetext_night] body, [_firetext_night] img {',
+			'		-webkit-filter: invert(100%) hue-rotate(180deg);',
+			'	filter: invert(100%) hue-rotate(180deg);',
+			'}',
+			'</style>',
+			'<script>',
+			'window.addEventListener("message", function(e) { nightEditor(e.data.nightMode); });',
+			'function nightEditor(nightMode) {',
+			'	var html = document.getElementsByTagName("html")[0];',
+			'	if(nightMode) {',
+			'		document.documentElement.setAttribute("_firetext_night", "");',
+			'	} else {',
+			'		document.documentElement.removeAttribute("_firetext_night");',
+			'	}',
+			'}',
+			'</script>'
+		].join('\n');
+	iframe.scrolling = 'no';
+	return iframe;
+}
+
+function updatePreviewNightModes(iframes) {
+	if(!welcomeDocsList.classList.contains('previews')) {
+		return;
+	}
+	Array.prototype.forEach.call(iframes, function(iframe) {
+		iframe.contentWindow.postMessage({
+			nightMode: html.classList.contains('night')
+		}, '*');
+	});
+}
+
+var gettingPreview = {};
+
+function resetPreviews(location) {
+	Object.keys(gettingPreview).forEach(function(key) {
+		if(key.substr(key.lastIndexOf(',') + 1) === location) {
+			delete gettingPreview[key];
+		}
+	});
+}
+
+function resetPreview() {
+	delete gettingPreview[Array.prototype.join.call(arguments, ',')];
+}
+
+function setPreview(description, previews) {
+	var done;
+	var preview;
+	previews.some(function(_preview) {
+		if(description.firstChild === _preview) {
+			done = true;
+			return true;
+		} else if(!document.contains(_preview)) {
+			preview = _preview;
+			return true;
+		}
+	});
+	if(done) {
+		return;
+	}
+	if(!preview) {
+		preview = previews[0].cloneNode();
+		previews.push(preview);
+	}
+	description.innerHTML = '';
+	description.appendChild(preview);
+	if(html.classList.contains('night')) {
+		preview.addEventListener('load', function() {
+			updatePreviewNightModes([preview]);
+		});
+	}
+}
+
+function updatePreviews() {
+	if(!welcomeDocsList.classList.contains('previews')) {
+		return;
+	}
+	Array.prototype.forEach.call(document.getElementsByClassName('fileListItem'), function(item) {
+		if(!item.offsetParent) {
+			// We're in edit mode, item is hidden.
+			return;
+		}
+		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
+		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
+			var directory = item.getAttribute('data-click-directory');
+			var filename = item.getAttribute('data-click-filename');
+			var filetype = item.getAttribute('data-click-filetype');
+			var location = item.getAttribute('data-click-location');
+			var key = [directory, filename, filetype, location];
+			if(!gettingPreview[key]) {
+				gettingPreview[key] = true;
+				firetext.io.load(directory, filename, filetype, function (result, error) {
+					gettingPreview[key] = [getPreview(filetype, result, error)];
+					Array.prototype.forEach.call(document.querySelectorAll(
+						'.fileListItem' +
+						'[data-click-directory="' + directory + '"]' +
+						'[data-click-filename="' + filename + '"]' +
+						'[data-click-filetype="' + filetype + '"]' +
+						'[data-click-location="' + location + '"]'
+					), function(item) {
+						setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
+					});
+				}, location);
+			} else if(gettingPreview[key] !== true) {
+				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
+			}
+		}
+	})
+}
+
+function buildDocListItems(DOCS, listElms, ctr) {
+	// Get current doc
+	var DOC = DOCS[ctr];
+	
+	// Get doc location
+	var location = DOC[4] || 'internal';
 	
 	// UI refinements
-	var icon, directory;
-	if (location != 'internal' && location && location != '') {
-		icon = ('document-' + location);
+	var directory;
+	if (DOC[0].charAt(0) == '/' && DOC[0].length > 1) {
+		directory = DOC[0].slice(1);
 	} else {
-		icon = 'document';
-		location = 'internal';
-	}
-	if (DOCS[0][0].charAt(0) == '/' && DOCS[0][0].length > 1) {
-		directory = DOCS[0][0].slice(1);
-	} else {
-		directory = DOCS[0][0];
+		directory = DOC[0];
 	}
 			
 	// Generate item
-	output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
+	var output = '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" style="order: '+ctr+'">';
 	output += '<a href="#">';
-	if (description != '' && firetext.settings.get('previews.enabled') != 'false') {
-		output += '<div class="fileItemDescription">'+description+'</div>';
-	}
+	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
 	output += '<aside class="pack-end icon-arrow"></aside>';	
-	output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
-	output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
+	output += '<aside class="pack-end edit-checkbox"><label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label></aside>';
+	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>'; 
+	output += '<p class="fileItemPath" title="'+directory+DOC[1]+DOC[2]+'">'+(location==='dropbox'?'<span class="icon-dropbox" title="'+navigator.mozL10n.get('documents-dropbox')+'"></span> ':'')+directory+DOC[1]+DOC[2]+'</p>';
 	output += '</div>'; 
 	output += '</a></li>';
 	
 	// Display output HTML
 	for (var i = 0; i < listElms.length; i++) {
-		listElms[i].innerHTML = output;
+		var elm = listElms[i].querySelector(
+			'.fileListItem' +
+			'[data-click-directory="' + DOC[0] + '"]' +
+			'[data-click-filename="' + DOC[1] + '"]' +
+			'[data-click-filetype="' + DOC[2] + '"]' +
+			'[data-click-location="' + location + '"]'
+		);
+		if(elm) {
+			elm.style.order = ctr;
+		} else {
+			listElms[i].insertAdjacentHTML('beforeend', output);
+		}
 	}
 	
+	// Fetch previews
+	updatePreviews();
+	
 	// Base case
-	if (DOCS.length <= 1) {		 
+	if (ctr === DOCS.length - 1) {		 
 		return;
 	}
 	
-	// Per doc locations
-	if (DOCS[1][4] && DOCS[1][4] != location) {
-		location = DOCS[1][4];
-	}
-	
 	// build next item
-	if (preview == true) {
-		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result, error) {
-			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview, error);
-		}, location);
-	} else {
-		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location, preview, true);	
-	}
+	buildDocListItems(DOCS, listElms, ctr + 1);
 }
 
-function buildDocList(DOCS, listElms, display, location, preview) {
+function buildDocList(DOCS, listElms, display) {
 	if (listElms && DOCS) {
 		// Make sure list is not an edit list
 		for (var i = 0; i < listElms.length; i++) {
@@ -712,18 +933,24 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 		}
 		
 		if (DOCS.length > 0) {
-			// Per doc locations
-			if (DOCS[0][4] && DOCS[0][4] != location) {
-				location = DOCS[0][4];
-			}
-			
 			// build next item
-			if (preview == true) {
-				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result, error) {
-					buildDocListItems(DOCS, listElms, result, "", location, preview, error);
-				}, location);
-			} else {
-				buildDocListItems(DOCS, listElms, null, "", location, preview, true);			 
+			buildDocListItems(DOCS, listElms, 0);
+			
+			// remove outdated items
+			for (var i = 0; i < listElms.length; i++) {
+				for (var j = 0; j < listElms[i].childNodes.length; j++) {
+					var childNode = listElms[i].childNodes[j];
+					var DOC = DOCS[childNode.style.order];
+					if (
+						!DOC ||
+						DOC[0] !== childNode.getAttribute('data-click-directory') ||
+						DOC[1] !== childNode.getAttribute('data-click-filename') ||
+						DOC[2] !== childNode.getAttribute('data-click-filetype') ||
+						(DOC[4] || 'internal') !== childNode.getAttribute('data-click-location')
+					) {
+						listElms[i].removeChild(childNode);
+					}
+				}
 			}
 		} else {
 			// No docs message
@@ -737,34 +964,6 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 				listElms[i].innerHTML = output;
 			}
 		}
-	}
-}
-
-function buildEditDocList(DOCS, listElm, display, location) {
-	if (listElm != undefined) {
-		// Output HTML
-		var output = "";
-		
-		if (DOCS.length != 0) {
-			// generate each list item
-			for (var i = 0; i < DOCS.length; i++) {
-				output += '<li>';
-				output += '<label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label>';
-				output += '<p data-location="'+location+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
-				output += '</li>';
-			}		
-			 
-			// Make list an edit list
-			listElm.setAttribute("data-type","edit");
-		} else {
-			output += '<li style="margin-top: -5px" class="noLink">';
-			output += '<p style="padding: 1.5rem 0 0.5rem;" data-l10n-id="no-'+display+'">'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p style="padding-bottom: 1rem;" data-l10n-id="click-compose-icon-to-create">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
-			output += '</li>';
-		}
-		
-		// Display output HTML
-		listElm.innerHTML = output;
 	}
 }
 
@@ -890,51 +1089,52 @@ function autosave(force) {
 ------------------------*/ 
 function editDocs() {
 	if (editState == true) {
-		// Clear lists
-		welcomeDeviceList.innerHTML = '';
-		welcomeDropboxList.innerHTML = '';
+		editState = false;
+		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+		welcomeDocsList.classList.remove('editMode');
 		
 		updateDocLists(['all']);
-		editState = false;
-		welcomeRecentsArea.style.display = 'block';
-		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+		editModeListeners();
+		
 		regions.navBack();
 	} else {		
-		welcomeRecentsArea.style.display = 'none';
-		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
 		editState = true;
+		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
+		welcomeDocsList.classList.add('editMode');
 		
-		// Clear lists
-		welcomeDeviceList.innerHTML = '';
-		welcomeDropboxList.innerHTML = '';
-		
-		// Code to build list
-		firetext.io.enumerate('/', function(result) {
-			buildEditDocList(result, welcomeDeviceList, 'documents-found', 'internal');
-		});
-		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
-			cloud.dropbox.enumerate('/Documents', function(DOCS) {
-				buildEditDocList(DOCS, welcomeDropboxList, "dropbox-documents-found", 'dropbox');
-			});
-		}
-		watchCheckboxes();
+		editModeListeners();
 		
 		regions.nav('welcome-edit-mode');
 	}
 }
 
-function watchCheckboxes() {
-	// Only use this function in edit mode
+function editModeListeners() {
 	if (editState == true) {
 		var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
 		for (var i = 0; i < checkboxes.length; i++ ) {
 			checkboxes[i].onchange = updateSelectButton;
 		}
+		var listItems = welcomeDocsList.getElementsByClassName('fileListItem');
+		for (var i = 0; i < listItems.length; i++ ) {
+			listItems[i].onclick = updateCheckbox;
+		}
+	} else {
+		var listItems = welcomeDocsList.getElementsByClassName('fileListItem');
+		for (var i = 0; i < listItems.length; i++ ) {
+			listItems[i].onclick = null;
+		}
+	}
+}
+
+function updateCheckbox(evt) {
+	evt.stopPropagation();
+	if(!this.getElementsByClassName('pack-checkbox')[0].contains(evt.target)) {
+		this.getElementsByClassName('edit-selected')[0].click();
 	}
 }
 
 function updateSelectButton() {
-	if (numSelected() == 0) {
+	if (numSelected() != numCheckboxes()) {
 		// Add select all button
 		document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll" data-l10n-id="select-all"></button><button data-click="delete" class="danger" data-l10n-id="delete-selected"></button>';
 	}
@@ -955,6 +1155,14 @@ function numSelected() {
 			}
 		}
 		return n;
+	}
+}
+
+function numCheckboxes() {
+	// Only use this function in edit mode
+	if (editState == true) {
+		var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
+		return checkboxes.length;
 	}
 }
 
@@ -1006,8 +1214,9 @@ function deleteSelected(confirmed) {
 		// Delete selected files
 		for (var i = 0; i < selected.length; i++) {
 			// Get filename
-			var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
-			var location = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].getAttribute('data-location');
+			var elm = selected[i].closest('.fileListItem');
+			var filename = elm.getAttribute('data-click-directory') + elm.getAttribute('data-click-filename') + elm.getAttribute('data-click-filetype');
+			var location = elm.getAttribute('data-click-location');
 			
 			// Remove from RecentDocs
 			firetext.recents.remove((filename + location), true);
@@ -1016,7 +1225,6 @@ function deleteSelected(confirmed) {
 			firetext.io.delete(filename, location);
 			
 			// Remove from list
-			var elm = selected[i].parentNode.parentNode;
 			elm.parentNode.removeChild(elm);
 		}
 	}

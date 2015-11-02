@@ -56,6 +56,7 @@
 
 	<!-- Parsers -->
 	<script type="text/javascript" src="scripts/parsers/plain-text.js" defer></script>
+	<script type="text/javascript" src="scripts/parsers/odt.js/lib/odt.js" defer></script>
 
 	<!-- Building Blocks -->
 	<link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
@@ -140,14 +141,6 @@
 				<div id="welcome-recents-area">
 					<h2 data-l10n-id="recent-documents"></h2>
 					<ul id="welcome-recents-list"></ul>
-				</div>
-				<div id="welcome-device-area">
-					<h2 data-l10n-id="documents-device"></h2>
-					<ul id="welcome-device-list"></ul>
-				</div>
-				<div id="welcome-dropbox-area">
-					<h2 data-l10n-id="documents-dropbox"></h2>
-					<ul id="welcome-dropbox-list"></ul>
 				</div>
 			</article>
 		</div>
@@ -264,15 +257,11 @@
 			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<h1 data-l10n-id="open"></h1>
 		</header>
-		<div role="main" class="header-only">
+		<div role="main" class="header-only" id="open-dialog-main-area">
 			<article data-type="list" class="docsList">
-				<div id="open-dialog-device-area">
-					<h2 data-l10n-id="documents-device"></h2>
-					<ul id="open-dialog-device-list"></ul>
-				</div>
-				<div id="open-dialog-dropbox-area">
-					<h2 data-l10n-id="documents-dropbox"></h2>
-					<ul id="open-dialog-dropbox-list"></ul>
+				<div id="open-dialog-recents-area">
+					<h2 data-l10n-id="recent-documents"></h2>
+					<ul id="open-dialog-recents-list"></ul>
 				</div>
 			</article>
 		</div>
@@ -564,9 +553,12 @@
 					<ul>
 						<li class="noLink">
 							<aside class="pack-end">
-								<label class="pack-switch">
-									<input type="checkbox" id="previews-enabled-switch">
-									<span></span>
+								<label>
+									<select id="previews-select">
+										<option value="0" data-l10n-id="always-off"></option>
+										<option value="1" data-l10n-id="always-on"></option>
+										<option selected value="2" data-l10n-id="auto"></option>
+									</select>
 								</label>
 							</aside>
 							<p class="label" data-l10n-id="enable-file-previews"></p>

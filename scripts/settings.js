@@ -20,7 +20,7 @@ firetext.settings.init = function () {
 	var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
 	var languageSelect = document.querySelector('#language-select');
 	var nightmodeSelect = document.querySelector('#nightmode-select');
-	var previewsEnabled = document.querySelector('#previews-enabled-switch');
+	var previewsSelect = document.querySelector('#previews-select');
 	var statsEnabled = document.querySelector('#stats-enabled-switch');
 
 	// Autoload
@@ -109,18 +109,37 @@ firetext.settings.init = function () {
 	});
 
 	// Previews
-	if (firetext.settings.get('previews.enabled') != 'false') {
-		previewsEnabled.setAttribute('checked', '');
-		if (firetext.settings.get('previews.enabled') != 'true') {
-			firetext.settings.save('previews.enabled', 'true');
+	if (firetext.settings.get('previews.enabled') == 'always') {
+		previewsSelect.value = '1';
+	} else if (firetext.settings.get('previews.enabled') == 'never' || firetext.settings.get('previews.enabled') == 'false') {
+		previewsSelect.value = '0';
+		if (firetext.settings.get('previews.enabled') != 'never') {
+			firetext.settings.save('previews.enabled', 'never');
 		}
-	} else {	
-		previewsEnabled.removeAttribute('checked');
+	} else { // true, auto
+		previewsSelect.value = '2';
+		if (firetext.settings.get('previews.enabled') != 'auto') {
+			firetext.settings.save('previews.enabled', 'auto');
+		}
 	}
-	previewsEnabled.onchange = function () {
-		firetext.settings.save('previews.enabled', this.checked);
-		updateDocLists(['recents']);
-	}
+	updatePreviewsEnabled();
+	previewsSelect.addEventListener('change', function () {
+		// Convert
+		var convertedPreviewsValue;
+		if (previewsSelect.value == '1') {
+			convertedPreviewsValue = 'always';
+		} else if (previewsSelect.value == '0') { 
+			convertedPreviewsValue = 'never';
+		} else {
+			convertedPreviewsValue = 'auto';
+		}	 
+
+		// Save
+		firetext.settings.save('previews.enabled', convertedPreviewsValue);
+
+		// Update
+		updatePreviewsEnabled();
+	});
 
 	// Stats
 	if (firetext.settings.get('stats.enabled') != 'false') {
