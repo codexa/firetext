@@ -31,7 +31,7 @@
   if(document.getElementsByTagName('style').length === 0) {
     var style = document.createElement('style');
     style.textContent = [
-      /* The following default style is duplicated in io.js */
+      /* The following default style is duplicated in io.js and index.html */
       'h1 {',
       '  font-size: 1.5em;',
       '  margin: 0;',

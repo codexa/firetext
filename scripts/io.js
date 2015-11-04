@@ -796,7 +796,7 @@ firetext.io.getDefaultContent = function (extension) {
 				'<head>',
 				'	<meta charset="utf-8">',
 				'	<style>',
-				/* The following default style is duplicated in contentscript.js */
+				/* The following default style is duplicated in contentscript.js and index.html */
 				'	h1 {',
 				'		font-size: 1.5em;',
 				'		margin: 0;',

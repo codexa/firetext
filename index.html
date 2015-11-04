@@ -343,15 +343,16 @@
 								</select>
 							</li>
 							<li>
-								<select data-change="style" id="style-select" data-l10n-title="style">
+								<select data-change="style" id="style-select" data-l10n-title="formatting">
 									<option value="" disabled selected data-l10n-id="format-block"></option>
-									<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": "1" }'></option>
-									<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": "2" }'></option>
-									<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": "3" }'></option>
-									<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": "4" }'></option>
-									<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": "5" }'></option>
-									<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": "6" }'></option>
 									<option value="p" data-l10n-id="paragraph"></option>
+									<!-- The following default style is duplicated in io.js and contentscript.js -->
+									<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": 1 }' style="font-size: 1.5em; font-weight: bold;"></option>
+									<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": 2 }' style="font-size: 1.17em; font-weight: bold;"></option>
+									<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": 3 }' style="font-weight: bold;"></option>
+									<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": 4 }' style="text-decoration: underline;"></option>
+									<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": 5 }' style="font-weight: bold; color: #555;"></option>
+									<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="text-decoration: underline; color: #444;"></option>
 								</select>
 							</li>
 							<li><button class="icon-hr" data-click="formatDoc" data-click-action="insertHorizontalRule" data-l10n-title="horizontal-rule"></button></li>

@@ -114,6 +114,13 @@
 
     typeListeners.splice(pos, 1);
   };
+  
+  
+  function getNumberToString(lang) {
+    return function(number) {
+      return number.toLocaleString(lang);
+    };
+  }
 
 
   function getPluralRule(lang) {
@@ -1269,6 +1276,8 @@
     var value = res[1];
 
     if (typeof value === 'number') {
+      // localize number
+      res[1] = env.__number(value);
       return res;
     }
 
@@ -1531,8 +1540,9 @@
     this.ctx = ctx;
     this.isReady = false;
     this.entries = Object.create(null);
-    this.entries.__plural = getPluralRule(this.isPseudo() ?
-                                          this.ctx.defaultLocale : id);
+    var langcode = this.isPseudo() ? this.ctx.defaultLocale : id;
+    this.entries.__number = getNumberToString(langcode);
+    this.entries.__plural = getPluralRule(langcode);
   }
 
   Locale.prototype.isPseudo = function() {
