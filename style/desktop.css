@@ -270,6 +270,15 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   border-bottom: 2px solid #efefef;
 }
 
+#edit-zone {
+  padding: 0 .6rem;
+}
+
+#edit-zone li button {
+  width: 4rem;
+  padding: 0 .6rem;
+}
+
 /* Zen mode */
 .fullscreen .edit-header {
   top: 0rem;
