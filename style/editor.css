@@ -35,6 +35,8 @@
 	width: 100%;
 	overflow-x: auto;
 	white-space: nowrap;
+	padding: 0 1rem;
+	box-sizing: border-box;
 }
 
 #edit-zone li {
@@ -44,6 +46,11 @@
 	padding: 0 .15rem;
 	height: 4rem;
 	line-height: 4rem;
+}
+
+#edit-zone li button {
+	width: 4rem;
+	padding: 0 1rem;
 }
 
 #edit-zone li select {

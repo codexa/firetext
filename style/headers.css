@@ -15,29 +15,19 @@ section > header:first-child h1 {
 }
 
 section > header:first-child h1.firetext {
-  font-style: normal;
-  color: #1f1f1f;
   padding-top: 0;
-  line-height: 4.7rem;
 }
 
-section > header:first-child > button:first-child .icon-back,
-section > header:first-child > a:first-child .icon-back {
-  padding-top: 1.6rem;
-  padding-right: 0rem;
-}
-
-section > header:first-child > button:first-child .icon-close,
-section > header:first-child > a:first-child .icon-close {
-  padding-top: 1.6rem;
+section > header:first-child h1.firetext img {
+  width: 109px;
 }
 
 section > header:first-child [class^="icon-"], 
 section > header:first-child [class*=" icon-"] {
-  font-size: 2.5rem;
-  padding-top: 1.2rem;
+  font-size: 3rem;
+  padding-top: 1.1rem;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  color: #444;
+  color: #1f1f1f;
 }

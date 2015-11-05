@@ -68,13 +68,9 @@ html, body {
   right: 1rem;
   width: 5rem;
   font-size: 2.5rem;
-    -moz-transform: rotate(0.5turn);
-    -webkit-transform: rotate(0.5turn);
-    -o-transform: rotate(0.5turn);
-    -ms-transform: rotate(0.5turn);
-  transform: rotate(0.5turn);
   opacity: 0.6;
   background: transparent;
+  padding: 0;
   display: none;
 }
 
@@ -100,24 +96,9 @@ section[data-type="sidebar"] > nav {
   height: calc(100% - 5rem - 4rem);
 }
 
-section[data-type="sidebar"] [role="toolbar"] .icon-setting {
+section[data-type="sidebar"] [role="toolbar"] .icon-settings {
   padding-top: .3rem;
   font-size: 2.5rem;
-}
-
-section > header:first-child .icon.icon-back {
-  padding-right: .8rem;
-  padding-top: 1.4rem;
-  font-size: 1.8rem !important;
-}
-
-section > header:first-child .icon.icon-close {
-  font-size: 1.5rem !important;
-  padding-top: 1.4rem;
-}
-
-.tabToolbar .icon-close {
-  font-size: 1.5rem !important;
 }
 
 .firetext {
@@ -340,16 +321,17 @@ label.pack-switch {
   top: -.4rem;
 }
 
-[data-type="list"] li.fileListItem .icon-arrow {
-  font-size: 1.7rem;
+[data-type="list"] li.fileListItem .icon-chevron-right {
   color: #aaa;
+  padding: 0.7rem 0;
+  margin-right: -.35em;
 }
 
-[data-type="list"] li.fileListItem:hover .icon-arrow {
+[data-type="list"] li.fileListItem:hover .icon-chevron-right {
   color: #4a4a4a;
 }
 
-.docsList.editMode li.fileListItem .icon-arrow {
+.docsList.editMode li.fileListItem .icon-chevron-right {
   display: none;
 }
 
@@ -589,7 +571,7 @@ aside select.dummy {
     transform-origin: top right;
 }
 
-[dir="rtl"] .icon-arrow {
+[dir="rtl"] .icon-chevron-right {
        -moz-transform: scale(-1, 1);
        -webkit-transform: scale(-1, 1);
        -o-transform: scale(-1, 1);
