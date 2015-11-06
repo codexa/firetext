@@ -64,18 +64,17 @@ html, body {
 
 #hide-keyboard-button {
   position: fixed;
-  bottom: 0;
-  right: 1rem;
-  width: 5rem;
+  top: .75rem;
+  left: 0;
+  width: 6rem;
+  height: 3.5rem;
   font-size: 2.5rem;
-  opacity: 0.6;
-  background: transparent;
+  background: white;
   padding: 0;
-  display: none;
-}
-
-#hide-keyboard-button.shown {
-  display: inline-block; 
+  border: 0;
+  border-radius: 0;
+  border-right: solid 0.2rem #737373;
+  z-index: 10;
 }
 
 /* Fonts */

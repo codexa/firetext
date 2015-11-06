@@ -168,6 +168,13 @@ regions.tab = function (list, name) {
 				rawEditor.setValue(tempText);
 				tempText = undefined;				
 			}
+			document.getElementById('edit-bar').classList.add('hidden');
+		} else {
+			if (document.getElementById('currentFileType').textContent != '.txt' &&
+					document.getElementById('currentFileType').textContent != '.odt' &&
+					deviceType == 'desktop') {
+				document.getElementById('edit-bar').classList.remove('hidden');
+			}
 		}
 		/* End of customized section */
 	}

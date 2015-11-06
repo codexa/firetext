@@ -467,19 +467,17 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	});
 	
 	// Show/hide toolbar
-	switch (filetype) {
-		case ".html":
-			document.getElementById('edit-bar').style.display = 'block';
-			editor.classList.remove('no-toolbar');
-			toolbar.classList.remove('hidden');
-			break;
-		case ".txt":
-		case ".odt":
-		default:
-			document.getElementById('edit-bar').style.display = 'none';
-			editor.classList.add('no-toolbar');
-			toolbar.classList.add('hidden');
-			break;
+	if (deviceType == 'desktop') {
+		switch (filetype) {
+			case ".html":
+				document.getElementById('edit-bar').classList.remove('hidden');
+				break;
+			case ".txt":
+			case ".odt":
+			default:
+				document.getElementById('edit-bar').classList.add('hidden');
+				break;
+		}
 	}
 	
 	// Fill editor

@@ -1,5 +1,6 @@
 html {
 	padding: 0;
+	padding-bottom: 2px;
 	margin: 0 auto;
 	max-width: 690px;
 	position: relative;
@@ -10,7 +11,7 @@ html {
 }
 
 body {
-	padding: 10px 10px 65px;
+	padding: 10px;
 	margin: 0;
 	font-size: 20px;
 	outline: none;
@@ -52,7 +53,7 @@ html:before {
 }
 
 html:after {
-	margin-top: -65px;
+	margin-top: -10px;
 	border-bottom-width: 0;
 	border-left-width: 0;
 }
@@ -80,7 +81,6 @@ body:after {
 	body {				
 		border: 1px solid #ddd;
 		box-shadow: 0 0 5px #ddd;
-		padding-bottom: 10px;
 		background-color: #ffffff;
 	}
 	
@@ -88,10 +88,6 @@ body:after {
 	body:before {
 		top: 75px; 
 		z-index: 1;
-	}
-	
-	html:after {
-		margin-top: -10px;
 	}
 	
 	body {

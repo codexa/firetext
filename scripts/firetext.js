@@ -273,17 +273,15 @@ function initListeners() {
 			}
 		}
 	);
-	if (deviceType == 'desktop') {
-		Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
-			select.addEventListener(
-				// This doesn't catch the case where the user selects the
-				// same option, but we don't have anything better.
-				'change', function change() {
-					editor.contentWindow.focus();
-				}
-			);
-		});
-	}
+	Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+		select.addEventListener(
+			// This doesn't catch the case where the user selects the
+			// same option, but we don't have anything better.
+			'change', function change() {
+				editor.contentWindow.focus();
+			}
+		);
+	});
 	toolbar.addEventListener('mouseup', mouseEnd);
 	toolbar.addEventListener('mouseleave', mouseEnd);
 	function mouseEnd(event) {
@@ -1494,23 +1492,27 @@ function processActions(eventAttribute, target, event) {
 		} else if (calledFunction == 'style') {
 			formatDoc('formatBlock', styleSelect.value);
 		} else if (calledFunction == 'hideToolbar') {
+			if (deviceType != 'desktop' && !document.getElementById('edit-bar').contains(document.activeElement)) {
+				if (document.getElementById('currentFileType').textContent != '.txt' &&
+						document.getElementById('currentFileType').textContent != '.odt' &&
+						target.id === 'editor') {
+					document.querySelector('.edit-header').classList.remove('hidden');
+					document.getElementById('edit-bar').classList.add('hidden');
+				}
+				document.getElementById('header-close-file').style.visibility = 'visible';
+				document.getElementById('hide-keyboard-button').classList.add('hidden');
+			}
+		} else if (calledFunction == 'showToolbar') {
 			if (deviceType != 'desktop') {
 				if (document.getElementById('currentFileType').textContent != '.txt' &&
 						document.getElementById('currentFileType').textContent != '.odt' &&
 						target.id === 'editor') {
-					document.getElementById('edit-bar').style.display = 'none';
-					editor.classList.add('no-toolbar');
+					document.querySelector('.edit-header').classList.add('hidden');
+					document.getElementById('edit-bar').classList.remove('hidden');
 				}
-				document.getElementById('hide-keyboard-button').classList.add('shown');
+				document.getElementById('header-close-file').style.visibility = 'hidden';
+				document.getElementById('hide-keyboard-button').classList.remove('hidden');
 			}
-		} else if (calledFunction == 'showToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt' &&
-					document.getElementById('currentFileType').textContent != '.odt' &&
-					target.id === 'editor') {
-				document.getElementById('edit-bar').style.display = 'block';
-				editor.classList.remove('no-toolbar');
-			}
-			document.getElementById('hide-keyboard-button').classList.remove('shown');
 		} else if (calledFunction == 'hyperlink') {
 			if (target.getAttribute(eventAttribute + '-dialog')) {
 				formatDoc('createLink', document.getElementById('web-address').value);
