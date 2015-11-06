@@ -270,12 +270,13 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   border-bottom: 2px solid #efefef;
 }
 
-.icon-more {
-    -moz-transform: rotate(0.5turn);
-    -webkit-transform: rotate(0.5turn);
-    -o-transform: rotate(0.5turn);
-    -ms-transform: rotate(0.5turn);
-  transform: rotate(0.5turn);
+#edit-zone {
+  padding: 0 .6rem;
+}
+
+#edit-zone li button {
+  width: 4rem;
+  padding: 0 .6rem;
 }
 
 /* Zen mode */
@@ -317,14 +318,6 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   padding: 0.5rem;
 }
 
-.fullscreen #edit-bar .icon-more {
-    -moz-transform: rotate(-.25turn);
-    -webkit-transform: rotate(-.25turn);
-    -o-transform: rotate(-.25turn);
-    -ms-transform: rotate(-.25turn);
-  transform: rotate(-.25turn);
-}
-
 .fullscreen .editor-container {
   height: 100%;
 }
@@ -346,14 +339,6 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 [dir="rtl"] #edit-bar button {
   border-left: 4px solid transparent;
   border-right: none;
-}
-
-[dir="rtl"].fullscreen #edit-bar .icon-more {
-    -moz-transform: rotate(.25turn);
-    -webkit-transform: rotate(.25turn);
-    -o-transform: rotate(.25turn);
-    -ms-transform: rotate(.25turn);
-  transform: rotate(.25turn);
 }
 
 /* Status */

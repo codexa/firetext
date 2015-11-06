@@ -890,7 +890,7 @@ function buildDocListItems(DOCS, listElms, ctr) {
 	output += '<a href="#">';
 	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
-	output += '<aside class="pack-end icon-arrow"></aside>';	
+	output += '<aside class="pack-end icon-chevron-right"></aside>';	
 	output += '<aside class="pack-end edit-checkbox"><label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label></aside>';
 	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>'; 
 	output += '<p class="fileItemPath" title="'+directory+DOC[1]+DOC[2]+'">'+(location==='dropbox'?'<span class="icon-dropbox" title="'+navigator.mozL10n.get('documents-dropbox')+'"></span> ':'')+directory+DOC[1]+DOC[2]+'</p>';
@@ -1694,13 +1694,13 @@ function onFullScreenChange() {
 	) {
 		// Special editor UI
 		html.classList.add('fullscreen');
-		document.querySelector('#editor-zen-button span').classList.remove('icon-fs');
-		document.querySelector('#editor-zen-button span').classList.add('icon-efs');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-fullscreen');
+		document.querySelector('#editor-zen-button span').classList.add('icon-fullscreen-exit');
 	} else {
 		// Regular editor UI
 		html.classList.remove('fullscreen');
-		document.querySelector('#editor-zen-button span').classList.remove('icon-efs');
-		document.querySelector('#editor-zen-button span').classList.add('icon-fs');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-fullscreen-exit');
+		document.querySelector('#editor-zen-button span').classList.add('icon-fullscreen');
 	}
 }
 
