@@ -274,12 +274,29 @@
 	background-color: #000;
 }
 
+.night #edit-bar {
+	color: #111;
+	border-color: #2c2c2c;
+}
+
+.night #hide-keyboard-button {
+	background-color: #111;
+	color: #eee;
+}
+
 @media (min-width: 767px) {
 	.night #edit-bar {
-		background-color: #222;
-		color: #fff;
-		border-color: #2c2c2c;
+		color: #222;
 	}
+}
+
+/* Fix for currentColor glitch in Chrome: repeat styles identical to what we declared ealier */
+.night #edit-zone:before {
+	background-image: linear-gradient(to right, currentColor, transparent);
+}
+
+.night #edit-zone:after {
+	background-image: linear-gradient(to left, currentColor, transparent);
 }
 
 /* Toolbar */
@@ -317,6 +334,10 @@
 
 /* Zen */
 @media (min-width: 767px) {
+	.night.fullscreen #edit-bar {
+		color: #111;
+	}
+	
 	.night.fullscreen #edit-bar button:active,
 	.night.fullscreen #edit-bar button.active {
 		border-color: #eee !important;	

@@ -264,19 +264,29 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 }
 
 #edit-bar {
-  top: 0;
-  bottom: auto;
-  background-color: #fafafa;
-  border-bottom: 2px solid #efefef;
+  top: 5.1rem;
+  color: #fafafa;
+  z-index: 1;
 }
 
 #edit-zone {
-  padding: 0 .6rem;
+  width: 100%;
 }
 
-#edit-zone li button {
-  width: 4rem;
-  padding: 0 .6rem;
+#edit-zone:before {
+  left: 0;
+}
+
+#edit-zone:after {
+  right: 0;
+}
+
+#edit-zone li:first-child {
+  margin-left: .6rem;
+}
+
+#edit-zone li:last-child {
+  margin-right: .6rem;
 }
 
 /* Zen mode */
@@ -302,9 +312,10 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 }
 
 .fullscreen #edit-bar {
-  background-color: transparent !important;
+  color: #efefef;
   border-color: transparent !important;
   width: auto;
+  height: 5rem;
   top: 0rem;
   left: 22rem;
   right: 22rem;
@@ -314,7 +325,6 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 .fullscreen #edit-bar li {
   float: none;
-  margin: 0;
   padding: 0.5rem;
 }
 
