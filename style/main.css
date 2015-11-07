@@ -570,6 +570,11 @@ aside select.dummy {
     transform-origin: top right;
 }
 
+[dir="rtl"] [data-type="list"] li.fileListItem .icon-chevron-right {
+    margin-left: -.35em;
+    margin-right: 0;
+}
+
 [dir="rtl"] .icon-chevron-right {
        -moz-transform: scale(-1, 1);
        -webkit-transform: scale(-1, 1);
@@ -579,6 +584,23 @@ aside select.dummy {
 
 [dir="rtl"] .firetext {
     text-align: right !important;
+}
+
+[dir="rtl"] .mainButtons button .icon {
+    margin-left: 1rem;
+    margin-right: 0;
+}
+
+[dir="rtl"] #hide-keyboard-button {
+    right: 0;
+    left: auto;
+    border-left: solid 0.2rem #737373;
+    border-right: none;
+}
+
+[dir="rtl"] [role="toolbar"] button[class^="icon-"], 
+[dir="rtl"] [role="toolbar"] [class*=" icon-"] {
+    text-align: left;
 }
 
 @keyframes rtlSpin{
