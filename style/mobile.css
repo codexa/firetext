@@ -231,6 +231,10 @@ section[role="dialog"] + .background {
 	height: 5rem;
 }
 
+[dir="rtl"] #edit-zone {
+	float: left;
+}
+
 #edit-zone:before, #edit-zone:after {
 	height: 4rem; /* Don't cover scroll bar in Chrome mobile */
 }
@@ -243,12 +247,30 @@ section[role="dialog"] + .background {
 	right: 0;
 }
 
+[dir="rtl"] #edit-zone:before {
+	left: 0;
+}
+
+[dir="rtl"] #edit-zone:after {
+	right: 6rem;
+}
+
 #edit-zone li:first-child {
 	margin-left: 1rem;
 }
 
 #edit-zone li:last-child {
 	margin-right: 1rem;
+}
+
+[dir="rtl"] #edit-zone li:first-child {
+	margin-right: 1rem;
+	margin-left: 0;
+}
+
+[dir="rtl"] #edit-zone li:last-child {
+	margin-left: 1rem;
+	margin-right: 0;
 }
 
 #edit-zone li button {

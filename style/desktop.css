@@ -289,6 +289,16 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   margin-right: .6rem;
 }
 
+[dir="rtl"] #edit-zone li:first-child {
+  margin-right: .6rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] #edit-zone li:last-child {
+  margin-left: .6rem;
+  margin-right: 0;
+}
+
 /* Zen mode */
 .fullscreen .edit-header {
   top: 0rem;
@@ -301,7 +311,7 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 .fullscreen .edit-header .tabBar {
   width: 21rem;
-  margin-left: 1rem;
+  margin: 0 1rem;
   white-space: nowrap;
   overflow-x: auto;
   height: auto;
@@ -334,21 +344,6 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 .fullscreen #rawEditor {
   padding-top: 7rem;
-}
-
-[dir="rtl"].fullscreen .edit-header {
-  left: 1.1rem;
-  right: auto;
-}
-
-[dir="rtl"].fullscreen #edit-bar {
-  right: auto;
-  left: 0;
-}
-
-[dir="rtl"] #edit-bar button {
-  border-left: 4px solid transparent;
-  border-right: none;
 }
 
 /* Status */
