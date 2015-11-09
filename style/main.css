@@ -211,12 +211,16 @@ label.pack-switch {
 }
 
 .docsList:not(.previews) ul {
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
   display: flex;
   flex-direction: column;
 }
 
 .docsList.previews ul {
   padding: 1rem calc((100% - 1000px) / 2);
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
   display: flex;
   flex-wrap: wrap;
 }
@@ -251,10 +255,6 @@ label.pack-switch {
   vertical-align: top;
   padding: 1rem;
   border-bottom: none;
-}
-
-[data-type="list"] li.fileListItem:not(li.fileListItem + h2) {
-  border-bottom: 2px solid #ccc;
 }
 
 [data-type="list"] li.fileListItem a {

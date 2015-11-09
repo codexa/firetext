@@ -451,7 +451,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	tempText = undefined;
 	
 	// Initialize raw editor
-	if (!rawEditor) {
+	if (!(rawEditor instanceof CodeMirror)) {
 		rawEditor = CodeMirror(rawEditorElement, {
 			lineNumbers: true
 		});
