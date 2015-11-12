@@ -314,7 +314,6 @@ function initURLs(callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('post','http://firetext.codexa.bugs3.com/',true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhr.setRequestHeader("Connection", "close");
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			urls = JSON.parse(xhr.responseText);
@@ -884,7 +883,7 @@ function buildDocListItems(DOCS, listElms, ctr) {
 	}
 			
 	// Generate item
-	var output = '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" style="order: '+ctr+'">';
+	var output = '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" data-index="'+ctr+'" style="-webkit-order: '+ctr+'; order: '+ctr+';">';
 	output += '<a href="#">';
 	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
@@ -905,6 +904,8 @@ function buildDocListItems(DOCS, listElms, ctr) {
 			'[data-click-location="' + location + '"]'
 		);
 		if(elm) {
+			elm.setAttribute('data-index', ctr);
+			elm.style.webkitOrder = ctr;
 			elm.style.order = ctr;
 		} else {
 			listElms[i].insertAdjacentHTML('beforeend', output);
@@ -938,7 +939,7 @@ function buildDocList(DOCS, listElms, display) {
 			for (var i = 0; i < listElms.length; i++) {
 				for (var j = 0; j < listElms[i].childNodes.length; j++) {
 					var childNode = listElms[i].childNodes[j];
-					var DOC = DOCS[childNode.style.order];
+					var DOC = DOCS[childNode.getAttribute('data-index')];
 					if (
 						!DOC ||
 						DOC[0] !== childNode.getAttribute('data-click-directory') ||
