@@ -43,7 +43,9 @@ firetext.io.init = function (api, callback) {
 				storage.onchange = function (change) {
 					var fileparts = firetext.io.split(change.path)
 					resetPreview(fileparts[0], fileparts[1], fileparts[2], 'internal');
-					updateDocLists(['internal', 'recents']);
+					if (tempLoc == 'welcome' || tempLoc == 'welcome-edit-mode' || tempLoc == 'open') {
+						updateDocLists(['internal', 'recents']);
+					}
 				}
 				enableInternalStorage();
 				callback();
