@@ -11,9 +11,10 @@
   font: normal normal normal 24px/1 "Material Design Icons";
   font-size: inherit;
   text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   transform: translate(0, 0);
+  direction: ltr;
 }
 
 .icon-access-point:before {
@@ -5413,3 +5414,12 @@
 }
 
 /*# sourceMappingURL=materialdesignicons.css.map */
+
+/* RTL */
+[dir="rtl"] .icon-redo:before {
+  content: "\f5d0";
+}
+
+[dir="rtl"] .icon-undo:before {
+  content: "\f4ed";
+}

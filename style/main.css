@@ -66,15 +66,22 @@ html, body {
   position: fixed;
   top: .75rem;
   left: 0;
-  width: 6rem;
+  width: 5rem;
   height: 3.5rem;
   font-size: 2.5rem;
   background: white;
   padding: 0;
   border: 0;
   border-radius: 0;
-  border-right: solid 0.2rem #737373;
+  border-right: solid 0.2rem #dfdfdf;
   z-index: 10;
+}
+
+[dir="rtl"] #hide-keyboard-button {
+  right: 0;
+  left: auto;
+  border-left: solid 0.2rem #dfdfdf;
+  border-right: none;
 }
 
 /* Fonts */

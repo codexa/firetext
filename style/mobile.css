@@ -226,7 +226,7 @@ section[role="dialog"] + .background {
 }
 
 #edit-zone {
-	width: calc(100% - 6rem);
+	width: calc(100% - 5rem);
 	float: right;
 	height: 5rem;
 }
@@ -240,7 +240,7 @@ section[role="dialog"] + .background {
 }
 
 #edit-zone:before {
-	left: 6rem;
+	left: 5rem;
 }
 
 #edit-zone:after {
@@ -275,6 +275,28 @@ section[role="dialog"] + .background {
 
 #edit-zone li button {
 	margin: 1rem 0;
+}
+
+[dir="rtl"] #edit-zone {
+	float: left;
+}
+
+[dir="rtl"] #edit-zone:before {
+	left: 0;
+}
+
+[dir="rtl"] #edit-zone:after {
+	right: 5rem;
+}
+
+[dir="rtl"] #edit-zone li:first-child {
+	margin-left: 0;
+	margin-right: 1rem;
+}
+
+[dir="rtl"] #edit-zone li:last-child {
+	margin-left: 1rem;
+	margin-right: 0;
 }
 
 /* Status */
