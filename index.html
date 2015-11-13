@@ -314,7 +314,6 @@
 		<header class="edit-header top-bar">
 			<button id="header-close-file" data-click="closeFile" class="no-zen" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
-				<button data-click="saveFromEditor" class="no-zen" id="editorSaveButton" data-l10n-title="save"><span class="icon icon-content-save"></span></button>
 				<button data-click="fullscreen" class="desktop-only" id="editor-zen-button" data-l10n-title="fullscreen"><span class="icon icon-fullscreen"></span></button>
 				<button data-click="sidebar" data-click-id="main" class="menu drawerEnabled no-zen" data-l10n-title="menu"><span class="icon icon-menu"></span></button>
 			</menu>
@@ -325,44 +324,49 @@
 			</div>
 		</header>
 		<div role="toolbar" id="edit-bar" class="top-bar hidden">
-			<ul id="edit-zone">
-				<li><button class="icon-undo" id="undo" data-click="formatDoc" data-click-action="undo" data-l10n-title="undo"></button></li>
-				<li><button class="icon-redo" id="redo" data-click="formatDoc" data-click-action="redo" data-l10n-title="redo"></button></li>
-				<li><button class="sticky icon-format-bold" id="bold" data-click="formatDoc" data-click-action="bold" data-l10n-title="bold"></button></li>
-				<li><button class="sticky icon-format-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
-				<li><button class="sticky icon-format-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
-				<li><button class="sticky icon-format-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough" data-l10n-title="strikethrough"></button></li>
-				<li><button class="icon-format-clear" id="clear-format" data-click="formatDoc" data-click-action="removeFormat" data-l10n-title="clear-format"></button></li>
-				<li>
-					<select data-change="justify" id="justify-select" data-l10n-title="alignment">
-						<option value="l" data-l10n-id="left"></option>
-						<option value="r" data-l10n-id="right"></option>
-						<option value="c" data-l10n-id="center"></option>
-						<option value="j" data-l10n-id="justified"></option>
-					</select>
-				</li>
-				<li>
-					<select data-change="style" id="style-select" data-l10n-title="formatting">
-						<option value="" disabled selected data-l10n-id="format-block"></option>
-						<option value="p" data-l10n-id="paragraph"></option>
-						<!-- The following default style is duplicated in io.js and contentscript.js -->
-						<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": 1 }' style="font-size: 1.5em; font-weight: bold;"></option>
-						<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": 2 }' style="font-size: 1.17em; font-weight: bold;"></option>
-						<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": 3 }' style="font-weight: bold;"></option>
-						<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": 4 }' style="text-decoration: underline;"></option>
-						<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": 5 }' style="font-weight: bold; color: #555;"></option>
-						<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="text-decoration: underline; color: #444;"></option>
-					</select>
-				</li>
-				<li><button class="icon-minus" data-click="formatDoc" data-click-action="insertHorizontalRule" data-l10n-title="horizontal-rule"></button></li>
-				<li><button class="icon-image-area" data-click="image" data-l10n-title="image"></button></li>
-				<li><button class="icon-link-variant" data-click="hyperlink" data-l10n-title="link"></button></li>
-				<li><button class="icon-format-list-bulleted" data-click="formatDoc" data-click-action="insertUnorderedList" data-l10n-title="list"></button></li>
-				<li><button class="icon-format-list-numbers" data-click="formatDoc" data-click-action="insertOrderedList" data-l10n-title="numbered-list"></button></li>
-				<li><button class="icon-table" data-click="table" data-l10n-title="table"></button></li>
-			</ul>
-			<ul>
-			</ul>
+			<div id="edit-zone">
+				<ul>
+					<li id="editorSaveButton"><button class="icon-content-save" data-click="saveFromEditor" data-l10n-title="save"></button></li>
+					<li><button class="icon-undo" id="undo" data-click="formatDoc" data-click-action="undo" data-l10n-title="undo"></button></li>
+					<li><button class="icon-redo" id="redo" data-click="formatDoc" data-click-action="redo" data-l10n-title="redo"></button></li>
+				</ul>
+				<ul id="rich-tools">
+					<li><button class="sticky icon-format-bold" id="bold" data-click="formatDoc" data-click-action="bold" data-l10n-title="bold"></button></li>
+					<li><button class="sticky icon-format-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
+					<li><button class="sticky icon-format-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
+					<li><button class="sticky icon-format-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough" data-l10n-title="strikethrough"></button></li>
+					<li><button class="icon-format-clear" id="clear-format" data-click="formatDoc" data-click-action="removeFormat" data-l10n-title="clear-format"></button></li>
+					<li>
+						<select data-change="justify" id="justify-select" data-l10n-title="alignment">
+							<option value="l" data-l10n-id="left" style="text-align: left;"></option>
+							<option value="r" data-l10n-id="right" style="text-align: right;"></option>
+							<option value="c" data-l10n-id="center" style="text-align: center;"></option>
+							<option value="j" data-l10n-id="justified" style="text-align: justify;"></option>
+						</select>
+					</li>
+					<li>
+						<select data-change="style" id="style-select" data-l10n-title="formatting">
+							<option value="" disabled selected data-l10n-id="format-block"></option>
+							<option value="p" data-l10n-id="paragraph"></option>
+							<!-- The following default style is duplicated in io.js and contentscript.js -->
+							<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": 1 }' style="font-size: 1.5em; font-weight: bold;"></option>
+							<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": 2 }' style="font-size: 1.17em; font-weight: bold;"></option>
+							<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": 3 }' style="font-weight: bold;"></option>
+							<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": 4 }' style="text-decoration: underline;"></option>
+							<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": 5 }' style="font-weight: bold; color: #555;"></option>
+							<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="text-decoration: underline; color: #444;"></option>
+						</select>
+					</li>
+					<li><button class="icon-minus" data-click="formatDoc" data-click-action="insertHorizontalRule" data-l10n-title="horizontal-rule"></button></li>
+					<li><button class="icon-image-area" data-click="image" data-l10n-title="image"></button></li>
+					<li><button class="icon-link-variant" data-click="hyperlink" data-l10n-title="link"></button></li>
+					<li><button class="icon-format-list-bulleted" data-click="formatDoc" data-click-action="insertUnorderedList" data-l10n-title="list"></button></li>
+					<li><button class="icon-format-list-numbers" data-click="formatDoc" data-click-action="insertOrderedList" data-l10n-title="numbered-list"></button></li>
+					<li><button class="icon-table" data-click="table" data-l10n-title="table"></button></li>
+				</ul>
+				<ul>
+				</ul>
+			</div>
 		</div>
 		<div role="main" class="editor-container">
 			<ul role="tabs" id="editTabs">
@@ -374,7 +378,7 @@
 				</div>
 			</ul>
 		</div>
-		<button class="top-bar hidden icon-keyboard-close" id="hide-keyboard-button" data-click="hideToolbar" data-l10n-title="hide-keyboard"></button>
+		<button class="top-bar hidden icon-check" id="hide-keyboard-button" data-click="hideToolbar" data-l10n-title="hide-keyboard"></button>
 	</section>
 	
 	<section role="dialog" id="hyperlink">

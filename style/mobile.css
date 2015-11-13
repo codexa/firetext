@@ -229,6 +229,8 @@ section[role="dialog"] + .background {
 	width: calc(100% - 5rem);
 	float: right;
 	height: 5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
 }
 
 [dir="rtl"] #edit-zone {
@@ -253,24 +255,6 @@ section[role="dialog"] + .background {
 
 [dir="rtl"] #edit-zone:after {
 	right: 6rem;
-}
-
-#edit-zone li:first-child {
-	margin-left: 1rem;
-}
-
-#edit-zone li:last-child {
-	margin-right: 1rem;
-}
-
-[dir="rtl"] #edit-zone li:first-child {
-	margin-right: 1rem;
-	margin-left: 0;
-}
-
-[dir="rtl"] #edit-zone li:last-child {
-	margin-left: 1rem;
-	margin-right: 0;
 }
 
 #edit-zone li button {

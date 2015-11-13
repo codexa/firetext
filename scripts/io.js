@@ -461,10 +461,10 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	// Show/hide toolbar
 	if (deviceType == 'desktop') {
 		switch (filetype) {
+			case ".txt":
 			case ".html":
 				document.getElementById('edit-bar').classList.remove('hidden');
 				break;
-			case ".txt":
 			case ".odt":
 			default:
 				document.getElementById('edit-bar').classList.add('hidden');
@@ -483,14 +483,24 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				});
 				switch (filetype) {
 					case ".txt":
+						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
+						document.querySelector('[data-tab-id="design"]').classList.add('hidden-item');
+						tabRaw.classList.add('hidden-item');
+						document.getElementById('rich-tools').classList.add('hidden-item');
+						break;
 					case ".odt":
 						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
+						document.querySelector('[data-tab-id="design"]').classList.add('hidden-item');
 						tabRaw.classList.add('hidden-item');
+						document.getElementById('rich-tools').classList.add('hidden-item');
+						editable = false; // Do not allow user to edit odt documents at this time.
 						break;
 					case ".html":
 					default:
 						document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
+						document.querySelector('[data-tab-id="design"]').classList.remove('hidden-item');
 						tabRaw.classList.remove('hidden-item');
+						document.getElementById('rich-tools').classList.remove('hidden-item');
 						rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
 						break;
 				}

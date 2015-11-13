@@ -70,6 +70,11 @@
 	background-image: linear-gradient(to left, currentColor, transparent);
 }
 
+#edit-zone ul {
+	display: inline-block;
+	float: none;
+}
+
 #edit-zone li {
 	display: inline-block;
 	float: none;

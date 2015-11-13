@@ -271,6 +271,8 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 #edit-zone {
   width: 100%;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
 }
 
 #edit-zone:before {
@@ -279,24 +281,6 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 
 #edit-zone:after {
   right: 0;
-}
-
-#edit-zone li:first-child {
-  margin-left: .6rem;
-}
-
-#edit-zone li:last-child {
-  margin-right: .6rem;
-}
-
-[dir="rtl"] #edit-zone li:first-child {
-  margin-right: .6rem;
-  margin-left: 0;
-}
-
-[dir="rtl"] #edit-zone li:last-child {
-  margin-left: .6rem;
-  margin-right: 0;
 }
 
 /* Zen mode */
