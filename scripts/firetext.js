@@ -859,7 +859,7 @@ function updatePreviews() {
 					), function(item) {
 						setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 					});
-				}, location);
+				}, location, false);
 			} else if(gettingPreview[key] !== true) {
 				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 			}

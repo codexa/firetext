@@ -640,13 +640,15 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 	}
 };
 
-firetext.io.load = function (directory, filename, filetype, callback, location) {
+firetext.io.load = function (directory, filename, filetype, callback, location, showSpinner) {
 	if (!directory | !filename | !filetype | !callback) {
 		return;
 	}
 	
 	// Show spinner
-	spinner();
+	if (showSpinner != false) {
+		spinner();
+	}
 
 	// Put directory in proper form
 	if (directory[directory.length - 1] != '/') {
@@ -673,14 +675,18 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				
 				reader.onerror = function () {	
 					// Hide spinner
-					spinner('hide');
+					if (showSpinner != false) {
+						spinner('hide');
+					}
 					
 					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 					callback(this.error.name, true);
 				};
 				reader.onload = function () {
 					// Hide spinner
-					spinner('hide');
+					if (showSpinner != false) {
+						spinner('hide');
+					}
 					
 					// Update file info
 					var thisFile = firetext.io.split(file.name);
@@ -698,7 +704,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				}
 				
 				// Hide spinner
-				spinner('hide');
+				if (showSpinner != false) {
+					spinner('hide');
+				}
 			};
 		} else if (deviceAPI == 'file') {
 			storage.root.getFile(directory + filename + filetype, {}, function(fileEntry) {
@@ -707,14 +715,18 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					
 					reader.onerror = function () {
 						// Hide spinner
-						spinner('hide');
+						if (showSpinner != false) {
+							spinner('hide');
+						}
 						
 						firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 						callback(this.error.name, true);
 					};
 					reader.onload = function () {
 						// Hide spinner
-						spinner('hide');
+						if (showSpinner != false) {
+							spinner('hide');
+						}
 						
 						callback(this.result, undefined, [directory, filename, filetype]);
 					};
@@ -728,7 +740,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);
 					
 					// Hide spinner
-					spinner('hide');
+					if (showSpinner != false) {
+						spinner('hide');
+					}
 				});
 			}, function(err) {
 				if (err.code === FileError.NOT_FOUND_ERR) {
@@ -738,13 +752,17 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				}
 				
 				// Hide spinner
-				spinner('hide');
+				if (showSpinner != false) {
+					spinner('hide');
+				}
 			});
 		}
 	} else if (location = 'dropbox') {
 		cloud.dropbox.load(filePath, filetype, function (result, error) {
 			// Hide spinner
-			spinner('hide');
+			if (showSpinner != false) {
+				spinner('hide');
+			}
 					
 			callback(result, error, [directory, filename, filetype]);
 		});
