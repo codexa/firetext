@@ -1100,7 +1100,7 @@ function editDocs() {
 		regions.navBack();
 	} else {		
 		editState = true;
-		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
+		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 10rem)';
 		welcomeDocsList.classList.add('editMode');
 		
 		editModeListeners();
