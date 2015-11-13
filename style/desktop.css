@@ -246,6 +246,43 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   }
 }
 
+/* Section Menus */
+[role="dialog"] header:first-child {
+  position: static;
+}
+
+[role="dialog"] header:first-child menu {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: auto;
+  width: 100%;
+  text-align: right;
+  border-top: solid 0.2rem #efefef;
+}
+
+[dir="rtl"] [role="dialog"] header:first-child menu {
+  text-align: left;
+}
+
+[role="dialog"] header:first-child menu button,
+[dir="rtl"] [role="dialog"] header:first-child menu button {
+  float: none;
+  display: inline-block;
+}
+
+[role="dialog"]:not(.menuless) [role="main"] {
+    height: -moz-calc(100% - 10rem);
+    height: -webkit-calc(100% - 10rem);
+  height: calc(100% - 10rem);
+}
+
+[role="dialog"][data-type="edit"] > menu {
+  width: 70rem; /* The longest language for this is ml-IN (eighth last in settings).
+                 * When changing, don't forget to add a max-width if necessary. */
+  padding: .46rem;
+}
+
 /* Editor */
 #fileName {
   display: inline-block;

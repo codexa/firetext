@@ -87,7 +87,7 @@ function nav2() {
 		if (tempLoc == 'edit') {
 			// Focus editor
 			editor.focus();
-		} else {
+		} else if (tempLoc != 'welcome-edit-mode') {
 			// Focus first input
 			setTimeout(function() {
 				var input = tempElement.querySelector('input:not([disabled])') || tempElement.querySelector('button');
