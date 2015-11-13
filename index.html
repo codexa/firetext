@@ -326,13 +326,15 @@
 		</header>
 		<div role="toolbar" id="edit-bar" class="top-bar hidden">
 			<ul id="edit-zone">
+				<li><button class="icon-undo" id="undo" data-click="formatDoc" data-click-action="undo" data-l10n-title="undo"></button></li>
+				<li><button class="icon-redo" id="redo" data-click="formatDoc" data-click-action="redo" data-l10n-title="redo"></button></li>
 				<li><button class="sticky icon-format-bold" id="bold" data-click="formatDoc" data-click-action="bold" data-l10n-title="bold"></button></li>
 				<li><button class="sticky icon-format-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
 				<li><button class="sticky icon-format-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
 				<li><button class="sticky icon-format-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough" data-l10n-title="strikethrough"></button></li>
 				<li>
 					<select data-change="justify" id="justify-select" data-l10n-title="alignment">
-						<option selected value="l" data-l10n-id="left"></option>
+						<option value="l" data-l10n-id="left"></option>
 						<option value="r" data-l10n-id="right"></option>
 						<option value="c" data-l10n-id="center"></option>
 						<option value="j" data-l10n-id="justified"></option>
@@ -357,8 +359,6 @@
 				<li><button class="icon-format-list-bulleted" data-click="formatDoc" data-click-action="insertUnorderedList" data-l10n-title="list"></button></li>
 				<li><button class="icon-format-list-numbers" data-click="formatDoc" data-click-action="insertOrderedList" data-l10n-title="numbered-list"></button></li>
 				<li><button class="icon-table" data-click="table" data-l10n-title="table"></button></li>
-			</ul>
-			<ul>
 			</ul>
 		</div>
 		<div role="main" class="editor-container">
