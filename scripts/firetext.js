@@ -859,7 +859,7 @@ function updatePreviews() {
 					), function(item) {
 						setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 					});
-				}, location);
+				}, location, false);
 			} else if(gettingPreview[key] !== true) {
 				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 			}
@@ -1077,7 +1077,7 @@ function autosave(force) {
 		if (!saveTimeout || force == true) {
 			if (saving != true) {
 				// Add timeout for saving
-				saveTimeout = window.setTimeout(function() { saveFromEditor(deviceType == 'desktop'); }, 1000);
+				saveTimeout = window.setTimeout(function() { saveFromEditor(deviceType == 'desktop' && firetext.settings.get('autosaveNotification') == 'true'); }, 1000);
 			} else {
 				saveTimeout = window.setTimeout(forceAutosave, 1000);				 
 			}
