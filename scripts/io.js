@@ -64,7 +64,6 @@ firetext.io.init = function (api, callback) {
 			var onFSError = function() {
 				firetext.notify(navigator.mozL10n.get('could-not-initialize-filesystem'));
 				deviceAPI = 'none';
-				disableInternalStorage();
 				callback();
 			}
 			var requestFs = function(grantedBytes) {
@@ -86,14 +85,12 @@ firetext.io.init = function (api, callback) {
 				webkitStorageInfo.requestQuota( PERSISTENT, /*5MB*/5*1024*1024, requestFs, onFSError );
 			} else {
 				deviceAPI = 'none';
-				disableInternalStorage();
 				callback();
 				return;
 			}
 		} else {
 			// If nonexistent, disable internal storage
 			deviceAPI = 'none';
-			disableInternalStorage();
 			callback();
 			return;
 		}
@@ -109,11 +106,6 @@ function enableInternalStorage() {
 	locationSelect.appendChild(locationDevice);
 	updateAddDialog();	
 }
-
-function disableInternalStorage() {
-	welcomeDeviceArea.style.display = 'none';
-	openDialogDeviceArea.style.display = 'none';
-};
 
 
 /* Directory IO

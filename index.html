@@ -17,9 +17,9 @@
 	<title>Firetext</title>
 
 	<!-- Cloud -->
-	<script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
 	<script type="text/javascript" src="scripts/cloud/dropbox.min.js" defer></script>
 	<script type="text/javascript" src="scripts/cloud/dropbox_authdriver_firefoxos.js" defer></script>
+	<script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
 	<script type="text/javascript" src="scripts/cloud/cloud_dropbox.js" defer></script>
 
 	<!-- Lib -->
@@ -332,6 +332,7 @@
 				<li><button class="sticky icon-format-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
 				<li><button class="sticky icon-format-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
 				<li><button class="sticky icon-format-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough" data-l10n-title="strikethrough"></button></li>
+				<li><button class="icon-format-clear" id="clear-format" data-click="formatDoc" data-click-action="removeFormat" data-l10n-title="clear-format"></button></li>
 				<li>
 					<select data-change="justify" id="justify-select" data-l10n-title="alignment">
 						<option value="l" data-l10n-id="left"></option>
@@ -353,13 +354,14 @@
 						<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="text-decoration: underline; color: #444;"></option>
 					</select>
 				</li>
-				<li><button class="icon-format-clear" id="clear-format" data-click="formatDoc" data-click-action="removeFormat" data-l10n-title="clear-format"></button></li>
 				<li><button class="icon-minus" data-click="formatDoc" data-click-action="insertHorizontalRule" data-l10n-title="horizontal-rule"></button></li>
 				<li><button class="icon-image-area" data-click="image" data-l10n-title="image"></button></li>
 				<li><button class="icon-link-variant" data-click="hyperlink" data-l10n-title="link"></button></li>
 				<li><button class="icon-format-list-bulleted" data-click="formatDoc" data-click-action="insertUnorderedList" data-l10n-title="list"></button></li>
 				<li><button class="icon-format-list-numbers" data-click="formatDoc" data-click-action="insertOrderedList" data-l10n-title="numbered-list"></button></li>
 				<li><button class="icon-table" data-click="table" data-l10n-title="table"></button></li>
+			</ul>
+			<ul>
 			</ul>
 		</div>
 		<div role="main" class="editor-container">
