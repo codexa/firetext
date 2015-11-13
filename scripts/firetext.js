@@ -1299,7 +1299,9 @@ function updateToolbar() {
 /* Actions (had to do this because of CSP policies)
 ------------------------*/ 
 document.addEventListener('click', function(event) {
-	processActions('data-click', event.target, event);
+	if (event.button !== 2) {
+		processActions('data-click', event.target, event);
+	}
 });
 
 document.addEventListener('submit', function(event) {
