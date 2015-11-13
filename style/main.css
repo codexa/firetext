@@ -598,18 +598,6 @@ aside select.dummy {
     margin-right: 0;
 }
 
-[dir="rtl"] #hide-keyboard-button {
-    right: 0;
-    left: auto;
-    border-left: solid 0.2rem #737373;
-    border-right: none;
-}
-
-[dir="rtl"] [role="toolbar"] button[class^="icon-"], 
-[dir="rtl"] [role="toolbar"] [class*=" icon-"] {
-    text-align: left;
-}
-
 @keyframes rtlSpin{
   0%{
       -moz-transform: rotate(1turn);
