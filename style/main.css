@@ -256,6 +256,11 @@ label.pack-switch {
 
 [data-type="list"] li.fileListItem {
   cursor: pointer;
+  border-bottom: solid 0.1rem #e7e7e7;
+}
+
+[data-type="list"] li.fileListItem.lastItem {
+  border-bottom: none;
 }
 
 .docsList.previews li.fileListItem {

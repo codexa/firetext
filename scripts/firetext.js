@@ -883,7 +883,8 @@ function buildDocListItems(DOCS, listElms, ctr) {
 	}
 			
 	// Generate item
-	var output = '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" data-index="'+ctr+'" style="-webkit-order: '+ctr+'; order: '+ctr+';">';
+	var className = 'fileListItem' + (ctr === DOCS.length - 1 ? ' lastItem' : '');
+	var output = '<li class="'+className+'" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" data-index="'+ctr+'" style="-webkit-order: '+ctr+'; order: '+ctr+';">';
 	output += '<a href="#">';
 	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
@@ -904,6 +905,7 @@ function buildDocListItems(DOCS, listElms, ctr) {
 			'[data-click-location="' + location + '"]'
 		);
 		if(elm) {
+			elm.className = className;
 			elm.setAttribute('data-index', ctr);
 			elm.style.webkitOrder = ctr;
 			elm.style.order = ctr;
@@ -1297,7 +1299,9 @@ function updateToolbar() {
 /* Actions (had to do this because of CSP policies)
 ------------------------*/ 
 document.addEventListener('click', function(event) {
-	processActions('data-click', event.target, event);
+	if (event.button !== 2) {
+		processActions('data-click', event.target, event);
+	}
 });
 
 document.addEventListener('submit', function(event) {

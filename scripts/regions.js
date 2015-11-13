@@ -21,6 +21,9 @@ var tempLoc = '';
 /* Navigation
 ------------------------*/
 regions.nav = function (location) {
+	if (editState == true && location == 'edit') {
+		editDocs(); // Close edit mode
+	}
 	tempLoc = '';
 	if (document.getElementById(location)) {
 		tempLoc = location;
