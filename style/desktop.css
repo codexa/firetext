@@ -283,6 +283,10 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   padding: .46rem;
 }
 
+[role="dialog"]:not([data-type="edit"]) header:first-child h1 {
+  padding-right: 5rem;
+}
+
 /* Editor */
 #fileName {
   display: inline-block;
