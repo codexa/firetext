@@ -93,6 +93,14 @@ firetext.init = function () {
 	navigator.mozL10n.ready(function () {
 		// Add l10n title attributes and long-press help popups
 		initElementTitles();
+		
+		// Update document title
+		setDocumentTitle();
+		
+		// Let Bugsense know about language
+		if (bugsenseInitialized) {
+			Bugsense.addExtraData('app_locale', navigator.mozL10n.language.code);
+		}
 	});
 };
 
