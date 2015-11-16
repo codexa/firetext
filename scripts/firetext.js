@@ -46,9 +46,6 @@ window.addEventListener('DOMContentLoaded', function() {firetext.init();}, false
 firetext.init = function () {	
 	// l10n catch
 	navigator.mozL10n.once(function () {
-		// Add l10n title attributes and long-press help popups
-		initElementTitles();
-		
 		// Select elements
 		initElements();
 	
@@ -91,6 +88,11 @@ firetext.init = function () {
 			window.dispatchEvent(firetext.initialized);
 			firetext.isInitialized = true;
 		});	
+	});
+	
+	navigator.mozL10n.ready(function () {
+		// Add l10n title attributes and long-press help popups
+		initElementTitles();
 	});
 };
 
@@ -159,7 +161,7 @@ function initElementTitles() {
 		var startTime;
 		var startX;
 		var startY;
-		elm.addEventListener('touchstart', function(evt) {
+		elm.ontouchstart = function(evt) {
 			startTime = Date.now();
 			startX = evt.touches[0].clientX;
 			startY = evt.touches[0].clientY;
@@ -187,21 +189,22 @@ function initElementTitles() {
 					});
 				}
 			}, 500);
-		});
-		elm.addEventListener('touchend', function(evt) {
+		};
+		elm.ontouchend = function(evt) {
 			if (Date.now() - startTime > 500) {
 				evt.preventDefault();
 			} else {
 				cancel();
 			}
-		});
-		elm.addEventListener('touchmove', function(evt) {
+		};
+		elm.ontouchmove = function(evt) {
 			if(Math.pow(evt.touches[0].clientX - startX, 2) + Math.pow(evt.touches[0].clientY - startY, 2) > 100) { // 10px * 10px in any direction
 				cancel();
 			}
-		});
-		elm.addEventListener('touchleave', cancel);
-		elm.addEventListener('touchcancel', cancel);
+		};
+		elm.ontouchleave =
+		elm.ontouchcancel =
+			cancel;
 		function cancel(evt) {
 			clearTimeout(timeout);
 		};
