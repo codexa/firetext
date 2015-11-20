@@ -798,10 +798,18 @@ function showSaveBanner(filepath) {
 function extIcon() {
 	var extf = document.getElementById('extIconFile');
 	var option = document.getElementById('createDialogFileType').value;
-	if (option != '.html' && option != '.txt' && option != '.docx' && option != '.doc' && option != '.rtf') {
-		option = 'default';
+	var icon;
+	if (option == '.txt') {
+		icon = 'format-align-left';
+	} else {
+		icon = 'format-float-left';
 	}
-	extf.src = ('style/icons/extensions/'+option.replace(/./, '')+'.png');
+	extf.outerHTML = [
+		'<span id="extIconFile" class="icon icon-file" style="display:block; width: 150px; margin: 10px auto; font-size: 150px;">',
+		'	<span style="position: absolute; font-size: 13px; left: 35.5px; top: 45px; color: white; text-transform: uppercase; font-weight: bold;">' + option.replace('.', '') + '</span>',
+		'	<span style="position: absolute; font-size: 80px; left: 35.5px; top: 56px; color: white; transform: scaleX(1.3);"class="icon icon-' + icon + '" style=""></span>',
+		'</span>',
+	].join('\n');
 }
 
 
