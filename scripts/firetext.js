@@ -24,7 +24,7 @@ var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var currentFileName, currentFileType, currentFileLocation, currentFileDirectory;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
-var bold, italic, justifySelect, strikethrough, styleSelect;
+var bold, fontSelect, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
@@ -251,6 +251,7 @@ function initElements() {
 
 	// Formatting
 	bold = document.getElementById('bold');
+	fontSelect = document.getElementById('font-select');
 	italic = document.getElementById('italic');
 	justifySelect = document.getElementById('justify-select');
 	strikethrough = document.getElementById('strikethrough');
@@ -1084,12 +1085,16 @@ function updateToolbar() {
 	if (document.getElementById("edit").classList.contains('current')) {
 		var key = editorMessageProxy.registerMessageHandler(function(e){
 			var commandStates = e.data.commandStates;
+			
 			// Bold
 			if (commandStates.bold.state) {
 				bold.classList.add('active');
 			} else {
 				bold.classList.remove('active');
 			}
+			
+			// Font (TBD: show actual font)
+			fontSelect.value = '';
 			
 			// Italic
 			if (commandStates.italic.state) {
@@ -1128,7 +1133,7 @@ function updateToolbar() {
 		}, null, true);
 		editorMessageProxy.postMessage({
 			command: "query-command-states",
-			commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough", "formatBlock"],
+			commands: ["bold", "fontName", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough", "formatBlock"],
 			key: key
 		});
 	}
@@ -1458,6 +1463,8 @@ function processActions(eventAttribute, target, event) {
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
+		} else if (calledFunction == 'font') {
+			formatDoc("fontName", target.value);
 		}
 	}
 }
