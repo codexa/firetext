@@ -1103,8 +1103,8 @@ function updateToolbar() {
 				bold.classList.remove('active');
 			}
 			
-			// Font (TBD: show actual font)
-			fontSelect.value = '';
+			// Font
+			fontSelect.value = commandStates.fontName.value.replace(/'/g, '"').replace(/,\s*/g, ', ');
 			
 			// Font size
 			fontSizeSelect.value = commandStates.fontSize.value;
