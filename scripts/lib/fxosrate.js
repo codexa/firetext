@@ -230,11 +230,17 @@
     if (rateIt === true) {
       this.setLsItem('alreadyRated', 'yes');
       this.alreadyRated = "yes";
-      var activity = new MozActivity({
-        name: "marketplace-app-rating",
-        data: {slug: this.applicationName}
-      });
-      //window.open(this.MARKETBASEURL + this.applicationName + '/ratings/add');
+      if (window.MozActivity) {
+        var activity = new MozActivity({
+          name: "marketplace-app-rating",
+          data: {slug: this.applicationName}
+        });
+        activity.onerror = function() {
+          window.open(this.MARKETBASEURL + this.applicationName + '/ratings/add');
+        };
+      } else {
+        window.open(this.MARKETBASEURL + this.applicationName + '/ratings/add');
+      }
     } else {
       var later = window.confirm(navigator.mozL10n.get('wantremindlater'));
       if (later !== true) {
