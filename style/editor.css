@@ -97,6 +97,7 @@
 	margin: 0 1rem;
 	box-sizing: content-box;
 	height: 2.7rem;
+	text-overflow: ellipsis;
 }
 
 /* Raw editor */

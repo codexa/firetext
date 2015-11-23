@@ -265,6 +265,11 @@ section[role="dialog"] + .background {
 	float: left;
 }
 
+#edit-zone li select {
+	max-width: 10rem;
+	margin: 0;
+}
+
 /* Status */
 section[role="status"] > div {
 	transform: translateY(100%);
