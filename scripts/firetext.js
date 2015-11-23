@@ -24,7 +24,7 @@ var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var currentFileName, currentFileType, currentFileLocation, currentFileDirectory;
 var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
-var bold, fontSelect, italic, justifySelect, strikethrough, styleSelect;
+var bold, fontSelect, fontSizeSelect, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
 var bugsenseInitialized = false, bugsenseKey = '';
@@ -252,6 +252,7 @@ function initElements() {
 	// Formatting
 	bold = document.getElementById('bold');
 	fontSelect = document.getElementById('font-select');
+	fontSizeSelect = document.getElementById('font-size-select');
 	italic = document.getElementById('italic');
 	justifySelect = document.getElementById('justify-select');
 	strikethrough = document.getElementById('strikethrough');
@@ -1096,6 +1097,9 @@ function updateToolbar() {
 			// Font (TBD: show actual font)
 			fontSelect.value = '';
 			
+			// Font size
+			fontSizeSelect.value = commandStates.fontSize.value;
+			
 			// Italic
 			if (commandStates.italic.state) {
 				italic.classList.add('active');
@@ -1133,7 +1137,7 @@ function updateToolbar() {
 		}, null, true);
 		editorMessageProxy.postMessage({
 			command: "query-command-states",
-			commands: ["bold", "fontName", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough", "formatBlock"],
+			commands: ["bold", "fontName", "fontSize", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough", "formatBlock"],
 			key: key
 		});
 	}
@@ -1465,6 +1469,8 @@ function processActions(eventAttribute, target, event) {
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
 		} else if (calledFunction == 'font') {
 			formatDoc("fontName", target.value);
+		} else if (calledFunction == 'fontSize') {
+			formatDoc("fontSize", target.value);
 		}
 	}
 }
