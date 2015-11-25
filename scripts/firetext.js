@@ -673,6 +673,9 @@ function updatePreviews() {
 		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
 		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
 			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
+			// Show item
+			item.classList.remove("hiddenPreview");
+			
 			var directory = item.getAttribute('data-click-directory');
 			var filename = item.getAttribute('data-click-filename');
 			var filetype = item.getAttribute('data-click-filetype');
@@ -695,6 +698,9 @@ function updatePreviews() {
 			} else if(gettingPreview[key] !== true) {
 				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 			}
+		} else {
+			// Hide item
+			item.classList.add("hiddenPreview");
 		}
 	})
 }

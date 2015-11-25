@@ -269,6 +269,13 @@ label.pack-switch {
   vertical-align: top;
   padding: 1rem;
   border-bottom: none;
+  transition: 0s visibility 0s, opacity 0.3s;
+}
+
+.docsList.previews li.fileListItem.hiddenPreview {
+  visibility: hidden;
+  opacity: 0;
+  transition: 0s visibility 0.3s, opacity 0.3s;
 }
 
 [data-type="list"] li.fileListItem a {
