@@ -1351,8 +1351,7 @@ function processActions(eventAttribute, target, event) {
 			formatDoc('formatBlock', styleSelect.value);
 		} else if (calledFunction == 'hideToolbar') {
 			if (deviceType != 'desktop' && !document.getElementById('edit-bar').contains(document.activeElement)) {
-				if (document.getElementById('currentFileType').textContent != '.txt' &&
-						document.getElementById('currentFileType').textContent != '.odt' &&
+				if (document.getElementById('currentFileType').textContent != '.odt' &&
 						(target.id === 'editor' || target.id === 'hide-keyboard-button')) {
 					document.querySelector('.edit-header').classList.remove('hidden');
 					document.getElementById('edit-bar').classList.add('hidden');
@@ -1362,8 +1361,7 @@ function processActions(eventAttribute, target, event) {
 			}
 		} else if (calledFunction == 'showToolbar') {
 			if (deviceType != 'desktop') {
-				if (document.getElementById('currentFileType').textContent != '.txt' &&
-						document.getElementById('currentFileType').textContent != '.odt' &&
+				if (document.getElementById('currentFileType').textContent != '.odt' &&
 						(target.id === 'editor' || target.id === 'hide-keyboard-button')) {
 					document.querySelector('.edit-header').classList.add('hidden');
 					document.getElementById('edit-bar').classList.remove('hidden');
