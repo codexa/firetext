@@ -10,6 +10,7 @@
 ------------------------*/
 var ncss, dcss = document.getElementsByTagName("link")[25];
 var nightTheme = '#111', dayTheme = '#fff';
+var nightChangeEvent = new CustomEvent('night.changed');
 
 function night() {
 	if (firetext.settings.get('nightmode') == 'true') {
@@ -72,4 +73,7 @@ function startNight(start) {
 		}
 	}
 	updatePreviewNightModes(document.querySelectorAll('[data-type="list"] li.fileListItem .fileItemDescription iframe'));
+	
+	// Notify app
+	window.dispatchEvent(nightChangeEvent);	
 }

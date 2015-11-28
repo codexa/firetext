@@ -158,6 +158,9 @@ function initModules(callback) {
 			};
 	rate.init("firetext", version, config);
 	rate.promptRequired();
+	
+	// Initialize Christmas
+	christmas();
 }
 
 function initElementTitles() {
@@ -1628,5 +1631,32 @@ function setDocumentTitle() {
 		} else {
 			document.title = selectedRegion.querySelector('header:first-child h1').textContent+' - Firetext';
 		}		
+	}
+}
+
+function christmas() {
+	var testDate = new Date(),
+			testMonth = testDate.getMonth()+1,
+			testDay = testDate.getDate();
+	if (testMonth === 12 && (testDay >= 13 && testDay <= 31)) {
+		doChristmas();
+		window.addEventListener('night.changed', doChristmas);
+	}
+	
+	function doChristmas() {
+		var wordmark = document.getElementById('welcome-wordmark');
+		if (html.classList.contains('night') != true) {
+			if (!wordmark.hasAttribute('data-original-src')) {
+				wordmark.setAttribute('data-original-src',wordmark.src);
+			}
+			wordmark.src = 'style/icons/app/firetext_christmas.svg';
+		} else {
+			if (wordmark.hasAttribute('data-original-src')) {
+				wordmark.src = wordmark.getAttribute('data-original-src');
+			}
+		}
+		
+		// Override theme color
+		themeColor.setAttribute('content', '#034f20');
 	}
 }
