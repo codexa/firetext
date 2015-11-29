@@ -28,6 +28,14 @@ var mainClosure = function() {
 			throw new Error("origin did not match");
 		}
 		
+		// Send message on error or console.log()
+		window.onerror = function(a,b,c){
+			parentMessageProxy.postMessage({command: "error", details: [a,b,c]});
+		};
+		console.log = function(msg){
+			parentMessageProxy.postMessage({command: "log", details: msg});
+		};
+		
 		// initialize modules/register handlers
 		// night mode
 		initNight(doc, parentMessageProxy);

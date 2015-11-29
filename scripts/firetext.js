@@ -868,6 +868,14 @@ function editorCommunication(callback) {
 		editorMessageProxy.registerMessageHandler(function(e) {
 			callback();
 		}, "init-success", true);
+		
+		// Handle errors and logs
+		editorMessageProxy.registerMessageHandler(function(e) {
+			console.log(e.data.details);
+		}, "error", true);
+		editorMessageProxy.registerMessageHandler(function(e) {
+			console.log(e.data.details);
+		}, "log", true);
 
 		editorMessageProxy.registerMessageHandler(function(e) {
 			tempText = e.data.html;
