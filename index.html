@@ -346,12 +346,12 @@
 					</li>
 					<li>
 						<select data-change="font" id="font-select" data-l10n-title="font">
-							<option value="" disabled selected data-l10n-id="font"></option>
-							<option value="Verdana,Geneva,sans-serif" style="font-family: Verdana,Geneva,sans-serif;">Verdana/Geneva</option>
-							<option value="Helvetica,Arial,sans-serif" style="font-family: Helvetica,Arial,sans-serif;">Helvetica/Arial</option>
-							<option value="Georgia,Utopia,Charter,serif" style="font-family: Georgia,Utopia,Charter,serif;">Georgia/Utopia/Charter</option>
-							<option value="'Times New Roman',Times,serif" style="font-family: 'Times New Roman',Times,serif;">Times New Roman/Times</option>
-							<option value="'Courier New',Courier,monospace" style="font-family: 'Courier New',Courier,monospace;">Courier New/Courier</option>
+							<option value="" disabled selected data-l10n-id="font" style='font-family: initial;'></option>
+							<option value='Verdana, Geneva, sans-serif' style='font-family: Verdana, Geneva, sans-serif;'>Verdana</option>
+							<option value='Helvetica, Arial, sans-serif' style='font-family: Helvetica, Arial, sans-serif;'>Helvetica</option>
+							<option value='Georgia, Utopia, Charter, serif' style='font-family: Georgia, Utopia, Charter, serif;'>Georgia</option>
+							<option value='"Times New Roman", Times, serif' style='font-family: "Times New Roman", Times, serif;'>Times New Roman</option>
+							<option value='"Courier New", Courier, monospace' style='font-family: "Courier New", Courier, monospace;'>Courier New</option>
 						</select>
 					</li>
 					<li>
@@ -368,15 +368,16 @@
 					</li>
 					<li>
 						<select data-change="style" id="style-select" data-l10n-title="formatting">
-							<option value="" disabled selected data-l10n-id="format-block"></option>
-							<option value="p" data-l10n-id="paragraph"></option>
+							<option value="" disabled selected data-l10n-id="format-block"			style="font-size: 1.8rem;	font-weight: initial;	color: initial;"></option>
+							<option value="p" data-l10n-id="paragraph"								style="font-size: 1.8rem;	font-weight: initial;	color: initial;"></option>
 							<!-- The following default style is duplicated in io.js and contentscript.js -->
-							<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": 1 }' style="font-size: 1.5em; font-weight: bold;"></option>
-							<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": 2 }' style="font-size: 1.17em; font-weight: bold;"></option>
-							<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": 3 }' style="font-weight: bold;"></option>
-							<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": 4 }' style="text-decoration: underline;"></option>
-							<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": 5 }' style="font-weight: bold; color: #555;"></option>
-							<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="text-decoration: underline; color: #444;"></option>
+							<!-- `font-size`s are multiplied by 1.8rem -->
+							<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": 1 }' style="font-size: 2.7rem;	font-weight: bold;		color: initial;"></option>
+							<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": 2 }' style="font-size: 2.106rem;	font-weight: bold;		color: initial;"></option>
+							<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": 3 }' style="font-size: 1.8rem;	font-weight: bold;		color: initial;"></option>
+							<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": 4 }' style="font-size: 1.8rem;	font-weight: initial;	color: initial;	text-decoration: underline;"></option>
+							<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": 5 }' style="font-size: 1.8rem;	font-weight: bold;		color: #555;"></option>
+							<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="font-size: 1.8rem;	font-weight: initial;	color: #444;	text-decoration: underline;"></option>
 						</select>
 					</li>
 					<li><button class="icon-minus" data-click="formatDoc" data-click-action="insertHorizontalRule" data-l10n-title="horizontal-rule"></button></li>

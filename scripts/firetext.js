@@ -101,6 +101,15 @@ firetext.init = function () {
 		if (bugsenseInitialized) {
 			Bugsense.addExtraData('app_locale', navigator.mozL10n.language.code);
 		}
+		
+		// Freeze style selectors width, for Chrome
+		Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+			var style = select.getAttribute('style') || '';
+			select.setAttribute('style', '');
+			var width = select.clientWidth;
+			select.setAttribute('style', style);
+			select.style.width = width + 'px';
+		});
 	});
 };
 
@@ -291,10 +300,13 @@ function initListeners() {
 	);
 	Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
 		select.addEventListener(
-			// This doesn't catch the case where the user selects the
-			// same option, but we don't have anything better.
 			'change', function change() {
+				// This doesn't catch the case where the user selects the
+				// same option, but we don't have anything better.
 				editor.contentWindow.focus();
+				
+				// Also, update select styles.
+				updateSelectStyles();
 			}
 		);
 	});
@@ -1111,8 +1123,8 @@ function updateToolbar() {
 				bold.classList.remove('active');
 			}
 			
-			// Font (TBD: show actual font)
-			fontSelect.value = '';
+			// Font
+			fontSelect.value = commandStates.fontName.value.replace(/'/g, '"').replace(/,\s*/g, ', ');
 			
 			// Font size
 			fontSizeSelect.value = commandStates.fontSize.value;
@@ -1151,6 +1163,9 @@ function updateToolbar() {
 			
 			// Style
 			styleSelect.value = commandStates.formatBlock.value;
+			
+			// Update select current styles
+			updateSelectStyles();
 		}, null, true);
 		editorMessageProxy.postMessage({
 			command: "query-command-states",
@@ -1158,6 +1173,19 @@ function updateToolbar() {
 			key: key
 		});
 	}
+}
+
+function updateSelectStyles() {
+	// Set selects current style
+	Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+		var width = select.style.width;
+		select.setAttribute('style',
+			select.selectedOptions[0] ?
+				(select.selectedOptions[0].getAttribute('style') || '').replace('text-decoration: underline;', '') : // Firefox doesn't support text-decoration: none; on options elements apparently
+				''
+		);
+		select.style.width = width;
+	});
 }
 
 /* Actions (had to do this because of CSP policies)
