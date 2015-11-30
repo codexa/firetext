@@ -1,9 +1,13 @@
 (function(mainOrigin, _parentMessageProxy, initNight, filetype, odtdoc, readOnly) {
   function fixupDocument(evt) {
     if(document.body.children.length === 0) {
-      var p = document.createElement('p');
-      p.appendChild(document.createElement('br'));
-      document.body.appendChild(p);
+      if(filetype === '.txt') {
+        document.body.appendChild(document.createElement('br'));
+      } else {
+        var p = document.createElement('p');
+        p.appendChild(document.createElement('br'));
+        document.body.appendChild(p);
+      }
     }
     if(filetype === '.odt') {
       try {
@@ -26,8 +30,10 @@
     document.execCommand('enableObjectResizing', false, 'true');
   }
   
-  // Make p, not div
-  document.execCommand('defaultParagraphSeparator', false, 'p'); // Chrome
+  if(filetype !== '.txt') {
+    // Make p, not div
+    document.execCommand('defaultParagraphSeparator', false, 'p'); // Chrome
+  }
   if(document.getElementsByTagName('style').length === 0) {
     var style = document.createElement('style');
     style.textContent = [
