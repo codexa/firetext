@@ -317,12 +317,8 @@ function initListeners() {
 			event.target.classList.remove('active');
 		}
 	}
-	welcomeMainArea.addEventListener(
-		'scroll', throttle(updatePreviews, 300)
-	);
-	openDialogMainArea.addEventListener(
-		'scroll', throttle(updatePreviews, 300)
-	);
+	welcomeMainArea.addEventListener('scroll', throttle(updatePreviews,300));
+	openDialogMainArea.addEventListener('scroll', throttle(updatePreviews,300));
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
@@ -687,10 +683,7 @@ function updatePreviews() {
 		}
 		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
 		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
-			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
-			// Show item
-			item.classList.remove("hiddenPreview");
-			
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {			
 			var directory = item.getAttribute('data-click-directory');
 			var filename = item.getAttribute('data-click-filename');
 			var filetype = item.getAttribute('data-click-filetype');
@@ -713,11 +706,27 @@ function updatePreviews() {
 			} else if(gettingPreview[key] !== true) {
 				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
 			}
+		}
+	});
+}
+
+function scrollDocList() {
+	Array.prototype.forEach.call(document.getElementsByClassName('fileListItem'), function(item) {
+		if(!item.offsetParent) {
+			// We're in edit mode, item is hidden.
+			return;
+		}
+		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
+		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
+			// Show item
+			item.classList.remove("hiddenPreview");
 		} else {
 			// Hide item
 			item.classList.add("hiddenPreview");
 		}
-	})
+	});
+	
 }
 
 function buildDocListItems(DOCS, listElms, ctr) {
