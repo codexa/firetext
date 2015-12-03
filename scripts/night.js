@@ -10,29 +10,39 @@
 ------------------------*/
 var ncss, dcss = document.getElementsByTagName("link")[25];
 var nightTheme = '#111', dayTheme = '#fff';
-var nightChangeEvent = new CustomEvent('night.changed');
+var nightChangeEvent = new CustomEvent('night.changed'), nightListener;
 
 function night() {
-	if (firetext.settings.get('nightmode') == 'true') {
-		startNight(true);
-	} else if (firetext.settings.get('nightmode') == 'false') {
-		startNight(false);
-	} else {
-		startNight(false);
-		
-		window.addEventListener('devicelight', function(event) {
-			if (firetext.settings.get('nightmode') == 'auto') {
-				if (event.value < 3.4) {
-					if (html.classList.contains('night') != true) {
-						startNight(true);
-					}
-				} else if (event.value > 5) {
-					if (html.classList.contains('night')) {
-						startNight(false);
-					}
-				}
+	switch (firetext.settings.get('nightmode')) {
+		case "true":
+			startNight(true);
+			window.removeEventListener('devicelight', processLight);
+			nightListener = false;
+			break;
+		case "false":
+			startNight(false);
+			window.removeEventListener('devicelight', processLight);
+			nightListener = false;
+			break;
+		case "auto":
+			startNight(false);
+			if (!nightListener) window.addEventListener('devicelight', processLight);
+			nightListener = true;
+			break;
+	}
+}
+
+function processLight(event) {
+	if (firetext.settings.get('nightmode') == 'auto') {
+		if (event.value < 3.4) {
+			if (html.classList.contains('night') != true) {
+				startNight(true);
 			}
-		});		 
+		} else if (event.value > 5) {
+			if (html.classList.contains('night')) {
+				startNight(false);
+			}
+		}
 	}
 }
 

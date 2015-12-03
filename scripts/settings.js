@@ -103,14 +103,13 @@ firetext.settings.init = function () {
 	// Night Mode
 	if (firetext.settings.get('nightmode') == 'true') {
 		nightmodeSelect.value = '1';
-	} else if (firetext.settings.get('nightmode') == 'false') { 
-		nightmodeSelect.value = '0';
-	} else {
+	} else if (firetext.settings.get('nightmode') == 'auto') {
 		nightmodeSelect.value = '2';
-		if (firetext.settings.get('nightmode') != 'auto') {
-			firetext.settings.save('nightmode', 'auto');
-			night();
-		} 
+	} else {
+		nightmodeSelect.value = '0';
+		if (firetext.settings.get('nightmode') != 'false') {
+			firetext.settings.save('nightmode', 'false');
+		}
 	}
 	nightmodeSelect.addEventListener('change', function () {
 		// Convert
