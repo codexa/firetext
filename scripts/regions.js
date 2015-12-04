@@ -97,6 +97,7 @@ function nav2() {
 			setTimeout(function() {
 				var input = tempElement.querySelector('input:not([disabled])') || tempElement.querySelector('button');
 				if (input) {
+					editor.blur();
 					input.focus();
 					if(input.select) input.select();
 				}
