@@ -21,7 +21,7 @@ var defaultSettings = {
 	"language": "auto",
 	"nightmode": "false",
 	"previews.enabled": "auto",
-	"stats.enabled": "true",	
+	"stats.enabled": "true"
 };
 
 firetext.settings.init = function () {
@@ -34,6 +34,17 @@ firetext.settings.init = function () {
 	var nightmodeSelect = document.querySelector('#nightmode-select');
 	var previewsSelect = document.querySelector('#previews-select');
 	var statsEnabled = document.querySelector('#stats-enabled-switch');
+	
+	// Save version
+	if (!firetext.settings.get("lastVersion")) {
+		// Either first run or update from 0.4-
+		firetext.settings.save("lastVersion", version);
+		
+		// If 0.4-, purge defaults for certain settings
+		if (firetext.settings.get("autosave",true) != undefined) {
+			purgeOldSettings("0.4");
+		}
+	}
 
 	// Autoload
 	switch (firetext.settings.get('autoload')) {
@@ -143,14 +154,8 @@ firetext.settings.init = function () {
 
 	// Previews
 	switch (firetext.settings.get('previews.enabled')) {
-		case "false":
 		case "never":
 			previewsSelect.value = '0';
-			
-			// Fix old value
-			if (firetext.settings.get('previews.enabled') == 'false') {
-				firetext.settings.save('previews.enabled', 'never');
-			}
 			break;
 		case "always":
 			previewsSelect.value = '1';
@@ -200,9 +205,9 @@ firetext.settings.init = function () {
 	}
 };
 
-firetext.settings.get = function (name) {
+firetext.settings.get = function (name, forceTrueValue) {
 	var localStorageItem = localStorage.getItem(("firetext.settings."+name));
-	if (localStorageItem) {
+	if (localStorageItem || forceTrueValue) {
 		return localStorageItem;
 	} else {
 		return defaultSettings[name];
@@ -213,6 +218,44 @@ firetext.settings.save = function (name, value) {
 	if (bugsenseInitialized) {
 		Bugsense.leaveBreadcrumb("Setting: "+name+" set to: "+value);
 	}
-	name = ("firetext.settings."+name);
-	localStorage.setItem(name, value);
+	if (defaultSettings[name] == value.toString()) {
+		firetext.settings.clear(name);
+	} else {
+		var localStorageName = ("firetext.settings."+name);
+		localStorage.setItem(localStorageName, value);
+	}
 };
+
+firetext.settings.clear = function (name) {
+	var localStorageName = ("firetext.settings."+name);
+	localStorage.removeItem(localStorageName);
+};
+
+function purgeOldSettings(version) {
+	switch (version) {
+		case "0.4":
+			// Define old defaults
+			var oldDefaults = {
+				"autoload": "false",
+				"autosave": "true",
+				"dropbox.enabled": "false",
+				"nightmode": "auto",
+				"previews.enabled": "true",
+				"stats.enabled": "true"
+			};
+			
+			// Reset defaults
+			for (var setting in oldDefaults) {
+				if (firetext.settings.get(setting, true) == oldDefaults[setting]) {
+					firetext.settings.clear(setting);
+				}	
+			}
+			
+			// Reset old values
+			if (firetext.settings.get("previews.enabled", true) == "false") {
+				firetext.settings.save("previews.enabled","never");
+			}
+			
+			break;
+	}
+}
