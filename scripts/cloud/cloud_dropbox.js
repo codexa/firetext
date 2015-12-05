@@ -18,14 +18,14 @@ cloud.dropbox.client = undefined;
 /* Auth
 ------------------------*/
 cloud.dropbox.init = function(callback){
-	if (urls.dropboxAuth) {
+	if (firetextVariablesInitialized && firetextVariables.services.dropbox) {
 		cloud.dropbox.auth = new Dropbox.Client({
-			key: urls.dropboxKey
+			key: firetextVariables.services.dropbox.apiKey
 		});
 
 		cloud.dropbox.auth.authDriver(new Dropbox.AuthDriver.FFOSPopup({
 			rememberUser: true,
-			receiverUrl: urls.dropboxAuth
+			receiverUrl: firetextVariables.services.dropbox.authURL
 		}));
 
 		cloud.dropbox.auth.onAuth = new CustomEvent('cloud.dropbox.authed');

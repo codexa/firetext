@@ -16,6 +16,10 @@ firetext.user = {};
 firetext.parsers = {};
 firetext.analytics = {};
 
+// Config
+var version = '0.5';
+var serverURL = 'https://firetext-server.herokuapp.com';
+
 // Misc
 firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
@@ -23,11 +27,11 @@ var html = document.getElementsByTagName('html')[0], head = document.getElements
 var themeColor = document.getElementById("theme-color");
 var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
 var currentFileName, currentFileType, currentFileLocation, currentFileDirectory;
-var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.5';
+var deviceType, fileChanged, saveTimeout, saving, firetextVariables={}, firetextVariablesInitialized = false;
 var bold, fontSelect, fontSizeSelect, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
-var bugsenseInitialized = false, bugsenseKey = '';
+var bugsenseInitialized = false;
 var rate;
 var editorMessageProxy, editorURL;
 
@@ -113,17 +117,14 @@ firetext.init = function () {
 	});
 };
 
-function initModules(callback) {
-	// Initialize Bugsense
-	bugsenseInit();
-	
-	// Fix menu before url request
-	fixMenu(true);
-	
+function initModules(callback) {	
 	// Initialize urls
-	initURLs(function(){
-		// Modify links in menu
-		fixMenu();
+	initVariables(function(){
+		// Initialize Bugsense
+		bugsenseInit();
+		
+		// Add extra links to menu
+		addURLs();
     
 		// Initialize cloud services
 		cloud.init();
@@ -334,68 +335,90 @@ function initListeners() {
 	);
 }
 
-function initURLs(callback) {
+function initVariables(callback) {
 	var xhr = new XMLHttpRequest();
-	xhr.open('post','http://firetext.codexa.bugs3.com/',true);
+	xhr.open('post',serverURL,true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
-			urls = JSON.parse(xhr.responseText);
+			firetextVariables = JSON.parse(xhr.responseText);
+			firetextVariablesInitialized = true;
+			callback();
 		}
 	}
-	xhr.addEventListener("loadend", function(){
-		callback();
-	});
-	xhr.send('request=urls&version='+version);
+	xhr.send('request=firetext_variables&version='+version+'&locale='+html.getAttribute('lang'));
 }
 
-function fixMenu(soft) {
-	var tempElements = [], tempLinks = [];
-	var urlNames = ['about','support','credits','rate'];
-
-	// Find empty urls
-	urlNames.forEach(function(v){
-		if (!urls[v]) {
-			tempElements = addMenuElementsToArray(tempElements, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+function addURLs() {
+	// Create url array
+	var urls = {};
+	for (var category in firetextVariables.urlCategories) {
+		urls[firetextVariables.urlCategories[category].id] = {
+			"name": firetextVariables.urlCategories[category].name,
+			"items": {}
+		};
+	}
+	urls["other"] = {
+		"name": "Other",
+		"items": {}
+	};
+	for (var url in firetextVariables.urls) {
+		var currentUrl = firetextVariables.urls[url];
+		var category = urls[currentUrl.category] ? currentUrl.category : "other";
+		urls[category]["items"][url] = {
+			"name": currentUrl.name,
+			"id": currentUrl.id,
+			"url": currentUrl.url
+		};
+	}
+	
+	// Get url menus and clear old urls
+	var urlMenus = document.getElementsByClassName("url-menu");
+	var tempOldUrls = document.getElementsByClassName("remote-url");
+	while(tempOldUrls[0]) tempOldUrls[0].parentNode.removeChild(tempOldUrls[0]);
+	
+	// Create DOM elements
+	for (var urlCategory in urls) {
+		var tempCategoryTitle = document.createElement("h2");
+		tempCategoryTitle.classList.add("remote-url");
+		if (navigator.mozL10n.get(urlCategory) != ""){
+			tempCategoryTitle.setAttribute("data-l10n-id",urlCategory);
+			tempCategoryTitle.textContent = navigator.mozL10n.get(urlCategory);
 		} else {
-			tempLinks = addMenuElementsToArray(tempLinks, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
-			for (var i = 0; i < tempLinks.length; i++) {
-				tempLinks[i].parentNode.classList.remove('hidden-item');
+			tempCategoryTitle.textContent = urls[urlCategory].name;
+		}
+		
+		var tempLinkContainer = document.createElement("ul");
+		tempLinkContainer.classList.add("remote-url");
+		for (var thisUrl in urls[urlCategory].items) {
+			// Generate link elements
+			var thisUrlItem = urls[urlCategory].items[thisUrl];
+			var tempListItem = document.createElement("li");
+			var tempLink = document.createElement("a");
+			tempLink.href = "#";
+			tempLink.setAttribute("data-click","browser");
+			tempLink.setAttribute("data-click-location",thisUrlItem.url);
+			tempLink.setAttribute("data-url-id",thisUrlItem.id);		
+			if (navigator.mozL10n.get(thisUrlItem.id) != ""){
+				tempLink.setAttribute("data-l10n-id",thisUrlItem.id);
+				tempLink.textContent = navigator.mozL10n.get(thisUrlItem.id);
+			} else {
+				tempLink.textContent = thisUrlItem.name;
 			}
+			
+			// Add link to list item
+			tempListItem.appendChild(tempLink);
+			
+			// Add to category container
+			tempLinkContainer.appendChild(tempListItem);
 		}
-	});
-
-	if (soft === true) {
-		for (var i = 0; i < tempElements.length; i++) {
-			tempElements[i].parentNode.classList.add('hidden-item');
-		}
-	} else {
-		// Remove list items
-		for (var i = 0; i < tempElements.length; i++) {
-			var tempParent = tempElements[i].parentNode.parentNode;
-			if (tempParent) {
-				tempParent.removeChild(tempElements[i].parentNode);
-			}
-		}
-
-		// Remove empty lists
-		var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
-		for (var i = 0; i < tempLists.length; i++) {
-			if (tempLists[i].childElementCount == 0) {
-				if (tempLists[i].previousElementSibling) {
-					tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
-				}
-				tempLists[i].parentNode.removeChild(tempLists[i]);
-			}
-		}
+		
+		// Add category to url menus
+		Array.prototype.filter.call(urlMenus, function(menu){
+			menu.appendChild(tempCategoryTitle.cloneNode(true));
+			menu.appendChild(tempLinkContainer.cloneNode(true));
+		});
 	}
-}
-
-function addMenuElementsToArray(array, elements) {
-	for (var i = 0; i < elements.length; i++) {
-		array.push(elements[i]);
-	}
-	return array;
 }
 
 
@@ -450,10 +473,10 @@ function updateAddDialog() {
 /* Bugsense
 ------------------------*/
 function bugsenseInit() {
-	if (bugsenseKey) {
+	if (firetextVariablesInitialized && firetextVariables.services.splunk.apiKey) {
 		if (firetext.settings.get('stats.enabled') != 'false' &&
 				!bugsenseInitialized) {
-			Bugsense.initAndStartSession({ appname: 'Firetext', appVersion: version, apiKey: bugsenseKey });
+			Bugsense.initAndStartSession({ appname: 'Firetext', appVersion: version, apiKey: firetextVariables.services.splunk.apiKey });
 			bugsenseInitialized = true;
 		}
 	}
@@ -1352,15 +1375,9 @@ function processActions(eventAttribute, target, event) {
 			} else {
 				editFullScreen();
 			}
-		} else if (calledFunction == 'browser') {      
-			// Get location
-			var browseLocation = '';
-			if (target.getAttribute(eventAttribute + '-location') == 'about') {
-				browseLocation = urls.about;
-			} else if (target.getAttribute(eventAttribute + '-location') == 'credits') {
-				browseLocation = urls.credits;
-			} else if (target.getAttribute(eventAttribute + '-location') == 'rate') {
-				// Launch rate activity if available
+		} else if (calledFunction == 'browser') {
+			// Launch rate activity if available
+			if (target.getAttribute("data-url-id") == 'rate-firetext') {
 				if (window.MozActivity) {
 					var activity = new MozActivity({
 						name: "marketplace-app-rating",
@@ -1368,12 +1385,9 @@ function processActions(eventAttribute, target, event) {
 					});
 					return;
 				}
-				browseLocation = urls.rate;
-			} else if (target.getAttribute(eventAttribute + '-location') == 'support') {
-				browseLocation = urls.support;
-			} else {
-				browseLocation = target.getAttribute(eventAttribute + '-location');
 			}
+			
+			var browseLocation = target.getAttribute(eventAttribute + '-location');
 
 			// Fix for empty locations
 			if(!browseLocation || browseLocation==''){
