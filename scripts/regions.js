@@ -91,12 +91,15 @@ function nav2() {
 		
 		if (tempLoc == 'edit') {
 			// Focus editor
-			editor.focus();
+			setTimeout(function() {
+				editor.focus();
+			});
 		} else if (tempLoc != 'welcome-edit-mode') {
 			// Focus first input
 			setTimeout(function() {
 				var input = tempElement.querySelector('input:not([disabled])') || tempElement.querySelector('button');
 				if (input) {
+					editor.blur();
 					input.focus();
 					if(input.select) input.select();
 				}
