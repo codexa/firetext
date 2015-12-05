@@ -1383,20 +1383,14 @@ function processActions(eventAttribute, target, event) {
 						name: "marketplace-app-rating",
 						data: {slug: "firetext"}
 					});
+					activity.onerror = function() {
+						visitURL(target.getAttribute(eventAttribute + '-location'));
+					};
 					return;
 				}
 			}
 			
-			var browseLocation = target.getAttribute(eventAttribute + '-location');
-
-			// Fix for empty locations
-			if(!browseLocation || browseLocation==''){
-				firetext.notify(navigator.mozL10n.get('not-functional-link'));
-				return;
-			}
-
-			// Open a new tab
-			window.open(browseLocation);
+			visitURL(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'justify') {
 			var justifyDirection = justifySelect.value;			 
 			if (justifyDirection == 'l') {
@@ -1691,6 +1685,17 @@ function setDocumentTitle() {
 			document.title = selectedRegion.querySelector('header:first-child h1').textContent+' - Firetext';
 		}		
 	}
+}
+
+function visitURL(browseLocation) {
+	// Fix for empty locations
+	if(!browseLocation || browseLocation==''){
+		firetext.notify(navigator.mozL10n.get('not-functional-link'));
+		return;
+	}
+
+	// Open a new tab
+	window.open(browseLocation);
 }
 
 function christmas() {

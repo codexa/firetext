@@ -192,6 +192,9 @@ label.pack-switch {
   font-family: "Open Sans";
   font-weight: normal;
   font-size: 1.7rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 [data-type="list"] li a,
@@ -214,9 +217,6 @@ label.pack-switch {
 
 .docsList.previews h2 {
   padding: 0.5rem calc((100% - 1000px) / 2 + 2rem);
-  position: sticky;
-  top: 0;
-  z-index: 1;
 }
 
 .docsList:not(.previews) ul {

@@ -207,6 +207,9 @@ section[data-type="sidebar"] > nav > h2 {
   margin: 0;
   padding-right: 0.8rem;
   color: #6f6f6f;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 section[data-type="sidebar"] [role="toolbar"] {
