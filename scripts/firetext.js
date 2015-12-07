@@ -1412,7 +1412,7 @@ function processActions(eventAttribute, target, event) {
 					document.querySelector('.edit-header').classList.remove('hidden');
 					document.getElementById('edit-bar').classList.add('hidden');
 				}
-				document.getElementById('header-close-file').style.visibility = 'visible';
+				document.getElementById('header-close-file').style.visibility = '';
 				document.getElementById('hide-keyboard-button').classList.add('hidden');
 			}
 		} else if (calledFunction == 'showToolbar') {
