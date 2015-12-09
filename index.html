@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="scripts/lib/codemirror-compressed.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/fxosrate.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/closest.js" defer></script>
+	<script type="text/javascript" src="scripts/lib/list.min.js" defer></script>
 	
 	<!-- Localization -->
 	<meta name="defaultLanguage" content="en">
@@ -117,10 +118,20 @@
 		data-click="sidebar" data-click-id="welcome" data-click-state="close" data-click-only="current">
 		<header>
 			<menu type="toolbar">
+				<button data-click="search" data-click-state="open" data-search-field="welcome-search-box"><span class="icon icon-search"></span></button>
 				<button data-click="nav" data-click-location="create" data-l10n-title="create"><span class="icon icon-pencil"></span></button>
 				<button data-click="sidebar" data-click-id="welcome" class="drawerEnabled" data-l10n-title="menu"><span class="icon icon-menu"></span></button>
 			</menu>
 			<h1 class="firetext icon-"><img src="style/icons/app/firetext.svg" alt="Firetext" id="welcome-wordmark"></h1>
+			<div id="welcome-search-bar" class="top-bar hidden">
+				<section class="form">
+					<p>
+						<input type="search" id="welcome-search-box" placeholder="&#128269;">
+						<button type="reset" data-mouse-down="clearForm"></button>
+					</p>
+				</section>
+				<button data-click="search" data-click-state="close" data-search-field="welcome-search-box"><span class="icon icon-close"></span></button>
+			</div>
 		</header>
 		<div role="main" class="header-only" id="welcome-main-area">
 			<menu type="toolbar" class="desktop-only mainButtons">
@@ -130,8 +141,7 @@
 			</menu>
 			<article data-type="list" class="docsList" id="welcome-docs-list">
 				<div id="welcome-recents-area">
-					<h2 data-l10n-id="recent-documents"></h2>
-					<ul id="welcome-recents-list"></ul>
+					<ul id="welcome-recents-list" class="searchable-list"></ul>
 				</div>
 			</article>
 		</div>

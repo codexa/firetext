@@ -38,6 +38,7 @@ var editorMessageProxy, editorURL;
 // Lists
 var welcomeMainArea, welcomeDocsList, openDialogMainArea, openDialogRecentsArea, openDialogRecentsList;
 var welcomeRecentsArea, welcomeRecentsList;
+var welcomeSearchBox, welcomeSearchList;
 
 // Cache
 var appCache = window.applicationCache;
@@ -259,6 +260,7 @@ function initElements() {
 	openDialogMainArea = document.getElementById('open-dialog-main-area');
 	openDialogRecentsArea = document.getElementById('open-dialog-recents-area');
 	openDialogRecentsList = document.getElementById('open-dialog-recents-list');
+	welcomeSearchBox = document.getElementById('welcome-search-box');
 
 	// Formatting
 	bold = document.getElementById('bold');
@@ -331,6 +333,9 @@ function initListeners() {
 			}
 		}
 	);
+	welcomeSearchBox.addEventListener('input',function(){
+		welcomeSearchList.search(this.value);
+	});
 }
 
 function initVariables(callback) {
@@ -500,6 +505,9 @@ function updateAllDocs() {
 		return true;
 	});
 	buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
+	
+	// Initialize search
+	initSearch();
 }
 
 function updatePreviewsEnabled() {
@@ -849,6 +857,15 @@ function buildDocList(DOCS, listElms, display) {
 			}
 		}
 	}
+}
+
+function initSearch() {
+	var options = {
+		valueNames: [ "fileItemName", "fileItemPath" ],
+		listClass: "searchable-list"
+	};
+
+	welcomeSearchList = new List(welcomeRecentsArea, options);
 }
 
 
