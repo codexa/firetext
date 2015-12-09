@@ -18,7 +18,7 @@ firetext.analytics = {};
 
 // Config
 var version = '0.5';
-var serverURL = 'https://firetext-server.herokuapp.com';
+var serverURL = 'https://www.airbornos.com/firetext';
 
 // Misc
 firetext.initialized = new CustomEvent('firetext.initialized');
@@ -157,9 +157,7 @@ function initModules(callback) {
 	});
 	
 	// Initialize print button
-	initPrintButton(function() {
-		
-	});
+	initPrintButton(function() {});
 	
 	// Initialize rating prompter
 	rate = Object.create(fxosRate);
@@ -336,9 +334,9 @@ function initListeners() {
 }
 
 function initVariables(callback) {
+	var requestURL = serverURL+'?request=firetext_variables&version='+version+'&locale='+html.getAttribute('lang');
 	var xhr = new XMLHttpRequest();
-	xhr.open('post',serverURL,true);
-	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.open('get',requestURL,true);
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			firetextVariables = JSON.parse(xhr.responseText);
@@ -346,7 +344,7 @@ function initVariables(callback) {
 			callback();
 		}
 	}
-	xhr.send('request=firetext_variables&version='+version+'&locale='+html.getAttribute('lang'));
+	xhr.send();
 }
 
 function addURLs() {
