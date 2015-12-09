@@ -6,8 +6,8 @@
   "launch_path": "/index.html",
   "origin": "app://firetext",
   "developer": {
-    "name": "Codexa",
-    "url": "https://github.com/codexa"
+    "name": "Airborn OS",
+    "url": "https://www.airbornos.com/"
   },
   "icons": {
     "32": "/style/icons/app/32.png",
