@@ -1,8 +1,7 @@
 /* MaterialDesignIcons.com */
 @font-face {
   font-family: "Material Design Icons";
-  src: url("fonts/materialdesignicons-webfont.eot");
-  src: url("fonts/materialdesignicons-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/materialdesignicons-webfont.woff2") format("woff2"), url("fonts/materialdesignicons-webfont.woff") format("woff"), url("fonts/materialdesignicons-webfont.ttf") format("truetype"), url("fonts/materialdesignicons-webfont.svg#materialdesigniconsregular") format("svg");
+  src: url("fonts/materialdesignicons-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
