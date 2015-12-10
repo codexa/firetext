@@ -13,6 +13,7 @@ cloud.dropbox = {};
 
 // Dropbox
 cloud.dropbox.client = undefined;
+var authError;
 
 
 /* Auth
@@ -32,9 +33,12 @@ cloud.dropbox.init = function(callback){
 		
 		// Error Handler
 		cloud.dropbox.auth.onError.addListener(function (error) {
-			if (window.console) {
-				console.error(error);
+			if (!authError || error.status !== Dropbox.ApiError.NETWORK_ERROR) {
+				if (window.console) {
+					console.error(error);
+				}
 				cloud.dropbox.error(error);
+				authError = true;
 			}
 		});
 		
@@ -45,6 +49,7 @@ cloud.dropbox.init = function(callback){
 				if (!error && client) {
 					// Set client
 					cloud.dropbox.client = client;
+					authError = false;
 					
 					// Send success message
 					window.dispatchEvent(cloud.dropbox.auth.onAuth);
@@ -187,25 +192,25 @@ cloud.dropbox.delete = function (path) {
 ------------------------*/
 cloud.dropbox.error = function (error) {
 	switch (error.status) {
-	case Dropbox.ApiError.OVER_QUOTA:
-		// The user is over their Dropbox quota.
-		// Tell them their Dropbox is full. Refreshing the page won't help.
-		firetext.notify(navigator.mozL10n.get('dropbox-full'));
-		break;
+		case Dropbox.ApiError.OVER_QUOTA:
+			// The user is over their Dropbox quota.
+			// Tell them their Dropbox is full. Refreshing the page won't help.
+			firetext.notify(navigator.mozL10n.get('dropbox-full'));
+			break;
 
 
-	case Dropbox.ApiError.NETWORK_ERROR:
-		firetext.notify(navigator.mozL10n.get('network-error'));
-		break;
+		case Dropbox.ApiError.NETWORK_ERROR:
+			firetext.notify(navigator.mozL10n.get('network-error'));
+			break;
 
-	case Dropbox.ApiError.RATE_LIMITED:
-	case Dropbox.ApiError.INVALID_TOKEN:
-	case Dropbox.ApiError.INVALID_PARAM:
-	case Dropbox.ApiError.OAUTH_ERROR:
-	case Dropbox.ApiError.INVALID_METHOD:		 
-	case 404:	 
-	default:
-		// TBD Code to Notify Fireanalytic
-		break;
+		case Dropbox.ApiError.RATE_LIMITED:
+		case Dropbox.ApiError.INVALID_TOKEN:
+		case Dropbox.ApiError.INVALID_PARAM:
+		case Dropbox.ApiError.OAUTH_ERROR:
+		case Dropbox.ApiError.INVALID_METHOD:		 
+		case 404:	 
+		default:
+			// TBD Code to Notify Fireanalytic
+			break;
 	}
 };
