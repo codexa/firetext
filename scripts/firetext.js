@@ -580,6 +580,9 @@ function updateDocLists(lists) {
 				updateAllDocs();
 				spinner('hide');
 			});
+		} else {
+			cloudDocs = [];
+			updateAllDocs();
 		}
 	}
 }

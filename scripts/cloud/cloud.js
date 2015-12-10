@@ -61,9 +61,12 @@ cloud.init = function () {
 		var dropRecents = firetext.recents.get();
 		for (var i = 0; i < dropRecents.length; i++) {
 			if (dropRecents[i][4] == 'dropbox') {
-				firetext.recents.remove([dropRecents[i][0], dropRecents[i][1], dropRecents[i][2]], dropRecents[i][3], dropRecents[i][4]);
+				firetext.recents.remove(dropRecents[i]);
 			}
 		}	 
+		
+		// Update document lists
+		updateDocLists(['recents', 'cloud']);
 		
 		// Show connect button
 		mainButtonConnectDropbox.style.display = '';
