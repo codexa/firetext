@@ -65,10 +65,15 @@ firetext.init = function () {
 					// Wait until Dropbox is authenticated
 					if (lastDoc[3] == 'dropbox') {
 						if (firetext.settings.get('dropbox.enabled') == 'true') {
-							window.addEventListener('cloud.dropbox.authed', function() {
+							if (cloud.dropbox.client) {
 								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-								spinner('hide');
-							});
+								spinner('hide');								
+							} else {
+								window.addEventListener('cloud.dropbox.authed', function() {
+									loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+									spinner('hide');
+								});								
+							}
 						} else {
 							spinner('hide');
 						}
@@ -77,12 +82,12 @@ firetext.init = function () {
 						spinner('hide');
 					}
 				} else {
-					regions.nav('welcome');
 					spinner('hide');
 				}
-			} else {
 				regions.nav('welcome');
+			} else {
 				spinner('hide');
+				regions.nav('welcome');
 			}
 		
 			// Create listeners
