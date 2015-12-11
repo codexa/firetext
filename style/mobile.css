@@ -114,6 +114,48 @@ section[role="dialog"] + .background {
 	transform: translateX(80%) !important;
 }
 
+/* File Lists */
+.docsList.previews {
+	min-height: 100%;
+}
+
+.docsList.previews h2 {
+	padding: 0.5rem calc((100% - 450px) / 2 + 2rem);
+}
+
+.docsList.previews ul {
+	padding: 1rem calc((100% - 450px) / 2);
+}
+
+@media (max-width: 479px) {
+	.docsList.previews h2 {
+		padding: 0.5rem calc((100% - 300px) / 2 + 2rem);
+	}
+
+	.docsList.previews ul {
+		padding: 1rem calc((100% - 300px) / 2);
+	}
+}
+
+.docsList.previews li.fileListItem {
+	width: 150px;
+}
+
+.docsList.previews li.fileListItem .fileItemDescription {
+	padding: 1.5rem;
+	height: 150px;
+}
+
+.docsList.previews li.fileListItem .fileItemDescription iframe {
+	width: 300px;
+	height: 424px;
+	transform: scale(0.333);
+}
+
+.docsList.previews li.fileListItem .fileItemInfo {
+	padding: 0 1rem;
+}
+
 /* Tabs */
 .current [role="tabs"] [role="tab"],
 .parent [role="tabs"] [role="tab"],
@@ -167,7 +209,6 @@ section[role="dialog"] + .background {
 }
 
 .edit-header .tabBar {
-	display: block;
 	white-space: nowrap;
 	overflow-x: auto;
 	text-align: center;
@@ -178,11 +219,62 @@ section[role="dialog"] + .background {
 	line-height: 5rem;
 }
 
+#edit-bar {
+	top: 0;
+	color: white;
+	height: 5rem;
+}
+
+#edit-zone {
+	width: calc(100% - 5rem);
+	float: right;
+	height: 5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+[dir="rtl"] #edit-zone {
+	float: left;
+}
+
+#edit-zone:before, #edit-zone:after {
+	height: 4rem; /* Don't cover scroll bar in Chrome mobile */
+}
+
+#edit-zone:before {
+	left: 5rem;
+}
+
+#edit-zone:after {
+	right: 0;
+}
+
+[dir="rtl"] #edit-zone:before {
+	left: 0;
+}
+
+[dir="rtl"] #edit-zone:after {
+	right: 5rem;
+}
+
+#edit-zone li button {
+	margin: 1rem 0;
+}
+
+[dir="rtl"] #edit-zone {
+	float: left;
+}
+
+#edit-zone li select {
+	max-width: 10rem;
+	margin: 0;
+}
+
 /* Status */
-section[role="status"] {
+section[role="status"] > div {
 	transform: translateY(100%);
 }
 
-section[role="status"].notification-shown {
+section[role="status"] > div.notification-shown {
 	transform: none;
 }

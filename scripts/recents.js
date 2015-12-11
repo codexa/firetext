@@ -75,17 +75,9 @@ firetext.recents.add = function (file, location) {
 };
 
 // Remove from recent docs
-firetext.recents.remove = function (file, location, merged) {
+firetext.recents.remove = function (file, merged) {
 	if (localStorage["firetext.recents"] != undefined) {
 		var docsTMP = firetext.recents.get();
-	
-		if (!merged) {
-			merged = location;
-		}		 
-		if (merged != true) {
-		file.push('');
-		file.push(location);
-		}
 	
 		// Remove item
 		for (var i = 0; i < docsTMP.length; i++) {

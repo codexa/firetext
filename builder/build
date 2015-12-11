@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+original_dir=$(pwd)
+
+cd $(dirname $BASH_SOURCE)
+
+npm install
+
+[ -e ../build ] || mkdir ../build
+
+node build.js ../index.html "$@"
+[ -e ../build/scripts.js.map ] && (echo "//# sourceMappingURL=scripts.js.map" >> ../build/scripts.js)
+
+cp -r ../modules ../build
+cp -r ../locales ../build
+cp ../manifest.webapp ../build
+
+mkdir -p ../build/scripts/lib
+mkdir -p ../build/scripts/parsers/odt.js/lib
+cp ../scripts/messages.js  ../build/scripts
+cp ../scripts/lib/jszip.js  ../build/scripts/lib
+cp ../scripts/lib/jszip-deflate.js  ../build/scripts/lib
+cp ../scripts/lib/jszip-inflate.js  ../build/scripts/lib
+cp ../scripts/lib/jszip-load.js  ../build/scripts/lib
+cp ../scripts/lib/stringview.js  ../build/scripts/lib
+cp ../scripts/lib/innertext.js  ../build/scripts/lib
+cp ../scripts/parsers/docx.js  ../build/scripts/parsers
+cp ../scripts/parsers/plain-text.js  ../build/scripts/parsers
+cp ../scripts/parsers/odt.js/lib/odt.js  ../build/scripts/parsers/odt.js/lib
+
+mkdir -p ../build/style/icons/app
+cp ../style/icons/app/32.png ../build/style/icons/app
+cp ../style/icons/app/60.png ../build/style/icons/app
+cp ../style/icons/app/90.png ../build/style/icons/app
+cp ../style/icons/app/120.png ../build/style/icons/app
+cp ../style/icons/app/256.png ../build/style/icons/app
+cp ../style/icons/app/firetext_christmas.svg ../build/style/icons/app
+
+cd $original_dir

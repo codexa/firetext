@@ -51,6 +51,7 @@ form[role="dialog"] + .background {
   background: rgba(255,255,255,.7);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
     -moz-transition: opacity .4s, visibility .4s 0s;
     -webkit-transition: opacity .4s, visibility .4s 0s;
     -o-transition: opacity .4s, visibility .4s 0s;
@@ -64,6 +65,7 @@ form[role="dialog"].current + .background,
 form[role="dialog"].parent + .background {
   opacity: 1;
   visibility: visible;
+  pointer-events: all;
     -moz-transition: opacity .4s, visibility 0s;
     -webkit-transition: opacity .4s, visibility 0s;
     -o-transition: opacity .4s, visibility 0s;
@@ -213,6 +215,78 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   margin-left: 0;
 }
 
+/* File Lists */
+@media (max-width: 1833px) {
+  [role="dialog"] .docsList.previews h2 {
+    padding: 0.5rem calc((100% - 800px) / 2 + 2rem);
+  }
+  
+  [role="dialog"] .docsList.previews ul {
+    padding: 1rem calc((100% - 800px) / 2);
+  }
+}
+
+@media (max-width: 1500px) {
+  [role="dialog"] .docsList.previews h2 {
+    padding: 0.5rem calc((100% - 600px) / 2 + 2rem);
+  }
+  
+  [role="dialog"] .docsList.previews ul {
+    padding: 1rem calc((100% - 600px) / 2);
+  }
+}
+
+@media (max-width: 1167px) {
+  [role="dialog"] .docsList.previews h2 {
+    padding: 0.5rem calc((100% - 400px) / 2 + 2rem);
+  }
+  
+  [role="dialog"] .docsList.previews ul {
+    padding: 1rem calc((100% - 400px) / 2);
+  }
+}
+
+/* Section Menus */
+[role="dialog"] header:first-child {
+  position: static;
+}
+
+[role="dialog"] header:first-child menu {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: auto;
+  width: 100%;
+  text-align: right;
+  border-top: solid 0.2rem #efefef;
+}
+
+[dir="rtl"] [role="dialog"] header:first-child menu {
+  text-align: left;
+}
+
+[role="dialog"] header:first-child menu button,
+[dir="rtl"] [role="dialog"] header:first-child menu button {
+  float: none;
+  display: inline-block;
+}
+
+[role="dialog"]:not(.menuless) [role="main"] {
+    height: -moz-calc(100% - 10rem);
+    height: -webkit-calc(100% - 10rem);
+  height: calc(100% - 10rem);
+}
+
+[role="dialog"][data-type="edit"] > menu {
+  width: 70rem; /* The longest language for this is ml-IN (eighth last in settings).
+                 * When changing, don't forget to add a max-width if necessary. */
+  padding: .46rem;
+}
+
+[role="dialog"]:not([data-type="edit"]) header:first-child h1 {
+  padding-right: 5rem;
+}
+
 /* Editor */
 #fileName {
   display: inline-block;
@@ -231,26 +305,41 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 }
 
 #edit-bar {
-  top: 0;
-  background-color: #fafafa;
-  border-bottom: 2px solid #efefef;
+  top: 5.1rem;
+  color: #fafafa;
+  z-index: 1;
 }
 
-.icon-more {
-    -moz-transform: rotate(0.5turn);
-    -webkit-transform: rotate(0.5turn);
-    -o-transform: rotate(0.5turn);
-    -ms-transform: rotate(0.5turn);
-  transform: rotate(0.5turn);
+#edit-zone {
+  width: 100%;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+#edit-zone:before {
+  left: 0;
+}
+
+#edit-zone:after {
+  right: 0;
 }
 
 /* Zen mode */
 .fullscreen .edit-header {
-  right: 1.1rem;
-  top: 0.5rem;
+  top: 0rem;
   background-color: transparent;
   position: absolute;
   border: none;
+  width: 100%;
+  background-color: #efefef;
+}
+
+.fullscreen .edit-header .tabBar {
+  width: 21rem;
+  margin: 0 1rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  height: auto;
 }
 
 .fullscreen .no-zen {
@@ -258,36 +347,20 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
 }
 
 .fullscreen #edit-bar {
-  background-color: transparent !important;
+  color: #efefef;
   border-color: transparent !important;
   width: auto;
-  top: 6rem;
-  left: auto;
-  right: 0;
+  height: 5rem;
+  top: 0rem;
+  left: 22rem;
+  right: 22rem;
+  z-index: 10;
+  text-align: center;
 }
 
 .fullscreen #edit-bar li {
   float: none;
-  margin: 0;
   padding: 0.5rem;
-}
-
-.fullscreen #edit-bar button {
-  border-right: 4px solid transparent;
-}
-
-.fullscreen #edit-bar button:active,
-.fullscreen #edit-bar button.active {
-  background-color: transparent;
-  border-color: #aaa !important;
-}
-
-.fullscreen #edit-bar .icon-more {
-    -moz-transform: rotate(-.25turn);
-    -webkit-transform: rotate(-.25turn);
-    -o-transform: rotate(-.25turn);
-    -ms-transform: rotate(-.25turn);
-  transform: rotate(-.25turn);
 }
 
 .fullscreen .editor-container {
@@ -298,33 +371,16 @@ section[data-type="sidebar"] [role="toolbar"] button.active {
   padding-top: 7rem;
 }
 
-[dir="rtl"].fullscreen .edit-header {
-  left: 1.1rem;
-  right: auto;
-}
-
-[dir="rtl"].fullscreen #edit-bar {
-  right: auto;
-  left: 0;
-}
-
-[dir="rtl"] #edit-bar button {
-  border-left: 4px solid transparent;
-  border-right: none;
-}
-
-[dir="rtl"].fullscreen #edit-bar .icon-more {
-    -moz-transform: rotate(.25turn);
-    -webkit-transform: rotate(.25turn);
-    -o-transform: rotate(.25turn);
-    -ms-transform: rotate(.25turn);
-  transform: rotate(.25turn);
-}
-
 /* Status */
 section[role="status"] {
-  left: 0;
-  right: auto;
+  top: 0;
+  bottom: auto;
+  text-align: center;
+  background: transparent !important;
+  pointer-events: none;
+}
+
+section[role="status"] > div {
   max-width: 400px;
   border-radius: 8px;
   margin: 1rem;
@@ -333,17 +389,16 @@ section[role="status"] {
   padding: 10px;
   box-shadow: 0 0 10px #ccc;
 	opacity: 0;
+  transition: opacity 0.3s;
+  position: static;
+  display: inline-block;
+  pointer-events: all;
 }
 
-[dir="rtl"] section[role="status"] {
-  left: auto;
-  right: 0;  
-}
-
-section[role="status"] p {
+section[role="status"] > div p {
   margin: 0; 
 }
 
-section[role="status"].notification-shown {
+section[role="status"] > div.notification-shown {
 	opacity: 1;
 }

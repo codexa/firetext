@@ -27,7 +27,13 @@ function initDocIO(document, messageProxy, loadCallback) {
 		return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '');
 	}
 	function getText() {
-		return document.documentElement.textContent;
+		var textValue;
+		if (!('innerText' in document.documentElement)) {
+			textValue = innerText(document.documentElement)
+		} else {
+			textValue = document.documentElement.innerText;
+		}
+		return textValue;
 	}
 
 	function load(content, ft) {
@@ -88,7 +94,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 				type = "text\/html";
 				break;
 			case ".txt":
-				content = firetext.parsers.plain.encode(getHTML(), "HTML");
+				content = getText();
 				type = "text\/plain";
 				break;
 			case ".odt":

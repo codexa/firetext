@@ -1,7 +1,13 @@
 (function(mainOrigin, _parentMessageProxy, initNight, filetype, odtdoc, readOnly) {
-  function fixupDocument() {
+  function fixupDocument(evt) {
     if(document.body.children.length === 0) {
-      document.body.appendChild(document.createElement('br'));
+      if(filetype === '.txt') {
+        document.body.appendChild(document.createElement('br'));
+      } else {
+        var p = document.createElement('p');
+        p.appendChild(document.createElement('br'));
+        document.body.appendChild(p);
+      }
     }
     if(filetype === '.odt') {
       try {
@@ -22,6 +28,57 @@
   if(!readOnly) {
     document.documentElement.contentEditable = "true";
     document.execCommand('enableObjectResizing', false, 'true');
+  }
+  
+  if(filetype !== '.txt') {
+    // Make p, not div
+    document.execCommand('defaultParagraphSeparator', false, 'p'); // Chrome
+  }
+  if(document.getElementsByTagName('style').length === 0) {
+    var style = document.createElement('style');
+    style.textContent = [
+      /* The following default style is duplicated in io.js and index.html */
+      'h1 {',
+      '  font-size: 1.5em;',
+      '  margin: 0;',
+      '}',
+      'h2 {',
+      '  font-size: 1.17em;',
+      '  margin: 0;',
+      '}',
+      'h3 {',
+      '  font-size: 1em;',
+      '  margin: 0;',
+      '}',
+      'h4 {',
+      '  font-size: 1em;',
+      '  font-weight: normal;',
+      '  text-decoration: underline;',
+      '  margin: 0;',
+      '}',
+      'h5 {',
+      '  font-size: 1em;',
+      '  color: #555;',
+      '  margin: 0;',
+      '}',
+      'h6 {',
+      '  font-size: 1em;',
+      '  font-weight: normal;',
+      '  text-decoration: underline;',
+      '  color: #444;',
+      '  margin: 0;',
+      '}',
+      'p {',
+      '  margin: 0;',
+      '}',
+      'blockquote {',
+      '  margin: 0px 0px 0px 40px;',
+      '}',
+      'table.default, table.default td {',
+      '  border: 1px solid #afafaf;',
+      '}',
+    ].join('\n');
+    document.head.appendChild(style);
   }
   
   // Hide and show toolbar.
@@ -54,6 +111,22 @@
         return;
       }
       event.preventDefault();
+      parentMessageProxy.postMessage({
+        command: "update-toolbar"
+      });
+    }
+  });
+  document.addEventListener('keydown', function (event) {
+    if(event.which === 9) { // Tab
+      if(event.shiftKey) {
+        document.execCommand('outdent');
+      } else {
+        document.execCommand('indent');
+      }
+      event.preventDefault();
+      parentMessageProxy.postMessage({
+        command: "update-toolbar"
+      });
     }
   });
   
@@ -87,4 +160,29 @@
       filetype: filetype
     });
   });
+  
+  document.addEventListener('selectionchange', function() {
+    parentMessageProxy.postMessage({
+      command: "update-toolbar"
+    });
+  });
+  if(!('onselectionchange' in document)) { // Firefox
+    var getSelectionRange = function() {
+      var selection = document.getSelection();
+      return selection.rangeCount ? selection.getRangeAt(selection.rangeCount - 1) : null; // Last range to match Firefox behavior
+    }
+    var prevRange;
+    setInterval(function() {
+      var range = getSelectionRange();
+      if(range !== prevRange &&
+        (!range || !prevRange || ['startContainer', 'startOffset', 'endContainer', 'endOffset'].some(function(attr) {
+          return range[attr] !== prevRange[attr];
+        }))) {
+        parentMessageProxy.postMessage({
+          command: "update-toolbar"
+        });
+      }
+      prevRange = range;
+    }, 100);
+  }
 })(mainOrigin, parentMessageProxy, initNight, filetype, odtdoc, readOnly);

@@ -12,8 +12,10 @@ firetext.notify = function (message, title, time) {
 	}
 	
 	// Create notification
-	var notification = document.createElement('section');
-	notification.setAttribute('role','status');
+	var notificationContainer = document.createElement('section');
+	notificationContainer.setAttribute('role','status');
+	
+	var notification = document.createElement('div');
 	
 	if (title) {
 		var notificationTitle = document.createElement('p');
@@ -26,7 +28,9 @@ firetext.notify = function (message, title, time) {
 	notificationBody.textContent = message;
 	notification.appendChild(notificationBody);
 	
-	document.body.appendChild(notification);
+	notificationContainer.appendChild(notification);
+	document.body.appendChild(notificationContainer);
+	
 	setTimeout(function(){
 		notification.classList.add('notification-shown');
 		
@@ -34,7 +38,7 @@ firetext.notify = function (message, title, time) {
 		setTimeout(function(){
 			notification.classList.remove('notification-shown');
 			setTimeout(function(){
-				document.body.removeChild(notification);
+				document.body.removeChild(notificationContainer);
 			},300);
 		},time);
 	}, 100);

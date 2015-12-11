@@ -21,6 +21,9 @@ var tempLoc = '';
 /* Navigation
 ------------------------*/
 regions.nav = function (location) {
+	if (editState == true && location == 'edit') {
+		editDocs(); // Close edit mode
+	}
 	tempLoc = '';
 	if (document.getElementById(location)) {
 		tempLoc = location;
@@ -52,8 +55,8 @@ function nav2() {
 		regions.history.push(tempLoc);
 		tempElement.classList.add('current');
 		
-		/* Remove this section when porting to other projects */	 
-		if (tempLoc == 'edit') {			
+		/* Remove this section when porting to other projects */
+		if (tempLoc == 'edit') {
 			// Save edit status
 			firetext.settings.save('autoload.wasEditing', 'true');
 			firetext.settings.save('autoload.dir', document.getElementById('currentFileDirectory').textContent);
@@ -82,21 +85,25 @@ function nav2() {
 		}
 	
 		// Update docs lists
-		if (tempLoc == 'welcome') {
-			updateDocLists(['recents', 'cloud']);
-		} else if (tempLoc == 'open') {
-			updateDocLists(['cloud']);		
+		if (tempLoc == 'welcome' || tempLoc == 'welcome-edit-mode' || tempLoc == 'open') {
+			updateDocLists(['all']);
 		}
 		
-		// Focus filename input
-		if (tempLoc == 'create' || tempLoc == 'save-as') {
-			var onTransitionEnd = function () {
-				document.getElementById(tempLoc == 'create' ? 'createDialogFileName' : 'saveAsDialogFileName').focus();
-				tempElement.removeEventListener('transitionend', onTransitionEnd);
-				tempElement.removeEventListener('webkitTransitionEnd', onTransitionEnd);
-			};
-			tempElement.addEventListener('transitionend', onTransitionEnd);
-			tempElement.addEventListener('webkitTransitionEnd', onTransitionEnd);
+		if (tempLoc == 'edit') {
+			// Focus editor
+			setTimeout(function() {
+				editor.focus();
+			});
+		} else if (tempLoc != 'welcome-edit-mode') {
+			// Focus first input
+			setTimeout(function() {
+				var input = tempElement.querySelector('input:not([disabled])') || tempElement.querySelector('button');
+				if (input) {
+					editor.blur();
+					input.focus();
+					if(input.select) input.select();
+				}
+			});
 		}
 		
 		// Prefill filename and show filetype
@@ -107,8 +114,11 @@ function nav2() {
 		
 		// Move file location selector to active region
 		if (tempLoc == 'create' || tempLoc == 'upload' || tempLoc == 'save-as') {
-			document.getElementById(tempLoc).getElementsByClassName('button-block')[0].appendChild(locationLegend);
+			tempElement.getElementsByClassName('button-block')[0].appendChild(locationLegend);
 		}
+		
+		// Document title
+		setDocumentTitle();
 		/* End of customized section */
 	}
 }
@@ -166,7 +176,25 @@ regions.tab = function (list, name) {
 				rawEditor.setValue(tempText);
 				tempText = undefined;				
 			}
+			document.getElementById('edit-bar').classList.add('hidden');
+		} else {
+			if (document.getElementById('currentFileType').textContent != '.txt' &&
+					document.getElementById('currentFileType').textContent != '.odt' &&
+					deviceType == 'desktop') {
+				document.getElementById('edit-bar').classList.remove('hidden');
+			}
 		}
 		/* End of customized section */
+	}
+};
+
+regions.closeOverlay = function () {
+	if (document.querySelector('.current') && document.querySelector('.current').getAttribute('data-state') == 'drawer') {
+		regions.sidebar(document.querySelector('[data-type=sidebar].active').id.replace(/sidebar_/, ''));
+	} else if (document.querySelector('.current') &&
+		(document.querySelector('.current').getAttribute('role') == 'dialog' ||
+		document.querySelector('.current').getAttribute('role') == 'action')
+	) {
+		regions.navBack();
 	}
 };

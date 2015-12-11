@@ -12,53 +12,100 @@ firetext.settings = {};
 
 
 /* Settings
-------------------------*/ 
+------------------------*/
+var defaultSettings = {
+	"autoload": "false",
+	"autosave": "true",
+	"autosaveNotification": "true",
+	"dropbox.enabled": "false",
+	"language": "auto",
+	"nightmode": "false",
+	"previews.enabled": "auto",
+	"stats.enabled": "true"
+};
+
 firetext.settings.init = function () {
 	// Select elements
 	var autoloadEnabled = document.querySelector('#autoload-enabled-switch');
 	var autosaveEnabled = document.querySelector('#autosave-enabled-switch');
+	var autosaveNotificationEnabled = document.querySelector('#autosave-notification-enabled-switch');
 	var dropboxEnabled = document.querySelector('#dropbox-enabled-switch');
 	var languageSelect = document.querySelector('#language-select');
 	var nightmodeSelect = document.querySelector('#nightmode-select');
-	var previewsEnabled = document.querySelector('#previews-enabled-switch');
+	var previewsSelect = document.querySelector('#previews-select');
 	var statsEnabled = document.querySelector('#stats-enabled-switch');
+	
+	// Save version
+	if (!firetext.settings.get("lastVersion")) {
+		// Either first run or update from 0.4-
+		firetext.settings.save("lastVersion", version);
+		
+		// If 0.4-, purge defaults for certain settings
+		if (firetext.settings.get("autosave",true) != undefined) {
+			purgeOldSettings("0.4");
+		}
+	}
 
 	// Autoload
-	if (firetext.settings.get('autoload') == 'true') {
-		autoloadEnabled.setAttribute('checked', '');
-	} else {	
-		autoloadEnabled.removeAttribute('checked');
-		if (!firetext.settings.get('autoload')) {
-			firetext.settings.save('autoload', 'false');
-		}
+	switch (firetext.settings.get('autoload')) {
+		case "true":
+			autoloadEnabled.setAttribute('checked', '');
+			break;
+		case "false":
+			autoloadEnabled.removeAttribute('checked');
+			break;
 	}
 	autoloadEnabled.onchange = function () {
 		firetext.settings.save('autoload', this.checked);
 	}
 
 	// Autosave
-	if (firetext.settings.get('autosave') != 'false') {
-		autosaveEnabled.setAttribute('checked', '');
-		if (firetext.settings.get('autosave') != 'true') {
-			firetext.settings.save('autosave', 'true');
-		}
-	} else {	
-		autosaveEnabled.removeAttribute('checked');
+	switch (firetext.settings.get('autosave')) {
+		case "true":
+			autosaveEnabled.setAttribute('checked', '');
+			if (deviceType == 'desktop') document.getElementById('autosave-notification-setting').style.display = 'block';
+			break;
+		case "false":
+			autosaveEnabled.removeAttribute('checked');
+			if (deviceType == 'desktop') document.getElementById('autosave-notification-setting').style.display = 'none';
+			break;
 	}
 	autosaveEnabled.onchange = function () {
 		firetext.settings.save('autosave', this.checked);
 		if (firetext.settings.get('autosave') != 'false') {
 			document.getElementById('editorSaveButton').style.display = 'none';
+			if (deviceType == 'desktop') document.getElementById('autosave-notification-setting').style.display = 'block';
 		} else {
 			document.getElementById('editorSaveButton').style.display = 'inline-block';
+			if (deviceType == 'desktop') document.getElementById('autosave-notification-setting').style.display = 'none';
 		}
 	}
 
+	// Autosave Notification
+	if (deviceType == 'desktop') {
+		switch (firetext.settings.get('autosaveNotification')) {
+			case "true":
+				autosaveNotificationEnabled.setAttribute('checked', '');
+				break;
+			case "false":
+				autosaveNotificationEnabled.removeAttribute('checked');
+				break;
+		}
+		autosaveNotificationEnabled.onchange = function () {
+			firetext.settings.save('autosaveNotification', this.checked);
+		}
+	} else {
+		document.getElementById('autosave-notification-setting').style.display = 'none';
+	}
+
 	// Dropbox
-	if (firetext.settings.get('dropbox.enabled') == 'true') {
-		dropboxEnabled.setAttribute('checked', '');
-	} else {	
-		dropboxEnabled.removeAttribute('checked');
+	switch (firetext.settings.get('dropbox.enabled')) {
+		case "true":
+			dropboxEnabled.setAttribute('checked', '');
+			break;
+		case "false":
+			dropboxEnabled.removeAttribute('checked');
+			break;
 	}
 	dropboxEnabled.onchange = function () {
 		firetext.settings.save('dropbox.enabled', this.checked);
@@ -66,9 +113,6 @@ firetext.settings.init = function () {
 	}
 
 	// Language
-	if (!firetext.settings.get('language')) {
-		firetext.settings.save('language', 'auto');		 
-	}
 	languageSelect.value = firetext.settings.get('language');
 	languageSelect.addEventListener('change', function () {
 		// Save
@@ -79,16 +123,16 @@ firetext.settings.init = function () {
 	});
 
 	// Night Mode
-	if (firetext.settings.get('nightmode') == 'true') {
-		nightmodeSelect.value = '1';
-	} else if (firetext.settings.get('nightmode') == 'false') { 
-		nightmodeSelect.value = '0';
-	} else {
-		nightmodeSelect.value = '2';
-		if (firetext.settings.get('nightmode') != 'auto') {
-			firetext.settings.save('nightmode', 'auto');
-			night();
-		} 
+	switch (firetext.settings.get('nightmode')) {
+		case "false":
+			nightmodeSelect.value = '0';
+			break;
+		case "true":
+			nightmodeSelect.value = '1';
+			break;
+		case "auto":
+			nightmodeSelect.value = '2';
+			break;
 	}
 	nightmodeSelect.addEventListener('change', function () {
 		// Convert
@@ -109,27 +153,44 @@ firetext.settings.init = function () {
 	});
 
 	// Previews
-	if (firetext.settings.get('previews.enabled') != 'false') {
-		previewsEnabled.setAttribute('checked', '');
-		if (firetext.settings.get('previews.enabled') != 'true') {
-			firetext.settings.save('previews.enabled', 'true');
-		}
-	} else {	
-		previewsEnabled.removeAttribute('checked');
+	switch (firetext.settings.get('previews.enabled')) {
+		case "never":
+			previewsSelect.value = '0';
+			break;
+		case "always":
+			previewsSelect.value = '1';
+			break;
+		case "auto":
+			previewsSelect.value = '2';
+			break;
 	}
-	previewsEnabled.onchange = function () {
-		firetext.settings.save('previews.enabled', this.checked);
-		updateDocLists(['recents']);
-	}
+	updatePreviewsEnabled();
+	previewsSelect.addEventListener('change', function () {
+		// Convert
+		var convertedPreviewsValue;
+		if (previewsSelect.value == '1') {
+			convertedPreviewsValue = 'always';
+		} else if (previewsSelect.value == '0') { 
+			convertedPreviewsValue = 'never';
+		} else {
+			convertedPreviewsValue = 'auto';
+		}	 
+
+		// Save
+		firetext.settings.save('previews.enabled', convertedPreviewsValue);
+
+		// Update
+		updatePreviewsEnabled();
+	});
 
 	// Stats
-	if (firetext.settings.get('stats.enabled') != 'false') {
-		statsEnabled.setAttribute('checked', '');
-		if (firetext.settings.get('stats.enabled') != 'true') {
-			firetext.settings.save('stats.enabled', 'true');
-		}
-	} else {
-		statsEnabled.removeAttribute('checked');
+	switch (firetext.settings.get('stats.enabled')) {
+		case "true":
+			statsEnabled.setAttribute('checked', '');
+			break;
+		case "false":
+			statsEnabled.removeAttribute('checked');
+			break;
 	}
 	statsEnabled.onchange = function () {
 		firetext.settings.save('stats.enabled', this.checked);
@@ -144,12 +205,57 @@ firetext.settings.init = function () {
 	}
 };
 
-firetext.settings.get = function (name) {
-	name = ("firetext.settings."+name);
-	return localStorage.getItem(name);
+firetext.settings.get = function (name, forceTrueValue) {
+	var localStorageItem = localStorage.getItem(("firetext.settings."+name));
+	if (localStorageItem || forceTrueValue) {
+		return localStorageItem;
+	} else {
+		return defaultSettings[name];
+	}
 };
 
 firetext.settings.save = function (name, value) {
-	name = ("firetext.settings."+name);
-	localStorage.setItem(name, value);
+	if (bugsenseInitialized) {
+		Bugsense.leaveBreadcrumb("Setting: "+name+" set to: "+value);
+	}
+	if (defaultSettings[name] == value.toString()) {
+		firetext.settings.clear(name);
+	} else {
+		var localStorageName = ("firetext.settings."+name);
+		localStorage.setItem(localStorageName, value);
+	}
 };
+
+firetext.settings.clear = function (name) {
+	var localStorageName = ("firetext.settings."+name);
+	localStorage.removeItem(localStorageName);
+};
+
+function purgeOldSettings(version) {
+	switch (version) {
+		case "0.4":
+			// Define old defaults
+			var oldDefaults = {
+				"autoload": "false",
+				"autosave": "true",
+				"dropbox.enabled": "false",
+				"nightmode": "auto",
+				"previews.enabled": "true",
+				"stats.enabled": "true"
+			};
+			
+			// Reset defaults
+			for (var setting in oldDefaults) {
+				if (firetext.settings.get(setting, true) == oldDefaults[setting]) {
+					firetext.settings.clear(setting);
+				}	
+			}
+			
+			// Reset old values
+			if (firetext.settings.get("previews.enabled", true) == "false") {
+				firetext.settings.save("previews.enabled","never");
+			}
+			
+			break;
+	}
+}

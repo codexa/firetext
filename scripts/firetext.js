@@ -16,21 +16,27 @@ firetext.user = {};
 firetext.parsers = {};
 firetext.analytics = {};
 
+// Config
+var version = '0.5';
+var serverURL = 'https://www.airbornos.com/firetext';
+
 // Misc
 firetext.initialized = new CustomEvent('firetext.initialized');
 firetext.isInitialized = false;
 var html = document.getElementsByTagName('html')[0], head = document.getElementsByTagName("head")[0];
 var themeColor = document.getElementById("theme-color");
-var loadSpinner, editor, toolbar, toolbarInterval, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton;
-var deviceType, fileChanged, saveTimeout, saving, urls={}, version = '0.4';
-var bold, boldCheckbox, italic, italicCheckbox, justifySelect, strikethrough, strikethroughCheckbox;
+var loadSpinner, editor, toolbar, editWindow, editState, rawEditor, rawEditorElement, tempText, tabRaw, tabDesign, printButton, mainButtonConnectDropbox;
+var currentFileName, currentFileType, currentFileLocation, currentFileDirectory;
+var deviceType, fileChanged, saveTimeout, saving, firetextVariables={}, firetextVariablesInitialized = false;
+var bold, fontSelect, fontSizeSelect, italic, justifySelect, strikethrough, styleSelect;
 var underline, underlineCheckbox;
 var locationLegend, locationSelect, locationDevice, locationDropbox;
-var bugsenseInitialized = false, bugsenseKey = '';
+var bugsenseInitialized = false;
+var rate;
 var editorMessageProxy, editorURL;
 
 // Lists
-var welcomeDocsList, welcomeDeviceArea, welcomeDeviceList, openDialogDeviceArea, openDialogDeviceList;
+var welcomeMainArea, welcomeDocsList, openDialogMainArea, openDialogRecentsArea, openDialogRecentsList;
 var welcomeRecentsArea, welcomeRecentsList;
 
 // Cache
@@ -59,10 +65,15 @@ firetext.init = function () {
 					// Wait until Dropbox is authenticated
 					if (lastDoc[3] == 'dropbox') {
 						if (firetext.settings.get('dropbox.enabled') == 'true') {
-							window.addEventListener('cloud.dropbox.authed', function() {
+							if (cloud.dropbox.client) {
 								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-								spinner('hide');
-							});
+								spinner('hide');								
+							} else {
+								window.addEventListener('cloud.dropbox.authed', function() {
+									loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
+									spinner('hide');
+								});								
+							}
 						} else {
 							spinner('hide');
 						}
@@ -71,12 +82,12 @@ firetext.init = function () {
 						spinner('hide');
 					}
 				} else {
-					regions.nav('welcome');
 					spinner('hide');
 				}
-			} else {
 				regions.nav('welcome');
+			} else {
 				spinner('hide');
+				regions.nav('welcome');
 			}
 		
 			// Create listeners
@@ -87,19 +98,38 @@ firetext.init = function () {
 			firetext.isInitialized = true;
 		});	
 	});
+	
+	navigator.mozL10n.ready(function () {
+		// Add l10n title attributes and long-press help popups
+		initElementTitles();
+		
+		// Update document title
+		setDocumentTitle();
+		
+		// Let Bugsense know about language
+		if (bugsenseInitialized) {
+			Bugsense.addExtraData('app_locale', navigator.mozL10n.language.code);
+		}
+		
+		// Freeze style selectors width, for Chrome
+		Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+			var style = select.getAttribute('style') || '';
+			select.setAttribute('style', '');
+			var width = select.clientWidth;
+			select.setAttribute('style', style);
+			select.style.width = width + 'px';
+		});
+	});
 };
 
-function initModules(callback) {
-	// Initialize Bugsense
-	bugsenseInit();
-	
-	// Fix menu before url request
-	fixMenu(true);
-	
+function initModules(callback) {	
 	// Initialize urls
-	initURLs(function(){
-		// Modify links in menu
-		fixMenu();
+	initVariables(function(){
+		// Initialize Bugsense
+		bugsenseInit();
+		
+		// Add extra links to menu
+		addURLs();
     
 		// Initialize cloud services
 		cloud.init();
@@ -132,8 +162,76 @@ function initModules(callback) {
 	});
 	
 	// Initialize print button
-	initPrintButton(function() {
-		
+	initPrintButton(function() {});
+	
+	// Initialize rating prompter
+	rate = Object.create(fxosRate);
+	var config = {
+				usesUntilPrompt: 4
+			};
+	rate.init("firetext", version, config);
+	rate.promptRequired();
+	
+	// Initialize Christmas
+	christmas();
+}
+
+function initElementTitles() {
+	Array.prototype.forEach.call(document.querySelectorAll('[data-l10n-title]'), function(elm) {
+		var titleId = elm.getAttribute('data-l10n-title');
+		var title = navigator.mozL10n.get(titleId);
+		elm.title = title;
+		var timeout;
+		var startTime;
+		var startX;
+		var startY;
+		elm.ontouchstart = function(evt) {
+			startTime = Date.now();
+			startX = evt.touches[0].clientX;
+			startY = evt.touches[0].clientY;
+			timeout = setTimeout(function() {
+				var titlePopup = document.createElement('div');
+				titlePopup.textContent = title;
+				titlePopup.className = 'titlePopup';
+				elm.offsetParent.appendChild(titlePopup); // We put it in the document now because we want to know its width, to center it.
+				var elmPos = elm.getBoundingClientRect();
+				var offsetParentPos = elm.offsetParent.getBoundingClientRect(); // To make calculations easier.
+				if (window.innerHeight - elmPos.top - elm.offsetHeight >= 45) {
+					titlePopup.style.top = elm.offsetTop + elm.offsetHeight + 10 + 'px';
+				} else {
+					titlePopup.style.top = elm.offsetTop - 35 + 'px';
+				}
+				titlePopup.style.left = Math.max(10, Math.min(window.innerWidth - elm.offsetWidth - 10, elmPos.left + (elm.offsetWidth - titlePopup.offsetWidth) / 2)) - offsetParentPos.left + 'px';
+				titlePopup.classList.add('shown');
+				setTimeout(hide, 3000);
+				document.addEventListener('touchstart', hide);
+				function hide() {
+					document.removeEventListener('touchstart', hide);
+					titlePopup.classList.remove('shown');
+					titlePopup.addEventListener('transitionend', function() {
+						this.parentElement.removeChild(this);
+					});
+				}
+			}, 500);
+		};
+		elm.ontouchend = function(evt) {
+			if (Date.now() - startTime > 500) {
+				evt.preventDefault();
+			} else {
+				cancel();
+			}
+		};
+		elm.ontouchmove = function(evt) {
+			if(Math.pow(evt.touches[0].clientX - startX, 2) + Math.pow(evt.touches[0].clientY - startY, 2) > 100) { // 10px * 10px in any direction
+				cancel();
+			}
+		};
+		elm.ontouchleave =
+		elm.ontouchcancel =
+			cancel;
+		function cancel(evt) {
+			clearTimeout(timeout);
+		};
 	});
 }
 
@@ -150,124 +248,194 @@ function initElements() {
 	locationLegend = document.getElementById('locationLegend');
 	locationSelect = document.getElementById('createDialogFileLocation');	
 	printButton = document.getElementById('printButton');
+	mainButtonConnectDropbox = document.getElementById('mainButtonConnectDropbox');
+	
+	// Current file information
+	currentFileName = document.getElementById('currentFileName');
+	currentFileType = document.getElementById('currentFileType');
+	currentFileLocation = document.getElementById('currentFileLocation');
+	currentFileDirectory = document.getElementById('currentFileDirectory');
 	
 	// Lists
+	welcomeMainArea = document.getElementById('welcome-main-area');
 	welcomeDocsList = document.getElementById('welcome-docs-list');
-	welcomeDeviceArea = document.getElementById('welcome-device-area');
-	welcomeDeviceList = document.getElementById('welcome-device-list');
-	openDialogDeviceArea = document.getElementById('open-dialog-device-area');
-	openDialogDeviceList = document.getElementById('open-dialog-device-list');
 	welcomeRecentsArea = document.getElementById('welcome-recents-area');
 	welcomeRecentsList = document.getElementById('welcome-recents-list');
-	welcomeDropboxArea = document.getElementById('welcome-dropbox-area');
-	welcomeDropboxList = document.getElementById('welcome-dropbox-list');
-	openDialogDropboxArea = document.getElementById('open-dialog-dropbox-area');
-	openDialogDropboxList = document.getElementById('open-dialog-dropbox-list');
+	openDialogMainArea = document.getElementById('open-dialog-main-area');
+	openDialogRecentsArea = document.getElementById('open-dialog-recents-area');
+	openDialogRecentsList = document.getElementById('open-dialog-recents-list');
 
 	// Formatting
 	bold = document.getElementById('bold');
-	boldCheckbox = document.getElementById('boldCheckbox');
+	fontSelect = document.getElementById('font-select');
+	fontSizeSelect = document.getElementById('font-size-select');
 	italic = document.getElementById('italic');
-	italicCheckbox = document.getElementById('italicCheckbox');
 	justifySelect = document.getElementById('justify-select');
 	strikethrough = document.getElementById('strikethrough');
-	strikethroughCheckbox = document.getElementById('strikethroughCheckbox');
 	underline = document.getElementById('underline');
-	underlineCheckbox = document.getElementById('underlineCheckbox');
+	styleSelect = document.getElementById('style-select');
+}
+
+function throttle(fn, ms) {
+	var lastCall = 0;
+	var timeout;
+	return function() {
+		var now = Date.now();
+		if(now - lastCall > ms) {
+			fn.apply(this, arguments);
+			lastCall = now;
+		}
+		if(timeout) {
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(fn, ms);
+	};
 }
 
 function initListeners() {	
 	// Add event listeners
 	toolbar.addEventListener(
 		'mousedown', function mouseDown(event) {
-			event.preventDefault();
-			event.target.classList.toggle('active');
-		}
-	);
-	toolbar.addEventListener(
-		'mouseup', function mouseDown(event) {
-			if (event.target.classList.contains('sticky') != true) {
-				event.target.classList.remove('active');
+			if (event.target.nodeName.toLowerCase() !== 'select') {
+				event.preventDefault();
+				event.target.classList.toggle('active');
 			}
 		}
 	);
+	Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+		select.addEventListener(
+			'change', function change() {
+				// This doesn't catch the case where the user selects the
+				// same option, but we don't have anything better.
+				editor.contentWindow.focus();
+				
+				// Also, update select styles.
+				updateSelectStyles();
+			}
+		);
+	});
+	toolbar.addEventListener('mouseup', mouseEnd);
+	toolbar.addEventListener('mouseleave', mouseEnd);
+	function mouseEnd(event) {
+		if (event.target.classList.contains('sticky') != true) {
+			event.target.classList.remove('active');
+		}
+	}
+	welcomeMainArea.addEventListener('scroll', throttle(updatePreviews,300));
+	openDialogMainArea.addEventListener('scroll', throttle(updatePreviews,300));
 	welcomeDocsList.addEventListener(
 		'contextmenu', function contextmenu(event) {
 			event.preventDefault();
-			editDocs();
+			if (editState != true) {
+				editDocs();
+			}
+			var elm = event.target.closest('.fileListItem');
+			if (elm) {
+				elm.getElementsByClassName('edit-selected')[0].click();
+				updateSelectButton();
+			}
 		}
 	);
 }
 
-function initURLs(callback) {
+function initVariables(callback) {
+	var requestURL = serverURL+'?request=firetext_variables&version='+version+'&locale='+html.getAttribute('lang');
 	var xhr = new XMLHttpRequest();
-	xhr.open('post','http://firetext.codexa.bugs3.com/',true);
-	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhr.setRequestHeader("Connection", "close");
+	xhr.open('get',requestURL,true);
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
-			urls = JSON.parse(xhr.responseText);
+			firetextVariables = JSON.parse(xhr.responseText);
+			firetextVariablesInitialized = true;
+			callback();
 		}
 	}
-	xhr.addEventListener("loadend", function(){
-		callback();
-	});
-	xhr.send('request=urls&version='+version);
+	xhr.send();
 }
 
-function fixMenu(soft) {
-	var tempElements = [], tempLinks = [];
-	var urlNames = ['about','support','credits','rate'];
-
-	// Find empty urls
-	urlNames.forEach(function(v){
-		if (!urls[v]) {
-			tempElements = addMenuElementsToArray(tempElements, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
+function addURLs() {
+	// Create url array
+	var urls = {};
+	for (var category in firetextVariables.urlCategories) {
+		urls[firetextVariables.urlCategories[category].id] = {
+			"name": firetextVariables.urlCategories[category].name,
+			"items": {}
+		};
+	}
+	urls["other"] = {
+		"name": "Other",
+		"items": {}
+	};
+	for (var url in firetextVariables.urls) {
+		var currentUrl = firetextVariables.urls[url];
+		var category = urls[currentUrl.category] ? currentUrl.category : "other";
+		urls[category]["items"][url] = {
+			"name": currentUrl.name,
+			"id": currentUrl.id,
+			"url": currentUrl.url
+		};
+	}
+	
+	// Get url menus and clear old urls
+	var urlMenus = document.getElementsByClassName("url-menu");
+	var tempOldUrls = document.getElementsByClassName("remote-url");
+	while(tempOldUrls[0]) tempOldUrls[0].parentNode.removeChild(tempOldUrls[0]);
+	
+	// Create DOM elements
+	for (var urlCategory in urls) {
+		var tempCategoryTitle = document.createElement("h2");
+		tempCategoryTitle.classList.add("remote-url");
+		if (navigator.mozL10n.get(urlCategory) != ""){
+			tempCategoryTitle.setAttribute("data-l10n-id",urlCategory);
+			tempCategoryTitle.textContent = navigator.mozL10n.get(urlCategory);
 		} else {
-			tempLinks = addMenuElementsToArray(tempLinks, document.querySelectorAll('[data-type="sidebar"] nav [data-click-location="'+v+'"]'));
-			for (var i = 0; i < tempLinks.length; i++) {
-				tempLinks[i].parentNode.classList.remove('hidden-item');
+			tempCategoryTitle.textContent = urls[urlCategory].name;
+		}
+		
+		var tempLinkContainer = document.createElement("ul");
+		tempLinkContainer.classList.add("remote-url");
+		for (var thisUrl in urls[urlCategory].items) {
+			// Generate link elements
+			var thisUrlItem = urls[urlCategory].items[thisUrl];
+			var tempListItem = document.createElement("li");
+			var tempLink = document.createElement("a");
+			tempLink.href = "#";
+			tempLink.setAttribute("data-click","browser");
+			tempLink.setAttribute("data-click-location",thisUrlItem.url);
+			tempLink.setAttribute("data-url-id",thisUrlItem.id);		
+			if (navigator.mozL10n.get(thisUrlItem.id) != ""){
+				tempLink.setAttribute("data-l10n-id",thisUrlItem.id);
+				tempLink.textContent = navigator.mozL10n.get(thisUrlItem.id);
+			} else {
+				tempLink.textContent = thisUrlItem.name;
 			}
+			
+			// Add link to list item
+			tempListItem.appendChild(tempLink);
+			
+			// Add to category container
+			tempLinkContainer.appendChild(tempListItem);
 		}
-	});
-
-	if (soft === true) {
-		for (var i = 0; i < tempElements.length; i++) {
-			tempElements[i].parentNode.classList.add('hidden-item');
-		}
-	} else {
-		// Remove list items
-		for (var i = 0; i < tempElements.length; i++) {
-			var tempParent = tempElements[i].parentNode.parentNode;
-			if (tempParent) {
-				tempParent.removeChild(tempElements[i].parentNode);
-			}
-		}
-
-		// Remove empty lists
-		var tempLists = document.querySelectorAll('[data-type="sidebar"] nav ul');
-		for (var i = 0; i < tempLists.length; i++) {
-			if (tempLists[i].childElementCount == 0) {
-				if (tempLists[i].previousElementSibling) {
-					tempLists[i].parentNode.removeChild(tempLists[i].previousElementSibling);
-				}
-				tempLists[i].parentNode.removeChild(tempLists[i]);
-			}
-		}
+		
+		// Add category to url menus
+		Array.prototype.filter.call(urlMenus, function(menu){
+			menu.appendChild(tempCategoryTitle.cloneNode(true));
+			menu.appendChild(tempLinkContainer.cloneNode(true));
+		});
 	}
-}
-
-function addMenuElementsToArray(array, elements) {
-	for (var i = 0; i < elements.length; i++) {
-		array.push(elements[i]);
-	}
-	return array;
 }
 
 
 /* Add dialog
 ------------------------*/
 function updateAddDialog() {
+	if (bugsenseInitialized) {
+		var storageSystems = [], tempLocationOption;
+		for (var i=0;i<locationSelect.length;i++) {
+			tempLocationOption = locationSelect.children[i];
+			storageSystems.push(tempLocationOption.value);
+		}
+		Bugsense.addExtraData('storage_systems', storageSystems.toString());
+	}
 	if (locationSelect.length < 1) {
 		[].forEach.call(document.getElementsByClassName('create-dialog'), function(createDialog) {
 			// Disable elements
@@ -308,10 +476,10 @@ function updateAddDialog() {
 /* Bugsense
 ------------------------*/
 function bugsenseInit() {
-	if (bugsenseKey) {
+	if (firetextVariablesInitialized && firetextVariables.services.splunk.apiKey) {
 		if (firetext.settings.get('stats.enabled') != 'false' &&
 				!bugsenseInitialized) {
-			Bugsense.initAndStartSession({ appname: 'Firetext', appVersion: version, apiKey: bugsenseKey });
+			Bugsense.initAndStartSession({ appname: 'Firetext', appVersion: version, apiKey: firetextVariables.services.splunk.apiKey });
 			bugsenseInitialized = true;
 		}
 	}
@@ -320,295 +488,336 @@ function bugsenseInit() {
 
 /* Doc lists
 ------------------------*/
+var allDocs,
+	recentsDocs,
+	internalDocs = [],
+	cloudDocs = [];
+
+function updateAllDocs() {
+	allDocs = recentsDocs.concat(internalDocs.concat(cloudDocs).sort(function(a, b) {
+		return b[5] - a[5];
+	})).filter(function(doc, j, docs) {
+		for(var i = 0; i < j; i++) {
+			if(docs[i][0] == doc[0] && docs[i][1] == doc[1] && docs[i][2] == doc[2]) {
+				return false;
+			}
+		}
+		return true;
+	});
+	buildDocList(allDocs, [welcomeRecentsList, openDialogRecentsList], 'documents-found');
+}
+
+function updatePreviewsEnabled() {
+	if(firetext.settings.get('previews.enabled') == 'never') {
+		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+			docList.classList.remove('previews');
+		});
+		updatePreviews();
+	} else if(firetext.settings.get('previews.enabled') == 'always') {
+		Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+			docList.classList.add('previews');
+		});
+		updatePreviews();
+	} else {
+		var conn = navigator.connection || navigator.webkitConnection;
+		if(conn) {
+			conn.onchange = conn.ontypechange = updatePreviewsEnabledFromConnection;
+			updatePreviewsEnabledFromConnection();
+		} else {
+			Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+				docList.classList.add('previews');
+			});
+			updatePreviews();
+		}
+	}
+}
+
+function updatePreviewsEnabledFromConnection() {
+	if(firetext.settings.get('previews.enabled') == 'auto') {
+		var conn = navigator.connection || navigator.webkitConnection;
+		if(conn.type !== 'none') { // Don't change if no connection
+			if(['bluethooth', 'cellular', 'wimax'].indexOf(conn.type) !== -1) {
+				Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+					docList.classList.remove('previews');
+				});
+			} else {
+				Array.prototype.forEach.call(document.getElementsByClassName('docsList'), function(docList) {
+					docList.classList.add('previews');
+				});
+			}
+			updatePreviews();
+		}
+	}
+}
+
 function updateDocLists(lists) {
 	if (!lists) {
 		lists = [];
 		lists.push('all');
 	}
 	
+	if (!lists.length) {
+		updateAllDocs();
+	}
+	
 	if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
 		// Recents
-		buildDocList(firetext.recents.get(), [welcomeRecentsList], "recent-documents", 'internal', true);
+		recentsDocs = firetext.recents.get();
+		updateAllDocs();
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
 		// Internal
 		spinner();
 		firetext.io.enumerate('/', function(DOCS) {
-			buildDocList(DOCS, [welcomeDeviceList, openDialogDeviceList], "documents-found", 'internal');
+			internalDocs = DOCS;
+			updateAllDocs();
 			spinner('hide');
 		});
 	}
 		
 	if (lists.indexOf('all') != '-1' | lists.indexOf('cloud') != '-1') {
 		// Cloud
-		cloud.updateDocLists(lists);
+		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
+			spinner();
+			cloud.dropbox.enumerate('/Documents/', function(DOCS) {
+				cloudDocs = DOCS;
+				updateAllDocs();
+				spinner('hide');
+			});
+		} else {
+			cloudDocs = [];
+			updateAllDocs();
+		}
 	}
 }
 
-function completeHTML(tableHTML) {
-/*
-		Purpose: given a incomplete HTML string <a><b><c>text</c> should complete html <a><b><c>text</c></b></a>
-		Test cases:
-				var tableHTML = "<table><tbody><tr><td><b>1</b></td><th>2</th><td>3</td></tr>";
-				//							 012345678901234567890123456789012345678901234567890123456789
-				//							 0				 1				 2				 3				 4				 5 
-				console.log( completeHTML(tableHTML) );
-				//Should produce <table><tbody><tr><td><b>1</b></td><th>2</th><td>3</td></tr></tbody></table>
-*/
-		var r = /(<[a-zA-Z]+[ >]+|<\/[a-zA-Z]+>)/;
-		var i=0;
-		var tooManyIterations=50;
-		var bail = false;
-		var tagSense = new Array();
-		//
-		i += tableHTML.substr(i).search(r);
-		var rResult = r.exec(tableHTML.substr(i));
-		if( (rResult != null) && (rResult.length > 0) ) {
-				if( rResult[0].indexOf("</") >= 0 ) {
-						var tag = rResult[0].substr(2,rResult[0].length - 3 )
-						tagSense.pop();
-				} else {
-						var tag = rResult[0].substr(1,rResult[0].length - 2 );
-						tagSense.push(tag);
-				}
-		}
-		//
-		while(r.test( tableHTML.substr(i) ) && !bail) {
-				i += tableHTML.substr(i).search(r) + 1;
-				var rResult = r.exec(tableHTML.substr(i));
-				if( (rResult != null) && (rResult.length > 0) ) {
-						if( rResult[0].indexOf("</") >= 0 ) {
-								var tag = rResult[0].substr(2,rResult[0].length - 3 )
-								var t = tagSense.pop();
-								if(t != tag) {
-										console.warn("completeHTML() argument contains broken HTML");
-								}
-						} else {
-								var tag = rResult[0].substr(1,rResult[0].length - 2 );
-								tagSense.push(tag);
-						}
-				}
-				if(tooManyIterations-- <= 0) {
-						bail = true;
-						console.warn("infinate loop avoided");
-				}
-		}
-		while(tagSense.length > 0) {
-				var t = tagSense.pop();
-				tableHTML += "</" + t + ">";	 
-		}
-		return tableHTML;
-}
-
-function cleanForPreview(text, documentType) {
-	/*
-		Test cases:
-				console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf 6sdf 7sdf", ".txt") );
-				console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf-5sdf-6sdf 7sdf", ".txt") );
-				console.log( cleanForPreview("1sdf 2sdf 3sfd 4sdf 5sdf-6sdf 7sdf", ".txt") );
-				console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
-				console.log( cleanForPreview("1sdf 2sdf-3sfd-4sdf-5sdf-", ".txt") );
-				console.log( cleanForPreview("1sdf-2sdf-3sfd-4sdf-5sdf-6sdf-7sdf", ".txt") );
-				console.log( cleanForPreview("wwww1 wwww2 wwww3 wwww4 wwww5 wwww6", ".txt") );
-				//														01234567890123456789012345678901234567890
-				//														0					1					2					3					4
-				
-				var html1 = "<b>1sdf</b> <u>2sdf</u> <i>3sdf</i> 4sdf-5sdf 6sdf 7sdf";
-				var html7 = "<b>1sdf</b>-<u>2sdf</u>-<i>3sfd</i>-4sdf-5sdf-6sdf-7sdf";
-				console.log( cleanForPreview(html1, ".html") );
-				console.log( cleanForPreview(html7, ".html") );
-	*/
-	var approxPreviewWidthInCharacters = 100;
-	var additionalCharactersTillWhitespace = 5;
-	var regWhiteSpace
-	switch(documentType) {
-		default:
-		case ".txt":
-			if(text.length <= approxPreviewWidthInCharacters) {
-				return text;
-			} else {
-				var nextWhitespace = text.substr(approxPreviewWidthInCharacters).search(/\s/);
-				var reverseText = text.substr(0,approxPreviewWidthInCharacters).split("").reverse().join("");
-				var prevWhitespace = reverseText.search(/\s/);
-				if( nextWhitespace == -1 ) {
-						nextWhitespace = text.length - approxPreviewWidthInCharacters;
-				}
-				if( (prevWhitespace > additionalCharactersTillWhitespace) && (nextWhitespace > additionalCharactersTillWhitespace)) {
-						//Next whitespace too far
-						return text.substr(0, approxPreviewWidthInCharacters) + "...";
-				} else if( nextWhitespace <= prevWhitespace	 ) {
-						//Closest whitespace in less than additionalCharactersTillWhitespace more characters
-						return text.substr(0, approxPreviewWidthInCharacters + nextWhitespace);
-				} else {
-						//Closest whitespace is before our truncation point
-						return text.substr(0, approxPreviewWidthInCharacters - prevWhitespace) + (prevWhitespace == -1 ? "..." : "" );
-				}
-			}
-			return text.replace(/\n/g," ").substr(0, approxPreviewWidthInCharacters);
-		case ".html":
-				var htmlNode = (new DOMParser()).parseFromString(text, "text/html").documentElement;
-				var textStripped = htmlNode.textContent;
-				var textTruncated = cleanForPreview(textStripped, ".txt");
-				textTruncated = textTruncated.replace(/\.\.\.$/, "");
-				var textTruncatedSplit = textTruncated.split("");
-				for (var i = 0; i < textTruncatedSplit.length; i++) {
-					textTruncatedSplit[i] = textTruncatedSplit[i].replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
-				}
-				var r = "^(<[a-zA-Z]+.*?>)*" + textTruncatedSplit.join(".*?(<[a-zA-Z]+.*?>)*");
-				var rDynamic = new RegExp(r);
-				if(! rDynamic.test(text) ) {
-					return textTruncated;
-				} else {
-					var htmlOfTextWanted = rDynamic.exec(text)[0];
-					var remainingHTML = text.substr(htmlOfTextWanted.length);
-					var firstNewTagAfterHTMLOfTextWanted = remainingHTML.search(/<[a-zA-Z]/);
-					if(firstNewTagAfterHTMLOfTextWanted != -1) {
-							remainingHTML = remainingHTML.substr(0, firstNewTagAfterHTMLOfTextWanted);
-							htmlOfTextWanted = htmlOfTextWanted + remainingHTML;
-					}
-					//htmlOfTextWanted has the html we want, however it may also contain line breaks
-					htmlNode = (new DOMParser()).parseFromString(htmlOfTextWanted, "text/html").documentElement;
-					var nodesToRemove = htmlNode.getElementsByTagName("br");
-					while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
-							nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
-							nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
-							nodesToRemove = htmlNode.getElementsByTagName("br");
-					}
-					nodesToRemove = htmlNode.getElementsByTagName("img");
-					while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
-							nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
-							nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
-							nodesToRemove = htmlNode.getElementsByTagName("img");
-					}
-					nodesToRemove = htmlNode.getElementsByTagName("hr");
-					while( (nodesToRemove != undefined) && (nodesToRemove.length > 0) ) {
-							nodesToRemove[0].parentElement.insertBefore(document.createTextNode(" "), nodesToRemove[0]);
-							nodesToRemove[0].parentElement.removeChild(nodesToRemove[0]);
-							nodesToRemove = htmlNode.getElementsByTagName("hr");
-					}
-					htmlNode.innerHTML = completeHTML(htmlNode.innerHTML);
-					var bodyTag = htmlNode.getElementsByTagName("body");
-					if (bodyTag[0]) {
-						htmlNode = bodyTag[0];
-					}
-					//the following will take a table of n rows and make it a table of 1 row
-					var nodesToChange = htmlNode.getElementsByTagName("table");
-					for(var t=0; t<nodesToChange.length; t++) {
-						var table = nodesToChange[t];
-						var trs = table.getElementsByTagName("tr");
-						for(var i=1; i<trs.length; i++) {
-								var tds = trs[i].getElementsByTagName("td");
-								var ths = trs[i].getElementsByTagName("th");
-								var cells = new Array();
-								for(var j=0; j<tds.length; j++) {
-										cells.push(tds[j]);
-								}
-								for(var j=0; j<ths.length; j++) {
-										cells.push(ths[j]);
-								}
-								cells.sort(sortByCellIndex);
-								for(var j=0; j<cells.length; j++) {
-										trs[0].appendChild(cells[j]);
-								}
-						}
-						while( (trs != undefined) && (trs.length > 1) ) {
-								trs[1].parentElement.removeChild( trs[1] );
-								trs = table.getElementsByTagName("tr");
-						}
-					}
-					return htmlNode.innerHTML;
-				}
-				return text;
-	}
-}
-
-function sortByCellIndex(a,b) {
-		return a.cellIndex - b.cellIndex;
-}
-
-function buildDocListItems(DOCS, listElms, description, output, location, preview, error) {
-	// Handle description
-	if (!description) {
-		description = '';
+function getPreview(filetype, content, error) {
+	if (!content) {
+		content = '';
 	}
 	
-	if (preview && firetext.settings.get('previews.enabled') != 'false') {	 
-		switch (error ? ".txt" : DOCS[0][2]) {
-			case ".txt":
-				description = firetext.parsers.plain.parse(cleanForPreview(description, ".txt"), "HTML");
-				break;
-			case ".docx":
-			case ".odt":
-				if(DOCS[0][2] === ".docx") {
-					var tmp = document.createElement("DIV");
-					var docx = new DocxEditor(description);
-					tmp.appendChild(docx.HTMLout());
-					description = tmp.innerHTML;
-				} else {
-					description = new JSZip(description).file('content.xml').asText();
-				}
-			case ".html":
-				description = cleanForPreview(description, ".html");
-				break;
-			default:
-				break;
-		}
+	if(error) {
+		return document.createTextNode(content);
 	}
+	
+	switch (filetype) {
+		case ".txt":
+			content = firetext.parsers.plain.parse(content, "HTML");
+			break;
+		case ".odt":
+			content = new ODTDocument(content).getHTMLUnsafe();
+			break;
+		/* 0.4
+		case ".docx":
+			docxeditor = new firetext.parsers.DocxEditor(content);
+			content = result.HTMLout();
+			doc.appendChild(content);
+			break;
+		*/
+		case ".html":
+		default:
+			if(!/<!DOCTYPE/i.test(content)) content = '<!DOCTYPE html>' + content;
+			break;
+	}
+	
+	var iframe = document.createElement('iframe');
+	iframe.sandbox = 'allow-scripts';
+	iframe.srcdoc = content
+		.replace(' contenteditable="true"', '') // Work around the bug that we include contenteditable in the saved file, to disable the spellchecker in Firefox.
+		+ [
+			'<style>',
+			'[_firetext_night] body, [_firetext_night] img {',
+			'		-webkit-filter: invert(100%) hue-rotate(180deg);',
+			'	filter: invert(100%) hue-rotate(180deg);',
+			'}',
+			'</style>',
+			'<script>',
+			'window.addEventListener("message", function(e) { nightEditor(e.data.nightMode); });',
+			'function nightEditor(nightMode) {',
+			'	var html = document.getElementsByTagName("html")[0];',
+			'	if(nightMode) {',
+			'		document.documentElement.setAttribute("_firetext_night", "");',
+			'	} else {',
+			'		document.documentElement.removeAttribute("_firetext_night");',
+			'	}',
+			'}',
+			'</script>'
+		].join('\n');
+	iframe.scrolling = 'no';
+	return iframe;
+}
+
+function updatePreviewNightModes(iframes) {
+	if(!welcomeDocsList.classList.contains('previews')) {
+		return;
+	}
+	Array.prototype.forEach.call(iframes, function(iframe) {
+		iframe.contentWindow.postMessage({
+			nightMode: html.classList.contains('night')
+		}, '*');
+	});
+}
+
+var gettingPreview = {};
+
+function resetPreviews(location) {
+	Object.keys(gettingPreview).forEach(function(key) {
+		if(key.substr(key.lastIndexOf(',') + 1) === location) {
+			delete gettingPreview[key];
+		}
+	});
+}
+
+function resetPreview() {
+	delete gettingPreview[Array.prototype.join.call(arguments, ',')];
+}
+
+function setPreview(description, previews) {
+	var done;
+	var preview;
+	previews.some(function(_preview) {
+		if(description.firstChild === _preview) {
+			done = true;
+			return true;
+		} else if(!document.contains(_preview)) {
+			preview = _preview;
+			return true;
+		}
+	});
+	if(done) {
+		return;
+	}
+	if(!preview) {
+		preview = previews[0].cloneNode();
+		previews.push(preview);
+	}
+	description.innerHTML = '';
+	description.appendChild(preview);
+	if(html.classList.contains('night')) {
+		preview.addEventListener('load', function() {
+			updatePreviewNightModes([preview]);
+		});
+	}
+}
+
+function updatePreviews() {
+	if(!welcomeDocsList.classList.contains('previews')) {
+		return;
+	}
+	Array.prototype.forEach.call(document.getElementsByClassName('fileListItem'), function(item) {
+		if(!item.offsetParent) {
+			// We're in edit mode, item is hidden.
+			return;
+		}
+		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
+		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {			
+			var directory = item.getAttribute('data-click-directory');
+			var filename = item.getAttribute('data-click-filename');
+			var filetype = item.getAttribute('data-click-filetype');
+			var location = item.getAttribute('data-click-location');
+			var key = [directory, filename, filetype, location];
+			if(!gettingPreview[key]) {
+				gettingPreview[key] = true;
+				firetext.io.load(directory, filename, filetype, function (result, error) {
+					gettingPreview[key] = [getPreview(filetype, result, error)];
+					Array.prototype.forEach.call(document.querySelectorAll(
+						'.fileListItem' +
+						'[data-click-directory="' + directory + '"]' +
+						'[data-click-filename="' + filename + '"]' +
+						'[data-click-filetype="' + filetype + '"]' +
+						'[data-click-location="' + location + '"]'
+					), function(item) {
+						setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
+					});
+				}, location, false);
+			} else if(gettingPreview[key] !== true) {
+				setPreview(item.getElementsByClassName('fileItemDescription')[0], gettingPreview[key]);
+			}
+		}
+	});
+}
+
+function scrollDocList() {
+	Array.prototype.forEach.call(document.getElementsByClassName('fileListItem'), function(item) {
+		if(!item.offsetParent) {
+			// We're in edit mode, item is hidden.
+			return;
+		}
+		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
+		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
+			// Show item
+			item.classList.remove("hiddenPreview");
+		} else {
+			// Hide item
+			item.classList.add("hiddenPreview");
+		}
+	});
+	
+}
+
+function buildDocListItems(DOCS, listElms, ctr) {
+	// Get current doc
+	var DOC = DOCS[ctr];
+	
+	// Get doc location
+	var location = DOC[4] || 'internal';
 	
 	// UI refinements
-	var icon, directory;
-	if (location != 'internal' && location && location != '') {
-		icon = ('document-' + location);
+	var directory;
+	if (DOC[0].charAt(0) == '/' && DOC[0].length > 1) {
+		directory = DOC[0].slice(1);
 	} else {
-		icon = 'document';
-		location = 'internal';
-	}
-	if (DOCS[0][0].charAt(0) == '/' && DOCS[0][0].length > 1) {
-		directory = DOCS[0][0].slice(1);
-	} else {
-		directory = DOCS[0][0];
+		directory = DOC[0];
 	}
 			
 	// Generate item
-	output += '<li class="fileListItem" data-click="loadToEditor" data-click-directory="'+DOCS[0][0]+'" data-click-filename="'+DOCS[0][1]+'" data-click-filetype="'+DOCS[0][2]+'" data-click-location="'+location+'">';
+	var className = 'fileListItem' + (ctr === DOCS.length - 1 ? ' lastItem' : '');
+	var output = '<li class="'+className+'" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" data-index="'+ctr+'" style="-webkit-order: '+ctr+'; order: '+ctr+';">';
 	output += '<a href="#">';
-	if (description != '' && firetext.settings.get('previews.enabled') != 'false') {
-		output += '<div class="fileItemDescription">'+description+'</div>';
-	}
+	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
-	output += '<aside class="pack-end icon-arrow"></aside>';	
-	output += '<p class="fileItemName">'+DOCS[0][1]+DOCS[0][2]+'</p>'; 
-	output += '<p class="fileItemPath">'+directory+DOCS[0][1]+DOCS[0][2]+'</p>';
+	output += '<aside class="pack-end icon-chevron-right"></aside>';	
+	output += '<aside class="pack-end edit-checkbox"><label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label></aside>';
+	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>'; 
+	output += '<p class="fileItemPath" title="'+directory+DOC[1]+DOC[2]+'">'+(location==='dropbox'?'<span class="icon-dropbox" title="'+navigator.mozL10n.get('documents-dropbox')+'"></span> ':'')+directory+DOC[1]+DOC[2]+'</p>';
 	output += '</div>'; 
 	output += '</a></li>';
 	
 	// Display output HTML
 	for (var i = 0; i < listElms.length; i++) {
-		listElms[i].innerHTML = output;
+		var elm = listElms[i].querySelector(
+			'.fileListItem' +
+			'[data-click-directory="' + DOC[0] + '"]' +
+			'[data-click-filename="' + DOC[1] + '"]' +
+			'[data-click-filetype="' + DOC[2] + '"]' +
+			'[data-click-location="' + location + '"]'
+		);
+		if(elm) {
+			elm.className = className;
+			elm.setAttribute('data-index', ctr);
+			elm.style.webkitOrder = ctr;
+			elm.style.order = ctr;
+		} else {
+			listElms[i].insertAdjacentHTML('beforeend', output);
+		}
 	}
 	
+	// Fetch previews
+	updatePreviews();
+	
 	// Base case
-	if (DOCS.length <= 1) {		 
+	if (ctr === DOCS.length - 1) {		 
 		return;
 	}
 	
-	// Per doc locations
-	if (DOCS[1][4] && DOCS[1][4] != location) {
-		location = DOCS[1][4];
-	}
-	
 	// build next item
-	if (preview == true) {
-		firetext.io.load(DOCS[1][0], DOCS[1][1], DOCS[1][2], function (result, error) {
-			buildDocListItems(DOCS.slice(1, DOCS.length), listElms, result, output, location, preview, error);
-		}, location);
-	} else {
-		buildDocListItems(DOCS.slice(1, DOCS.length), listElms, null, output, location, preview, true);	
-	}
+	buildDocListItems(DOCS, listElms, ctr + 1);
 }
 
-function buildDocList(DOCS, listElms, display, location, preview) {
+function buildDocList(DOCS, listElms, display) {
 	if (listElms && DOCS) {
 		// Make sure list is not an edit list
 		for (var i = 0; i < listElms.length; i++) {
@@ -616,18 +825,24 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 		}
 		
 		if (DOCS.length > 0) {
-			// Per doc locations
-			if (DOCS[0][4] && DOCS[0][4] != location) {
-				location = DOCS[0][4];
-			}
-			
 			// build next item
-			if (preview == true) {
-				firetext.io.load(DOCS[0][0], DOCS[0][1], DOCS[0][2], function (result, error) {
-					buildDocListItems(DOCS, listElms, result, "", location, preview, error);
-				}, location);
-			} else {
-				buildDocListItems(DOCS, listElms, null, "", location, preview, true);			 
+			buildDocListItems(DOCS, listElms, 0);
+			
+			// remove outdated items
+			for (var i = 0; i < listElms.length; i++) {
+				for (var j = 0; j < listElms[i].childNodes.length; j++) {
+					var childNode = listElms[i].childNodes[j];
+					var DOC = DOCS[childNode.getAttribute('data-index')];
+					if (
+						!DOC ||
+						DOC[0] !== childNode.getAttribute('data-click-directory') ||
+						DOC[1] !== childNode.getAttribute('data-click-filename') ||
+						DOC[2] !== childNode.getAttribute('data-click-filetype') ||
+						(DOC[4] || 'internal') !== childNode.getAttribute('data-click-location')
+					) {
+						listElms[i].removeChild(childNode);
+					}
+				}
 			}
 		} else {
 			// No docs message
@@ -644,34 +859,6 @@ function buildDocList(DOCS, listElms, display, location, preview) {
 	}
 }
 
-function buildEditDocList(DOCS, listElm, display, location) {
-	if (listElm != undefined) {
-		// Output HTML
-		var output = "";
-		
-		if (DOCS.length != 0) {
-			// generate each list item
-			for (var i = 0; i < DOCS.length; i++) {
-				output += '<li>';
-				output += '<label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label>';
-				output += '<p data-location="'+location+'">'+DOCS[i][0]+DOCS[i][1]+'<em>'+DOCS[i][2]+'</em></p>';
-				output += '</li>';
-			}		
-			 
-			// Make list an edit list
-			listElm.setAttribute("data-type","edit");
-		} else {
-			output += '<li style="margin-top: -5px" class="noLink">';
-			output += '<p style="padding: 1.5rem 0 0.5rem;" data-l10n-id="no-'+display+'">'+navigator.mozL10n.get('no-'+display)+'</p>';
-			output += '<p style="padding-bottom: 1rem;" data-l10n-id="click-compose-icon-to-create">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
-			output += '</li>';
-		}
-		
-		// Display output HTML
-		listElm.innerHTML = output;
-	}
-}
-
 
 /* Display
 ------------------------*/
@@ -683,10 +870,18 @@ function showSaveBanner(filepath) {
 function extIcon() {
 	var extf = document.getElementById('extIconFile');
 	var option = document.getElementById('createDialogFileType').value;
-	if (option != '.html' && option != '.txt' && option != '.docx' && option != '.doc' && option != '.rtf') {
-		option = 'default';
+	var icon;
+	if (option == '.txt') {
+		icon = 'format-align-left';
+	} else {
+		icon = 'format-float-left';
 	}
-	extf.src = ('style/icons/extensions/'+option.replace(/./, '')+'.png');
+	extf.outerHTML = [
+		'<span id="extIconFile" class="icon icon-file" style="display:block; width: 150px; margin: 10px auto; font-size: 150px;">',
+		'	<span style="position: absolute; font-size: 13px; left: 35.5px; top: 45px; color: white; text-transform: uppercase; font-weight: bold;">' + option.replace('.', '') + '</span>',
+		'	<span style="position: absolute; font-size: 80px; left: 35.5px; top: 56px; color: white; transform: scaleX(1.3);"class="icon icon-' + icon + '" style=""></span>',
+		'</span>',
+	].join('\n');
 }
 
 
@@ -723,12 +918,24 @@ function editorCommunication(callback) {
 		editorMessageProxy.registerMessageHandler(function(e) {
 			callback();
 		}, "init-success", true);
+		
+		// Handle errors and logs
+		editorMessageProxy.registerMessageHandler(function(e) {
+			console.log(e.data.details);
+		}, "error", true);
+		editorMessageProxy.registerMessageHandler(function(e) {
+			console.log(e.data.details);
+		}, "log", true);
 
 		editorMessageProxy.registerMessageHandler(function(e) {
 			tempText = e.data.html;
 			fileChanged = true;
 			autosave();
 		}, "doc-changed");
+
+		editorMessageProxy.registerMessageHandler(function(e) {
+			updateToolbar();
+		}, "update-toolbar");
 
 		// editor focus and blur
 		editorMessageProxy.registerMessageHandler(function(e) {
@@ -777,7 +984,7 @@ function autosave(force) {
 		if (!saveTimeout || force == true) {
 			if (saving != true) {
 				// Add timeout for saving
-				saveTimeout = window.setTimeout(saveFromEditor, 1000);
+				saveTimeout = window.setTimeout(function() { saveFromEditor(deviceType == 'desktop' && firetext.settings.get('autosaveNotification') == 'true'); }, 1000);
 			} else {
 				saveTimeout = window.setTimeout(forceAutosave, 1000);				 
 			}
@@ -790,51 +997,52 @@ function autosave(force) {
 ------------------------*/ 
 function editDocs() {
 	if (editState == true) {
-		// Clear lists
-		welcomeDeviceList.innerHTML = '';
-		welcomeDropboxList.innerHTML = '';
+		editState = false;
+		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+		welcomeDocsList.classList.remove('editMode');
 		
 		updateDocLists(['all']);
-		editState = false;
-		welcomeRecentsArea.style.display = 'block';
-		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
+		editModeListeners();
+		
 		regions.navBack();
 	} else {		
-		welcomeRecentsArea.style.display = 'none';
-		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 12rem)';
 		editState = true;
+		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 10rem)';
+		welcomeDocsList.classList.add('editMode');
 		
-		// Clear lists
-		welcomeDeviceList.innerHTML = '';
-		welcomeDropboxList.innerHTML = '';
-		
-		// Code to build list
-		firetext.io.enumerate('/', function(result) {
-			buildEditDocList(result, welcomeDeviceList, 'documents-found', 'internal');
-		});
-		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
-			cloud.dropbox.enumerate('/Documents', function(DOCS) {
-				buildEditDocList(DOCS, welcomeDropboxList, "dropbox-documents-found", 'dropbox');
-			});
-		}
-		watchCheckboxes();
+		editModeListeners();
 		
 		regions.nav('welcome-edit-mode');
 	}
 }
 
-function watchCheckboxes() {
-	// Only use this function in edit mode
+function editModeListeners() {
 	if (editState == true) {
 		var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
 		for (var i = 0; i < checkboxes.length; i++ ) {
 			checkboxes[i].onchange = updateSelectButton;
 		}
+		var listItems = welcomeDocsList.getElementsByClassName('fileListItem');
+		for (var i = 0; i < listItems.length; i++ ) {
+			listItems[i].onclick = updateCheckbox;
+		}
+	} else {
+		var listItems = welcomeDocsList.getElementsByClassName('fileListItem');
+		for (var i = 0; i < listItems.length; i++ ) {
+			listItems[i].onclick = null;
+		}
+	}
+}
+
+function updateCheckbox(evt) {
+	evt.stopPropagation();
+	if(!this.getElementsByClassName('pack-checkbox')[0].contains(evt.target)) {
+		this.getElementsByClassName('edit-selected')[0].click();
 	}
 }
 
 function updateSelectButton() {
-	if (numSelected() == 0) {
+	if (numSelected() != numCheckboxes()) {
 		// Add select all button
 		document.getElementById("selectButtons").innerHTML = '<button data-click="selectAll" data-l10n-id="select-all"></button><button data-click="delete" class="danger" data-l10n-id="delete-selected"></button>';
 	}
@@ -855,6 +1063,14 @@ function numSelected() {
 			}
 		}
 		return n;
+	}
+}
+
+function numCheckboxes() {
+	// Only use this function in edit mode
+	if (editState == true) {
+		var checkboxes = welcomeDocsList.getElementsByClassName('edit-selected');
+		return checkboxes.length;
 	}
 }
 
@@ -906,8 +1122,9 @@ function deleteSelected(confirmed) {
 		// Delete selected files
 		for (var i = 0; i < selected.length; i++) {
 			// Get filename
-			var filename = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].textContent;
-			var location = selected[i].parentNode.parentNode.getElementsByTagName("P")[0].getAttribute('data-location');
+			var elm = selected[i].closest('.fileListItem');
+			var filename = elm.getAttribute('data-click-directory') + elm.getAttribute('data-click-filename') + elm.getAttribute('data-click-filetype');
+			var location = elm.getAttribute('data-click-location');
 			
 			// Remove from RecentDocs
 			firetext.recents.remove((filename + location), true);
@@ -916,7 +1133,6 @@ function deleteSelected(confirmed) {
 			firetext.io.delete(filename, location);
 			
 			// Remove from list
-			var elm = selected[i].parentNode.parentNode;
 			elm.parentNode.removeChild(elm);
 		}
 	}
@@ -937,91 +1153,117 @@ function updateToolbar() {
 	if (document.getElementById("edit").classList.contains('current')) {
 		var key = editorMessageProxy.registerMessageHandler(function(e){
 			var commandStates = e.data.commandStates;
+			
 			// Bold
 			if (commandStates.bold.state) {
 				bold.classList.add('active');
-				boldCheckbox.checked = true;
 			} else {
 				bold.classList.remove('active');
-				boldCheckbox.checked = false;
 			}
+			
+			// Font
+			fontSelect.value = commandStates.fontName.value.replace(/'/g, '"').replace(/,\s*/g, ', ');
+			
+			// Font size
+			fontSizeSelect.value = commandStates.fontSize.value;
 			
 			// Italic
 			if (commandStates.italic.state) {
 				italic.classList.add('active');
-				italicCheckbox.checked = true;
 			} else {
 				italic.classList.remove('active');
-				italicCheckbox.checked = false;
 			}
 			
 			// Justify
 			if (commandStates.justifyCenter.state) {
-				justifySelect.value = 'Center';
+				justifySelect.value = 'c';
 			} else if (commandStates.justifyFull.state) {
-				justifySelect.value = 'Justified';
+				justifySelect.value = 'j';
 			} else if (commandStates.justifyRight.state) {
-				justifySelect.value = 'Right';
+				justifySelect.value = 'r';
 			} else {
-				justifySelect.value = 'Left';
+				justifySelect.value = 'l';
 			}
 			
 			// Underline
 			if (commandStates.underline.state) {
 				underline.classList.add('active');
-				underlineCheckbox.checked = true;
 			} else {
 				underline.classList.remove('active');
-				underlineCheckbox.checked = false;
 			}
 			
 			// Strikethrough
 			if (commandStates.strikeThrough.state) {
 				strikethrough.classList.add('active');
-				strikethroughCheckbox.checked = true;
 			} else {
 				strikethrough.classList.remove('active');
-				strikethroughCheckbox.checked = false;
 			}
+			
+			// Style
+			styleSelect.value = commandStates.formatBlock.value;
+			
+			// Update select current styles
+			updateSelectStyles();
 		}, null, true);
 		editorMessageProxy.postMessage({
 			command: "query-command-states",
-			commands: ["bold", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough"],
+			commands: ["bold", "fontName", "fontSize", "italic", "justifyCenter", "justifyFull", "justifyRight", "underline", "strikeThrough", "formatBlock"],
 			key: key
 		});
 	}
 }
 
+function updateSelectStyles() {
+	// Set selects current style
+	Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
+		var width = select.style.width;
+		select.setAttribute('style',
+			select.selectedOptions[0] ?
+				(select.selectedOptions[0].getAttribute('style') || '').replace('text-decoration: underline;', '') : // Firefox doesn't support text-decoration: none; on options elements apparently
+				''
+		);
+		select.style.width = width;
+	});
+}
+
 /* Actions (had to do this because of CSP policies)
 ------------------------*/ 
 document.addEventListener('click', function(event) {
-	processActions('data-click', event.target);
+	if (event.button !== 2) {
+		processActions('data-click', event.target, event);
+	}
 });
 
 document.addEventListener('submit', function(event) {
-	processActions('data-submit', event.target);
+	processActions('data-submit', event.target, event);
 });
 
 document.addEventListener('keypress', function(event) {
 	if (event.key == 13 | event.keyCode == 13) {
-		processActions('data-enter', event.target);
+		processActions('data-enter', event.target, event);
+	}
+});
+
+document.addEventListener('keyup', function(event) {
+	if (event.key == 27 | event.keyCode == 27) {
+		processActions('data-esc', event.target, event);
 	}
 });
 
 document.addEventListener('mousedown', function(event) {
-	processActions('data-mouse-down', event.target);
+	processActions('data-mouse-down', event.target, event);
 });
 
 document.addEventListener('change', function(event) {
-	processActions('data-change', event.target);
+	processActions('data-change', event.target, event);
 });
 
 document.addEventListener('focus', function(event) {
-	processActions('data-focus', event.target);
+	processActions('data-focus', event.target, event);
 });
 
 document.addEventListener('blur', function(event) {
-	processActions('data-blur', event.target);
+	processActions('data-blur', event.target, event);
 });
 
 function initGestures () {
@@ -1040,11 +1282,11 @@ function initGestures () {
 		} 
 		
 		// Process the action
-		processActions(('data-swipe-'+direction), event.target); 
+		processActions(('data-swipe-'+direction), event.target, event); 
 	});
 }
 
-function processActions(eventAttribute, target) {
+function processActions(eventAttribute, target, event) {
 	if (target && target.getAttribute) {
 		if (target.hasAttribute(eventAttribute) != true) {
 			while (target.parentNode && target.parentNode.getAttribute) {
@@ -1069,6 +1311,8 @@ function processActions(eventAttribute, target) {
 			regions.nav(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'navBack') {
 			regions.navBack();
+		} else if (calledFunction == 'closeOverlay') {
+			regions.closeOverlay();
 		} else if (calledFunction == 'sidebar') {
 			regions.sidebar(target.getAttribute(eventAttribute + '-id'), target.getAttribute(eventAttribute + '-state'));
 		} else if (calledFunction == 'saveFromEditor') {
@@ -1097,16 +1341,10 @@ function processActions(eventAttribute, target) {
 				}
 			}
 			
-			// Clear toolbar update interval
-			window.clearInterval(toolbarInterval);
-			
 			// Navigate to the welcome screen
 			regions.nav('welcome');
 		} else if (calledFunction == 'formatDoc') {
 			formatDoc(target.getAttribute(eventAttribute + '-action'), target.getAttribute(eventAttribute + '-value'));
-			if (target.getAttribute(eventAttribute + '-back') == 'true') {
-				regions.navBack();
-			}
 		} else if (calledFunction == 'createFromDialog') {
 			createFromDialog();
 		} else if (calledFunction == 'uploadFromDialog') {
@@ -1128,40 +1366,37 @@ function processActions(eventAttribute, target) {
 		} else if (calledFunction == 'clearForm') {
 			if (target.parentNode.children[0]) {
 				target.parentNode.children[0].value = '';
+				event.preventDefault();
+				setTimeout(function() { // Fix autocapitalization in Chrome mobile
+					target.parentNode.children[0].blur();
+					target.parentNode.children[0].focus();
+				});
 			}
 		} else if (calledFunction == 'clearCreateForm') {
 			clearCreateForm();
-		} else if (calledFunction == 'clearSaveAsForm') {
-			clearSaveAsForm();
+			event.preventDefault();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
 				editFullScreen(false);		
 			} else {
 				editFullScreen();
 			}
-		} else if (calledFunction == 'browser') {      
-			// Get location
-			var browseLocation = '';
-			if (target.getAttribute(eventAttribute + '-location') == 'about') {
-				browseLocation = urls.about;
-			} else if (target.getAttribute(eventAttribute + '-location') == 'credits') {
-				browseLocation = urls.credits;
-			} else if (target.getAttribute(eventAttribute + '-location') == 'rate') {
-				browseLocation = urls.rate;
-			} else if (target.getAttribute(eventAttribute + '-location') == 'support') {
-				browseLocation = urls.support;
-			} else {
-				browseLocation = target.getAttribute(eventAttribute + '-location');
+		} else if (calledFunction == 'browser') {
+			// Launch rate activity if available
+			if (target.getAttribute("data-url-id") == 'rate-firetext') {
+				if (window.MozActivity) {
+					var activity = new MozActivity({
+						name: "marketplace-app-rating",
+						data: {slug: "firetext"}
+					});
+					activity.onerror = function() {
+						visitURL(target.getAttribute(eventAttribute + '-location'));
+					};
+					return;
+				}
 			}
-
-			// Fix for empty locations
-			if(!browseLocation || browseLocation==''){
-				firetext.notify(navigator.mozL10n.get('not-functional-link'));
-				return;
-			}
-
-			// Open a new tab
-			window.open(browseLocation);
+			
+			visitURL(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'justify') {
 			var justifyDirection = justifySelect.value;			 
 			if (justifyDirection == 'l') {
@@ -1174,37 +1409,37 @@ function processActions(eventAttribute, target) {
 				justifyDirection = 'Full';
 			}
 			formatDoc('justify'+justifyDirection);
+		} else if (calledFunction == 'style') {
+			formatDoc('formatBlock', styleSelect.value);
 		} else if (calledFunction == 'hideToolbar') {
-			if (deviceType != 'desktop') {
-				if (document.getElementById('currentFileType').textContent != '.txt' &&
-						document.getElementById('currentFileType').textContent != '.odt' &&
-						target.id === 'editor') {
-					document.getElementById('edit-bar').style.display = 'none';
-					editor.classList.add('no-toolbar');
+			if (deviceType != 'desktop' && !document.getElementById('edit-bar').contains(document.activeElement)) {
+				if (document.getElementById('currentFileType').textContent != '.odt' &&
+						(target.id === 'editor' || target.id === 'hide-keyboard-button')) {
+					document.querySelector('.edit-header').classList.remove('hidden');
+					document.getElementById('edit-bar').classList.add('hidden');
 				}
-				document.getElementById('hide-keyboard-button').classList.add('shown');
+				document.getElementById('header-close-file').style.visibility = '';
+				document.getElementById('hide-keyboard-button').classList.add('hidden');
 			}
 		} else if (calledFunction == 'showToolbar') {
-			if (document.getElementById('currentFileType').textContent != '.txt' &&
-					document.getElementById('currentFileType').textContent != '.odt' &&
-					target.id === 'editor') {
-				document.getElementById('edit-bar').style.display = 'block';
-				editor.classList.remove('no-toolbar');
+			if (deviceType != 'desktop') {
+				if (document.getElementById('currentFileType').textContent != '.odt' &&
+						(target.id === 'editor' || target.id === 'hide-keyboard-button')) {
+					document.querySelector('.edit-header').classList.add('hidden');
+					document.getElementById('edit-bar').classList.remove('hidden');
+				}
+				document.getElementById('header-close-file').style.visibility = 'hidden';
+				document.getElementById('hide-keyboard-button').classList.remove('hidden');
 			}
-			document.getElementById('hide-keyboard-button').classList.remove('shown');
 		} else if (calledFunction == 'hyperlink') {
 			if (target.getAttribute(eventAttribute + '-dialog')) {
 				formatDoc('createLink', document.getElementById('web-address').value);
 				regions.navBack();
-				regions.navBack();
 			} else {
 				var key = editorMessageProxy.registerMessageHandler(function(e) {
 					var createLink = e.data.commandStates.createLink;
-					console.log(createLink);
 					if (createLink.state) {
 						document.getElementById('web-address').value = createLink.value;
-					} else {
-						document.getElementById('web-address').value = '';				
 					}
 					regions.nav('hyperlink');
 				}, null, true);
@@ -1239,7 +1474,6 @@ function processActions(eventAttribute, target) {
 						// Read blob
 						reader.addEventListener("loadend", function() {
 							formatDoc('insertImage', reader.result);
-							regions.navBack();
 						});
 				
 						reader.readAsDataURL(image);
@@ -1250,14 +1484,10 @@ function processActions(eventAttribute, target) {
 				} else {
 					if (target.getAttribute(eventAttribute + '-dialog') == 'true') {
 						formatDoc('insertImage', document.getElementById('image-address').value);
-						regions.navBack();
 					} else {
 						regions.nav('image-web');
 					}
 				}
-				
-				// Clear inputs
-				document.getElementById('image-address').value = null;
 			} else {
 				if (navigator.mozSetMessageHandler) {
 					// Web Activities are supported, allow user to choose them or web URI
@@ -1281,13 +1511,11 @@ function processActions(eventAttribute, target) {
 				// Make sure # is above 0
 				if ((rows > 0) && (cols > 0)) {
 					// Generate HTML
-					var output = '<style>table.default { border: 1px solid #afafaf; width: 100%; }';
-					output += ' table.default td { border: 1px solid #afafaf; }</style>';
-					output += '<table class="default">';
+					var output = '<table class="default" style="width: 100%;">';
 					for (var r = 0; r < rows; r++) {
 						output += '<tr>';
 						for (var c = 0; c < cols; c++) {
-							output += '<td></td>';
+							output += '<td><br></td>';
 						}
 						output += '</tr>';
 					}
@@ -1298,18 +1526,17 @@ function processActions(eventAttribute, target) {
 					
 					// Nav Back
 					regions.navBack();
-					regions.navBack();					
 				}
 			} else {
 				regions.nav('table');
 			}
-			
-			// Clear inputs
-			document.getElementById('table-rows').value = null;
-			document.getElementById('table-columns').value = null;
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
+		} else if (calledFunction == 'font') {
+			formatDoc("fontName", target.value);
+		} else if (calledFunction == 'fontSize') {
+			formatDoc("fontSize", target.value);
 		}
 	}
 }
@@ -1335,8 +1562,9 @@ function checkDevice() {
 		deviceType = 'desktop';
 	}
 	
-	if (window.opera) {
-		firetext.notify(navigator.mozL10n.get('warning-unsupported-technology'));
+	// Let Bugsense know about device type 
+	if (bugsenseInitialized) {
+		Bugsense.addExtraData('device_type', deviceType);
 	}
 };
 
@@ -1344,10 +1572,10 @@ function clearCreateForm() {
 	document.getElementById('createDialogFileName').value = '';
 	document.getElementById('createDialogFileType').value = '.html';
 	extIcon();
-}
-
-function clearSaveAsForm() {
-	document.getElementById('saveAsDialogFileName').value = '';
+	setTimeout(function() { // Fix autocapitalization in Chrome mobile
+		document.getElementById('createDialogFileName').blur();
+		document.getElementById('createDialogFileName').focus();
+	});
 }
 
 function spinner(state) {
@@ -1390,13 +1618,13 @@ function onFullScreenChange() {
 	) {
 		// Special editor UI
 		html.classList.add('fullscreen');
-		document.querySelector('#editor-zen-button span').classList.remove('icon-fs');
-		document.querySelector('#editor-zen-button span').classList.add('icon-efs');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-fullscreen');
+		document.querySelector('#editor-zen-button span').classList.add('icon-fullscreen-exit');
 	} else {
 		// Regular editor UI
 		html.classList.remove('fullscreen');
-		document.querySelector('#editor-zen-button span').classList.remove('icon-efs');
-		document.querySelector('#editor-zen-button span').classList.add('icon-fs');
+		document.querySelector('#editor-zen-button span').classList.remove('icon-fullscreen-exit');
+		document.querySelector('#editor-zen-button span').classList.add('icon-fullscreen');
 	}
 }
 
@@ -1449,5 +1677,56 @@ function printButtonCommunication(callback) {
 			});
 			regions.nav('edit');
 		}, "print-button-pressed");
+	}
+}
+
+function setDocumentTitle() {
+	var selectedRegion = document.querySelector('section.current');
+	if (selectedRegion) {
+		if (selectedRegion.id == 'welcome') {
+			document.title = 'Firetext';
+		} else if (selectedRegion.id == 'edit') {
+			document.title = currentFileName.textContent+currentFileType.textContent+' - Firetext';
+		} else {
+			document.title = selectedRegion.querySelector('header:first-child h1').textContent+' - Firetext';
+		}		
+	}
+}
+
+function visitURL(browseLocation) {
+	// Fix for empty locations
+	if(!browseLocation || browseLocation==''){
+		firetext.notify(navigator.mozL10n.get('not-functional-link'));
+		return;
+	}
+
+	// Open a new tab
+	window.open(browseLocation);
+}
+
+function christmas() {
+	var testDate = new Date(),
+			testMonth = testDate.getMonth()+1,
+			testDay = testDate.getDate();
+	if (testMonth === 12 && (testDay >= 13 && testDay <= 31)) {
+		doChristmas();
+		window.addEventListener('night.changed', doChristmas);
+	}
+	
+	function doChristmas() {
+		var wordmark = document.getElementById('welcome-wordmark');
+		if (html.classList.contains('night') != true) {
+			if (!wordmark.hasAttribute('data-original-src')) {
+				wordmark.setAttribute('data-original-src',wordmark.src);
+			}
+			wordmark.src = 'style/icons/app/firetext_christmas.svg';
+		} else {
+			if (wordmark.hasAttribute('data-original-src')) {
+				wordmark.src = wordmark.getAttribute('data-original-src');
+			}
+		}
+		
+		// Override theme color
+		themeColor.setAttribute('content', '#034f20');
 	}
 }

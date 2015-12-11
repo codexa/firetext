@@ -8,15 +8,15 @@
 
 firetext.language = function(code){
 	if (code) {
-		// Catch for 'auto' case
+		var codes;
 		if (code === 'auto') {
-			code = navigator.language;
+			codes = navigator.languages || [navigator.language];
+		} else {
+			codes = [code];
 		}
 		
 		// Localize interface
-		if (code !== navigator.mozL10n.language.code) {
-			navigator.mozL10n.language.code = code;
-		}
+		navigator.mozL10n.ctx.requestLocales.apply(navigator.mozL10n.ctx, codes);
 	} else {
 		return navigator.mozL10n.language.code;
 	}

@@ -41,7 +41,11 @@ firetext.io.init = function (api, callback) {
 				return;
 			} else {
 				storage.onchange = function (change) {
-					updateDocLists(['internal', 'recents']);
+					var fileparts = firetext.io.split(change.path)
+					resetPreview(fileparts[0], fileparts[1], fileparts[2], 'internal');
+					if (tempLoc == 'welcome' || tempLoc == 'welcome-edit-mode' || tempLoc == 'open') {
+						updateDocLists(['internal', 'recents']);
+					}
 				}
 				enableInternalStorage();
 				callback();
@@ -62,7 +66,6 @@ firetext.io.init = function (api, callback) {
 			var onFSError = function() {
 				firetext.notify(navigator.mozL10n.get('could-not-initialize-filesystem'));
 				deviceAPI = 'none';
-				disableInternalStorage();
 				callback();
 			}
 			var requestFs = function(grantedBytes) {
@@ -84,14 +87,12 @@ firetext.io.init = function (api, callback) {
 				webkitStorageInfo.requestQuota( PERSISTENT, /*5MB*/5*1024*1024, requestFs, onFSError );
 			} else {
 				deviceAPI = 'none';
-				disableInternalStorage();
 				callback();
 				return;
 			}
 		} else {
 			// If nonexistent, disable internal storage
 			deviceAPI = 'none';
-			disableInternalStorage();
 			callback();
 			return;
 		}
@@ -107,11 +108,6 @@ function enableInternalStorage() {
 	locationSelect.appendChild(locationDevice);
 	updateAddDialog();	
 }
-
-function disableInternalStorage() {
-	welcomeDeviceArea.style.display = 'none';
-	openDialogDeviceArea.style.display = 'none';
-};
 
 
 /* Directory IO
@@ -158,6 +154,7 @@ firetext.io.enumerate = function (directory, callback) {
 				// Split name into parts
 				var thisFile = firetext.io.split(file.name);
 				thisFile[3] = file.type;
+				thisFile[5] = file.lastModifiedDate;
 				
 				// Don't get any files but docs
 				if (!thisFile[1] |
@@ -337,11 +334,6 @@ function createFromDialog() {
 	var contentBlob = new Blob([contentData], { "type" : type });
 	
 	createAndOpen(location, directory, filename, filetype, contentBlob);
-	
-	// Clear file fields
-	document.getElementById('createDialogFileName').value = '';
-	document.getElementById('createDialogFileType').value = '.html';
-	extIcon();
 }
 
 function uploadFromDialog() {
@@ -379,9 +371,6 @@ function uploadFromDialog() {
 		
 		createAndOpen(location, directory, filename, filetype, file);
 	}
-	
-	// Clear file fields
-	document.getElementById('uploadDialogFiles').value = '';
 }
 
 function saveAsFromDialog() {
@@ -456,35 +445,33 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 	tempText = undefined;
 	
 	// Initialize raw editor
-	if (!rawEditor) {
+	if (!(rawEditor instanceof CodeMirror)) {
 		rawEditor = CodeMirror(rawEditorElement, {
 			lineNumbers: true
 		});
 	}
 	
 	// Set file name and type
-	document.getElementById('currentFileLocation').textContent = location;
-	document.getElementById('currentFileDirectory').textContent = directory;
-	document.getElementById('currentFileName').textContent = filename;
-	document.getElementById('currentFileType').textContent = filetype;
+	currentFileName.textContent = filename;
+	currentFileType.textContent = filetype;
+	currentFileLocation.textContent = location;
+	currentFileDirectory.textContent = directory;
 	[].forEach.call(document.getElementsByClassName('file-name'), function(element) {
 		element.textContent = filename + filetype;		
 	});
 	
 	// Show/hide toolbar
-	switch (filetype) {
-		case ".html":
-			document.getElementById('edit-bar').style.display = 'block';
-			editor.classList.remove('no-toolbar');
-			toolbar.classList.remove('hidden');
-			break;
-		case ".txt":
-		case ".odt":
-		default:
-			document.getElementById('edit-bar').style.display = 'none';
-			editor.classList.add('no-toolbar');
-			toolbar.classList.add('hidden');
-			break;
+	if (deviceType == 'desktop') {
+		switch (filetype) {
+			case ".txt":
+			case ".html":
+				document.getElementById('edit-bar').classList.remove('hidden');
+				break;
+			case ".odt":
+			default:
+				document.getElementById('edit-bar').classList.add('hidden');
+				break;
+		}
 	}
 	
 	// Fill editor
@@ -498,14 +485,24 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				});
 				switch (filetype) {
 					case ".txt":
+						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
+						document.querySelector('[data-tab-id="design"]').classList.add('hidden-item');
+						tabRaw.classList.add('hidden-item');
+						document.getElementById('rich-tools').classList.add('hidden-item');
+						break;
 					case ".odt":
 						document.querySelector('[data-tab-id="raw"]').classList.add('hidden-item');
+						document.querySelector('[data-tab-id="design"]').classList.add('hidden-item');
 						tabRaw.classList.add('hidden-item');
+						document.getElementById('rich-tools').classList.add('hidden-item');
+						editable = false; // Do not allow user to edit odt documents at this time.
 						break;
 					case ".html":
 					default:
 						document.querySelector('[data-tab-id="raw"]').classList.remove('hidden-item');
+						document.querySelector('[data-tab-id="design"]').classList.remove('hidden-item');
 						tabRaw.classList.remove('hidden-item');
+						document.getElementById('rich-tools').classList.remove('hidden-item');
 						rawEditor.swapDoc(new CodeMirror.Doc(result, 'text/html'));
 						break;
 				}
@@ -519,9 +516,6 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				
 				// Add listener to update views
 				watchDocument(filetype);
-				
-				// Start toolbar update interval			
-				toolbarInterval = window.setInterval(updateToolbar, 100);
 				
 				// Add file to recent docs
 				firetext.recents.add([fileInfo[0], fileInfo[1], fileInfo[2]], location);
@@ -603,6 +597,9 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 								spinner('hide');
 							}
 							
+							// Refresh preview
+							resetPreview(directory, filename, filetype, 'internal');
+							
 							// Finish
 							saving = false;
 							callback();
@@ -634,6 +631,9 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 			if (showBanner) {
 				showSaveBanner(filePath);
 			}
+			
+			// Refresh preview
+			resetPreview(directory, filename, filetype, 'dropbox');
 			 
 			// Finish 
 			saving = false;
@@ -642,13 +642,15 @@ firetext.io.save = function (directory, filename, filetype, contentBlob, showBan
 	}
 };
 
-firetext.io.load = function (directory, filename, filetype, callback, location) {
+firetext.io.load = function (directory, filename, filetype, callback, location, showSpinner) {
 	if (!directory | !filename | !filetype | !callback) {
 		return;
 	}
 	
 	// Show spinner
-	spinner();
+	if (showSpinner != false) {
+		spinner();
+	}
 
 	// Put directory in proper form
 	if (directory[directory.length - 1] != '/') {
@@ -675,14 +677,18 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				
 				reader.onerror = function () {	
 					// Hide spinner
-					spinner('hide');
+					if (showSpinner != false) {
+						spinner('hide');
+					}
 					
 					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 					callback(this.error.name, true);
 				};
 				reader.onload = function () {
 					// Hide spinner
-					spinner('hide');
+					if (showSpinner != false) {
+						spinner('hide');
+					}
 					
 					// Update file info
 					var thisFile = firetext.io.split(file.name);
@@ -700,7 +706,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				}
 				
 				// Hide spinner
-				spinner('hide');
+				if (showSpinner != false) {
+					spinner('hide');
+				}
 			};
 		} else if (deviceAPI == 'file') {
 			storage.root.getFile(directory + filename + filetype, {}, function(fileEntry) {
@@ -709,14 +717,18 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					
 					reader.onerror = function () {
 						// Hide spinner
-						spinner('hide');
+						if (showSpinner != false) {
+							spinner('hide');
+						}
 						
 						firetext.notify(navigator.mozL10n.get('load-unsuccessful')+this.error.name);
 						callback(this.error.name, true);
 					};
 					reader.onload = function () {
 						// Hide spinner
-						spinner('hide');
+						if (showSpinner != false) {
+							spinner('hide');
+						}
 						
 						callback(this.result, undefined, [directory, filename, filetype]);
 					};
@@ -730,7 +742,9 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 					firetext.notify(navigator.mozL10n.get('load-unsuccessful')+err.code);
 					
 					// Hide spinner
-					spinner('hide');
+					if (showSpinner != false) {
+						spinner('hide');
+					}
 				});
 			}, function(err) {
 				if (err.code === FileError.NOT_FOUND_ERR) {
@@ -740,13 +754,17 @@ firetext.io.load = function (directory, filename, filetype, callback, location) 
 				}
 				
 				// Hide spinner
-				spinner('hide');
+				if (showSpinner != false) {
+					spinner('hide');
+				}
 			});
 		}
 	} else if (location = 'dropbox') {
 		cloud.dropbox.load(filePath, filetype, function (result, error) {
 			// Hide spinner
-			spinner('hide');
+			if (showSpinner != false) {
+				spinner('hide');
+			}
 					
 			callback(result, error, [directory, filename, filetype]);
 		});
@@ -797,9 +815,53 @@ firetext.io.getDefaultContent = function (extension) {
 				'<html style="max-width: 690px; position: relative; margin: 0 auto;">',
 				'<head>',
 				'	<meta charset="utf-8">',
+				'	<style>',
+				/* The following default style is duplicated in contentscript.js and index.html */
+				'	h1 {',
+				'		font-size: 1.5em;',
+				'		margin: 0;',
+				'	}',
+				'	h2 {',
+				'		font-size: 1.17em;',
+				'		margin: 0;',
+				'	}',
+				'	h3 {',
+				'		font-size: 1em;',
+				'		margin: 0;',
+				'	}',
+				'	h4 {',
+				'		font-size: 1em;',
+				'		font-weight: normal;',
+				'		text-decoration: underline;',
+				'		margin: 0;',
+				'	}',
+				'	h5 {',
+				'		font-size: 1em;',
+				'		color: #555;',
+				'		margin: 0;',
+				'	}',
+				'	h6 {',
+				'		font-size: 1em;',
+				'		font-weight: normal;',
+				'		text-decoration: underline;',
+				'		color: #444;',
+				'		margin: 0;',
+				'	}',
+				'	p {',
+				'		margin: 0;',
+				'	}',
+				'	blockquote {',
+				'		margin: 0px 0px 0px 40px;',
+				'	}',
+				'	table.default, table.default td {',
+				'		border: 1px solid #afafaf;',
+				'	}',
+				'	</style>',
 				'</head>',
 				'<body>',
-				'	<br>',
+				'	<p>',
+				'		<br>',
+				'	</p>',
 				'</body>',
 				'</html>',
 				''

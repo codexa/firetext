@@ -15,21 +15,15 @@
 	<link href="style/icons/app/60.png" rel="shortcut icon" type="image/x-icon" />
 
 	<title>Firetext</title>
-	
-	<!-- Localization -->
-	<link rel="resource" type="application/l10n" href="locales/locales.ini" />
-	<script src="scripts/lib/l10n.js" defer></script>
 
 	<!-- Cloud -->
-	<script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
 	<script type="text/javascript" src="scripts/cloud/dropbox.min.js" defer></script>
-	<script type="text/javascript" src="scripts/cloud/dropbox.js" defer></script>
+	<script type="text/javascript" src="scripts/cloud/dropbox_authdriver_firefoxos.js" defer></script>
+	<script type="text/javascript" src="scripts/cloud/cloud.js" defer></script>
+	<script type="text/javascript" src="scripts/cloud/cloud_dropbox.js" defer></script>
 
 	<!-- Lib -->
-	<script type="text/javascript" src="scripts/lib/kamino.js" defer></script>
-	<script type="text/javascript" src="scripts/lib/uuid.core.js" defer></script>
-	<script type="text/javascript" src="scripts/lib/message_channel.js" defer></script>
-	<script type="text/javascript" src="scripts/lib/encrypt.js" defer></script>
+	<script type="text/javascript" src="scripts/lib/es6-promise.min.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/FileSaver.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/gesture_detector.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/stringview.js" defer></script>
@@ -39,6 +33,14 @@
 	<script type="text/javascript" src="scripts/lib/jszip-inflate.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/jszip-load.js" defer></script>
 	<script type="text/javascript" src="scripts/lib/codemirror-compressed.js" defer></script>
+	<script type="text/javascript" src="scripts/lib/fxosrate.js" defer></script>
+	<script type="text/javascript" src="scripts/lib/closest.js" defer></script>
+	
+	<!-- Localization -->
+	<meta name="defaultLanguage" content="en">
+	<meta name="availableLanguages" content="bg,bn-BD,bn-IN,cs,de,en,eo,es,fa-IR,fr,he,hi-IN,hu,id,it,ja,ml-IN,nl,pl,pt-BR,ro,ru,ta-IN,zh-CN">
+	<link rel="localization" href="locales/{locale}.app.properties">
+	<script src="scripts/lib/l10n.js" defer></script>
 
 	<!-- Scripts -->
 	<script type="text/javascript" src="scripts/modules.js" defer></script>
@@ -54,8 +56,8 @@
 	<script type="text/javascript" src="scripts/notifications.js" defer></script>
 
 	<!-- Parsers -->
-	<script type="text/javascript" src="scripts/parsers/base64.js" defer></script>
 	<script type="text/javascript" src="scripts/parsers/plain-text.js" defer></script>
+	<script type="text/javascript" src="scripts/parsers/odt.js/lib/odt.js" defer></script>
 
 	<!-- Building Blocks -->
 	<link rel="stylesheet" type="text/css" href="style/bb/buttons.css"/>
@@ -85,34 +87,24 @@
 	<link rel="stylesheet" type="text/css" href="style/night.css" />
 </head>
 
-<body role="application">
+<body role="application" data-esc="closeOverlay">
 	<div class="spinner center" id="loadSpinner" style="z-index: 1000;"><div></div></div>
 
 	<section data-type="sidebar" id="sidebar_welcome" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="welcome">
 		<header>
 			<h1 data-l10n-id="menu"></h1>
 		</header>
-		<nav>
+		<nav class="url-menu">
 			<h2 data-l10n-id="documents"></h2>
 			<ul>
 				<li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create"></a></li>
 				<li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import"></a></li>
 				<li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open"></a></li>
 			</ul>
-			<h2 data-l10n-id="help"></h2>
-			<ul>
-				<li><a href="#" data-click="browser" data-click-location="about" data-l10n-id="about-firetext"></a></li>
-				<li><a href="#" data-click="browser" data-click-location="support" data-l10n-id="firetext-support"></a></li>
-			</ul>
-			<h2 data-l10n-id="other"></h2>
-			<ul>
-				<li><a href="#" data-click="browser" data-click-location="credits" data-l10n-id="credits"></a></li>
-				<li><a href="#" data-click="browser" data-click-location="rate" data-l10n-id="rate-firetext"></a></li>
-			</ul>
 		</nav>
 		<div role="toolbar">
 			<ul>
-			 <li><button href="#" data-click="nav" data-click-location="settings" class="icon-setting"></button></li>
+			 <li><button href="#" data-click="nav" data-click-location="settings" class="icon-settings" data-l10n-title="settings"></button></li>
 			</ul>
 			<ul>
 			</ul>
@@ -125,24 +117,21 @@
 		data-click="sidebar" data-click-id="welcome" data-click-state="close" data-click-only="current">
 		<header>
 			<menu type="toolbar">
-				<button data-click="nav" data-click-location="create"><span class="icon icon-create"></span></button>
-				<button data-click="sidebar" data-click-id="welcome" class="drawerEnabled"><span class="icon icon-menu"></span></button>
+				<button data-click="nav" data-click-location="create" data-l10n-title="create"><span class="icon icon-pencil"></span></button>
+				<button data-click="sidebar" data-click-id="welcome" class="drawerEnabled" data-l10n-title="menu"><span class="icon icon-menu"></span></button>
 			</menu>
-			<h1 class="firetext icon-">firetext</h1>
+			<h1 class="firetext icon-"><img src="style/icons/app/firetext.svg" alt="Firetext" id="welcome-wordmark"></h1>
 		</header>
 		<div role="main" class="header-only" id="welcome-main-area">
+			<menu type="toolbar" class="desktop-only mainButtons">
+				<button data-click="nav" data-click-location="create"><span class="icon icon-pencil"></span><span class="buttonText" data-l10n-id="create"></span></button>
+				<button data-click="nav" data-click-location="import"><span class="icon icon-cloud-upload"></span><span class="buttonText" data-l10n-id="import"></span></button>
+				<button data-click="nav" data-click-location="settings" id="mainButtonConnectDropbox"><span class="icon icon-dropbox"></span><span class="buttonText" data-l10n-id="use-dropbox"></span></button>
+			</menu>
 			<article data-type="list" class="docsList" id="welcome-docs-list">
 				<div id="welcome-recents-area">
 					<h2 data-l10n-id="recent-documents"></h2>
 					<ul id="welcome-recents-list"></ul>
-				</div>
-				<div id="welcome-device-area">
-					<h2 data-l10n-id="documents-device"></h2>
-					<ul id="welcome-device-list"></ul>
-				</div>
-				<div id="welcome-dropbox-area">
-					<h2 data-l10n-id="documents-dropbox"></h2>
-					<ul id="welcome-dropbox-list"></ul>
 				</div>
 			</article>
 		</div>
@@ -165,7 +154,7 @@
 	
 	<section role="dialog" id="create" class="create-dialog">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="createFromDialog" class="create-button" data-l10n-id="create"></button>
 			</menu>
@@ -178,7 +167,7 @@
 		<div role="main" class="header-only">
 			<div class="form">
 				<br>
-				<img alt="" src="style/icons/extensions/default.png" id="extIconFile" height="150px" style="display:block; margin: 10px auto;"/>
+				<span id="extIconFile"></span>
 				<fieldset class="button-block">
 					<legend class="fileTypeLegend action">
 						<select name="File type" id="createDialogFileType" data-change="extIcon">
@@ -200,11 +189,11 @@
 			</div>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section role="dialog" id="import" class="create-dialog">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="uploadFromDialog" class="create-button" data-l10n-id="import"></button>
 			</menu>
@@ -222,11 +211,11 @@
 			</div>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section role="dialog" id="save-as" class="create-dialog">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="saveAsFromDialog" class="create-button" data-l10n-id="save"></button>
 			</menu>
@@ -245,41 +234,37 @@
 					<section id="fileNameInput">
 						<p>
 							<input placeholder="untitled" required="" type="text" id="saveAsDialogFileName" data-enter="saveAsFromDialog" />
-							<button type="reset" data-mouse-down="clearSaveAsForm"></button>
+							<button type="reset" data-mouse-down="clearForm"></button>
 						</p>
 					</section>
 				</fieldset>
 			</div>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
-	<section role="dialog" id="open">
+	<section role="dialog" id="open" class="menuless">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<h1 data-l10n-id="open"></h1>
 		</header>
-		<div role="main" class="header-only">
+		<div role="main" class="header-only" id="open-dialog-main-area">
 			<article data-type="list" class="docsList">
-				<div id="open-dialog-device-area">
-					<h2 data-l10n-id="documents-device"></h2>
-					<ul id="open-dialog-device-list"></ul>
-				</div>
-				<div id="open-dialog-dropbox-area">
-					<h2 data-l10n-id="documents-dropbox"></h2>
-					<ul id="open-dialog-dropbox-list"></ul>
+				<div id="open-dialog-recents-area">
+					<h2 data-l10n-id="recent-documents"></h2>
+					<ul id="open-dialog-recents-list"></ul>
 				</div>
 			</article>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section data-type="sidebar" id="sidebar_main" data-position="right" data-swipe-right="sidebar" data-swipe-right-id="main">
 		<header>
 			<h1 class="file-name"></h1>
 		</header>
-		<nav>
-		<h2 class="desktop-only file-name"></h2>
+		<nav class="url-menu">
+			<h2 class="desktop-only file-name"></h2>
 			<ul>
 				<li><a href="#" data-click="saveFromEditor" data-l10n-id="save"></a></li>
 				<li><a href="#" data-click="nav" data-click-location="save-as" data-l10n-id="save-as"></a></li>
@@ -296,20 +281,10 @@
 				<li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import"></a></li>
 				<li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open"></a></li>
 			</ul>
-			<h2 data-l10n-id="help"></h2>
-			<ul>
-				<li><a href="#" data-click="browser" data-click-location="about" data-l10n-id="about-firetext"></a></li>
-				<li><a href="#" data-click="browser" data-click-location="support" data-l10n-id="firetext-support"></a></li>
-			</ul>
-			<h2 data-l10n-id="other"></h2>
-			<ul>
-				<li><a href="#" data-click="browser" data-click-location="credits" data-l10n-id="credits"></a></li>
-				<li><a href="#" data-click="browser" data-click-location="rate" data-l10n-id="rate-firetext"></a></li>
-			</ul>
 		</nav>
 		<div role="toolbar">
 		 <ul>
-			 <li><button class="icon-setting" href="#" data-click="nav" data-click-location="settings"></button></li>
+			 <li><button class="icon-settings" href="#" data-click="nav" data-click-location="settings" data-l10n-title="settings"></button></li>
 			</ul>
 			<ul>
 			</ul>
@@ -317,12 +292,11 @@
 	</section>
 	
 	<section role="region" id="edit" data-click="sidebar" data-click-id="main" data-click-state="close" data-click-only="current">
-		<header class="edit-header">
-			<button data-click="closeFile" class="no-zen"><span class="icon icon-close"></span></button>
+		<header class="edit-header top-bar">
+			<button id="header-close-file" data-click="closeFile" class="no-zen" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
-				<button data-click="saveFromEditor" class="no-zen" id="editorSaveButton"><span class="icon icon-save"></span></button>
-				<button data-click="fullscreen" class="desktop-only" id="editor-zen-button"><span class="icon icon-fs"></span></button>
-				<button data-click="sidebar" data-click-id="main" class="menu drawerEnabled no-zen"><span class="icon icon-menu"></span></button>
+				<button data-click="fullscreen" class="desktop-only" id="editor-zen-button" data-l10n-title="fullscreen"><span class="icon icon-fullscreen"></span></button>
+				<button data-click="sidebar" data-click-id="main" class="menu drawerEnabled no-zen" data-l10n-title="menu"><span class="icon icon-menu"></span></button>
 			</menu>
 			<h1 id="fileName" class="no-zen"><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
 			<div class="tabBar">
@@ -330,154 +304,90 @@
 				<div data-click="tab" data-click-name="raw" data-l10n-id="raw" role="tab-button" data-tab-id="raw"></div>			
 			</div>
 		</header>
+		<div role="toolbar" id="edit-bar" class="top-bar hidden">
+			<div id="edit-zone">
+				<ul>
+					<li id="editorSaveButton"><button class="icon-content-save" data-click="saveFromEditor" data-l10n-title="save"></button></li>
+					<li><button class="icon-undo" id="undo" data-click="formatDoc" data-click-action="undo" data-l10n-title="undo"></button></li>
+					<li><button class="icon-redo" id="redo" data-click="formatDoc" data-click-action="redo" data-l10n-title="redo"></button></li>
+				</ul>
+				<ul id="rich-tools">
+					<li><button class="sticky icon-format-bold" id="bold" data-click="formatDoc" data-click-action="bold" data-l10n-title="bold"></button></li>
+					<li><button class="sticky icon-format-italic" id="italic" data-click="formatDoc" data-click-action="italic" data-l10n-title="italic"></button></li>
+					<li><button class="sticky icon-format-underline" id="underline" data-click="formatDoc" data-click-action="underline" data-l10n-title="underline"></button></li>
+					<li><button class="sticky icon-format-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough" data-l10n-title="strikethrough"></button></li>
+					<li><button class="icon-format-clear" id="clear-format" data-click="formatDoc" data-click-action="removeFormat" data-l10n-title="clear-format"></button></li>
+					<li>
+						<select data-change="justify" id="justify-select" data-l10n-title="alignment">
+							<option value="l" data-l10n-id="left" style="text-align: left;"></option>
+							<option value="r" data-l10n-id="right" style="text-align: right;"></option>
+							<option value="c" data-l10n-id="center" style="text-align: center;"></option>
+							<option value="j" data-l10n-id="justified" style="text-align: justify;"></option>
+						</select>
+					</li>
+					<li>
+						<select data-change="font" id="font-select" data-l10n-title="font">
+							<option value="" disabled selected data-l10n-id="font" style='font-family: initial;'></option>
+							<option value='Verdana, Geneva, sans-serif' style='font-family: Verdana, Geneva, sans-serif;'>Verdana</option>
+							<option value='Helvetica, Arial, sans-serif' style='font-family: Helvetica, Arial, sans-serif;'>Helvetica</option>
+							<option value='Georgia, Utopia, Charter, serif' style='font-family: Georgia, Utopia, Charter, serif;'>Georgia</option>
+							<option value='"Times New Roman", Times, serif' style='font-family: "Times New Roman", Times, serif;'>Times New Roman</option>
+							<option value='"Courier New", Courier, monospace' style='font-family: "Courier New", Courier, monospace;'>Courier New</option>
+						</select>
+					</li>
+					<li>
+						<select id="font-size-select" data-change="fontSize" data-l10n-title="font-size">
+							<option value="" disabled selected data-l10n-id="font-size"></option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+						</select>
+					</li>
+					<li>
+						<select data-change="style" id="style-select" data-l10n-title="formatting">
+							<option value="" disabled selected data-l10n-id="format-block"			style="font-size: 1.8rem;	font-weight: initial;	color: initial;"></option>
+							<option value="p" data-l10n-id="paragraph"								style="font-size: 1.8rem;	font-weight: initial;	color: initial;"></option>
+							<!-- The following default style is duplicated in io.js and contentscript.js -->
+							<!-- `font-size`s are multiplied by 1.8rem -->
+							<option value="h1" data-l10n-id="heading-n" data-l10n-args='{ "n": 1 }' style="font-size: 2.7rem;	font-weight: bold;		color: initial;"></option>
+							<option value="h2" data-l10n-id="heading-n" data-l10n-args='{ "n": 2 }' style="font-size: 2.106rem;	font-weight: bold;		color: initial;"></option>
+							<option value="h3" data-l10n-id="heading-n" data-l10n-args='{ "n": 3 }' style="font-size: 1.8rem;	font-weight: bold;		color: initial;"></option>
+							<option value="h4" data-l10n-id="heading-n" data-l10n-args='{ "n": 4 }' style="font-size: 1.8rem;	font-weight: initial;	color: initial;	text-decoration: underline;"></option>
+							<option value="h5" data-l10n-id="heading-n" data-l10n-args='{ "n": 5 }' style="font-size: 1.8rem;	font-weight: bold;		color: #555;"></option>
+							<option value="h6" data-l10n-id="heading-n" data-l10n-args='{ "n": 6 }' style="font-size: 1.8rem;	font-weight: initial;	color: #444;	text-decoration: underline;"></option>
+						</select>
+					</li>
+					<li><button class="icon-minus" data-click="formatDoc" data-click-action="insertHorizontalRule" data-l10n-title="horizontal-rule"></button></li>
+					<li><button class="icon-image-area" data-click="image" data-l10n-title="image"></button></li>
+					<li><button class="icon-link-variant" data-click="hyperlink" data-l10n-title="link"></button></li>
+					<li><button class="icon-format-list-bulleted" data-click="formatDoc" data-click-action="insertUnorderedList" data-l10n-title="list"></button></li>
+					<li><button class="icon-format-list-numbers" data-click="formatDoc" data-click-action="insertOrderedList" data-l10n-title="numbered-list"></button></li>
+					<li><button class="icon-table" data-click="table" data-l10n-title="table"></button></li>
+				</ul>
+				<ul>
+				</ul>
+			</div>
+		</div>
 		<div role="main" class="editor-container">
 			<ul role="tabs" id="editTabs">
 				<div role="tab" id="tab-design">
-					<iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="hideToolbar" data-blur="showToolbar" src=""></iframe>
-					<div role="toolbar" id="edit-bar">
-						<ul id="edit-zone">
-							<li><button class="sticky icon-bold" id="bold" data-click="formatDoc" data-click-action="bold"></button></li>
-							<li><button class="sticky icon-italic" id="italic" data-click="formatDoc" data-click-action="italic"></button></li>
-							<li><button class="sticky icon-underline" id="underline" data-click="formatDoc" data-click-action="underline"></button></li>
-							<li><button class="sticky icon-strikethrough" firetext-icon id="strikethrough" data-click="formatDoc" data-click-action="strikeThrough"></button></li>
-							<li><button class="icon-more" data-click="nav" data-click-location="format"></button></li>
-						</ul>
-						<ul>
-						</ul>
-					</div>
+					<iframe class="editor" id="editor" sandbox="allow-scripts" data-focus="showToolbar" data-blur="hideToolbar" src=""></iframe>
 				</div>
 				<div role="tab" id="tab-raw">
-					<div class="editor" id="rawEditor" data-focus="hideToolbar" data-blur="showToolbar"></div>
+					<div class="editor" id="rawEditor" data-focus="showToolbar" data-blur="hideToolbar"></div>
 				</div>
 			</ul>
 		</div>
-		<button class="icon-more" id="hide-keyboard-button"></button>
+		<button class="top-bar hidden icon-check" id="hide-keyboard-button" data-click="hideToolbar" data-l10n-title="hide-keyboard"></button>
 	</section>
-	
-	<section role="dialog" id="format">
-		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
-			<h1 data-l10n-id="tools"></h1>
-		</header>
-		<div role="main" class="header-only">
-			<article data-type="list">
-				<h2 data-l10n-id="elements"></h2>
-				<ul>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<button data-click="formatDoc" data-click-action="insertHorizontalRule" data-click-back="true" data-l10n-id="insert"></button>
-							</label>
-						</aside>
-						<aside class="icon-hr"></aside>
-						<p class="label" data-l10n-id="horizontal-rule"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<button data-click="image" data-l10n-id="insert"></button>
-							</label>
-						</aside>
-						<aside class="icon-image"></aside>
-						<p class="label" data-l10n-id="image"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<button data-click="hyperlink" data-l10n-id="insert"></button>
-							</label>
-						</aside>
-						<aside class="icon-link"></aside>
-						<p class="label" data-l10n-id="link"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<button data-click="formatDoc" data-click-action="insertUnorderedList" data-click-back="true" data-l10n-id="insert"></button>
-							</label>
-						</aside>
-						<aside class="icon-list"></aside>
-						<p class="label" data-l10n-id="list"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<button data-click="formatDoc" data-click-action="insertOrderedList" data-click-back="true" data-l10n-id="insert"></button>
-							</label>
-						</aside>
-						<aside class="icon-numbered-list"></aside>
-						<p class="label" data-l10n-id="numbered-list"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<button data-click="table" data-l10n-id="insert"></button>
-							</label>
-						</aside>
-						<aside class="icon-table"></aside>
-						<p class="label" data-l10n-id="table"></p>
-					</li>
-				</ul>
-				<h2 data-l10n-id="formatting"></h2>
-				<ul>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label>
-								<select data-change="justify" id="justify-select">
-									<option selected value="l" data-l10n-id="left"></option>
-									<option value="r" data-l10n-id="right"></option>
-									<option value="c" data-l10n-id="center"></option>
-									<option value="j" data-l10n-id="justified"></option>
-								</select>
-							</label>
-						</aside>
-						<p class="label" data-l10n-id="alignment"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label class="pack-switch">
-								<input type="checkbox" id="boldCheckbox" data-click="formatDoc" data-click-action="bold">
-								<span></span>
-							</label>
-						</aside>
-						<p class="label" data-l10n-id="bold"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label class="pack-switch">
-								<input type="checkbox" id="italicCheckbox" data-click="formatDoc" data-click-action="italic">
-								<span></span>
-							</label>
-						</aside>
-						<p class="label" data-l10n-id="italic"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label class="pack-switch">
-								<input type="checkbox" id="strikethroughCheckbox" data-click="formatDoc" data-click-action="strikeThrough">
-								<span></span>
-							</label>
-						</aside>
-						<p class="label" data-l10n-id="strikethrough"></p>
-					</li>
-					<li class="noLink">
-						<aside class="pack-end">
-							<label class="pack-switch">
-								<input type="checkbox" id="underlineCheckbox" data-click="formatDoc" data-click-action="underline">
-								<span></span>
-							</label>
-						</aside>
-						<p class="label" data-l10n-id="underline"></p>
-					</li>
-				</ul>
-			</article>
-		</div>
-	</section>
-	<div class="background"></div>
 	
 	<section role="dialog" id="hyperlink">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="hyperlink" data-click-dialog="true" data-l10n-id="okay"></button>
 			</menu>
@@ -497,7 +407,7 @@
 			</div>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section role="action" id="image-location">
 		<header>
@@ -509,11 +419,11 @@
 			<button data-click="navBack" data-l10n-id="cancel"></button>
 		</menu>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section role="dialog" id="image-web">
 			<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="image" data-click-location="web" data-click-dialog="true" data-l10n-id="okay"></button>
 			</menu>
@@ -533,11 +443,11 @@
 			</div>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section role="dialog" id="table">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<menu type="toolbar">
 				<button data-click="table" data-click-dialog="true" data-l10n-id="okay"></button>
 			</menu>
@@ -547,23 +457,35 @@
 			<div class="form">
 				<br>
 				<fieldset class="button-block">
-					<section>
-						<p>
-							<input data-l10n-id="number-of-rows" placeholder="# of rows" required type="text" id="table-rows" data-enter="table" data-enter-dialog="true" />
-							<button type="reset" data-mouse-down="clearForm"></button>
-						</p>
-					</section>
-					<section>
-						<p>
-							<input data-l10n-id="number-of-columns" placeholder="# of columns" required type="text" id="table-columns" data-enter="table" data-enter-dialog="true" />
-							<button type="reset" data-mouse-down="clearForm"></button>
-						</p>
-					</section>
+					<table>
+						<tr>
+							<td>
+								<input data-l10n-id="number-of-rows" placeholder="# of rows" required="" type="text" disabled="">
+							</td>
+							<td>
+								<p>
+									<input required="" type="text" id="table-rows" data-enter="table" data-enter-dialog="true">
+									<button type="reset" data-mouse-down="clearForm"></button>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input data-l10n-id="number-of-columns" placeholder="# of columns" required="" type="text" disabled="">
+							</td>
+							<td>
+								<p>
+									<input required="" type="text" id="table-columns" data-enter="table" data-enter-dialog="true">
+									<button type="reset" data-mouse-down="clearForm"></button>
+								</p>
+							</td>
+						</tr>
+					</table>
 				</fieldset>
 			</div>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 	<section role="action" id="save-file">
 		<header>
@@ -575,11 +497,11 @@
 			<button data-click="navBack" data-l10n-id="cancel"></button>
 		</menu>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 
-	<section role="dialog" id="settings">
+	<section role="dialog" id="settings" class="menuless">
 		<header>
-			<button data-click="navBack"><span class="icon icon-close"></span></button>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
 			<h1 data-l10n-id="settings"></h1>
 		</header>
 		<div role="main" class="header-only">
@@ -608,6 +530,15 @@
 								</label>
 							</aside>
 							<p class="label" data-l10n-id="enable-autosave"></p>
+						</li>
+						<li class="noLink" id="autosave-notification-setting">
+							<aside class="pack-end">
+								<label class="pack-switch">
+									<input type="checkbox" id="autosave-notification-enabled-switch">
+									<span></span>
+								</label>
+							</aside>
+							<p class="label" data-l10n-id="enable-autosave-notification"></p>
 						</li>
 						<li class="noLink">
 							<aside class="pack-end">
@@ -643,9 +574,12 @@
 					<ul>
 						<li class="noLink">
 							<aside class="pack-end">
-								<label class="pack-switch">
-									<input type="checkbox" id="previews-enabled-switch">
-									<span></span>
+								<label>
+									<select id="previews-select">
+										<option value="0" data-l10n-id="always-off"></option>
+										<option value="1" data-l10n-id="always-on"></option>
+										<option selected value="2" data-l10n-id="auto"></option>
+									</select>
 								</label>
 							</aside>
 							<p class="label" data-l10n-id="enable-file-previews"></p>
@@ -669,21 +603,27 @@
 										<option value="auto" data-l10n-id="auto" selected></option>
 										<option value="bg">български</option>
 										<option value="bn-BD">বাংলা (BD)</option>
+										<option value="bn-IN">বাংলা (IN)</option>
 										<option value="cs">&#268;e&#353;tina</option>
 										<option value="de">Deutsch</option>
-										<option value="en-US">English (US)</option>
+										<option value="en">English</option>
 										<option value="eo">Esperanto</option>
 										<option value="es">Espa&#241;ol</option>
+										<option value="fa-IR">فارسى (IR)</option>
 										<option value="fr">Fran&#231;ais</option>
 										<option value="he">&#1506;&#1489;&#1512;&#1497;&#1514;</option>
+										<option value="hi-IN">हिन्दी (IN)</option>
 										<option value="hu">Magyar</option>
 										<option value="id">Bahasa Indonesia</option>
 										<option value="it">Italiano</option>
+										<option value="ja">日本語</option>
+										<option value="ml-IN">മലയാളം (IN)</option>
 										<option value="nl">Nederlands</option>
 										<option value="pl">Polski</option>
 										<option value="pt-BR">Portugu&#234;s (BR)</option>
 										<option value="ro">Rom&acirc;n&#x103;</option>
 										<option value="ru">Русский</option>
+										<option value="ta-IN">தமிழ் (IN)</option>
 										<option value="zh-CN">&#20013;&#25991; (CN)</option>
 									</select>
 								</label>
@@ -695,7 +635,7 @@
 			</article>
 		</div>
 	</section>
-	<div class="background"></div>
+	<div class="background" data-click="navBack"></div>
 	
 </body>
 </html>

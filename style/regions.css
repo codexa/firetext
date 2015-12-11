@@ -13,10 +13,10 @@ section[role="region"], section[role="dialog"] {
   left: 0px;
   right: 0px;  
   background-color: #fff;  
-    -moz-transition: all .4s ease;
-    -webkit-transition: all .4s ease;
-    -o-transition: all .4s ease;
-  transition: all .4s ease;
+    -moz-transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s, visibility .4s;
+    -webkit-transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s, visibility .4s;
+    -o-transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s, visibility .4s;
+  transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s, visibility .4s;
 }
 
 section[role="region"] {
@@ -47,6 +47,10 @@ section[role="dialog"].current {
     -o-transform: none;
     -ms-transform: none;
   transform: none;
+    -moz-transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s;
+    -webkit-transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s;
+    -o-transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s;
+  transition: -moz-transform .4s, -webkit-transform .4s, -o-transform .4s, -ms-transform .4s, transform .4s;
 }
 
 /* Sidebars */
