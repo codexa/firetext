@@ -4,7 +4,6 @@
   "version": "0.5",
   "type": "privileged",
   "launch_path": "/index.html",
-  "origin": "app://firetext",
   "developer": {
     "name": "Airborn OS",
     "url": "https://www.airbornos.com/"
@@ -94,6 +93,12 @@
       "access": "readwrite"
     }
   },
+  "redirects": [
+    {
+	  "from": "https://firetext-server.herokuapp.com/auth/dropbox/oauth2/",
+      "to": "/modules/oauth2/index.html"
+	}
+  ],
   "activities": {
     "open": {
       "href": "./index.html",
