@@ -15,6 +15,7 @@ cp -r ../modules ../build
 cp -r ../locales ../build
 cp ../manifest.webapp ../build
 
+mkdir -p ../build/scripts/cloud
 mkdir -p ../build/scripts/lib
 mkdir -p ../build/scripts/parsers/odt.js/lib
 cp ../scripts/messages.js  ../build/scripts
