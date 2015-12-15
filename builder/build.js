@@ -189,6 +189,7 @@ prepareFile(argv._[0].replace('../', ''), {compat: false, _compat: false, bootst
 				/\.icon-file/,
 				/\.icon-format-align-left/,
 				/\.icon-format-float-left/,
+				/\.icon-chevron-right/,
 			]
 		}, function(err, css) {
 			// Remove unused glyphs from icon font
