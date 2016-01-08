@@ -5,8 +5,8 @@
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
-    "name": "Airborn OS",
-    "url": "https://www.airbornos.com/"
+    "name": "Codexa",
+    "url": "https://github.com/codexa"
   },
   "icons": {
     "32": "/style/icons/app/32.png",
