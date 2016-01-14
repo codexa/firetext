@@ -1,7 +1,7 @@
 /*
  * Firetext
  * Copyright (C) Codexa Organization.
- * Licensed and released under the GPLv3. 
+ * Licensed and released under the GPLv3.
  * See LICENSE in "licenses/gpl.txt"
  * or at http://www.gnu.org/licenses/gpl-3.0.txt
  */
@@ -17,8 +17,8 @@ firetext.parsers = {};
 firetext.analytics = {};
 
 // Config
-var version = '0.5';
-var serverURL = 'https://www.airbornos.com/firetext';
+var version = '0.5.1';
+var serverURL = 'https://firetext-server.herokuapp.com/';
 
 // Misc
 firetext.initialized = new CustomEvent('firetext.initialized');
@@ -47,17 +47,17 @@ var appCache = window.applicationCache;
 ------------------------*/
 window.addEventListener('DOMContentLoaded', function() {firetext.init();}, false);
 
-firetext.init = function () {	
+firetext.init = function () {
 	// l10n catch
 	navigator.mozL10n.once(function () {
 		// Select elements
 		initElements();
-	
+
 		// Load modules
-		initModules(function() {		
+		initModules(function() {
 			// Update Doc Lists
 			updateDocLists();
-		
+
 			// Check for recent file, and if found, load it.
 			if (firetext.settings.get('autoload') == 'true') {
 				var lastDoc = [firetext.settings.get('autoload.dir'), firetext.settings.get('autoload.name'), firetext.settings.get('autoload.ext'), firetext.settings.get('autoload.loc')];
@@ -67,12 +67,12 @@ firetext.init = function () {
 						if (firetext.settings.get('dropbox.enabled') == 'true') {
 							if (cloud.dropbox.client) {
 								loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
-								spinner('hide');								
+								spinner('hide');
 							} else {
 								window.addEventListener('cloud.dropbox.authed', function() {
 									loadToEditor(lastDoc[0], lastDoc[1], lastDoc[2], lastDoc[3]);
 									spinner('hide');
-								});								
+								});
 							}
 						} else {
 							spinner('hide');
@@ -89,28 +89,28 @@ firetext.init = function () {
 				spinner('hide');
 				regions.nav('welcome');
 			}
-		
+
 			// Create listeners
 			initListeners();
 
 			// Dispatch init event
 			window.dispatchEvent(firetext.initialized);
 			firetext.isInitialized = true;
-		});	
+		});
 	});
-	
+
 	navigator.mozL10n.ready(function () {
 		// Add l10n title attributes and long-press help popups
 		initElementTitles();
-		
+
 		// Update document title
 		setDocumentTitle();
-		
+
 		// Let Bugsense know about language
 		if (bugsenseInitialized) {
 			Bugsense.addExtraData('app_locale', navigator.mozL10n.language.code);
 		}
-		
+
 		// Freeze style selectors width, for Chrome
 		Array.prototype.forEach.call(toolbar.getElementsByTagName('select'), function(select) {
 			var style = select.getAttribute('style') || '';
@@ -122,48 +122,48 @@ firetext.init = function () {
 	});
 };
 
-function initModules(callback) {	
+function initModules(callback) {
 	// Initialize urls
 	initVariables(function(){
 		// Initialize Bugsense
 		bugsenseInit();
-		
+
 		// Add extra links to menu
 		addURLs();
-    
+
 		// Initialize cloud services
 		cloud.init();
 	});
-	
+
 	// Find device type
 	checkDevice();
-		
+
 	// Initialize Settings
 	firetext.settings.init();
-	
+
 	// Initialize Language
 	firetext.language(firetext.settings.get('language'));
-	
+
 	// Initialize Gestures
 	initGestures();
-	
+
 	// Initialize night
 	night();
-	
+
 	// Initialize extIcon
 	extIcon();
-	
+
 	// Initalize recent docs
 	firetext.recents.init();
-	
+
 	// Initialize IO
 	firetext.io.init(null, function() {
 		callback();
 	});
-	
+
 	// Initialize print button
 	initPrintButton(function() {});
-	
+
 	// Initialize rating prompter
 	rate = Object.create(fxosRate);
 	var config = {
@@ -171,7 +171,7 @@ function initModules(callback) {
 			};
 	rate.init("firetext", version, config);
 	rate.promptRequired();
-	
+
 	// Initialize Christmas
 	christmas();
 }
@@ -246,16 +246,16 @@ function initElements() {
 	toolbar = document.getElementById('edit-zone');
 	editWindow = document.getElementById('edit');
 	locationLegend = document.getElementById('locationLegend');
-	locationSelect = document.getElementById('createDialogFileLocation');	
+	locationSelect = document.getElementById('createDialogFileLocation');
 	printButton = document.getElementById('printButton');
 	mainButtonConnectDropbox = document.getElementById('mainButtonConnectDropbox');
-	
+
 	// Current file information
 	currentFileName = document.getElementById('currentFileName');
 	currentFileType = document.getElementById('currentFileType');
 	currentFileLocation = document.getElementById('currentFileLocation');
 	currentFileDirectory = document.getElementById('currentFileDirectory');
-	
+
 	// Lists
 	welcomeMainArea = document.getElementById('welcome-main-area');
 	welcomeDocsList = document.getElementById('welcome-docs-list');
@@ -292,7 +292,7 @@ function throttle(fn, ms) {
 	};
 }
 
-function initListeners() {	
+function initListeners() {
 	// Add event listeners
 	toolbar.addEventListener(
 		'mousedown', function mouseDown(event) {
@@ -308,7 +308,7 @@ function initListeners() {
 				// This doesn't catch the case where the user selects the
 				// same option, but we don't have anything better.
 				editor.contentWindow.focus();
-				
+
 				// Also, update select styles.
 				updateSelectStyles();
 			}
@@ -374,12 +374,12 @@ function addURLs() {
 			"url": currentUrl.url
 		};
 	}
-	
+
 	// Get url menus and clear old urls
 	var urlMenus = document.getElementsByClassName("url-menu");
 	var tempOldUrls = document.getElementsByClassName("remote-url");
 	while(tempOldUrls[0]) tempOldUrls[0].parentNode.removeChild(tempOldUrls[0]);
-	
+
 	// Create DOM elements
 	for (var urlCategory in urls) {
 		var tempCategoryTitle = document.createElement("h2");
@@ -390,7 +390,7 @@ function addURLs() {
 		} else {
 			tempCategoryTitle.textContent = urls[urlCategory].name;
 		}
-		
+
 		var tempLinkContainer = document.createElement("ul");
 		tempLinkContainer.classList.add("remote-url");
 		for (var thisUrl in urls[urlCategory].items) {
@@ -401,21 +401,21 @@ function addURLs() {
 			tempLink.href = "#";
 			tempLink.setAttribute("data-click","browser");
 			tempLink.setAttribute("data-click-location",thisUrlItem.url);
-			tempLink.setAttribute("data-url-id",thisUrlItem.id);		
+			tempLink.setAttribute("data-url-id",thisUrlItem.id);
 			if (navigator.mozL10n.get(thisUrlItem.id) != ""){
 				tempLink.setAttribute("data-l10n-id",thisUrlItem.id);
 				tempLink.textContent = navigator.mozL10n.get(thisUrlItem.id);
 			} else {
 				tempLink.textContent = thisUrlItem.name;
 			}
-			
+
 			// Add link to list item
 			tempListItem.appendChild(tempLink);
-			
+
 			// Add to category container
 			tempLinkContainer.appendChild(tempListItem);
 		}
-		
+
 		// Add category to url menus
 		Array.prototype.filter.call(urlMenus, function(menu){
 			menu.appendChild(tempCategoryTitle.cloneNode(true));
@@ -442,7 +442,7 @@ function updateAddDialog() {
 			createDialog.getElementsByClassName('create-button')[0].style.pointerEvents = 'none';
 			createDialog.getElementsByClassName('create-button')[0].style.color = '#999';
 			createDialog.querySelector('[role="main"]').style.display = 'none';
-			
+
 			// Show notice
 			var noStorageNotice = createDialog.getElementsByClassName('no-storage-notice')[0];
 			if (noStorageNotice.classList.contains('hidden-item')) {
@@ -455,14 +455,14 @@ function updateAddDialog() {
 			createDialog.getElementsByClassName('create-button')[0].style.pointerEvents = '';
 			createDialog.getElementsByClassName('create-button')[0].style.color = '';
 			createDialog.querySelector('[role="main"]').style.display = '';
-			
+
 			// Hide location select if only one option exists
 			if (locationSelect.length === 1) {
 				locationLegend.style.display = 'none';
 			} else {
-				locationLegend.style.display = 'block';                 
+				locationLegend.style.display = 'block';
 			}
-			
+
 			// Hide notice
 			var noStorageNotice = createDialog.getElementsByClassName('no-storage-notice')[0];
 			if (!noStorageNotice.classList.contains('hidden-item')) {
@@ -555,17 +555,17 @@ function updateDocLists(lists) {
 		lists = [];
 		lists.push('all');
 	}
-	
+
 	if (!lists.length) {
 		updateAllDocs();
 	}
-	
+
 	if (lists.indexOf('all') != '-1' | lists.indexOf('recents') != '-1') {
 		// Recents
 		recentsDocs = firetext.recents.get();
 		updateAllDocs();
 	}
-		
+
 	if (lists.indexOf('all') != '-1' | lists.indexOf('internal') != '-1') {
 		// Internal
 		spinner();
@@ -575,7 +575,7 @@ function updateDocLists(lists) {
 			spinner('hide');
 		});
 	}
-		
+
 	if (lists.indexOf('all') != '-1' | lists.indexOf('cloud') != '-1') {
 		// Cloud
 		if (firetext.settings.get('dropbox.enabled') == 'true' && cloud.dropbox.client) {
@@ -596,11 +596,11 @@ function getPreview(filetype, content, error) {
 	if (!content) {
 		content = '';
 	}
-	
+
 	if(error) {
 		return document.createTextNode(content);
 	}
-	
+
 	switch (filetype) {
 		case ".txt":
 			content = firetext.parsers.plain.parse(content, "HTML");
@@ -620,7 +620,7 @@ function getPreview(filetype, content, error) {
 			if(!/<!DOCTYPE/i.test(content)) content = '<!DOCTYPE html>' + content;
 			break;
 	}
-	
+
 	var iframe = document.createElement('iframe');
 	iframe.sandbox = 'allow-scripts';
 	iframe.srcdoc = content
@@ -712,7 +712,7 @@ function updatePreviews() {
 		}
 		var scrollParent = welcomeMainArea.contains(item) ? welcomeMainArea : openDialogMainArea;
 		if(item.offsetTop < item.offsetParent.offsetHeight + scrollParent.scrollTop &&
-			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {			
+			item.offsetTop + item.offsetHeight > scrollParent.offsetTop + scrollParent.scrollTop) {
 			var directory = item.getAttribute('data-click-directory');
 			var filename = item.getAttribute('data-click-filename');
 			var filetype = item.getAttribute('data-click-filetype');
@@ -755,16 +755,16 @@ function scrollDocList() {
 			item.classList.add("hiddenPreview");
 		}
 	});
-	
+
 }
 
 function buildDocListItems(DOCS, listElms, ctr) {
 	// Get current doc
 	var DOC = DOCS[ctr];
-	
+
 	// Get doc location
 	var location = DOC[4] || 'internal';
-	
+
 	// UI refinements
 	var directory;
 	if (DOC[0].charAt(0) == '/' && DOC[0].length > 1) {
@@ -772,20 +772,20 @@ function buildDocListItems(DOCS, listElms, ctr) {
 	} else {
 		directory = DOC[0];
 	}
-			
+
 	// Generate item
 	var className = 'fileListItem' + (ctr === DOCS.length - 1 ? ' lastItem' : '');
 	var output = '<li class="'+className+'" data-click="loadToEditor" data-click-directory="'+DOC[0]+'" data-click-filename="'+DOC[1]+'" data-click-filetype="'+DOC[2]+'" data-click-location="'+location+'" data-index="'+ctr+'" style="-webkit-order: '+ctr+'; order: '+ctr+';">';
 	output += '<a href="#">';
 	output += '<div class="fileItemDescription"></div>';
 	output += '<div class="fileItemInfo">';
-	output += '<aside class="pack-end icon-chevron-right"></aside>';	
+	output += '<aside class="pack-end icon-chevron-right"></aside>';
 	output += '<aside class="pack-end edit-checkbox"><label class="pack-checkbox danger"><input type="checkbox" class="edit-selected"><span></span></label></aside>';
-	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>'; 
+	output += '<p class="fileItemName" title="'+DOC[1]+DOC[2]+'">'+DOC[1]+DOC[2]+'</p>';
 	output += '<p class="fileItemPath" title="'+directory+DOC[1]+DOC[2]+'">'+(location==='dropbox'?'<span class="icon-dropbox" title="'+navigator.mozL10n.get('documents-dropbox')+'"></span> ':'')+directory+DOC[1]+DOC[2]+'</p>';
-	output += '</div>'; 
+	output += '</div>';
 	output += '</a></li>';
-	
+
 	// Display output HTML
 	for (var i = 0; i < listElms.length; i++) {
 		var elm = listElms[i].querySelector(
@@ -804,15 +804,15 @@ function buildDocListItems(DOCS, listElms, ctr) {
 			listElms[i].insertAdjacentHTML('beforeend', output);
 		}
 	}
-	
+
 	// Fetch previews
 	updatePreviews();
-	
+
 	// Base case
-	if (ctr === DOCS.length - 1) {		 
+	if (ctr === DOCS.length - 1) {
 		return;
 	}
-	
+
 	// build next item
 	buildDocListItems(DOCS, listElms, ctr + 1);
 }
@@ -823,11 +823,11 @@ function buildDocList(DOCS, listElms, display) {
 		for (var i = 0; i < listElms.length; i++) {
 			listElms[i].setAttribute("data-type", "list");
 		}
-		
+
 		if (DOCS.length > 0) {
 			// build next item
 			buildDocListItems(DOCS, listElms, 0);
-			
+
 			// remove outdated items
 			for (var i = 0; i < listElms.length; i++) {
 				for (var j = 0; j < listElms[i].childNodes.length; j++) {
@@ -850,7 +850,7 @@ function buildDocList(DOCS, listElms, display) {
 			output += '<p style="padding: 1.5rem 0 0.5rem;" data-l10n-id="no-'+display+'">'+navigator.mozL10n.get('no-'+display)+'</p>';
 			output += '<p style="padding-bottom: 1rem;" data-l10n-id="click-compose-icon-to-create">'+navigator.mozL10n.get('click-compose-icon-to-create')+'</p>';
 			output += '</li>';
-			
+
 			// Display output HTML
 			for (var i = 0; i < listElms.length; i++) {
 				listElms[i].innerHTML = output;
@@ -865,7 +865,7 @@ function buildDocList(DOCS, listElms, display) {
 function showSaveBanner(filepath) {
 	firetext.notify(navigator.mozL10n.get('successfully-saved')+' '+filepath);
 }
-	
+
 // File Extension Icon on Create new file
 function extIcon() {
 	var extf = document.getElementById('extIconFile');
@@ -886,7 +886,7 @@ function extIcon() {
 
 
 /* Editor
-------------------------*/ 
+------------------------*/
 function initEditor(callback) {
 	if (editorURL) {
 		app.modules.fill(editorURL, editor, function() {
@@ -909,7 +909,7 @@ function editorCommunication(callback) {
 	editor.onload = function() {
 		// Stop listening to editor
 		if(editorMessageProxy) editorMessageProxy.setRecv(null);
-		
+
 		// See: scripts/messages.js
 		editorMessageProxy = new MessageProxy();
 		editorMessageProxy.setSend(editor.contentWindow);
@@ -918,7 +918,7 @@ function editorCommunication(callback) {
 		editorMessageProxy.registerMessageHandler(function(e) {
 			callback();
 		}, "init-success", true);
-		
+
 		// Handle errors and logs
 		editorMessageProxy.registerMessageHandler(function(e) {
 			console.log(e.data.details);
@@ -946,7 +946,7 @@ function editorCommunication(callback) {
 			}
 		}, "focus");
 		editorMessageProxy.postMessage({command: "init"});
-		
+
 		editor.onload = function() {
 			editorMessageProxy.setSend(editor.contentWindow);
 		}
@@ -967,10 +967,10 @@ function watchDocument(filetype) {
 			});
 		});
 		rawEditor.on('focus', function() {
-			processActions('data-focus',rawEditorElement);	
+			processActions('data-focus',rawEditorElement);
 		});
 		rawEditor.on('blur', function() {
-			processActions('data-blur',rawEditorElement);	
+			processActions('data-blur',rawEditorElement);
 		});
 	}
 }
@@ -986,7 +986,7 @@ function autosave(force) {
 				// Add timeout for saving
 				saveTimeout = window.setTimeout(function() { saveFromEditor(deviceType == 'desktop' && firetext.settings.get('autosaveNotification') == 'true'); }, 1000);
 			} else {
-				saveTimeout = window.setTimeout(forceAutosave, 1000);				 
+				saveTimeout = window.setTimeout(forceAutosave, 1000);
 			}
 		}
 	}
@@ -994,24 +994,24 @@ function autosave(force) {
 
 
 /* Edit Mode
-------------------------*/ 
+------------------------*/
 function editDocs() {
 	if (editState == true) {
 		editState = false;
 		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 5rem)';
 		welcomeDocsList.classList.remove('editMode');
-		
+
 		updateDocLists(['all']);
 		editModeListeners();
-		
+
 		regions.navBack();
-	} else {		
+	} else {
 		editState = true;
 		document.querySelector('#welcome div[role=main]').style.height = 'calc(100% - 10rem)';
 		welcomeDocsList.classList.add('editMode');
-		
+
 		editModeListeners();
-		
+
 		regions.nav('welcome-edit-mode');
 	}
 }
@@ -1104,12 +1104,12 @@ function deleteSelected(confirmed) {
 		var selected = Array.prototype.filter.call(checkboxes, function(elm) {
 			return elm.checked;
 		});
-		
+
 		if (confirmed != true && confirmed != 'true') {
 			if (selected.length == 1) {
-				var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-singular'));			
+				var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-singular'));
 			} else if (selected.length > 1) {
-				var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-plural'));			
+				var confirmDeletion = confirm(navigator.mozL10n.get('want-to-delete-plural'));
 			} else {
 				firetext.notify(navigator.mozL10n.get('no-files-selected'));
 				return;
@@ -1118,20 +1118,20 @@ function deleteSelected(confirmed) {
 				return;
 			}
 		}
-		
+
 		// Delete selected files
 		for (var i = 0; i < selected.length; i++) {
 			// Get filename
 			var elm = selected[i].closest('.fileListItem');
 			var filename = elm.getAttribute('data-click-directory') + elm.getAttribute('data-click-filename') + elm.getAttribute('data-click-filetype');
 			var location = elm.getAttribute('data-click-location');
-			
+
 			// Remove from RecentDocs
 			firetext.recents.remove((filename + location), true);
-			
+
 			// Delete file
 			firetext.io.delete(filename, location);
-			
+
 			// Remove from list
 			elm.parentNode.removeChild(elm);
 		}
@@ -1140,7 +1140,7 @@ function deleteSelected(confirmed) {
 
 
 /* Format
-------------------------*/ 
+------------------------*/
 function formatDoc(sCmd, sValue) {
 	editorMessageProxy.postMessage({
 		command: "format",
@@ -1153,27 +1153,27 @@ function updateToolbar() {
 	if (document.getElementById("edit").classList.contains('current')) {
 		var key = editorMessageProxy.registerMessageHandler(function(e){
 			var commandStates = e.data.commandStates;
-			
+
 			// Bold
 			if (commandStates.bold.state) {
 				bold.classList.add('active');
 			} else {
 				bold.classList.remove('active');
 			}
-			
+
 			// Font
 			fontSelect.value = commandStates.fontName.value.replace(/'/g, '"').replace(/,\s*/g, ', ');
-			
+
 			// Font size
 			fontSizeSelect.value = commandStates.fontSize.value;
-			
+
 			// Italic
 			if (commandStates.italic.state) {
 				italic.classList.add('active');
 			} else {
 				italic.classList.remove('active');
 			}
-			
+
 			// Justify
 			if (commandStates.justifyCenter.state) {
 				justifySelect.value = 'c';
@@ -1184,24 +1184,24 @@ function updateToolbar() {
 			} else {
 				justifySelect.value = 'l';
 			}
-			
+
 			// Underline
 			if (commandStates.underline.state) {
 				underline.classList.add('active');
 			} else {
 				underline.classList.remove('active');
 			}
-			
+
 			// Strikethrough
 			if (commandStates.strikeThrough.state) {
 				strikethrough.classList.add('active');
 			} else {
 				strikethrough.classList.remove('active');
 			}
-			
+
 			// Style
 			styleSelect.value = commandStates.formatBlock.value;
-			
+
 			// Update select current styles
 			updateSelectStyles();
 		}, null, true);
@@ -1227,7 +1227,7 @@ function updateSelectStyles() {
 }
 
 /* Actions (had to do this because of CSP policies)
-------------------------*/ 
+------------------------*/
 document.addEventListener('click', function(event) {
 	if (event.button !== 2) {
 		processActions('data-click', event.target, event);
@@ -1279,10 +1279,10 @@ function initGestures () {
 			}
 		} else {
 			direction = event.detail.direction;
-		} 
-		
+		}
+
 		// Process the action
-		processActions(('data-swipe-'+direction), event.target, event); 
+		processActions(('data-swipe-'+direction), event.target, event);
 	});
 }
 
@@ -1296,14 +1296,14 @@ function processActions(eventAttribute, target, event) {
 				}
 			}
 		}
-		
+
 		// Check to see if it has the right class
 		if (target.getAttribute(eventAttribute+'-only')) {
 			if (!target.classList.contains(target.getAttribute(eventAttribute+'-only'))) {
 				return;
 			}
 		}
-		
+
 		var calledFunction = target.getAttribute(eventAttribute);
 		if (calledFunction == 'loadToEditor') {
 			loadToEditor(target.getAttribute(eventAttribute + '-directory'), target.getAttribute(eventAttribute + '-filename'), target.getAttribute(eventAttribute + '-filetype'), target.getAttribute(eventAttribute + '-location'));
@@ -1323,15 +1323,15 @@ function processActions(eventAttribute, target, event) {
 			// Check if file is changed.	If so, prompt the user to save it.
 			if (firetext.settings.get('autosave') == 'false' && fileChanged == true) {
 				if (target.getAttribute(eventAttribute + '-action')) {
-					var action = target.getAttribute(eventAttribute + '-action');					 
+					var action = target.getAttribute(eventAttribute + '-action');
 					if (action == 'yes') {
 						regions.navBack();
 						saveFromEditor();
-						regions.nav('welcome');					 
+						regions.nav('welcome');
 					} else if (action == 'no') {
 						fileChanged = false;
 						regions.navBack();
-						regions.nav('welcome');					 
+						regions.nav('welcome');
 					} else {
 						regions.navBack();
 					}
@@ -1340,7 +1340,7 @@ function processActions(eventAttribute, target, event) {
 					return;
 				}
 			}
-			
+
 			// Navigate to the welcome screen
 			regions.nav('welcome');
 		} else if (calledFunction == 'formatDoc') {
@@ -1377,7 +1377,7 @@ function processActions(eventAttribute, target, event) {
 			event.preventDefault();
 		} else if (calledFunction == 'fullscreen') {
 			if (target.getAttribute(eventAttribute + '-state') == 'off') {
-				editFullScreen(false);		
+				editFullScreen(false);
 			} else {
 				editFullScreen();
 			}
@@ -1395,16 +1395,16 @@ function processActions(eventAttribute, target, event) {
 					return;
 				}
 			}
-			
+
 			visitURL(target.getAttribute(eventAttribute + '-location'));
 		} else if (calledFunction == 'justify') {
-			var justifyDirection = justifySelect.value;			 
+			var justifyDirection = justifySelect.value;
 			if (justifyDirection == 'l') {
-				justifyDirection = 'Left';			
+				justifyDirection = 'Left';
 			} else if (justifyDirection == 'r') {
-				justifyDirection = 'Right';			 
+				justifyDirection = 'Right';
 			} else if (justifyDirection == 'c') {
-				justifyDirection = 'Center';			
+				justifyDirection = 'Center';
 			} else if (justifyDirection == 'j') {
 				justifyDirection = 'Full';
 			}
@@ -1448,16 +1448,16 @@ function processActions(eventAttribute, target, event) {
 					commands: ["createLink"],
 					key: key
 				});
-				
+
 			}
 		} else if (calledFunction == 'image') {
 			if (target.getAttribute(eventAttribute + '-location')) {
 				// Get location
 				var location = target.getAttribute(eventAttribute + '-location');
-				
+
 				// Close location window
 				regions.navBack();
-				
+
 				// Pick image based on location
 				if (location == 'internal') {
 					var pick = new MozActivity({
@@ -1470,17 +1470,17 @@ function processActions(eventAttribute, target, event) {
 					pick.onsuccess = function () {
 						var image = this.result.blob;
 						var reader = new FileReader();
-				
+
 						// Read blob
 						reader.addEventListener("loadend", function() {
 							formatDoc('insertImage', reader.result);
 						});
-				
+
 						reader.readAsDataURL(image);
 					};
 
 					pick.onerror = function () {
-					};				
+					};
 				} else {
 					if (target.getAttribute(eventAttribute + '-dialog') == 'true') {
 						formatDoc('insertImage', document.getElementById('image-address').value);
@@ -1494,7 +1494,7 @@ function processActions(eventAttribute, target, event) {
 					regions.nav('image-location');
 				} else {
 					// Just allow web URIs
-					regions.nav('image-web');					 
+					regions.nav('image-web');
 				}
 			}
 		} else if (calledFunction == 'table') {
@@ -1502,12 +1502,12 @@ function processActions(eventAttribute, target, event) {
 				if (parseInt(document.getElementById('table-rows').value) &&
 						parseInt(document.getElementById('table-columns').value)) {
 					var rows = parseInt(document.getElementById('table-rows').value);
-					var cols = parseInt(document.getElementById('table-columns').value);						
+					var cols = parseInt(document.getElementById('table-columns').value);
 				} else {
 					firetext.notify(navigator.mozL10n.get('valid-integer-value'));
 					return;
 				}
-			
+
 				// Make sure # is above 0
 				if ((rows > 0) && (cols > 0)) {
 					// Generate HTML
@@ -1519,11 +1519,11 @@ function processActions(eventAttribute, target, event) {
 						}
 						output += '</tr>';
 					}
-					
+
 					// Output HTML
 					output += '</table>';
 					formatDoc('insertHTML', output);
-					
+
 					// Nav Back
 					regions.navBack();
 				}
@@ -1555,14 +1555,14 @@ function checkDevice() {
 	} else if (document.body) {
 		width = document.body.clientWidth;
 		height = document.body.clientHeight;
-	}	 
-	if (width <= 766) {			 
-		deviceType = 'mobile';	
+	}
+	if (width <= 766) {
+		deviceType = 'mobile';
 	} else {
 		deviceType = 'desktop';
 	}
-	
-	// Let Bugsense know about device type 
+
+	// Let Bugsense know about device type
 	if (bugsenseInitialized) {
 		Bugsense.addExtraData('device_type', deviceType);
 	}
@@ -1580,9 +1580,9 @@ function clearCreateForm() {
 
 function spinner(state) {
 	if (state == 'hide') {
-		loadSpinner.classList.remove('shown');	
+		loadSpinner.classList.remove('shown');
 	} else {
-		loadSpinner.classList.add('shown');	 
+		loadSpinner.classList.add('shown');
 	}
 }
 
@@ -1641,7 +1641,7 @@ document.addEventListener('mozfullscreenerror', onFullScreenError);
 document.addEventListener('webkitfullscreenerror', onFullScreenError);
 
 /* Print button
-------------------------*/ 
+------------------------*/
 function initPrintButton(callback) {
 	app.modules.load('modules/printButton/printButton.html', printButton, function() {
 		printButtonCommunication(function(){
@@ -1662,7 +1662,7 @@ function printButtonCommunication(callback) {
 			var key = editorMessageProxy.registerMessageHandler(function(editorEvt){
 				var filename = document.getElementById('currentFileName').textContent;
 				var filetype = document.getElementById('currentFileType').textContent;
-				
+
 				printButtonMessageProxy.postMessage({
 					command: printEvt.data.key,
 					filename: filename,
@@ -1689,7 +1689,7 @@ function setDocumentTitle() {
 			document.title = currentFileName.textContent+currentFileType.textContent+' - Firetext';
 		} else {
 			document.title = selectedRegion.querySelector('header:first-child h1').textContent+' - Firetext';
-		}		
+		}
 	}
 }
 
@@ -1712,7 +1712,7 @@ function christmas() {
 		doChristmas();
 		window.addEventListener('night.changed', doChristmas);
 	}
-	
+
 	function doChristmas() {
 		var wordmark = document.getElementById('welcome-wordmark');
 		if (html.classList.contains('night') != true) {
@@ -1725,7 +1725,7 @@ function christmas() {
 				wordmark.src = wordmark.getAttribute('data-original-src');
 			}
 		}
-		
+
 		// Override theme color
 		themeColor.setAttribute('content', '#034f20');
 	}
