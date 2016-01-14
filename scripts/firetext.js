@@ -17,7 +17,7 @@ firetext.parsers = {};
 firetext.analytics = {};
 
 // Config
-var version = '0.5';
+var version = '0.5.1';
 var serverURL = 'https://firetext-server.herokuapp.com/';
 
 // Misc
