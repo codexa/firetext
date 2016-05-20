@@ -134,5 +134,6 @@
       },
       "returnValue": false
     }
-  }
+  },
+  "fullscreen": true
 }
