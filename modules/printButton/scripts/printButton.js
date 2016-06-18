@@ -14,6 +14,16 @@ window.addEventListener('DOMContentLoaded', function() {
 			"});",
 			"</script>",
 		], {type: 'text/html'})));
+		// In Firefox <48, we use moznomarginboxes to remove headers and footers.
+		// In Firefox 48, that attribute was removed, however, with @page { margin: 0 },
+		// the headers and footers are not rendered. However, we also (obviously) lose
+		// page margins. body { margin: 20mm } only adds margin to the first and last
+		// pages. However, in Firefox, table headers and footers are rendered on every
+		// page, so we wrap the page in a table and use those to add margin.
+		// In Chrome, this behavior doesn't exist, so we only do it in Firefox.
+		// Luckily, in Chrome, it's pretty easy for the user to remove page headers and
+		// footers from the UI.
+		var firefox = navigator.userAgent.indexOf('Firefox') !== -1;
 		var key = parentMessageProxy.registerMessageHandler(function(e){
 			win.postMessage({
 				content: 
@@ -36,10 +46,43 @@ window.addEventListener('DOMContentLoaded', function() {
 							'		#firetext_print_notice {',
 							'			display: none;',
 							'		}',
+						(firefox ? [
+							'		@page {',
+							'			margin: 0 1in;',
+							'		}',
+							'		.firetext_page_margin {',
+							'			height: 1in;',
+							'		}',
+						] : [
+							'		@page {',
+							'			margin: 1in;',
+							'		}',
+						]).join('\n'),
 							'	}',
 							'	</style>',
 							'</head>',
 						].join('\n'))
+						.replace('<body>', firefox ? [
+							'<body>',
+							'<table style="border-collapse: collapse">',
+							'	<thead>',
+							'		<tr class="firetext_page_margin"><td></td></tr>',
+							'	</thead>',
+							'	<tbody>',
+							'		<tr>',
+							'			<td style="padding: 0">',
+						].join('\n') : '$&')
+						.replace('</body>', firefox ? [
+							'',
+							'			</td>',
+							'		</tr>',
+							'	</tbody>',
+							'	<tfoot>',
+							'		<tr class="firetext_page_margin"><td></td></tr>',
+							'	</tfoot>',
+							'</table>',
+							'</body>',
+						].join('\n') : '$&')
 						.replace('</body>', [
 							"",
 							"<script>",
