@@ -2,7 +2,7 @@ html {
 	padding: 0;
 	padding-bottom: 2px;
 	margin: 0 auto;
-	max-width: 690px;
+	max-width: var(--width) !important; /* Older documents have style="max-width: 690px" */
 	position: relative;
 }
 
@@ -13,7 +13,6 @@ html {
 body {
 	padding: var(--margin);
 	margin: 0;
-	font-size: 20px;
 	outline: none;
 	word-wrap: break-word;
 }

@@ -17,6 +17,9 @@
         evt.stopImmediatePropagation();
       }
     }
+    if(!document.documentElement.style.getPropertyValue('--width')) {
+      document.documentElement.style.setProperty('--width', '21cm');
+    }
     if(!document.documentElement.style.getPropertyValue('--margin')) {
       document.documentElement.style.setProperty('--margin', '1in');
     }
