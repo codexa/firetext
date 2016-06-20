@@ -48,14 +48,14 @@ window.addEventListener('DOMContentLoaded', function() {
 							'		}',
 						(firefox ? [
 							'		@page {',
-							'			margin: 0 1in;',
+							'			margin: 0 ' + e.data.content.match(/--margin:([^;]*)/)[1] + ';',
 							'		}',
 							'		.firetext_page_margin {',
-							'			height: 1in;',
+							'			height: var(--margin);',
 							'		}',
 						] : [
 							'		@page {',
-							'			margin: 1in;',
+							'			margin: ' + e.data.content.match(/--margin:([^;]*)/)[1] + ';',
 							'		}',
 						]).join('\n'),
 							'	}',

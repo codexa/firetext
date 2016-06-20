@@ -11,7 +11,7 @@ html {
 }
 
 body {
-	padding: 10px;
+	padding: var(--margin);
 	margin: 0;
 	font-size: 20px;
 	outline: none;
@@ -34,7 +34,7 @@ body:after {
 	box-sizing: border-box;
 	width: 8px;
 	height: 8px;
-	margin: -8px 2px;
+	margin: calc(var(--margin) - 18px) calc(var(--margin) - 8px);
 	border: 1px solid #999;
 	pointer-events: none;
 }
@@ -53,7 +53,7 @@ html:before {
 }
 
 html:after {
-	margin-top: -10px;
+	margin-top: calc(-1 * var(--margin));
 	border-bottom-width: 0;
 	border-left-width: 0;
 }
@@ -69,6 +69,12 @@ body:after {
 	margin-top: 0;
 	border-bottom-width: 0;
 	border-right-width: 0;
+}
+
+@media (max-width: 766px) {
+	html {
+		--margin: 10px !important;
+	}
 }
 
 @media (min-width: 767px) {

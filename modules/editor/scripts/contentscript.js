@@ -17,6 +17,9 @@
         evt.stopImmediatePropagation();
       }
     }
+    if(!document.documentElement.style.getPropertyValue('--margin')) {
+      document.documentElement.style.setProperty('--margin', '1in');
+    }
   }
   
   var parentMessageProxy = new MessageProxy();
