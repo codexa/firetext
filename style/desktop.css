@@ -392,7 +392,6 @@ section[role="status"] > div {
   transition: opacity 0.3s;
   position: static;
   display: inline-block;
-  pointer-events: all;
 }
 
 section[role="status"] > div p {
@@ -401,4 +400,8 @@ section[role="status"] > div p {
 
 section[role="status"] > div.notification-shown {
 	opacity: 1;
+}
+
+header:hover ~ section[role="status"] > div {
+  opacity: .5;
 }

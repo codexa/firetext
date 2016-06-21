@@ -29,7 +29,7 @@ firetext.notify = function (message, title, time) {
 	notification.appendChild(notificationBody);
 	
 	notificationContainer.appendChild(notification);
-	document.body.appendChild(notificationContainer);
+	document.querySelector('section.current').appendChild(notificationContainer);
 	
 	setTimeout(function(){
 		notification.classList.add('notification-shown');
@@ -38,7 +38,7 @@ firetext.notify = function (message, title, time) {
 		setTimeout(function(){
 			notification.classList.remove('notification-shown');
 			setTimeout(function(){
-				document.body.removeChild(notificationContainer);
+				notificationContainer.parentElement.removeChild(notificationContainer);
 			},300);
 		},time);
 	}, 100);
