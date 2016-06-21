@@ -126,6 +126,17 @@ section[data-type="sidebar"] > nav > ul > li > iframe {
   height: 100%;
 }
 
+section[data-type="sidebar"] > nav > ul > li > a {
+  padding-left: 3rem;
+}
+
+section[data-type="sidebar"] > nav > ul > li > a > [class^="icon"] {
+  position: absolute;
+  left: 0;
+  top: 1.35rem;
+  opacity: .7;
+}
+
 .titlePopup {
   position: absolute;
   background: white;
@@ -611,6 +622,16 @@ aside select.dummy {
 [dir="rtl"] .mainButtons button .icon {
     margin-left: 1rem;
     margin-right: 0;
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav > ul > li > a {
+  padding-left: none;
+  padding-right: 3rem;
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav > ul > li > a > [class^="icon"] {
+  left: auto;
+  right: 2rem;
 }
 
 @keyframes rtlSpin{
