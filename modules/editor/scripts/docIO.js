@@ -24,7 +24,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 			+ (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
 			+ (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
 			+ '>' : '';
-		return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '');
+		return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '').replace(' _firetext_print_view=""', '');
 	}
 	function getText() {
 		var textValue;

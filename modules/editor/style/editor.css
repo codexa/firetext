@@ -70,8 +70,63 @@ body:after {
 	border-right-width: 0;
 }
 
+/* Print View */
+[_firetext_print_view] {
+		-moz-column-count: 1;
+	column-count: 1;
+		-moz-column-gap: 65px;
+	column-gap: 65px;
+	width: calc(var(--width) - 2 * var(--margin));
+	height: calc(var(--height) - 2 * var(--margin));
+	overflow-y: hidden;
+	transform-origin: 0 65px;
+	padding-left: 65px;
+	padding-bottom: 0;
+	margin: 0 !important;
+	
+	/* Mobile */
+	padding-top: 65px;
+	background-color: #efefef;
+}
+
 @media (max-width: 766px) {
-	html {
+	[_firetext_print_view] {
+		transform-origin: 0 0;
+	}
+}
+
+[_firetext_print_view] body {
+	padding: 0;
+	box-sizing: border-box; /* Firefox */
+	
+	/* Mobile */
+	border: 1px solid #ddd;
+	margin: -1px;
+	box-shadow: 0 0 5px #ddd;
+	background-color: #ffffff;
+}
+
+@supports not (-moz-appearance: none) {
+	[_firetext_print_view] body {
+		overflow: hidden; /* Breaks columns in Firefox */
+	}
+}
+
+[_firetext_print_view]:before,
+[_firetext_print_view]:after,
+[_firetext_print_view] body:before,
+[_firetext_print_view] body:after {
+	display: none;
+}
+
+[_firetext_print_view][_firetext_night] body,
+[_firetext_print_view][_firetext_night] img {
+		-webkit-filter: none;
+	filter: none;
+}
+
+@media (max-width: 766px) {
+	html:not([_firetext_print_view]) {
 		--margin: 10px !important;
 	}
 }
@@ -85,6 +140,7 @@ body:after {
 	
 	body {				
 		border: 1px solid #ddd;
+		margin: -1px;
 		box-shadow: 0 0 5px #ddd;
 		background-color: #ffffff;
 	}
@@ -93,9 +149,5 @@ body:after {
 	body:before {
 		top: 75px; 
 		z-index: 1;
-	}
-	
-	body {
-		margin: -1px;
 	}
 }

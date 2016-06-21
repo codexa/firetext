@@ -1362,7 +1362,7 @@ function processActions(eventAttribute, target, event) {
 		} else if (calledFunction == "deselectAll") {
 			deselectAll();
 		} else if (calledFunction == 'tab') {
-			regions.tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
+			regions.tab(target.getAttribute('data-tab-id'), target.getAttribute(eventAttribute + '-name'));
 		} else if (calledFunction == 'clearForm') {
 			if (target.parentNode.children[0]) {
 				target.parentNode.children[0].value = '';

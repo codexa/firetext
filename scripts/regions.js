@@ -148,7 +148,7 @@ regions.sidebar = function (name, state) {
 	}
 };
 
-regions.tab = function (list, name) {
+regions.tab = function (id, name) {
 	if (document.getElementById('tab-'+name)) {
 		// Unselect previous tab and button
 		var previousTab = document.querySelector('.selected-tab');
@@ -164,7 +164,7 @@ regions.tab = function (list, name) {
 		document.getElementById('tab-'+name).classList.add('selected-tab');
 
 		// Select tab button
-		var tabButton = document.querySelector('[role="tab-button"][data-tab-id="'+name+'"]');
+		var tabButton = document.querySelector('[role="tab-button"][data-tab-id="'+id+'"]');
 		if (tabButton) {
 			tabButton.classList.add('selected-tab-button');                
 		}
@@ -182,6 +182,12 @@ regions.tab = function (list, name) {
 					document.getElementById('currentFileType').textContent != '.odt' &&
 					deviceType == 'desktop') {
 				document.getElementById('edit-bar').classList.remove('hidden');
+			}
+			if (editorMessageProxy) {
+				editorMessageProxy.postMessage({
+					command: "printView",
+					printView: id === 'printView'
+				});
 			}
 		}
 		/* End of customized section */

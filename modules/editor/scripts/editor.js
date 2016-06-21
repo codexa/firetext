@@ -39,6 +39,8 @@ var mainClosure = function() {
 		// initialize modules/register handlers
 		// night mode
 		initNight(doc, parentMessageProxy);
+		// print view
+		initPrintView(doc, parentMessageProxy);
 		
 		var content_styles = document.querySelectorAll('style[data-for-content]');
 		
@@ -48,6 +50,7 @@ var mainClosure = function() {
 			window.mainOrigin = mainOrigin;
 			window.parentMessageProxy = parentMessageProxy;
 			window.initNight = initNight;
+			window.initPrintView = initPrintView;
 			window.filetype = filetype;
 			window.odtdoc = odtdoc;
 			window.readOnly = readOnly;
