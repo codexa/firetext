@@ -436,6 +436,7 @@ function download() {
 	}, null, true);
 	editorMessageProxy.postMessage({
 		command: "get-content-blob",
+		rich: true,
 		key: key
 	});
 }
@@ -481,6 +482,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				editorMessageProxy.postMessage({
 					command: "load",
 					content: result,
+					filename: filename,
 					filetype: filetype
 				});
 				switch (filetype) {
@@ -512,7 +514,7 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 				}
 				
 				// Add listener to update views
-				watchDocument(filetype);
+				watchDocument(filename, filetype);
 				
 				// Add file to recent docs
 				firetext.recents.add([fileInfo[0], fileInfo[1], fileInfo[2]], location);

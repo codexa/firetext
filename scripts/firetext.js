@@ -953,7 +953,7 @@ function editorCommunication(callback) {
 	}
 }
 
-function watchDocument(filetype) {
+function watchDocument(filename, filetype) {
 	if(filetype === ".html") {
 		// Add listener to update design
 		rawEditor.on('change', function() {
@@ -962,6 +962,7 @@ function watchDocument(filetype) {
 			editorMessageProxy.postMessage({
 				command: "load",
 				content: rawEditor.getValue(),
+				filename: filename,
 				filetype: ".html",
 				key: 'autosave-ready'
 			});
@@ -1660,19 +1661,15 @@ function printButtonCommunication(callback) {
 
 		printButtonMessageProxy.registerMessageHandler(function(printEvt) {
 			var key = editorMessageProxy.registerMessageHandler(function(editorEvt){
-				var filename = document.getElementById('currentFileName').textContent;
-				var filetype = document.getElementById('currentFileType').textContent;
-
 				printButtonMessageProxy.postMessage({
 					command: printEvt.data.key,
-					filename: filename,
-					filetype: filetype,
 					content: editorEvt.data.content,
 					'automatic-printing-failed': navigator.mozL10n.get('automatic-printing-failed')
 				});
 			}, null, true);
 			editorMessageProxy.postMessage({
 				command: "get-content-html",
+				rich: true,
 				key: key
 			});
 			regions.nav('edit');

@@ -14,92 +14,32 @@ window.addEventListener('DOMContentLoaded', function() {
 			"});",
 			"</script>",
 		], {type: 'text/html'})));
-		// In Firefox <48, we use moznomarginboxes to remove headers and footers.
-		// In Firefox 48, that attribute was removed, however, with @page { margin: 0 },
-		// the headers and footers are not rendered. However, we also (obviously) lose
-		// page margins. body { margin: 20mm } only adds margin to the first and last
-		// pages. However, in Firefox, table headers and footers are rendered on every
-		// page, so we wrap the page in a table and use those to add margin.
-		// In Chrome, this behavior doesn't exist, so we only do it in Firefox.
-		// Luckily, in Chrome, it's pretty easy for the user to remove page headers and
-		// footers from the UI.
 		var firefox = navigator.userAgent.indexOf('Firefox') !== -1;
 		var key = parentMessageProxy.registerMessageHandler(function(e){
 			win.postMessage({
 				content: 
 					e.data.content
-						.replace('<html', '<html moznomarginboxes')
 						.replace('</head>', [
 							'',
-							'	<meta charset="utf-8">', // Default to utf-8
-							'	<title>' + e.data.filename.replace(/</g, '&lt;') + e.data.filetype + '</title>',
+							'	<!--_firetext_import_remove_start-->',
 							'	<style>',
-							'	html {',
-							'		width: var(--width);',
-							'		max-width: none !important; /* Older documents have style="max-width: 690px" */',
-							'		overflow-x: hidden;',
-							'	}',
-							'	body {',
-							'		padding: var(--margin);',
-							'		margin: 0;',
-							'		word-wrap: break-word;',
-							'		overflow-x: hidden;',
-							'	}',
 							'	#firetext_print_notice {',
 							'		border: 2px solid;',
 							'		font-size: xx-large;',
-							'		margin: 20px;',
+							'		margin-bottom: var(--margin);',
 							'		padding: 20px;',
 							'		border-radius: 8px;',
 							'		font-family: sans-serif;',
 							'	}',
 							'	@media print {',
-							'		html {',
-							'			width: calc(var(--width) - 2 * var(--margin));',
-							'		}',
-							'		body {',
-							'			padding: 0;',
-							'		}',
 							'		#firetext_print_notice {',
 							'			display: none;',
 							'		}',
-						(firefox ? [
-							'		@page {',
-							'			margin: 0 ' + e.data.content.match(/--margin:([^;]*)/)[1] + ';',
-							'		}',
-							'		.firetext_page_margin {',
-							'			height: var(--margin);',
-							'		}',
-						] : [
-							'		@page {',
-							'			margin: ' + e.data.content.match(/--margin:([^;]*)/)[1] + ';',
-							'		}',
-						]).join('\n'),
 							'	}',
 							'	</style>',
+							'	<!--_firetext_import_remove_end-->',
 							'</head>',
 						].join('\n'))
-						.replace('<body>', firefox ? [
-							'<body>',
-							'<table style="border-collapse: collapse; table-layout: fixed; width: 100%;">',
-							'	<thead>',
-							'		<tr class="firetext_page_margin"><td></td></tr>',
-							'	</thead>',
-							'	<tbody>',
-							'		<tr>',
-							'			<td style="padding: 0">',
-						].join('\n') : '$&')
-						.replace('</body>', firefox ? [
-							'',
-							'			</td>',
-							'		</tr>',
-							'	</tbody>',
-							'	<tfoot>',
-							'		<tr class="firetext_page_margin"><td></td></tr>',
-							'	</tfoot>',
-							'</table>',
-							'</body>',
-						].join('\n') : '$&')
 						.replace('</body>', [
 							"",
 							"<script>",
@@ -109,10 +49,13 @@ window.addEventListener('DOMContentLoaded', function() {
 							"		if(Date.now() - t0 < 200) {",
 							"			// The browser doesn't support window.print() (or window.print() is non-blocking).",
 							"			// So we ask the user that, if the browser supports printing, they print manually.",
-							"			var notice = document.createElement('div');",
-							"			notice.id = 'firetext_print_notice';",
-							"			notice.textContent = " + JSON.stringify(e.data['automatic-printing-failed']) + ";",
-							"			document.body.insertBefore(notice, document.body.firstChild);",
+							"			document.body.insertAdjacentHTML('beforebegin', [",
+							"				'<!--_firetext_import_remove_start-->',",
+							"				'<div id=firetext_print_notice>',",
+							"				" + JSON.stringify(e.data['automatic-printing-failed'].replace(/</g, '&lt;')) + ",",
+							"				'</div>',",
+							"				'<!--_firetext_import_remove_end-->',",
+							"			].join('\\n'));",
 							"		} else if(",
 							"			navigator.userAgent.indexOf('Chrome') !== -1 &&",
 							"				// In both Firefox and IE the window.print() dialog is less featureful than menu -> print,",
