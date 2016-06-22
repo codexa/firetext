@@ -624,9 +624,26 @@ function getPreview(filetype, content, error) {
 	var iframe = document.createElement('iframe');
 	iframe.sandbox = 'allow-scripts';
 	iframe.srcdoc = content
-		.replace(' contenteditable="true"', '') // Work around the bug that we include contenteditable in the saved file, to disable the spellchecker in Firefox.
-		+ [
+		.replace(' contenteditable="true"', '') // Work around the bug that we used to include contenteditable in the saved file, to disable the spellchecker in Firefox.
+		.replace('</head>', [
+			'',
 			'<style>',
+			'html {',
+			'	max-width: calc(var(--width) - 2 * var(--margin)) !important;',
+			'	height: calc(var(--height) - 2 * var(--margin));',
+			'		-moz-column-count: 1;',
+			'	column-count: 1;',
+			'		-moz-column-gap: 1000px;',
+			'	column-gap: 1000px;',
+			'	',
+			'	/* Defaults */',
+			'	--width: 21cm;',
+			'	--height: 29.7cm;',
+			'	--margin: 1in;',
+			'}',
+			'body {',
+			'	margin: 0;',
+			'}',
 			'[_firetext_night] body, [_firetext_night] img {',
 			'		-webkit-filter: invert(100%) hue-rotate(180deg);',
 			'	filter: invert(100%) hue-rotate(180deg);',
@@ -642,8 +659,9 @@ function getPreview(filetype, content, error) {
 			'		document.documentElement.removeAttribute("_firetext_night");',
 			'	}',
 			'}',
-			'</script>'
-		].join('\n');
+			'</script>',
+			'</head>',
+		].join('\n'));
 	iframe.scrolling = 'no';
 	return iframe;
 }
