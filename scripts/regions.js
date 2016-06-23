@@ -97,7 +97,7 @@ function nav2() {
 		} else if (tempLoc != 'welcome-edit-mode') {
 			// Focus first input
 			setTimeout(function() {
-				var input = tempElement.querySelector('input:not([disabled])') || tempElement.querySelector('button');
+				var input = tempElement.querySelector('input:not([disabled]), #page-size') || tempElement.querySelector('button');
 				if (input) {
 					editor.blur();
 					input.focus();

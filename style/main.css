@@ -471,6 +471,31 @@ aside select.dummy {
   background: none;
 }
 
+/* Page Setup dialog */
+#page-setup table {
+  width: 100%;
+}
+
+#page-setup table td:first-child {
+  width: 190px;
+  height: 4.2rem;
+  padding-left: 1rem;
+}
+
+#page-setup table select {
+  height: 2.7rem;
+  width: 20rem;
+}
+
+#page-setup table input {
+  margin: 0;
+}
+
+#page-setup table span {
+  vertical-align: top;
+  margin-right: 2rem;
+}
+
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 100%;

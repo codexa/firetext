@@ -1549,6 +1549,41 @@ function processActions(eventAttribute, target, event) {
 			} else {
 				regions.nav('table');
 			}
+		} else if (calledFunction == 'openPageSetup') {
+			var key = editorMessageProxy.registerMessageHandler(function(e) {
+				var values = e.data.propertyValues;
+				var size = [values.width, values.height];
+				if(parseFloat(values.width) <= parseFloat(values.height)) {
+					document.getElementById('page-orientation-portrait').checked = true;
+				} else {
+					size.reverse();
+					document.getElementById('page-orientation-landscape').checked = true;
+				}
+				document.getElementById('page-size').value = size.join(' ');
+				document.getElementById('page-margin').value = values.margin.replace('in', '"').replace(/[^\d"]+$/, ' $&').replace('.', .5.toLocaleString().indexOf(',') !== -1 ? ',' : '.');
+				regions.nav('page-setup');
+			}, null, true);
+			editorMessageProxy.postMessage({
+				command: "get-properties",
+				properties: ["width", "height", "margin"],
+				key: key
+			});
+		} else if (calledFunction == 'pageSetup') {
+			var size = document.getElementById('page-size').value.split(' ');
+			if(document.getElementById('page-orientation-landscape').checked) {
+				size = size.reverse();
+			}
+			var width = size[0];
+			var height = size[1];
+			var margin = document.getElementById('page-margin').value.replace('"', 'in').replace(/\s+/g, '').replace(',', '.');
+			editorMessageProxy.postMessage({
+				command: "set-properties",
+				properties: {
+					width: width,
+					height: height,
+					margin: margin,
+				}
+			});
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));

@@ -77,6 +77,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 				'			padding: 0;',
 				'		}',
 				'		@page {',
+				'			size: ' + html.match(/--width:([^;]*)/)[1] + ' ' + html.match(/--height:([^;]*)/)[1] + ';',
 				'			margin: ' + html.match(/--margin:([^;]*)/)[1] + ';',
 				'		}',
 				'		@supports (-moz-appearance: none) { /* Firefox */',
@@ -245,4 +246,23 @@ function initDocIO(document, messageProxy, loadCallback) {
 			commandStates: commandStates
 		})
 	}, "query-command-states");
+
+	messageProxy.registerMessageHandler(function(e) {
+		var propertyValues = {};
+		e.data.properties.forEach(function(property) {
+			propertyValues[property] = document.documentElement.style.getPropertyValue('--' + property).replace(/\s+/g, '');
+		});
+		messageProxy.postMessage({
+			command: e.data.key,
+			propertyValues: propertyValues
+		})
+	}, "get-properties");
+
+	messageProxy.registerMessageHandler(function(e) {
+		Object.keys(e.data.properties).forEach(function(property) {
+			document.documentElement.style.setProperty('--' + property, e.data.properties[property]);
+		});
+		printViewOnInput();
+		printViewOnResize();
+	}, "set-properties");
 }
