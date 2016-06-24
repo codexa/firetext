@@ -135,6 +135,9 @@ function initModules(callback) {
 		cloud.init();
 	});
 
+	// Get user's location
+	initLocation();
+
 	// Find device type
 	checkDevice();
 
@@ -347,6 +350,19 @@ function initVariables(callback) {
 			firetextVariables = JSON.parse(xhr.responseText);
 			firetextVariablesInitialized = true;
 			callback();
+		}
+	}
+	xhr.send();
+}
+
+var user_location = {};
+function initLocation() {
+	var requestURL = serverURL+'/location';
+	var xhr = new XMLHttpRequest();
+	xhr.open('get',requestURL,true);
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			user_location = JSON.parse(xhr.responseText);
 		}
 	}
 	xhr.send();
@@ -637,7 +653,11 @@ function getPreview(filetype, content, error) {
 			'	column-gap: 1000px;',
 			'	',
 			'	/* Defaults */',
+user_location.country === 'US' ?
+			'	--width: 8.5in;' :
 			'	--width: 21cm;',
+user_location.country === 'US' ?
+			'	--height: 11in;' :
 			'	--height: 29.7cm;',
 			'	--margin: 1in;',
 			'}',
@@ -982,6 +1002,7 @@ function watchDocument(filename, filetype) {
 				content: rawEditor.getValue(),
 				filename: filename,
 				filetype: ".html",
+				user_location: user_location,
 				key: 'autosave-ready'
 			});
 		});

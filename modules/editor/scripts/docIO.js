@@ -131,7 +131,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 		return textValue;
 	}
 
-	function load(content, _filename, _filetype) {
+	function load(content, _filename, _filetype, user_location) {
 		// Check for night
 		var wasNight = false
 		if (document.documentElement.hasAttribute('_firetext_night')) {
@@ -177,7 +177,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 			nightEditor(true);
 		}
 		
-		loadCallback(filetype, odtdoc, readOnly);
+		loadCallback(filetype, user_location, odtdoc, readOnly);
 	}
 
 	messageProxy.registerMessageHandler(function(e) {
@@ -225,7 +225,7 @@ function initDocIO(document, messageProxy, loadCallback) {
 	}, "get-content-html");
 
 	messageProxy.registerMessageHandler(function(e) {
-		load(e.data.content, e.data.filename, e.data.filetype);
+		load(e.data.content, e.data.filename, e.data.filetype, e.data.user_location);
 		if(e.data.key) {
 			messageProxy.postMessage({
 				command: e.data.key

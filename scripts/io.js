@@ -483,7 +483,8 @@ function loadToEditor(directory, filename, filetype, location, editable) {
 					command: "load",
 					content: result,
 					filename: filename,
-					filetype: filetype
+					filetype: filetype,
+					user_location: user_location,
 				});
 				switch (filetype) {
 					case ".txt":

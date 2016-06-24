@@ -1,4 +1,4 @@
-(function(mainOrigin, _parentMessageProxy, initNight, initPrintView, filetype, odtdoc, readOnly) {
+(function(mainOrigin, _parentMessageProxy, initNight, initPrintView, filetype, user_location, odtdoc, readOnly) {
   function fixupDocument(evt) {
     if(document.body.children.length === 0) {
       if(filetype === '.txt') {
@@ -18,10 +18,10 @@
       }
     }
     if(!document.documentElement.style.getPropertyValue('--width')) {
-      document.documentElement.style.setProperty('--width', '21cm');
+      document.documentElement.style.setProperty('--width', user_location.country === 'US' ? '8.5in' : '21cm');
     }
     if(!document.documentElement.style.getPropertyValue('--height')) {
-      document.documentElement.style.setProperty('--height', '29.7cm');
+      document.documentElement.style.setProperty('--height', user_location.country === 'US' ? '11in' : '29.7cm');
     }
     if(!document.documentElement.style.getPropertyValue('--margin')) {
       document.documentElement.style.setProperty('--margin', '1in');
@@ -196,4 +196,4 @@
       prevRange = range;
     }, 100);
   }
-})(mainOrigin, parentMessageProxy, initNight, initPrintView, filetype, odtdoc, readOnly);
+})(mainOrigin, parentMessageProxy, initNight, initPrintView, filetype, user_location, odtdoc, readOnly);
