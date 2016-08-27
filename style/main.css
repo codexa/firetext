@@ -126,6 +126,17 @@ section[data-type="sidebar"] > nav > ul > li > iframe {
   height: 100%;
 }
 
+section[data-type="sidebar"] > nav > ul > li > a {
+  padding-left: 3rem;
+}
+
+section[data-type="sidebar"] > nav > ul > li > a > [class^="icon"] {
+  position: absolute;
+  left: 0;
+  top: 1.35rem;
+  opacity: .7;
+}
+
 .titlePopup {
   position: absolute;
   background: white;
@@ -460,6 +471,31 @@ aside select.dummy {
   background: none;
 }
 
+/* Page Setup dialog */
+#page-setup table {
+  width: 100%;
+}
+
+#page-setup table td:first-child {
+  width: 190px;
+  height: 4.2rem;
+  padding-left: 1rem;
+}
+
+#page-setup table select {
+  height: 2.7rem;
+  width: 20rem;
+}
+
+#page-setup table input {
+  margin: 0;
+}
+
+#page-setup table span {
+  vertical-align: top;
+  margin-right: 2rem;
+}
+
 /* Spinner (Throbber) */
 .spinner {
   border-radius: 100%;
@@ -611,6 +647,16 @@ aside select.dummy {
 [dir="rtl"] .mainButtons button .icon {
     margin-left: 1rem;
     margin-right: 0;
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav > ul > li > a {
+  padding-left: none;
+  padding-right: 3rem;
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav > ul > li > a > [class^="icon"] {
+  left: auto;
+  right: 2rem;
 }
 
 @keyframes rtlSpin{

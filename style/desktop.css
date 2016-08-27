@@ -161,7 +161,7 @@ section[data-type="sidebar"] > nav > h2 {
   background-color: transparent;
   text-indent: 0;
   font-size: 1.8rem;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1.8rem;
 }
 
 section[data-type="sidebar"] > nav > ul > li:active {
@@ -171,8 +171,22 @@ section[data-type="sidebar"] > nav > ul > li:active {
 section[data-type="sidebar"] > nav > ul > li > a {
   font-size: 1.8rem;
   line-height: 4rem;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1.8rem 0.5rem 4.5rem;
   text-indent: 0;
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav > ul > li > a {
+  padding: 0.5rem 4.5rem 0.5rem 1.8rem;
+}
+
+section[data-type="sidebar"] > nav > ul > li > a > .icon {
+  left: 1.8rem;
+  top: 1.8rem;
+}
+
+[dir="rtl"] section[data-type="sidebar"] > nav > ul > li > a > .icon {
+  left: auto;
+  right: 1.8rem;
 }
 
 section[data-type="sidebar"] [role="toolbar"] {
@@ -392,7 +406,6 @@ section[role="status"] > div {
   transition: opacity 0.3s;
   position: static;
   display: inline-block;
-  pointer-events: all;
 }
 
 section[role="status"] > div p {
@@ -401,4 +414,8 @@ section[role="status"] > div p {
 
 section[role="status"] > div.notification-shown {
 	opacity: 1;
+}
+
+header:hover ~ section[role="status"] > div {
+  opacity: .5;
 }

@@ -39,16 +39,20 @@ var mainClosure = function() {
 		// initialize modules/register handlers
 		// night mode
 		initNight(doc, parentMessageProxy);
+		// print view
+		initPrintView(doc, parentMessageProxy);
 		
 		var content_styles = document.querySelectorAll('style[data-for-content]');
 		
 		var content_scripts = document.querySelectorAll('script[data-for-content]');
 		
-		initDocIO(document, parentMessageProxy, function loadCallback(filetype, odtdoc, readOnly) {
+		initDocIO(document, parentMessageProxy, function loadCallback(filetype, user_location, odtdoc, readOnly) {
 			window.mainOrigin = mainOrigin;
 			window.parentMessageProxy = parentMessageProxy;
 			window.initNight = initNight;
+			window.initPrintView = initPrintView;
 			window.filetype = filetype;
+			window.user_location = user_location;
 			window.odtdoc = odtdoc;
 			window.readOnly = readOnly;
 			

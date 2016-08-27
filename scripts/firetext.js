@@ -135,6 +135,9 @@ function initModules(callback) {
 		cloud.init();
 	});
 
+	// Get user's location
+	initLocation();
+
 	// Find device type
 	checkDevice();
 
@@ -347,6 +350,19 @@ function initVariables(callback) {
 			firetextVariables = JSON.parse(xhr.responseText);
 			firetextVariablesInitialized = true;
 			callback();
+		}
+	}
+	xhr.send();
+}
+
+var user_location = {};
+function initLocation() {
+	var requestURL = serverURL+'/location';
+	var xhr = new XMLHttpRequest();
+	xhr.open('get',requestURL,true);
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			user_location = JSON.parse(xhr.responseText);
 		}
 	}
 	xhr.send();
@@ -624,9 +640,30 @@ function getPreview(filetype, content, error) {
 	var iframe = document.createElement('iframe');
 	iframe.sandbox = 'allow-scripts';
 	iframe.srcdoc = content
-		.replace(' contenteditable="true"', '') // Work around the bug that we include contenteditable in the saved file, to disable the spellchecker in Firefox.
-		+ [
+		.replace(' contenteditable="true"', '') // Work around the bug that we used to include contenteditable in the saved file, to disable the spellchecker in Firefox.
+		.replace('</head>', [
+			'',
 			'<style>',
+			'html {',
+			'	max-width: calc(var(--width) - 2 * var(--margin)) !important;',
+			'	height: calc(var(--height) - 2 * var(--margin));',
+			'		-moz-column-count: 1;',
+			'	column-count: 1;',
+			'		-moz-column-gap: 1000px;',
+			'	column-gap: 1000px;',
+			'	',
+			'	/* Defaults */',
+user_location.country === 'US' ?
+			'	--width: 8.5in;' :
+			'	--width: 21cm;',
+user_location.country === 'US' ?
+			'	--height: 11in;' :
+			'	--height: 29.7cm;',
+			'	--margin: 1in;',
+			'}',
+			'body {',
+			'	margin: 0;',
+			'}',
 			'[_firetext_night] body, [_firetext_night] img {',
 			'		-webkit-filter: invert(100%) hue-rotate(180deg);',
 			'	filter: invert(100%) hue-rotate(180deg);',
@@ -642,8 +679,9 @@ function getPreview(filetype, content, error) {
 			'		document.documentElement.removeAttribute("_firetext_night");',
 			'	}',
 			'}',
-			'</script>'
-		].join('\n');
+			'</script>',
+			'</head>',
+		].join('\n'));
 	iframe.scrolling = 'no';
 	return iframe;
 }
@@ -953,7 +991,7 @@ function editorCommunication(callback) {
 	}
 }
 
-function watchDocument(filetype) {
+function watchDocument(filename, filetype) {
 	if(filetype === ".html") {
 		// Add listener to update design
 		rawEditor.on('change', function() {
@@ -962,7 +1000,9 @@ function watchDocument(filetype) {
 			editorMessageProxy.postMessage({
 				command: "load",
 				content: rawEditor.getValue(),
+				filename: filename,
 				filetype: ".html",
+				user_location: user_location,
 				key: 'autosave-ready'
 			});
 		});
@@ -1362,7 +1402,7 @@ function processActions(eventAttribute, target, event) {
 		} else if (calledFunction == "deselectAll") {
 			deselectAll();
 		} else if (calledFunction == 'tab') {
-			regions.tab(target.parentNode.id, target.getAttribute(eventAttribute + '-name'));
+			regions.tab(target.getAttribute('data-tab-id'), target.getAttribute(eventAttribute + '-name'));
 		} else if (calledFunction == 'clearForm') {
 			if (target.parentNode.children[0]) {
 				target.parentNode.children[0].value = '';
@@ -1530,6 +1570,41 @@ function processActions(eventAttribute, target, event) {
 			} else {
 				regions.nav('table');
 			}
+		} else if (calledFunction == 'openPageSetup') {
+			var key = editorMessageProxy.registerMessageHandler(function(e) {
+				var values = e.data.propertyValues;
+				var size = [values.width, values.height];
+				if(parseFloat(values.width) <= parseFloat(values.height)) {
+					document.getElementById('page-orientation-portrait').checked = true;
+				} else {
+					size.reverse();
+					document.getElementById('page-orientation-landscape').checked = true;
+				}
+				document.getElementById('page-size').value = size.join(' ');
+				document.getElementById('page-margin').value = values.margin.replace('in', '"').replace(/[^\d"]+$/, ' $&').replace('.', .5.toLocaleString().indexOf(',') !== -1 ? ',' : '.');
+				regions.nav('page-setup');
+			}, null, true);
+			editorMessageProxy.postMessage({
+				command: "get-properties",
+				properties: ["width", "height", "margin"],
+				key: key
+			});
+		} else if (calledFunction == 'pageSetup') {
+			var size = document.getElementById('page-size').value.split(' ');
+			if(document.getElementById('page-orientation-landscape').checked) {
+				size = size.reverse();
+			}
+			var width = size[0];
+			var height = size[1];
+			var margin = document.getElementById('page-margin').value.replace('"', 'in').replace(/\s+/g, '').replace(',', '.');
+			editorMessageProxy.postMessage({
+				command: "set-properties",
+				properties: {
+					width: width,
+					height: height,
+					margin: margin,
+				}
+			});
 		} else if (calledFunction == 'clearRecents') {
 			firetext.recents.reset();
 			firetext.notify(navigator.mozL10n.get('recents-eliminated'));
@@ -1660,19 +1735,15 @@ function printButtonCommunication(callback) {
 
 		printButtonMessageProxy.registerMessageHandler(function(printEvt) {
 			var key = editorMessageProxy.registerMessageHandler(function(editorEvt){
-				var filename = document.getElementById('currentFileName').textContent;
-				var filetype = document.getElementById('currentFileType').textContent;
-
 				printButtonMessageProxy.postMessage({
 					command: printEvt.data.key,
-					filename: filename,
-					filetype: filetype,
 					content: editorEvt.data.content,
 					'automatic-printing-failed': navigator.mozL10n.get('automatic-printing-failed')
 				});
 			}, null, true);
 			editorMessageProxy.postMessage({
 				command: "get-content-html",
+				rich: true,
 				key: key
 			});
 			regions.nav('edit');

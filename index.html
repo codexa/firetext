@@ -97,8 +97,8 @@
 		<nav class="url-menu">
 			<h2 data-l10n-id="documents"></h2>
 			<ul>
-				<li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create"></a></li>
-				<li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import"></a></li>
+				<li><a href="#" data-click="nav" data-click-location="create"><span class="icon icon-pencil"></span><span data-l10n-id="create"></span></a></li>
+				<li><a href="#" data-click="nav" data-click-location="import"><span class="icon icon-cloud-upload"></span><span data-l10n-id="import"></span></a></li>
 				<li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open"></a></li>
 			</ul>
 		</nav>
@@ -266,19 +266,20 @@
 		<nav class="url-menu">
 			<h2 class="desktop-only file-name"></h2>
 			<ul>
-				<li><a href="#" data-click="saveFromEditor" data-l10n-id="save"></a></li>
+				<li><a href="#" data-click="saveFromEditor"><span class="icon icon-content-save"></span><span data-l10n-id="save"></span></a></li>
 				<li><a href="#" data-click="nav" data-click-location="save-as" data-l10n-id="save-as"></a></li>
-				<li><a href="#" data-click="downloadFile" data-l10n-id="export"></a></li>
+				<li><a href="#" data-click="downloadFile"><span class="icon icon-cloud-download"></span><span data-l10n-id="export"></span></a></li>
+				<li><a href="#" data-click="openPageSetup" data-l10n-id="page-setup"></a></li>
 				<li>
-					<a href="#" data-click="printFile" data-l10n-id="print"></a>
-					<iframe class="printButton" id="printButton" sandbox="allow-scripts allow-popups" src=""></iframe>
+					<a href="#" data-click="printFile"><span class="icon icon-printer"></span><span data-l10n-id="print"></span></a>
+					<iframe class="printButton" id="printButton" sandbox="allow-scripts allow-popups allow-modals" src=""></iframe>
 				</li>
 				<li><a href="#" data-click="closeFile" data-l10n-id="close"></a></li>
 			</ul>
 			<h2 data-l10n-id="documents"></h2>
 			<ul>
-				<li><a href="#" data-click="nav" data-click-location="create" data-l10n-id="create"></a></li>
-				<li><a href="#" data-click="nav" data-click-location="import" data-l10n-id="import"></a></li>
+				<li><a href="#" data-click="nav" data-click-location="create"><span class="icon icon-pencil"></span><span data-l10n-id="create"></span></a></li>
+				<li><a href="#" data-click="nav" data-click-location="import"><span class="icon icon-cloud-upload"></span><span data-l10n-id="import"></span></a></li>
 				<li><a href="#" data-click="nav" data-click-location="open" data-l10n-id="open"></a></li>
 			</ul>
 		</nav>
@@ -301,10 +302,11 @@
 			<h1 id="fileName" class="no-zen"><span id="currentFileLocation" style="display:none;"></span><span id="currentFileDirectory" style="display:none;"></span><span id="currentFileName"></span><span id="currentFileType"></span></h1>
 			<div class="tabBar">
 				<div data-click="tab" data-click-name="design" data-l10n-id="design" role="tab-button" data-tab-id="design"></div>
+				<div data-click="tab" data-click-name="design" data-l10n-id="print-view" role="tab-button" data-tab-id="printView"></div>
 				<div data-click="tab" data-click-name="raw" data-l10n-id="raw" role="tab-button" data-tab-id="raw"></div>			
 			</div>
 		</header>
-		<div role="toolbar" id="edit-bar" class="top-bar hidden">
+		<header role="toolbar" id="edit-bar" class="top-bar hidden">
 			<div id="edit-zone">
 				<ul>
 					<li id="editorSaveButton"><button class="icon-content-save" data-click="saveFromEditor" data-l10n-title="save"></button></li>
@@ -371,7 +373,7 @@
 				<ul>
 				</ul>
 			</div>
-		</div>
+		</header>
 		<div role="main" class="editor-container">
 			<ul role="tabs" id="editTabs">
 				<div role="tab" id="tab-design">
@@ -496,6 +498,61 @@
 			<button data-click="closeFile" data-click-action="no" class="danger" data-l10n-id="no"></button>
 			<button data-click="navBack" data-l10n-id="cancel"></button>
 		</menu>
+	</section>
+	<div class="background" data-click="navBack"></div>
+	
+	<section role="dialog" id="page-setup">
+		<header>
+			<button data-click="navBack" data-l10n-title="close"><span class="icon icon-close"></span></button>
+			<menu type="toolbar">
+				<button data-click="pageSetup" data-l10n-id="okay"></button>
+			</menu>
+			<h1 data-l10n-id="page-setup"></h1>
+		</header>
+		<div role="main">
+			<div class="form">
+				<br>
+				<fieldset class="button-block">
+					<table>
+						<tr>
+							<td data-l10n-id="size"></td>
+							<td>
+								<p>
+									<select id="page-size">
+										<option value="14.8cm 21cm">A5</option>
+										<option value="21cm 29.7cm">A4</option>
+										<option value="29.7cm 42cm">A3</option>
+										<option value="17.6cm 25cm">B5</option>
+										<option value="25cm 35.3cm">B4</option>
+										<option value="8.5in 11in">Letter</option>
+										<option value="8.5in 14in">Legal</option>
+										<option value="11in 14in">Ledger</option>
+									</select>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td data-l10n-id="orientation"></td>
+							<td>
+								<p>
+									<label><input required="" type="radio" value="portrait" name="page-orientation" id="page-orientation-portrait" data-enter="pageSetup"> <span data-l10n-id="portrait"></span></label>
+									<label><input required="" type="radio" value="landscape" name="page-orientation" id="page-orientation-landscape" data-enter="pageSetup"> <span data-l10n-id="landscape"></span></label>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td data-l10n-id="margins"></td>
+							<td>
+								<p>
+									<input required="" type="text" id="page-margin" data-enter="pageSetup">
+									<button type="reset" data-mouse-down="clearForm"></button>
+								</p>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+			</div>
+		</div>
 	</section>
 	<div class="background" data-click="navBack"></div>
 

@@ -1,4 +1,4 @@
-(function(mainOrigin, _parentMessageProxy, initNight, filetype, odtdoc, readOnly) {
+(function(mainOrigin, _parentMessageProxy, initNight, initPrintView, filetype, user_location, odtdoc, readOnly) {
   function fixupDocument(evt) {
     if(document.body.children.length === 0) {
       if(filetype === '.txt') {
@@ -16,6 +16,15 @@
         document.execCommand('undo');
         evt.stopImmediatePropagation();
       }
+    }
+    if(!document.documentElement.style.getPropertyValue('--width')) {
+      document.documentElement.style.setProperty('--width', user_location.country === 'US' ? '8.5in' : '21cm');
+    }
+    if(!document.documentElement.style.getPropertyValue('--height')) {
+      document.documentElement.style.setProperty('--height', user_location.country === 'US' ? '11in' : '29.7cm');
+    }
+    if(!document.documentElement.style.getPropertyValue('--margin')) {
+      document.documentElement.style.setProperty('--margin', '1in');
     }
   }
   
@@ -136,6 +145,8 @@
   
   // night mode
   initNight(document, parentMessageProxy);
+  // print view
+  initPrintView(document, parentMessageProxy);
   
   // format document
   parentMessageProxy.registerMessageHandler(function(e) { document.execCommand(e.data.sCmd, false, e.data.sValue); }, "format")
@@ -149,7 +160,7 @@
       + (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
       + (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
       + '>' : '';
-    return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '');
+    return doctypeString + document.documentElement.outerHTML.replace(/<(style|link)[^>]*_firetext_remove=""[^>]*>[^<>]*(?:<\/\1>)?/g, '').replace(' _firetext_night=""', '').replace(' _firetext_print_view=""', '');
   }
 
   // Add listener to update raw
@@ -185,4 +196,4 @@
       prevRange = range;
     }, 100);
   }
-})(mainOrigin, parentMessageProxy, initNight, filetype, odtdoc, readOnly);
+})(mainOrigin, parentMessageProxy, initNight, initPrintView, filetype, user_location, odtdoc, readOnly);
