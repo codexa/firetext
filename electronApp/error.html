@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Error</title>
+    <style>
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h3>Error</h3>
+        <p id="errorMessage">Your error message here</p>
+      </header>
+      <section class="main">
+        <script>
+          require('electron').ipcRenderer.on('app-error', (event, message) => {
+            document.getElementById('errorMessage').innerHTML = message;
+          });
+        </script>
+      </section>
+      <footer></footer>
+    </div>
+  </body>
+</html>

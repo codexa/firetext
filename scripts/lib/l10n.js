@@ -1890,8 +1890,11 @@
 
     this.isLoading = true;
     var requested = Array.prototype.slice.call(arguments);
-    if (requested.length === 0) {
-      throw new L10nError('No locales requested');
+
+    if (requested.length === 0 && this.availableLocales.length == 0) {
+      throw new L10nError('No locales requested'); 
+    } else if (requested.length === 0) {
+      requested = this.availableLocales;
     }
 
     var supported = negotiate(
@@ -2103,8 +2106,11 @@
       }
     }
 
-    var additionalLanguagesPromise;
+    // store the languages from meta into the context
+    this.ctx.defaultLocale = meta.defaultLanguage;
+    this.ctx.availableLocales = Object.keys(meta.availableLanguages);
 
+    var additionalLanguagesPromise;
     if (navigator.mozApps && navigator.mozApps.getAdditionalLanguages) {
       // if the environment supports langpacks, register extra languages…
       additionalLanguagesPromise =
@@ -2116,7 +2122,7 @@
       document.addEventListener('additionallanguageschange', function(evt) {
         registerLocales.call(this, meta, evt.detail);
         this.ctx.requestLocales.apply(
-          this.ctx, navigator.languages || [navigator.language]);
+          this.ctx, this.ctx.availableLocales || [this.ctx.defaultLocale] || navigator.languages || [navigator.language]);
       }.bind(this));
     } else {
       additionalLanguagesPromise = Promise.resolve();
@@ -2210,10 +2216,11 @@
 
   function initLocale() {
     this.ctx.requestLocales.apply(
-      this.ctx, navigator.languages || [navigator.language]);
+      this.ctx, this.ctx.availableLocales || [this.ctx.defaultLocale] || navigator.languages || [navigator.language]);
+
     window.addEventListener('languagechange', function l10n_langchange() {
       this.ctx.requestLocales.apply(
-        this.ctx, navigator.languages || [navigator.language]);
+        this.ctx, this.ctx.availableLocales || [this.ctx.defaultLocale] || navigator.languages || [navigator.language]);
     }.bind(this));
   }
 
