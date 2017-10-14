@@ -86,6 +86,7 @@ function initialize() {
       width: 1024,
       height: 768,
       title: app.getName(),
+      icon: path.join(__dirname, 'icon.png'),
       webPreferences: {
         // Disabling node integration allows to use libraries such as jQuery/React, etc
         nodeIntegration: pjson.config.nodeIntegration || true,
