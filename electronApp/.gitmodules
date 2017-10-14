@@ -1,0 +1,7 @@
+[submodule "scripts/parsers/odt.js"]
+	path = scripts/parsers/odt.js
+	url = https://github.com/codexa/odt.js.git
+	branch = master
+[submodule "builder/airbornos"]
+	path = builder/airbornos
+	url = https://github.com/airbornos/airbornos
