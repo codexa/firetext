@@ -1,6 +1,7 @@
 node_modules
 /dist
 npm-debug.log
+package-lock.json
 
 /build/
 /builder/node_modules/
