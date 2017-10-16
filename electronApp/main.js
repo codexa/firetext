@@ -9,6 +9,9 @@ const ipc = require('electron').ipcMain;
 const path = require('path');
 const pjson = require('./package.json');
 const _ = require('lodash');
+const electronStore = require('electron-store');
+const store = new electronStore();
+let browserConfig = store.get('window', {"x":0,"y":0,"width":0,"height":0, "maximized":false});
 
 // Use system log facility, should work on Windows too
 require('./lib/log')(pjson.productName || 'SkelEktron');
@@ -83,9 +86,12 @@ function initialize() {
   */
   function createMainWindow() {
     const win = new electron.BrowserWindow({
-      width: 1024,
-      height: 768,
+      x: browserConfig.x,
+      y: browserConfig.y,
+      width: browserConfig.width,
+      height: browserConfig.height,
       title: app.getName(),
+      icon: path.join(__dirname, 'icon.png'),
       webPreferences: {
         // Disabling node integration allows to use libraries such as jQuery/React, etc
         nodeIntegration: pjson.config.nodeIntegration || true,
@@ -97,6 +103,30 @@ function initialize() {
     win.loadURL(`file://${__dirname}/${pjson.config.url}`, {});
 
     win.on('closed', onClosed);
+    win.on('close', function() {
+      let config = win.getBounds();
+
+      browserConfig.x = config.x;
+      browserConfig.y = config.y;
+      browserConfig.width = config.width;
+      browserConfig.height = config.height;
+
+      store.set('window', browserConfig);
+    });
+
+    win.on('show', function() {
+      if (browserConfig.maximized) {
+        win.maximize();
+      }
+    })
+
+    win.on('maximize', function() {
+      browserConfig.maximize = true;
+    });
+
+    win.on('unmaximize', function() {
+      browserConfig.maximize = false;
+    })
 
     win.on('unresponsive', function unresponsive() {
       dialog.showErrorBox('Unresponsive Program', 'the program is currently under heavy load please wait...');
@@ -122,6 +152,7 @@ function initialize() {
     win.webContents.on('crashed', () => {
       dialog.showErrorBox('Crash', 'The program has crashed');
       console.error('The browser window has just crashed');
+      app.quit();
     });
 
     win.webContents.on('did-finish-load', () => {
@@ -144,6 +175,13 @@ function initialize() {
   });
 
   app.on('ready', () => {
+    const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
+
+    if (browserConfig.width == 0 || browserConfig.height == 0) {
+      browserConfig.width = width;
+      browserConfig.height = height;
+    }
+
     Menu.setApplicationMenu(createMenu());
     mainWindow = createMainWindow();
 
