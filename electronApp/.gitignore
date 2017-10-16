@@ -2,4 +2,3 @@ node_modules
 /dist
 .idea
 npm-debug.log
-package-lock.json

@@ -1,6 +1,6 @@
 Firetext Electron App
 ================
-Using the cross-platform [electron](https://electron.atom.io/) platform.
+Using the cross-platform [electron](https://electron.atom.io/) framework.
 
 __________________________________________________________
 **What you need:**
