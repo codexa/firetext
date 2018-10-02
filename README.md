@@ -1,5 +1,7 @@
-# Firetext
+# Firetext (Not Maintained)
 ## About
+
+>**Notice: Firetext is not currently being maintained. Use at your own risk.**
 
 Firetext is an open-source word processor for Firefox OS, and is [available on the Firefox Marketplace](https://marketplace.firefox.com/app/firetext).
 
